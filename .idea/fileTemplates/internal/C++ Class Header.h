@@ -11,3 +11,4 @@ class ${NAME} {
 ${NAMESPACES_CLOSE}
 
 #[[#endif]]# //${INCLUDE_GUARD}
+

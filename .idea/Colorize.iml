@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module type="PYTHON_MODULE" version="4">
+<module classpath="CMake" type="PYTHON_MODULE" version="4">
   <component name="ColorizeRootManager">
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
@@ -13,10 +13,21 @@
       <excludeFolder url="file://$MODULE_DIR$/cmake-build-release" />
       <excludeFolder url="file://$MODULE_DIR$/cmake-build-relwithdebinfo" />
     </content>
-    <orderEntry type="jdk" jdkName="System Interpreter" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Kernel" />
     <orderEntry type="module" module-name="Python" />
+  </component>
+  <component name="FacetManager">
+    <facet type="Python" name="Project's Python Facet">
+      <configuration sdkName="Project's Python Environment" />
+    </facet>
+  </component>
+  <component name="ColorizePythonRootManager">
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Project's Python Environment interpreter library" level="application" />
+  </component>
+  <component name="PackageRequirementsSettings">
+    <option name="requirementsPath" value="" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_FOLDERS">
@@ -26,7 +37,6 @@
     </option>
   </component>
   <component name="TestRunnerService">
-    <option name="projectConfiguration" value="pytest" />
     <option name="PROJECT_TEST_RUNNER" value="pytest" />
   </component>
 </module>
