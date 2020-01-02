@@ -48,9 +48,6 @@ ELSE ()
   MESSAGE(STATUS "Found a suitable version of Python 3: \"Python ${Python3_VERSION}\"")
 ENDIF ()
 
-# Include "Language Extensions" (those need Python)
-INCLUDE(${TREE_SCRIPTS_CMAKE_PATH}/CMakeExtensions.cmake)
-
 # For a CMake cross-compilation (the one used throughout this process), you must specify some variables that will
 # disable compilation for the host and enable the use of Platform, Compiler and Language files. Along with the
 # toolchain files, it is possible to create a fully customized compilation system based on CMake.
@@ -63,10 +60,13 @@ SET(CMAKE_SYSTEM_VERSION 0.0.0.1)
 SET(CMAKE_CROSSCOMPILING ON)
 SET(CMAKE_SYSTEM_PROCESSOR ${KERNEL_ARCH})
 
-# Create and configure the actual CMake project
 GET_FILENAME_COMPONENT(KERNEL_SOURCEDIR_NAME "${CMAKE_SOURCE_DIR}" NAME_WE)
 MESSAGE(STATUS "Using the directory name as the project identifier: \"${KERNEL_SOURCEDIR_NAME}\"")
-# Enable the lenguages: C, C++, CPP and Assembler
-PROJECT("Zalea ${CMAKE_SYSTEM_NAME} (${KERNEL_SOURCEDIR_NAME})"
-        VERSION ${CMAKE_SYSTEM_VERSION} LANGUAGES ASM C CXX)#CPP)
+SET(PROJECT_NAME "Zalea ${CMAKE_SYSTEM_NAME} (${KERNEL_SOURCEDIR_NAME})")
+
+# Include "Language Extensions" (those need Python)
+INCLUDE(${TREE_SCRIPTS_CMAKE_PATH}/CMakeExtensions.cmake)
+
+# Create and configure the actual CMake project and enable the languages: C, C++, CPP and Assembler
+PROJECT("${PROJECT_NAME}" VERSION ${CMAKE_SYSTEM_VERSION} LANGUAGES ASM C CXX)#CPP)
 MESSAGE(STATUS "The \"${PROJECT_NAME}\" project version ${CMAKE_PROJECT_VERSION} for ${KERNEL_ARCH}")
