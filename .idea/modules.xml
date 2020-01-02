@@ -3,8 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Colorize.iml" filepath="$PROJECT_DIR$/.idea/Colorize.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/Kernel.iml" filepath="$PROJECT_DIR$/.idea/Kernel.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/Python.iml" filepath="$PROJECT_DIR$/.idea/Python.iml" />
     </modules>
   </component>
 </project>

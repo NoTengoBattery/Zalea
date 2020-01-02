@@ -40,10 +40,7 @@
     <scope name="Test Files" pattern="file[Colorize]:*.tst.*" />
   </component>
   <component name="ProjectId" id="1VjtzCrRNK1JUVCF1tLLHgAHcdv" />
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-  </component>
-  <component name="masterDetails">
+  <component name="projectDetails">
     <states>
       <state key="ScopeChooserConfigurable.UI">
         <settings>
