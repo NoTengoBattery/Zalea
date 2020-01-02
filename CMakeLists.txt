@@ -38,6 +38,7 @@ SET(CMAKE_MODULE_PATH "${TREE_SCRIPTS_CMAKE_MODULES_PATH}")
 SET(CMAKE_TOOLCHAIN_FILE ${TREE_SCRIPTS_CMAKE_TOOLCHAIN_PATH}/CMakeToolchain.cmake)
 
 # We rely on Python 3.7 for CMake Extensions, which are Python scripts that extends our CMake
+SET(Python_ROOT_DIR "${TREE_SCRIPTS_PYTHON_ENVS_PATH}")
 FIND_PACKAGE(Python3 COMPONENTS Interpreter)
 IF (NOT Python3_Interpreter_FOUND)
   MESSAGE(FATAL_ERROR "No Pyhton 3 interpreter found. Python 3.7 or later is required.")

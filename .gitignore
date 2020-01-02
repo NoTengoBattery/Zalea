@@ -749,3 +749,4 @@ MigrationBackup/
 # End of https://www.gitignore.io/api/c,c++,xcode,linux,macos,cmake,clion,python,windows,assembler,kdevelop4,codeblocks,visualstudio
 
 .idea/.name
+Scripts/Python/Environments/3/
