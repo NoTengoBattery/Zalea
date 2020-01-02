@@ -25,27 +25,28 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.15.3)
 
 # We won't support in-tree build, however, we support build in a tree subdirectory
-IF (${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
+IF ("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
   MESSAGE(FATAL_ERROR "In-source builds are not supported. Please run CMake in an different directory.")
 ENDIF ()
 
 # Include tree definition. The 'Tree.cmake' file sets the tree structure, all the needed paths
 INCLUDE(Tree.cmake)
 # Always generate these important directories if they don't exist
-FILE(MAKE_DIRECTORY ${TREE_BIN_IMPORTANT_PATH})
+FILE(MAKE_DIRECTORY "${TREE_BIN_IMPORTANT_PATH}")
+FILE(MAKE_DIRECTORY "${TREE_BIN_IMPORTANT_PYTHON3_PATH}")
 # Set the TREE_SCRIPTS_CMAKE_MODULES_PATH to the CMAKE_MODULE_PATH so CMake will use those modules first
 SET(CMAKE_MODULE_PATH "${TREE_SCRIPTS_CMAKE_MODULES_PATH}")
-SET(CMAKE_TOOLCHAIN_FILE ${TREE_SCRIPTS_CMAKE_TOOLCHAIN_PATH}/CMakeToolchain.cmake)
+SET(CMAKE_TOOLCHAIN_FILE "${TREE_SCRIPTS_CMAKE_TOOLCHAIN_PATH}/CMakeToolchain.cmake")
 
 # We rely on Python 3.7 for CMake Extensions, which are Python scripts that extends our CMake
-SET(Python_ROOT_DIR "${TREE_SCRIPTS_PYTHON_ENVS_PATH}")
 FIND_PACKAGE(Python3 COMPONENTS Interpreter)
 IF (NOT Python3_Interpreter_FOUND)
   MESSAGE(FATAL_ERROR "No Pyhton 3 interpreter found. Python 3.7 or later is required.")
 ELSEIF (Python3_VERSION VERSION_LESS 3.7)
   MESSAGE(FATAL_ERROR "Python 3.7 or newer is required to build this project.")
 ELSE ()
-  MESSAGE(STATUS "Found a suitable version of Python 3: \"Python ${Python3_VERSION}\"")
+  MESSAGE(STATUS "Found a suitable version of system Python 3: \"Python ${Python3_VERSION}\"")
+  MESSAGE(STATUS "Python executable: \"${Python3_EXECUTABLE}\"")
 ENDIF ()
 
 # For a CMake cross-compilation (the one used throughout this process), you must specify some variables that will
@@ -65,7 +66,15 @@ MESSAGE(STATUS "Using the directory name as the project identifier: \"${KERNEL_S
 SET(PROJECT_NAME "Zalea ${CMAKE_SYSTEM_NAME} (${KERNEL_SOURCEDIR_NAME})")
 
 # Include "Language Extensions" (those need Python)
-INCLUDE(${TREE_SCRIPTS_CMAKE_PATH}/CMakeExtensions.cmake)
+INCLUDE("${TREE_SCRIPTS_CMAKE_PATH}/CMakeExtensions.cmake")
+
+# Generate the Python Virtual Environment on the first run. Then try to update the CMake Paths.
+IF (NOT PYTHON3_GENERATED)
+  RUN_PYTHON3_SCRIPT("${PYTHON_GENERATE_PY}" "${TREE_SRC_ROOT_PATH}" "${TREE_SCRIPTS_PYTHON3_ENV_PATH}")
+  UNSET(Python3_EXECUTABLE CACHE)
+  FIND_PROGRAM(Python3_EXECUTABLE "python3" "${TREE_SCRIPTS_PYTHON3_BIN_ENV_PATH}" NO_DEFAULT_PATH)
+  MESSAGE(STATUS "Changed Python 3 executable to: \"${Python3_EXECUTABLE}\"")
+ENDIF ()
 
 # Create and configure the actual CMake project and enable the languages: C, C++, CPP and Assembler
 PROJECT("${PROJECT_NAME}" VERSION ${CMAKE_SYSTEM_VERSION} LANGUAGES ASM C CXX)#CPP)

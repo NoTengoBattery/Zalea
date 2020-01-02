@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import os
+import subprocess
 import sys
 import venv
 from subprocess import PIPE, Popen
@@ -8,11 +9,11 @@ from threading import Thread
 from urllib.parse import urlparse
 from urllib.request import urlretrieve
 
+from pip._vendor.lockfile import FileLock
+
 
 class ExtendedEnvBuilder(venv.EnvBuilder):
     def __init__(self, *args, **kwargs):
-        self.nodist = False
-        self.nopip = False
         super().__init__(*args, **kwargs)
 
     def post_setup(self, context):
@@ -34,8 +35,7 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         bin_path = context.bin_path
         dist_path = os.path.join(bin_path, fn)
         urlretrieve(url, dist_path)
-        term = '\n'
-        sys.stderr.write('Installing %s ...%s' % (name, term))
+        sys.stderr.write('Installing %s ...%s' % (name, '\n'))
         sys.stderr.flush()
         args = [context.env_exe, fn]
         p = Popen(args, stdout=PIPE, stderr=PIPE, cwd=bin_path)
@@ -52,33 +52,40 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
     def install_pip(self, context):
         url = 'https://bootstrap.pypa.io/get-pip.py'
         self.install_script(context, 'pip', url)
+        # Install the latest packages. If the latest breaks the scripts, we should update the scripts instead of
+        # installing a specific version of the packages.
+        subprocess.check_call([context.env_exe, "-m", "pip", "install", "pytest"])
+        subprocess.check_call([context.env_exe, "-m", "pip", "install", "tinydb"])
+        subprocess.check_call([context.env_exe, "-m", "pip", "install", "ujson"])
 
-    def main(args=None):
-        compatible = True
-        if sys.version_info < (3, 7):
-            compatible = False
-        elif not hasattr(sys, 'base_prefix'):
-            compatible = False
-        if not compatible:
-            raise ValueError('This script is only for use with Python 3.7 or later.')
-        else:
-            parser = argparse.ArgumentParser(prog=__name__,
-                                             description='Creates virtual Python environments in one or more target '
-                                                         'directories.')
-            parser.add_argument('dirs', metavar='ENV_DIR', nargs='+', help='A directory to create the environment in.')
-        if os.name == 'nt':
-            symlinks = False
-        else:
-            symlinks = True
-        options = parser.parse_args(args)
-        builder = ExtendedEnvBuilder(symlinks=options.symlinks)
-        for d in options.dirs:
-            builder.create(d)
+
+def main(args=None):
+    compatible = True
+    if sys.version_info < (3, 7):
+        compatible = False
+    elif not hasattr(sys, 'base_prefix'):
+        compatible = False
+    if not compatible:
+        raise ValueError('This script is only for use with Python 3.7 or later.')
+    else:
+        parser = argparse.ArgumentParser(prog=__name__,
+                                         description='Creates virtual Python environments in one or more target '
+                                                     'directories.')
+        parser.add_argument('dirs', metavar='ENV_DIR', nargs='+', help='A directory to create the environment in.')
+    if os.name == 'nt':
+        symlinks = False
+    else:
+        symlinks = True
+    options = parser.parse_args(args)
+    builder = ExtendedEnvBuilder(symlinks=options.symlinks)
+    for d in options.dirs:
+        builder.create(d)
 
 
 if __name__ == '__main__':
     rc = 1
     try:
+        lock = FileLock("installing.lock")
         venv.main()
         rc = 0
     except Exception as e:
