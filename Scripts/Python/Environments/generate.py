@@ -9,8 +9,6 @@ from threading import Thread
 from urllib.parse import urlparse
 from urllib.request import urlretrieve
 
-from pip._vendor.lockfile import FileLock
-
 
 class ExtendedEnvBuilder(venv.EnvBuilder):
     def __init__(self, *args, **kwargs):
@@ -23,8 +21,7 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
     def reader(self, stream, context):
         while True:
             s = stream.readline()
-            if not s:
-                break
+            if not s: break
             sys.stderr.write(s.decode('utf-8'))
             sys.stderr.flush()
         stream.close()
@@ -35,18 +32,17 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         bin_path = context.bin_path
         dist_path = os.path.join(bin_path, fn)
         urlretrieve(url, dist_path)
-        sys.stderr.write('Installing %s ...%s' % (name, '\n'))
+        sys.stderr.write('Installing %s...%s' % (name, '\n'))
         sys.stderr.flush()
         args = [context.env_exe, fn]
         p = Popen(args, stdout=PIPE, stderr=PIPE, cwd=bin_path)
         t1 = Thread(target=self.reader, args=(p.stdout, 'stdout'))
-        t1.start()
         t2 = Thread(target=self.reader, args=(p.stderr, 'stderr'))
+        t1.start()
         t2.start()
         p.wait()
         t1.join()
         t2.join()
-        sys.stderr.write('done.\n')
         os.unlink(dist_path)
 
     def install_pip(self, context):
@@ -57,6 +53,35 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         subprocess.check_call([context.env_exe, "-m", "pip", "install", "pytest"])
         subprocess.check_call([context.env_exe, "-m", "pip", "install", "tinydb"])
         subprocess.check_call([context.env_exe, "-m", "pip", "install", "ujson"])
+
+
+class FileLock:
+    def __init__(self, filename):
+        self.filename = filename
+        self.fd = None
+        self.pid = os.getpid()
+
+    def acquire(self):
+        try:
+            self.fd = os.open(self.filename, os.O_CREAT | os.O_EXCL | os.O_RDWR)
+            os.write(self.fd, str.encode("%d" % self.pid))
+            return 1
+        except OSError:
+            self.fd = None
+            return 0
+
+    def release(self):
+        if not self.fd:
+            return 0
+        try:
+            os.close(self.fd)
+            os.remove(self.filename)
+            return 1
+        except OSError:
+            return 0
+
+    def __del__(self):
+        self.release()
 
 
 def main(args=None):
@@ -77,17 +102,23 @@ def main(args=None):
     else:
         symlinks = True
     options = parser.parse_args(args)
-    builder = ExtendedEnvBuilder(symlinks=options.symlinks)
+    builder = ExtendedEnvBuilder(symlinks=symlinks)
     for d in options.dirs:
         builder.create(d)
 
 
 if __name__ == '__main__':
-    rc = 1
     try:
-        lock = FileLock("installing.lock")
-        venv.main()
-        rc = 0
+        if not os.path.isfile('done.txt'):
+            lock = FileLock("lock.file")
+            if lock.acquire():
+                main()
+                open("done.txt", 'a').close()
+                exit(0)
+            else:
+                exit(100)
+        else:
+            exit(0)
     except Exception as e:
         print('Error: %s' % e, file=sys.stderr)
-    sys.exit(rc)
+        sys.exit(200)

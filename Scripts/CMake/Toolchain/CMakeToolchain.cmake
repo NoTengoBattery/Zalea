@@ -1,4 +1,4 @@
-#===-- CMakeToolchain.cmake - The root of the toolchain file for CMake cross compilation  ---*- CMake -*-===//
+#===-- CMakeToolchain.cmake - The root of the toolchain file for CMake cross compilation  -------------*- CMake -*-===//
 #
 # Copyright (c) 2019 Oever González
 #

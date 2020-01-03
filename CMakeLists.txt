@@ -29,16 +29,16 @@ IF ("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
   MESSAGE(FATAL_ERROR "In-source builds are not supported. Please run CMake in an different directory.")
 ENDIF ()
 
-# Include tree definition. The 'Tree.cmake' file sets the tree structure, all the needed paths
+# Include tree definition. The 'Tree.cmake' file sets the tree structure, all the needed paths and special files
 INCLUDE(Tree.cmake)
 # Always generate these important directories if they don't exist
 FILE(MAKE_DIRECTORY "${TREE_BIN_IMPORTANT_PATH}")
-FILE(MAKE_DIRECTORY "${TREE_BIN_IMPORTANT_PYTHON3_PATH}")
+FILE(MAKE_DIRECTORY "${TREE_SCRIPTS_PYTHON3_ENV_PATH}")
 # Set the TREE_SCRIPTS_CMAKE_MODULES_PATH to the CMAKE_MODULE_PATH so CMake will use those modules first
 SET(CMAKE_MODULE_PATH "${TREE_SCRIPTS_CMAKE_MODULES_PATH}")
 SET(CMAKE_TOOLCHAIN_FILE "${TREE_SCRIPTS_CMAKE_TOOLCHAIN_PATH}/CMakeToolchain.cmake")
 
-# We rely on Python 3.7 for CMake Extensions, which are Python scripts that extends our CMake
+# We rely on Python 3.7 for CMake Extensions, which are Python scripts that extends the build system
 FIND_PACKAGE(Python3 COMPONENTS Interpreter)
 IF (NOT Python3_Interpreter_FOUND)
   MESSAGE(FATAL_ERROR "No Pyhton 3 interpreter found. Python 3.7 or later is required.")
@@ -51,7 +51,7 @@ ENDIF ()
 
 # For a CMake cross-compilation (the one used throughout this process), you must specify some variables that will
 # disable compilation for the host and enable the use of Platform, Compiler and Language files. Along with the
-# toolchain files, it is possible to create a fully customized compilation system based on CMake.
+# toolchain files, it is possible to create a fully customized compilation system based on CMake
 # -> CMAKE_SYSTEM_NAME is set to Kernel
 # -> CMAKE_SYSTEM_VERSION is set to a particular version, shared between the image and the loader
 # -> CMAKE_CROSSCOMPILING to ON
@@ -61,20 +61,25 @@ SET(CMAKE_SYSTEM_VERSION 0.0.0.1)
 SET(CMAKE_CROSSCOMPILING ON)
 SET(CMAKE_SYSTEM_PROCESSOR ${KERNEL_ARCH})
 
+# Identify the "project name" with the name of the root folder of the source code
 GET_FILENAME_COMPONENT(KERNEL_SOURCEDIR_NAME "${CMAKE_SOURCE_DIR}" NAME_WE)
 MESSAGE(STATUS "Using the directory name as the project identifier: \"${KERNEL_SOURCEDIR_NAME}\"")
 SET(PROJECT_NAME "Zalea ${CMAKE_SYSTEM_NAME} (${KERNEL_SOURCEDIR_NAME})")
 
-# Include "Language Extensions" (those need Python)
-INCLUDE("${TREE_SCRIPTS_CMAKE_PATH}/CMakeExtensions.cmake")
+# Manually include this Python extension. This is the Python runner, a pure CMake runner needed to install the VENV
+INCLUDE("${TREE_SCRIPTS_CMAKE_EXTENSIONS_PATH}/PurePythonRunner.cmake")
 
-# Generate the Python Virtual Environment on the first run. Then try to update the CMake Paths.
+# Generate the Python Virtual Environment on the first run. Then try to update the CMake paths
 IF (NOT PYTHON3_GENERATED)
-  RUN_PYTHON3_SCRIPT("${PYTHON_GENERATE_PY}" "${TREE_SRC_ROOT_PATH}" "${TREE_SCRIPTS_PYTHON3_ENV_PATH}")
+  RUN_PYTHON3_SCRIPT("${PYTHON_GENERATE_PY}" "${TREE_SCRIPTS_PYTHON3_ENV_PATH}" ".")
   UNSET(Python3_EXECUTABLE CACHE)
   FIND_PROGRAM(Python3_EXECUTABLE "python3" "${TREE_SCRIPTS_PYTHON3_BIN_ENV_PATH}" NO_DEFAULT_PATH)
-  MESSAGE(STATUS "Changed Python 3 executable to: \"${Python3_EXECUTABLE}\"")
+  SET(PYTHON3_GENERATED "YES" CACHE INTERNAL "Detect if the Python 3 VENV has been installed")
+  MESSAGE(FATAL_ERROR "The virtual environment of Python 3 was not installed. You will need to run CMake again.")
 ENDIF ()
+
+# Include "Language Extensions" (need Python), this file includes all availabe extensions
+INCLUDE("${TREE_SCRIPTS_CMAKE_PATH}/CMakeExtensions.cmake")
 
 # Create and configure the actual CMake project and enable the languages: C, C++, CPP and Assembler
 PROJECT("${PROJECT_NAME}" VERSION ${CMAKE_SYSTEM_VERSION} LANGUAGES ASM C CXX)#CPP)
