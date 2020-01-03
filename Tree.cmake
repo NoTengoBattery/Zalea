@@ -1,4 +1,4 @@
-#===-- Tree.cmake - Project's source tree description  ---*- CMake -*-===//
+#===-- Tree.cmake - Project's source tree description  ------------------------------------------------*- CMake -*-===//
 #
 # Copyright (c) 2019 Oever González
 #

@@ -3,11 +3,10 @@ import argparse
 import os
 import subprocess
 import sys
+import threading
+import urllib.parse
+import urllib.request
 import venv
-from subprocess import PIPE, Popen
-from threading import Thread
-from urllib.parse import urlparse
-from urllib.request import urlretrieve
 
 
 class ExtendedEnvBuilder(venv.EnvBuilder):
@@ -27,17 +26,17 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         stream.close()
 
     def install_script(self, context, name, url):
-        _, _, path, _, _, _ = urlparse(url)
+        _, _, path, _, _, _ = urllib.parse.urlparse(url)
         fn = os.path.split(path)[-1]
         bin_path = context.bin_path
         dist_path = os.path.join(bin_path, fn)
-        urlretrieve(url, dist_path)
+        urllib.request.urlretrieve(url, dist_path)
         sys.stderr.write('Installing %s...%s' % (name, '\n'))
         sys.stderr.flush()
         args = [context.env_exe, fn]
-        p = Popen(args, stdout=PIPE, stderr=PIPE, cwd=bin_path)
-        t1 = Thread(target=self.reader, args=(p.stdout, 'stdout'))
-        t2 = Thread(target=self.reader, args=(p.stderr, 'stderr'))
+        p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=bin_path)
+        t1 = threading.Thread(target=self.reader, args=(p.stdout, 'stdout'))
+        t2 = threading.Thread(target=self.reader, args=(p.stderr, 'stderr'))
         t1.start()
         t2.start()
         p.wait()
