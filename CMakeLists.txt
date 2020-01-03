@@ -45,7 +45,7 @@ IF (NOT Python3_Interpreter_FOUND)
 ELSEIF (Python3_VERSION VERSION_LESS 3.7)
   MESSAGE(FATAL_ERROR "Python 3.7 or newer is required to build this project.")
 ELSE ()
-  MESSAGE(STATUS "Found a suitable version of system Python 3: \"Python ${Python3_VERSION}\"")
+  MESSAGE(STATUS "Found a suitable version of Python 3: \"Python ${Python3_VERSION}\"")
   MESSAGE(STATUS "Python executable: \"${Python3_EXECUTABLE}\"")
 ENDIF ()
 
@@ -71,6 +71,7 @@ INCLUDE("${TREE_SCRIPTS_CMAKE_EXTENSIONS_PATH}/PurePythonRunner.cmake")
 
 # Generate the Python Virtual Environment on the first run. Then try to update the CMake paths
 IF (NOT PYTHON3_GENERATED)
+  MESSAGE(STATUS "Ready to install the Python Virtual Environment...")
   RUN_PYTHON3_SCRIPT("${PYTHON_GENERATE_PY}" "${TREE_SCRIPTS_PYTHON3_ENV_PATH}" ".")
   UNSET(Python3_EXECUTABLE CACHE)
   FIND_PROGRAM(Python3_EXECUTABLE "python3" "${TREE_SCRIPTS_PYTHON3_BIN_ENV_PATH}" NO_DEFAULT_PATH)

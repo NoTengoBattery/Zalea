@@ -1,6 +1,5 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
-    <option name="projectDefault" value="Project Default" />
     <inspection_tool class="EqualityInConditionalOperatorWithSelf" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ImplicitDeclarationOfIvar" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="InconsistentLineSeparators" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -16,12 +15,13 @@
     <inspection_tool class="PyMissingOrEmptyDocstringInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="PyMissingTypeHintsInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="RegExpAnonymousGroup" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="SSBasedInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SeveralTargetsMessage" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SqlGotoInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SqlMissingColumnAliasesInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SqlNamedArgumentsInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="SSBasedInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="TodoComment" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UnusedDefine" enabled="true" level="WARNING" enabled_by_default="true" />
+    <option name="projectDefault" value="Project Default" />
   </profile>
 </component>

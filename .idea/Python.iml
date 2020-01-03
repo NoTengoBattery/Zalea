@@ -10,7 +10,8 @@
   </component>
   <component name="PythonRootManager">
     <content url="file://$MODULE_DIR$/Scripts/Python">
-      <sourceFolder url="file://$MODULE_DIR$/Scripts/Python" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/Scripts/Python/Environments/3" />
+      <sourceFolder url="file://$MODULE_DIR$/Scripts/Python/Sources" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Scripts/Python/Tests" isTestSource="true" />
     </content>
     <orderEntry type="jdk" jdkName="Pipenv (Python)" jdkType="Python SDK" />
