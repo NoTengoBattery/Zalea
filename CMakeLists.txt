@@ -58,7 +58,6 @@ ENDIF ()
 SET(CMAKE_SYSTEM_NAME Kernel)
 SET(CMAKE_SYSTEM_VERSION 0.0.0.1)
 SET(CMAKE_CROSSCOMPILING ON)
-SET(CMAKE_SYSTEM_PROCESSOR ${KERNEL_ARCH})
 
 # Identify the "project name" with the name of the root folder of the source code
 GET_FILENAME_COMPONENT(KERNEL_SOURCEDIR_NAME "${CMAKE_SOURCE_DIR}" NAME_WE)
@@ -83,6 +82,14 @@ ENDIF ()
 
 # Include "Language Extensions" (need Python), this file includes all available extensions
 INCLUDE("${TREE_SCRIPTS_CMAKE_PATH}/CMakeExtensions.cmake")
+
+# This file is the architecture selector, it forces the user to select a valid architecture to build
+INCLUDE(${TREE_ARCHITECTURE_PATH}/ArchitectureSelector.cmake)
+
+# Update these variables before the project and after a sane configuration
+SET(CMAKE_SYSTEM_PROCESSOR ${KERNEL_ARCH})
+# Update the tree before the project and after a sane configuration
+INCLUDE("${TREE_SELF_PATH}")
 
 # Create and configure the actual CMake project and enable the languages: C, C++, CPP and Assembler
 PROJECT("${PROJECT_NAME}" VERSION ${CMAKE_SYSTEM_VERSION} LANGUAGES ASM C CXX)#CPP)

@@ -47,6 +47,8 @@ SET(TREE_BIN_IMPORTANT_PATH ${CMAKE_BINARY_DIR}/Important)                      
 MESSAGE(STATUS "Build important files root path: ${TREE_BIN_IMPORTANT_PATH}")
 
 # Scripts root folder
+SET(TREE_ARCHITECTURE_PATH "${TREE_SRC_ROOT_PATH}/Architecture")                                             # <- Parent
+MESSAGE(STATUS "Architecture root path: ${TREE_ARCHITECTURE_PATH}")
 SET(TREE_SCRIPTS_PATH "${TREE_SRC_ROOT_PATH}/Scripts")                                                       # <- Parent
 MESSAGE(STATUS "Scripts root path: ${TREE_SCRIPTS_PATH}")
 SET(TREE_SCRIPTS_CMAKE_PATH "${TREE_SCRIPTS_PATH}/CMake")
