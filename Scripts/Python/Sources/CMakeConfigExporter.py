@@ -7,7 +7,6 @@ import sys
 
 from tinydb import JSONStorage, TinyDB, where
 from tinydb.middlewares import CachingMiddleware
-from tinydb.operations import delete
 
 default_db_filename = 'config.i.json'
 program_parser = None

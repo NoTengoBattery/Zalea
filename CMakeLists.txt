@@ -72,12 +72,13 @@ IF (NOT PYTHON3_GENERATED)
   MESSAGE(STATUS "Ready to install the Python Virtual Environment...")
   FILE(MAKE_DIRECTORY "${TREE_SCRIPTS_PYTHON3_ENV_PATH}")
   RUN_PYTHON3_SCRIPT("${PYTHON_GENERATE_PY}" "${TREE_SCRIPTS_PYTHON3_ENV_PATH}" ".")
-  UNSET(Python3_EXECUTABLE CACHE)
-  FIND_PROGRAM(Python3_EXECUTABLE "python3" "${TREE_SCRIPTS_PYTHON3_BIN_ENV_PATH}" NO_DEFAULT_PATH)
+  UNSET(_Python3_EXECUTABLE CACHE)
+  FIND_PROGRAM(_Python3_EXECUTABLE NAMES "python3" "python" PATHS
+               "${TREE_SCRIPTS_PYTHON3_ENV_PATH}" PATH_SUFFIXES "Scripts" "bin" NO_DEFAULT_PATH)
+  SET(Python3_EXECUTABLE "${_Python3_EXECUTABLE}" CACHE INTERNAL "The Python 3 VENV executable" FORCE)
+  SET(_Python3_EXECUTABLE "${_Python3_EXECUTABLE}" CACHE INTERNAL "The Python 3 VENV executable" FORCE)
+  FIND_PACKAGE(Python3 REQUIRED COMPONENTS Interpreter)
   SET(PYTHON3_GENERATED "YES" CACHE INTERNAL "Detect if the Python 3 VENV has been installed")
-  MESSAGE(FATAL_ERROR
-          "The virtual environment of Python 3 was not installed. CMake has just installed it, but you will need to "
-          "run CMake again.")
 ENDIF ()
 
 # Include "Language Extensions" (need Python), this file includes all available extensions
