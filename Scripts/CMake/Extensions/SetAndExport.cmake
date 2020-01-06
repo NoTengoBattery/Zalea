@@ -69,17 +69,18 @@ ENDIF ()
 # Sets a variable in the cache and uses a Python3 Script (helper script) to write the variable, type, value and
 # docstring to a database. The command that updates the database always use the current value of the variable, no matter
 # how the function was called.
-FUNCTION(SET_AND_EXPORT VARIABLE VALUE TYPE DOCSTRING)
+FUNCTION(SET_AND_EXPORT VARIABLE VALUE TYPE DEFAULT DOCSTRING)
   # We run "SET" first as it is supposed to not change the cached value (that is the one that we export to the DB)
-  # WE NEVER EXPORT THE VALUE GIVEN IN THE FUNCTION CALL
+  # WE NEVER EXPORT THE VALUE GIVEN IN THE FUNCTION CALL, we always export the cached value
   SET(${VARIABLE} "${VALUE}" CACHE ${TYPE} "${DOCSTRING}")
   # Run the Python script to insert in the DB
   SET(CMD_ARGS
       SAE
       --dbfile ${SAE_DBFILE}
       --variable ${VARIABLE}
-      --value ${${VARIABLE}}
+      --value $CACHE{${VARIABLE}}
       --type ${TYPE}
+      --default ${DEFAULT}
       --docstring ${DOCSTRING})
   RUN_PYTHON3_SCRIPT(${SAE_HELPER} "." "${CMD_ARGS}")
 ENDFUNCTION()
@@ -90,18 +91,19 @@ ENDFUNCTION()
 # SET_AND_EXPORT_FORCE is designed to override a user-selectable config that may render the built kernel useless if
 # the user sets the variable in the CMake cache. You should use this directive only in manually modified Default
 # Configs or in variables that are constants but need to be exported.
-FUNCTION(SET_AND_EXPORT_FORCE VARIABLE VALUE TYPE DOCSTRING)
+FUNCTION(SET_AND_EXPORT_FORCE VARIABLE VALUE TYPE DEFAULT DOCSTRING)
+  # We run "SET" first as it is supposed to change the cached value (that is the one that we won't export to the DB)
+  # WE ALWAYS EXPORT THE CACHED VALUE, it should have changed
+  SET(${VARIABLE} "${VALUE}" CACHE ${TYPE} "${DOCSTRING}" FORCE)
   # Run the Python script to insert in the DB
   SET(CMD_ARGS
       SAE
       --dbfile ${SAE_DBFILE}
       --variable ${VARIABLE}
-      --value ${VALUE}
+      --value $CACHE{${VARIABLE}}
       --type ${TYPE}
+      --default ${DEFAULT}
       --docstring ${DOCSTRING}
       --force)
   RUN_PYTHON3_SCRIPT(${SAE_HELPER} "." "${CMD_ARGS}")
-  # SET is runned at last, as we force the set and export the value given in the function call
-  # WE NEVER EXPORT THE CACHED VALUE
-  SET(${VARIABLE} "${VALUE}" CACHE ${TYPE} "${DOCSTRING}" FORCE)
 ENDFUNCTION()

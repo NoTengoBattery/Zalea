@@ -60,6 +60,11 @@ def parse_args(args):
                         help='The type of the CMake variable. The type is always uppercase and can be any of the '
                              'valid CMake cache variable types. This value cannot be empty.',
                         choices=['BOOL', 'FILEPATH', 'PATH', 'STRING', 'INTERNAL'])
+    parser.add_argument('-u', '--default',
+                        action='store', type=str, metavar='default', default="-",
+                        help='A default value for the CMake variable. If this value is identical to the given value, '
+                             'then the variable is not added to the database. If the variable is present, '
+                             'it gets removed.')
     parser.add_argument('-o', '--docstring',
                         action='store', type=str, metavar='docstring', default="",
                         help='An optional docstring to describe the variable in the CMake cache. Can be empty.')
@@ -114,9 +119,10 @@ def set_and_export(args):
         db_table_nf = db.table('SET')
         entry_f = db_table_f.search(where('variable') == args.variable)
         entry_nf = db_table_nf.search(where('variable') == args.variable)
-        # If one entry exist in both tables, remove the one in SET
+        # If one entry exist in both tables, remove both
         if entry_f and entry_nf:
-            db_table_nf.update(delete('variable'), where('variable') == args.variable)
+            db_table_nf.remove(where('variable') == args.variable)
+            db_table_f.remove(where('variable') == args.variable)
         if entry_f:
             db_table = db_table_f
             entry = entry_f
@@ -135,21 +141,30 @@ def set_and_export(args):
             this_logger.debug("No entry found. Using the table '%s' for insert" % db_table.name)
         else:
             raise SystemExit(12, 'Cannot choose a valid table to insert or update.')
-        # If the variable exist,  only update the value
+        # If the variable exist, only update the value. Delete if it's value is the default.
         if entry:
-            db_table.update({
-                'value': args.value,
-                'docstring': args.docstring
-            }, where('variable') == args.variable)
-            this_logger.info("Update entry: {value: '%s', docstring: '%s'}" % (args.value, args.docstring))
+            if not args.value == args.default:
+                db_table.update({
+                    'value': args.value,
+                    'docstring': args.docstring
+                }, where('variable') == args.variable)
+                this_logger.info("Update entry: {value: '%s', docstring: '%s'}" % (args.value, args.docstring))
+            else:
+                db_table.remove(where('variable') == args.variable)
+                this_logger.info("Remove entry: {value: '%s', docstring: '%s', default: '%s'}" %
+                                 (args.value, args.docstring, args.default))
         else:
-            db_table.insert({
-                'variable': args.variable,
-                'value': args.value,
-                'type': args.type,
-                'docstring': args.docstring})
-            this_logger.info("Add entry: {variable: '%s', value: '%s', type: '%s', docstring: '%s'}"
-                             % (args.variable, args.value, args.type, args.docstring))
+            if not args.value == args.default:
+                db_table.insert({
+                    'variable': args.variable,
+                    'value': args.value,
+                    'type': args.type,
+                    'docstring': args.docstring})
+                this_logger.info("Add entry: {variable: '%s', value: '%s', type: '%s', docstring: '%s'}"
+                                 % (args.variable, args.value, args.type, args.docstring))
+            else:
+                this_logger.info("Ignoring entry: {value: '%s', docstring: '%s', default: '%s'}" %
+                                 (args.value, args.docstring, args.default))
 
 
 def dump_table(table: str, file, args):

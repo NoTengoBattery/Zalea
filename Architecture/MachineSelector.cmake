@@ -61,5 +61,5 @@ ELSE ()
 ENDIF ()
 
 # Export the current architecture to the default configuration
-SET_AND_EXPORT(MACHINE_NAME "${MACHINE_NAME}" STRING
+SET_AND_EXPORT(MACHINE_NAME "${MACHINE_NAME}" STRING "-"
                "This variable is the machine for the build, a human readable name for the machine.")
