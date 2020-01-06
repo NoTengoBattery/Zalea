@@ -34,6 +34,8 @@ FUNCTION(DATABASE_TO_CMAKE)
       --template ${SAE_TEMPLATE_FILE}
       --file ${SAE_OUTPUT_FILE})
   RUN_PYTHON3_SCRIPT(${SAE_HELPER} "." "${CMD_ARGS}")
+  MESSAGE(STATUS "The current configuration was stored in "
+          "'${SAE_OUTPUT_FILE}'")
 ENDFUNCTION()
 
 MESSAGE(STATUS "Importing the SET_AND_EXPORT CMake extension...")

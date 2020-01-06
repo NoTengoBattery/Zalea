@@ -107,14 +107,14 @@ def set_and_export(args):
                 'For updating or inserting an entry you must provide, at least, the type and the variable name')
     open_db(args)
     with tinydb_db as db:
-        # This code is way too bad. I know it but I is intentional. No need to optimize or generalize as:
+        # This code is way too bad. I know it but it is intentional. No need to optimize or generalize as:
         # 1. No new options are intended to be added
         # 2. The format and values are already fixed and should not change
-        db_table_f = db.table('SET_AND_EXPORT_FORCE')
-        db_table_nf = db.table('SET_AND_EXPORT')
+        db_table_f = db.table('SET_FORCE')
+        db_table_nf = db.table('SET')
         entry_f = db_table_f.search(where('variable') == args.variable)
         entry_nf = db_table_nf.search(where('variable') == args.variable)
-        # If one entry exist in both tables, remove the one in SET_AND_EXPORT
+        # If one entry exist in both tables, remove the one in SET
         if entry_f and entry_nf:
             db_table_nf.update(delete('variable'), where('variable') == args.variable)
         if entry_f:
@@ -160,11 +160,18 @@ def dump_table(table: str, file, args):
         dicts = {data[i]['variable']: data[i] for i in range(0, len(data))}
         for key in sorted(dicts):
             doc = dicts[key]
-            file.write('# {}: {}\n'
-                       .format(key, table))
-            file.write('{}({}\n\t\"{}\" {}\n\t\"{}\")\n\n'
-                       .format(table, key, doc['value'], doc['type'], doc['docstring'])
-                       .expandtabs(2))
+            if table == 'SET':
+                file.write('# {}: {} {}\n'
+                           .format(key, 'SET_AND_EXPORT', doc['type']))
+                file.write('SET({} \"{}\"\n\tCACHE {}\n\t\"{}\")\n'.expandtabs(2)
+                           .format(key, doc['value'], doc['type'], doc['docstring']))
+            elif table == 'SET_FORCE':
+                file.write('# {}: {} {}\n'
+                           .format(key, 'SET_AND_EXPORT_FORCE', doc['type']))
+                file.write('SET({} \"{}\"\n\tCACHE {}\n\t\"{}\" FORCE)\n'.expandtabs(2)
+                           .format(key, doc['value'], doc['type'], doc['docstring']))
+            else:
+                raise SystemExit(13, 'Invalid table was provided!')
             this_logger.debug("Dumped CMake entry for variable '%s'" % key)
 
 
@@ -180,10 +187,10 @@ def dump_db(args):
             output.write(template.read())
             this_logger.info("Copied template file to output file")
         output.write('\n')
-        dump_table('SET_AND_EXPORT', output, args)
-        this_logger.info("Dumped SET_AND_EXPORT table to output file")
-        dump_table('SET_AND_EXPORT_FORCE', output, args)
-        this_logger.info("Dumped SET_AND_EXPORT table to output file")
+        dump_table('SET', output, args)
+        this_logger.info("Dumped SET table to output file")
+        dump_table('SET_FORCE', output, args)
+        this_logger.info("Dumped SET_FORCE table to output file")
         with args.file as real_output:
             output.seek(0)
             real_output.write(output.read())

@@ -47,5 +47,5 @@ SET(TREE_ARCHITECTURE_X_PATH "${TREE_ARCHITECTURE_PATH}/${KERNEL_ARCH}")
 SET(TREE_ARCHITECTURE_X_CONFIG_PATH "${TREE_ARCHITECTURE_X_PATH}/Configurations")
 
 # Export the current architecture to the default configuration
-SET_AND_EXPORT(KERNEL_ARCH "${KERNEL_ARCH}" STRING
-               "This variable is the architecture to build, which is the CPU architecture that the machine runs.")
+SET_AND_EXPORT_FORCE(KERNEL_ARCH "${KERNEL_ARCH}" STRING
+                     "This variable is the architecture to build, which is the CPU architecture that the machine runs.")
