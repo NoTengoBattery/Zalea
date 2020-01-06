@@ -39,9 +39,13 @@ SET_WITH_STRINGS(KERNEL_ARCH "" "Target architecture for building this kernel" A
 CHECK_WITH_STRINGS(KERNEL_ARCH VALID_ARCH)
 IF (NOT VALID_ARCH)
   MESSAGE(FATAL_ERROR "Please set a valid architecture in the KERNEL_ARCH variable. Available architectures: "
-  "${H_VALID_ARCH}")
+          "${H_VALID_ARCH}")
 ENDIF ()
 
 # Update these variables (because they are needed by the MachineSelector script)
 SET(TREE_ARCHITECTURE_X_PATH "${TREE_ARCHITECTURE_PATH}/${KERNEL_ARCH}")
 SET(TREE_ARCHITECTURE_X_CONFIG_PATH "${TREE_ARCHITECTURE_X_PATH}/Configurations")
+
+# Export the current architecture to the default configuration
+SET_AND_EXPORT(KERNEL_ARCH "${KERNEL_ARCH}" STRING
+               "This variable is the architecture to build, which is the CPU architecture that the machine runs.")

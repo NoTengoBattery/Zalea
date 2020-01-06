@@ -96,3 +96,6 @@ INCLUDE("${TREE_SELF_PATH}")
 # Create and configure the actual CMake project and enable the languages: C, C++, CPP and Assembler
 PROJECT("${PROJECT_NAME}" VERSION ${CMAKE_SYSTEM_VERSION} LANGUAGES ASM C CXX)#CPP)
 MESSAGE(STATUS "The \"${PROJECT_NAME}\" project version ${CMAKE_PROJECT_VERSION} for ${KERNEL_ARCH}")
+
+# Dump the Current Config database to a CMake file at the end of configuration
+DATABASE_TO_CMAKE()

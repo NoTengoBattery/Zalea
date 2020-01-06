@@ -53,6 +53,13 @@ IF (NOT VALID_MACHINE)
             "the exported CMake config in the root of the source code.")
   ENDIF ()
 ELSE ()
-  INCLUDE("${TREE_ARCHITECTURE_X_CONFIG_PATH}/${KERNEL_MACHINE}.cfg.cmake")
+  IF (NOT _MACHINE_INCLUDED)
+    INCLUDE("${TREE_ARCHITECTURE_X_CONFIG_PATH}/${KERNEL_MACHINE}.cfg.cmake")
+    SET(_MACHINE_INCLUDED "YES" CACHE INTERNAL "Switch to avoid overriding user's configuration")
+  ENDIF ()
   MESSAGE(STATUS "Building for a machine called \"${MACHINE_NAME}\"...")
 ENDIF ()
+
+# Export the current architecture to the default configuration
+SET_AND_EXPORT(MACHINE_NAME "${MACHINE_NAME}" STRING
+               "This variable is the machine for the build, a human readable name for the machine.")

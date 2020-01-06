@@ -9,11 +9,12 @@
       <excludeFolder url="file://$MODULE_DIR$/cmake-build-minsizerel" />
       <excludeFolder url="file://$MODULE_DIR$/cmake-build-release" />
       <excludeFolder url="file://$MODULE_DIR$/cmake-build-relwithdebinfo" />
-      <excludeFolder url="file://$MODULE_DIR$/Scripts/Python/Environments/3" />
+      <excludeFolder url="file://$MODULE_DIR$/Scripts/Python/Environments" />
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Architecture" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Platform" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Scripts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Scripts/Python/Tests" isTestSource="true" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Kernel" />
