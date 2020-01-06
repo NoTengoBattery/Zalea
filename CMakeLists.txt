@@ -85,6 +85,8 @@ INCLUDE("${TREE_SCRIPTS_CMAKE_PATH}/CMakeExtensions.cmake")
 
 # This file is the architecture selector, it forces the user to select a valid architecture to build
 INCLUDE(${TREE_ARCHITECTURE_PATH}/ArchitectureSelector.cmake)
+# This file is the machine selector, it forces the user to select a valid machine to build
+INCLUDE(${TREE_ARCHITECTURE_PATH}/MachineSelector.cmake)
 
 # Update these variables before the project and after a sane configuration
 SET(CMAKE_SYSTEM_PROCESSOR ${KERNEL_ARCH})

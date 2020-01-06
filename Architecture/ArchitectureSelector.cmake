@@ -19,25 +19,29 @@
 #/ whole configuration process. As from the architecture you can select your machine, compiler and only then you can
 #/ configure the kernel features.
 #/
-#/ The other module is Machine Selector. This module selects the machine from the available machines and includes it's
-#/ default config. This "default config" is populated to the cache before selecting the compiler
+#/ The other script is Machine Selector. This script selects the machine from the available machines and includes it's
+#/ default config. This "default config" is populated to the cache before selecting the compiler.
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
 
 # List all subdirectories, they are the available architectures
-LIST_SUBDIR(${TREE_ARCHITECTURE_PATH} AVAILABLE_ARCHS)
-IF (NOT AVAILABLE_ARCHS)
+LIST_SUBDIR(${TREE_ARCHITECTURE_PATH} AVAILABLE_ARCHITECTURES)
+IF (NOT AVAILABLE_ARCHITECTURES)
   MESSAGE(FATAL_ERROR
           "No architectures to build! You shouldn't have to read this message ever!")
 ELSE ()
-  CLIST_TO_HLIST(AVAILABLE_ARCHS HVALID_ARCH)
-  MESSAGE(STATUS "Found the following architectures: ${HVALID_ARCH}")
+  CLIST_TO_HLIST(AVAILABLE_ARCHITECTURES H_VALID_ARCH)
+  MESSAGE(STATUS "Found the following architectures: ${H_VALID_ARCH}")
 ENDIF ()
 
 # Create a new cache variable, append these architectures to their available values and check if valid
-SET_WITH_STRINGS(KERNEL_ARCH "" "Target architecture for building this kernel" AVAILABLE_ARCHS)
+SET_WITH_STRINGS(KERNEL_ARCH "" "Target architecture for building this kernel" AVAILABLE_ARCHITECTURES)
 CHECK_WITH_STRINGS(KERNEL_ARCH VALID_ARCH)
 IF (NOT VALID_ARCH)
-  MESSAGE(FATAL_ERROR
-          "Please set a valid architecture in the KERNEL_ARCH variable. Available architectures: ${HVALID_ARCH}")
+  MESSAGE(FATAL_ERROR "Please set a valid architecture in the KERNEL_ARCH variable. Available architectures: "
+  "${H_VALID_ARCH}")
 ENDIF ()
+
+# Update these variables (because they are needed by the MachineSelector script)
+SET(TREE_ARCHITECTURE_X_PATH "${TREE_ARCHITECTURE_PATH}/${KERNEL_ARCH}")
+SET(TREE_ARCHITECTURE_X_CONFIG_PATH "${TREE_ARCHITECTURE_X_PATH}/Configurations")

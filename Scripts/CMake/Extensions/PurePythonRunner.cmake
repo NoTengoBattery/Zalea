@@ -23,14 +23,14 @@
 #===---------------------------------------------------------------------------------------------------------------===//
 
 # Runs a Python script given in the SCRIPT_PATH using the interpreter from a variable Python3_EXECUTABLE which is set by
-# FIND_PACKAGE. The ARGLIST is a CMake list which holds all arguments. The arguments may not be shell expanded.
-FUNCTION(RUN_PYTHON3_SCRIPT SCRIPT_PATH WORKING_PATH ARGLIST)
+# FIND_PACKAGE. The ARGUMENTS_LIST is a CMake list which holds all arguments. The arguments may not be shell expanded.
+FUNCTION(RUN_PYTHON3_SCRIPT SCRIPT_PATH WORKING_PATH ARGUMENTS_LIST)
   IF (NOT Python3_EXECUTABLE)
     MESSAGE(FATAL_ERROR
             "You need a Python executable. The build system should have detected and installed the interpreter.")
   ENDIF ()
   EXECUTE_PROCESS(
-    COMMAND "${Python3_EXECUTABLE}" "${SCRIPT_PATH}" ${ARGLIST}
+    COMMAND "${Python3_EXECUTABLE}" "${SCRIPT_PATH}" ${ARGUMENTS_LIST}
     WORKING_DIRECTORY ${WORKING_PATH}
     RESULT_VARIABLE PY_RESULT
     OUTPUT_QUIET)

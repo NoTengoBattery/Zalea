@@ -30,27 +30,33 @@
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
 
-# Point to this file itself
-IF (NOT TREE_SELF_PATH)
-  MESSAGE(STATUS "The tree definition is setting up a pointer to itself")
-  SET(TREE_SELF_PATH ${CMAKE_CURRENT_LIST_FILE})
-ENDIF ()
-
 # Root folders
-SET(TREE_SRC_ROOT_PATH ${CMAKE_SOURCE_DIR})                                                                  # <- Parent
-MESSAGE(STATUS "Source root path: ${TREE_SRC_ROOT_PATH}")
-SET(TREE_BIN_ROOT_PATH ${CMAKE_BINARY_DIR})                                                                  # <- Parent
-MESSAGE(STATUS "Binary/build root path: ${TREE_BIN_ROOT_PATH}")
+SET(TREE_SRC_ROOT_PATH "${CMAKE_SOURCE_DIR}")                                                                # <- Parent
+IF (NOT TREE_SELF_PATH)
+  MESSAGE(STATUS "Source root path: ${TREE_SRC_ROOT_PATH}")
+ENDIF ()
+SET(TREE_BIN_ROOT_PATH "${CMAKE_BINARY_DIR}")                                                                # <- Parent
+IF (NOT TREE_SELF_PATH)
+  MESSAGE(STATUS "Binary/build root path: ${TREE_BIN_ROOT_PATH}")
+ENDIF ()
 
 # Output important root folder
 SET(TREE_BIN_IMPORTANT_PATH ${CMAKE_BINARY_DIR}/Important)                                                   # <- Parent
-MESSAGE(STATUS "Build important files root path: ${TREE_BIN_IMPORTANT_PATH}")
+IF (NOT TREE_SELF_PATH)
+  MESSAGE(STATUS "Build important files root path: ${TREE_BIN_IMPORTANT_PATH}")
+ENDIF ()
 
 # Scripts root folder
 SET(TREE_ARCHITECTURE_PATH "${TREE_SRC_ROOT_PATH}/Architecture")                                             # <- Parent
-MESSAGE(STATUS "Architecture root path: ${TREE_ARCHITECTURE_PATH}")
+IF (NOT TREE_SELF_PATH)
+  MESSAGE(STATUS "Architecture root path: ${TREE_ARCHITECTURE_PATH}")
+ENDIF ()
+SET(TREE_ARCHITECTURE_X_PATH "${TREE_ARCHITECTURE_PATH}/${KERNEL_ARCH}")
+SET(TREE_ARCHITECTURE_X_CONFIG_PATH "${TREE_ARCHITECTURE_X_PATH}/Configurations")
 SET(TREE_SCRIPTS_PATH "${TREE_SRC_ROOT_PATH}/Scripts")                                                       # <- Parent
-MESSAGE(STATUS "Scripts root path: ${TREE_SCRIPTS_PATH}")
+IF (NOT TREE_SELF_PATH)
+  MESSAGE(STATUS "Scripts root path: ${TREE_SCRIPTS_PATH}")
+ENDIF ()
 SET(TREE_SCRIPTS_CMAKE_PATH "${TREE_SCRIPTS_PATH}/CMake")
 SET(TREE_SCRIPTS_CMAKE_EXTENSIONS_PATH "${TREE_SCRIPTS_CMAKE_PATH}/Extensions")
 SET(TREE_SCRIPTS_CMAKE_MODULES_PATH "${TREE_SCRIPTS_CMAKE_PATH}/Modules")
@@ -62,3 +68,6 @@ SET(TREE_SCRIPTS_PYTHON3_BIN_ENV_PATH "${TREE_SCRIPTS_PYTHON3_ENV_PATH}/bin")
 
 # Important and fixed path files
 SET(PYTHON_GENERATE_PY "${TREE_SCRIPTS_PYTHON_ENV_PATH}/generate.py")
+
+# Point to this file itself
+SET(TREE_SELF_PATH "${CMAKE_CURRENT_LIST_FILE}")
