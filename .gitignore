@@ -750,4 +750,5 @@ MigrationBackup/
 
 !Architecture/*
 .idea/.name
+config.i.json
 Scripts/Python/Environments

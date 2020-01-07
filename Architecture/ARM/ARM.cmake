@@ -1,6 +1,6 @@
-#===-- CMakeToolchain.cmake - The root of the toolchain file for CMake cross compilation  -------------*- CMake -*-===//
+#===-- ARM.cmake - CMake Architecture file for ARM ----------------------------------------------------*- CMake -*-===//
 #
-# Copyright (c) 2019 Oever González
+# Copyright (c) 2020 Oever González
 #
 #  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
 #  the License. You may obtain a copy of the License at
@@ -15,8 +15,8 @@
 #===---------------------------------------------------------------------------------------------------------------===//
 #/
 #/ \file
-#/ This file is the root of the toolchain architecture for CMake. This file will evaluate and configure the toolchain as
-#/ it's detected. It will import some files which are ad-hoc for each toolchain.
+#/ This file will define the general settings for the compiler. This includes the compiler itself (i.e. gcc, clang,
+#/ msvc), the binutils such as the assembler and linker and some other "generic" options for the architecture. The
+#/ respective machine file will probably override some options.
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
-

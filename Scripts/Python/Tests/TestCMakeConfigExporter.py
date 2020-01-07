@@ -1,5 +1,25 @@
 #!/usr/bin/env python3
 # coding=utf-8
+# ===-- TestCMakeConfigExporter.py - Configuration exporter for CMake  -------------------------------*- Python -*-===//
+#
+# Copyright (c) 2020 Oever González
+#
+#  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+#  the License. You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+#  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+#  specific language governing permissions and limitations under the License.
+# SPDX-License-Identifier: Apache-2.0
+#
+# ===--------------------------------------------------------------------------------------------------------------===//
+# /
+# / \file
+# / This file will test the correctness of the CMakeConfigExporter.py script.
+# /
+# ===--------------------------------------------------------------------------------------------------------------===//
 import os
 
 import pytest
@@ -109,10 +129,10 @@ def test_value_insertion():
             '--docstring', 'DESC']
     main(args)
     # Open the raw DB
-    # Access the SET_AND_EXPORT table
+    # Access the SET table
     # Query the just inserted value
     raw_db = TinyDB(default_db_filename)
-    table_db = raw_db.table('SET_AND_EXPORT')
+    table_db = raw_db.table('SET')
     entry = table_db.search(where('variable') == 'IVAR')
     # Test: Not none, values are correct
     assert entry is not None
@@ -121,6 +141,74 @@ def test_value_insertion():
     assert first['value'] == 'IVAL'
     assert first['type'] == 'STRING'
     assert first['docstring'] == 'DESC'
+
+
+def test_value_insertion_with_default():
+    """
+    This test hard-codes the DB structure. This is absolutely intended, a bad practice but intentional. We can rely
+    in a format for the DB if we need to use other tools.
+    """
+    args = ['INT']
+    main(args)
+
+    args = ['SAE',
+            '--variable', 'IVAR',
+            '--value', 'IVAL',
+            '--type', 'STRING',
+            '--default', 'IVAL',
+            '--docstring', 'DESC']
+    main(args)
+    # Open the raw DB
+    # Access the SET table
+    # Query the just inserted value
+    raw_db = TinyDB(default_db_filename)
+    table_db = raw_db.table('SET')
+    entry = table_db.search(where('variable') == 'IVAR')
+    # Test: Not none, values are correct
+    assert entry is not None
+    assert entry == []
+
+
+def test_value_insertion_with_default_update():
+    """
+    This test hard-codes the DB structure. This is absolutely intended, a bad practice but intentional. We can rely
+    in a format for the DB if we need to use other tools.
+    """
+    args = ['INT']
+    main(args)
+
+    args = ['SAE',
+            '--variable', 'IVAR',
+            '--value', 'IVAL',
+            '--type', 'STRING',
+            '--docstring', 'DESC']
+    main(args)
+    # Open the raw DB
+    # Access the SET table
+    # Query the just inserted value
+    raw_db = TinyDB(default_db_filename)
+    table_db = raw_db.table('SET')
+    entry = table_db.search(where('variable') == 'IVAR')
+    # Test: Not none, values are correct
+    assert entry is not None
+    first = entry[0]
+    assert first['variable'] == 'IVAR'
+    assert first['value'] == 'IVAL'
+    assert first['type'] == 'STRING'
+    assert first['docstring'] == 'DESC'
+    args = ['SAE',
+            '--variable', 'IVAR',
+            '--value', 'IVAL',
+            '--type', 'STRING',
+            '--default', 'IVAL',
+            '--docstring', 'DESC']
+    main(args)
+    raw_db = TinyDB(default_db_filename)
+    table_db = raw_db.table('SET')
+    entry = table_db.search(where('variable') == 'IVAR')
+    # Test: Not none, values are correct
+    assert entry is not None
+    assert entry == []
 
 
 def test_value_update(caplog, template_file, cmake_file):
@@ -155,10 +243,10 @@ def test_value_update(caplog, template_file, cmake_file):
         main(args)
 
         # Open the raw DB
-        # Access the SET_AND_EXPORT table
+        # Access the SET table
         # Query the just inserted value
         raw_db = TinyDB(default_db_filename)
-        table_db = raw_db.table('SET_AND_EXPORT')
+        table_db = raw_db.table('SET')
         entry = table_db.search(where('variable') == 'IVAR')
         # Test: Not none, values are correct
         assert entry is not None
@@ -185,10 +273,10 @@ def test_value_insert_force():
             '--force']
     main(args)
     # Open the raw DB
-    # Access the SET_AND_EXPORT_FORCE table
+    # Access the SET_FORCE table
     # Query the just inserted value
     raw_db = TinyDB(default_db_filename)
-    table_db = raw_db.table('SET_AND_EXPORT_FORCE')
+    table_db = raw_db.table('SET_FORCE')
     entry = table_db.search(where('variable') == 'IVAR')
     # Test: Not none, values are correct
     assert entry is not None
@@ -223,10 +311,10 @@ def test_value_update_force():
     main(args)
 
     # Open the raw DB
-    # Access the SET_AND_EXPORT_FORCE table
+    # Access the SET_FORCE table
     # Query the just inserted value
     raw_db = TinyDB(default_db_filename)
-    table_db = raw_db.table('SET_AND_EXPORT_FORCE')
+    table_db = raw_db.table('SET_FORCE')
     entry = table_db.search(where('variable') == 'IVAR')
     # Test: Not none, values are correct
     assert entry is not None
@@ -306,22 +394,22 @@ def test_dumped_format(db_file, template_file, cmake_file):
 
     with open(cmake_file) as f:
         assert str(f.read()) == '####\n' \
-                                '# E: SET_AND_EXPORT\n' \
-                                'SET_AND_EXPORT(E\n' \
-                                '  "U" BOOL\n' \
-                                '  "G")\n\n' \
-                                '# V: SET_AND_EXPORT\n' \
-                                'SET_AND_EXPORT(V\n' \
-                                '  "A" BOOL\n' \
-                                '  "D")\n\n' \
-                                '# EL: SET_AND_EXPORT_FORCE\n' \
-                                'SET_AND_EXPORT_FORCE(EL\n' \
-                                '  "EU" BOOL\n' \
-                                '  "GN")\n\n' \
-                                '# VA: SET_AND_EXPORT_FORCE\n' \
-                                'SET_AND_EXPORT_FORCE(VA\n' \
-                                '  "AL" BOOL\n' \
-                                '  "DO")\n\n'
+                                '# E: SET_AND_EXPORT BOOL\n' \
+                                'SET(E "U"\n' \
+                                '  CACHE BOOL\n' \
+                                '  "G")\n' \
+                                '# V: SET_AND_EXPORT BOOL\n' \
+                                'SET(V "A"\n' \
+                                '  CACHE BOOL\n' \
+                                '  "D")\n' \
+                                '# EL: SET_AND_EXPORT_FORCE BOOL\n' \
+                                'SET(EL "EU"\n' \
+                                '  CACHE BOOL\n' \
+                                '  "GN" FORCE)\n' \
+                                '# VA: SET_AND_EXPORT_FORCE BOOL\n' \
+                                'SET(VA "AL"\n' \
+                                '  CACHE BOOL\n' \
+                                '  "DO" FORCE)\n'
 
 
 def test_large_loop(db_file, template_file, cmake_file):
