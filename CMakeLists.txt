@@ -35,7 +35,6 @@ INCLUDE(Tree.cmake)
 FILE(MAKE_DIRECTORY "${TREE_BIN_IMPORTANT_PATH}")
 # Set the TREE_SCRIPTS_CMAKE_MODULES_PATH to the CMAKE_MODULE_PATH so CMake will use those modules first
 SET(CMAKE_MODULE_PATH "${TREE_SCRIPTS_CMAKE_MODULES_PATH}")
-SET(CMAKE_TOOLCHAIN_FILE "${TREE_SCRIPTS_CMAKE_TOOLCHAIN_PATH}/CMakeToolchain.cmake")
 
 # We rely on Python 3.7 for CMake Extensions, which are Python scripts that extends the build system
 FIND_PACKAGE(Python3 COMPONENTS Interpreter)
@@ -88,6 +87,9 @@ INCLUDE("${TREE_SCRIPTS_CMAKE_PATH}/CMakeExtensions.cmake")
 INCLUDE(${TREE_ARCHITECTURE_PATH}/ArchitectureSelector.cmake)
 # This file is the machine selector, it forces the user to select a valid machine to build
 INCLUDE(${TREE_ARCHITECTURE_PATH}/MachineSelector.cmake)
+
+# Include the CMake Toolchain file that will force the user to select a compiler for it's target
+SET(CMAKE_TOOLCHAIN_FILE "${TREE_SCRIPTS_CMAKE_TOOLCHAIN_PATH}/CMakeToolchain.cmake")
 
 # Update these variables before the project and after a sane configuration
 SET(CMAKE_SYSTEM_PROCESSOR ${KERNEL_ARCH})

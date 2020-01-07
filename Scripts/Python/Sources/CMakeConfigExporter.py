@@ -101,7 +101,7 @@ def init_db(args):
         db.purge()
         db.purge_tables()
         this_logger.info("Initialized database!")
-        this_logger.warning("The database and all it's tables are empty now")
+        this_logger.info("The database and all it's tables are empty now")
 
 
 def set_and_export(args):
