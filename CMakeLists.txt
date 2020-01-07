@@ -44,7 +44,7 @@ ELSEIF (Python3_VERSION VERSION_LESS 3.7)
   MESSAGE(FATAL_ERROR "Python 3.7 or newer is required to build this project.")
 ELSE ()
   MESSAGE(STATUS "Found a suitable version of Python 3: \"Python ${Python3_VERSION}\"")
-  MESSAGE(STATUS "Python executable: \"${Python3_EXECUTABLE}\"")
+  MESSAGE(STATUS "Python executable: '${Python3_EXECUTABLE}'")
 ENDIF ()
 
 # For a CMake cross-compilation (the one used throughout this process), you must specify some variables that will
@@ -59,9 +59,9 @@ SET(CMAKE_SYSTEM_VERSION 0.0.0.1)
 SET(CMAKE_CROSSCOMPILING ON)
 
 # Identify the "project name" with the name of the root folder of the source code
-GET_FILENAME_COMPONENT(KERNEL_SOURCEDIR_NAME "${CMAKE_SOURCE_DIR}" NAME_WE)
-MESSAGE(STATUS "Using the directory name as the project identifier: \"${KERNEL_SOURCEDIR_NAME}\"")
-SET(PROJECT_NAME "Zalea ${CMAKE_SYSTEM_NAME} (${KERNEL_SOURCEDIR_NAME})")
+GET_FILENAME_COMPONENT(KERNEL_SOURCE_DIR_NAME "${CMAKE_SOURCE_DIR}" NAME_WE)
+MESSAGE(STATUS "Using the directory name as the project identifier: \"${KERNEL_SOURCE_DIR_NAME}\"")
+SET(PROJECT_NAME "Zalea ${CMAKE_SYSTEM_NAME} (${KERNEL_SOURCE_DIR_NAME})")
 
 # Manually include this Python extension. This is the Python runner, a pure CMake runner needed to install the VENV
 INCLUDE("${TREE_SCRIPTS_CMAKE_EXTENSIONS_PATH}/PurePythonRunner.cmake")
@@ -74,10 +74,10 @@ IF (NOT PYTHON3_GENERATED)
   UNSET(_Python3_EXECUTABLE CACHE)
   FIND_PROGRAM(_Python3_EXECUTABLE NAMES "python3" "python" PATHS
                "${TREE_SCRIPTS_PYTHON3_ENV_PATH}" PATH_SUFFIXES "Scripts" "bin" NO_DEFAULT_PATH)
-  SET(Python3_EXECUTABLE "${_Python3_EXECUTABLE}" CACHE INTERNAL "The Python 3 VENV executable" FORCE)
-  SET(_Python3_EXECUTABLE "${_Python3_EXECUTABLE}" CACHE INTERNAL "The Python 3 VENV executable" FORCE)
+  SET(Python3_EXECUTABLE "${_Python3_EXECUTABLE}" CACHE INTERNAL "The Python 3 Virtual Environment executable" FORCE)
+  SET(_Python3_EXECUTABLE "${_Python3_EXECUTABLE}" CACHE INTERNAL "The Python 3 Virtual Environment executable" FORCE)
   FIND_PACKAGE(Python3 REQUIRED COMPONENTS Interpreter)
-  SET(PYTHON3_GENERATED "YES" CACHE INTERNAL "Detect if the Python 3 VENV has been installed")
+  SET(PYTHON3_GENERATED "YES" CACHE INTERNAL "Detect if the Python 3 Virtual Environment has been installed")
 ENDIF ()
 
 # Include "Language Extensions" (need Python), this file includes all available extensions
@@ -91,9 +91,8 @@ INCLUDE(${TREE_ARCHITECTURE_PATH}/MachineSelector.cmake)
 # Include the CMake Toolchain file that will force the user to select a compiler for it's target
 SET(CMAKE_TOOLCHAIN_FILE "${TREE_SCRIPTS_CMAKE_TOOLCHAIN_PATH}/CMakeToolchain.cmake")
 
-# Update these variables before the project and after a sane configuration
+# Update these variables and the tree before the project and after a sane configuration
 SET(CMAKE_SYSTEM_PROCESSOR ${KERNEL_ARCH})
-# Update the tree before the project and after a sane configuration
 INCLUDE("${TREE_SELF_PATH}")
 
 # Create and configure the actual CMake project and enable the languages: C, C++, CPP and Assembler

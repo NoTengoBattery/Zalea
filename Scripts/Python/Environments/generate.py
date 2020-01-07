@@ -40,10 +40,12 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         os.environ['VIRTUAL_ENV'] = context.env_dir
         self.install_pip(context)
 
-    def reader(self, stream, context):
+    @staticmethod
+    def reader(stream):
         while True:
             s = stream.readline()
-            if not s: break
+            if not s:
+                break
             sys.stderr.write(s.decode('utf-8'))
             sys.stderr.flush()
         stream.close()

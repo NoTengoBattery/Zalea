@@ -189,7 +189,7 @@ def set_and_export(args):
                                  (args.value, args.docstring, args.default))
 
 
-def dump_table(table: str, file, args):
+def dump_table(table: str, file):
     this_logger.info("Ready to dump database to CMake file")
     with tinydb_db as db:
         db_table = db.table(table)
@@ -224,9 +224,9 @@ def dump_db(args):
             output.write(template.read())
             this_logger.info("Copied template file to output file")
         output.write('\n')
-        dump_table('SET', output, args)
+        dump_table('SET', output)
         this_logger.info("Dumped SET table to output file")
-        dump_table('SET_FORCE', output, args)
+        dump_table('SET_FORCE', output)
         this_logger.info("Dumped SET_FORCE table to output file")
         with args.file as real_output:
             output.seek(0)

@@ -26,18 +26,6 @@
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
 
-# Dumps the database to a CMake script full of SET_AND_EXPORT and SET_AND_EXPORT_FORCE directives.
-FUNCTION(DATABASE_TO_CMAKE)
-  SET(CMD_ARGS
-      END
-      --dbfile ${SAE_DBFILE}
-      --template ${SAE_TEMPLATE_FILE}
-      --file ${SAE_OUTPUT_FILE})
-  RUN_PYTHON3_SCRIPT(${SAE_HELPER} "." "${CMD_ARGS}")
-  MESSAGE(STATUS "The current configuration was stored in "
-          "'${SAE_OUTPUT_FILE}'")
-ENDFUNCTION()
-
 MESSAGE(STATUS "Importing the SET_AND_EXPORT CMake extension...")
 
 # Initialize the module
@@ -65,6 +53,18 @@ SAE_HELPER: Path to the Python helper script")
   SET(SAE_INITDB ON CACHE INTERNAL "SET_AND_EXPORT database initialized status")
   MESSAGE(STATUS "Module for SET_AND_EXPORT command initialized!")
 ENDIF ()
+
+# Dumps the database to a CMake script full of SET_AND_EXPORT and SET_AND_EXPORT_FORCE directives.
+FUNCTION(DATABASE_TO_CMAKE)
+  SET(CMD_ARGS
+      END
+      --dbfile ${SAE_DBFILE}
+      --template ${SAE_TEMPLATE_FILE}
+      --file ${SAE_OUTPUT_FILE})
+  RUN_PYTHON3_SCRIPT(${SAE_HELPER} "." "${CMD_ARGS}")
+  MESSAGE(STATUS "The current configuration was stored in "
+          "'${SAE_OUTPUT_FILE}'")
+ENDFUNCTION()
 
 # Sets a variable in the cache and uses a Python3 Script (helper script) to write the variable, type, value and
 # docstring to a database. The command that updates the database always use the current value of the variable, no matter

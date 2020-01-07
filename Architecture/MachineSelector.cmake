@@ -49,7 +49,7 @@ IF (NOT VALID_MACHINE)
             "in the '${TREE_ARCHITECTURE_X_CONFIG_PATH}' directory (without the extension).")
   ELSE ()
     MESSAGE(FATAL_ERROR "The machine picked does not have a '.cfg.cmake' configuration file in "
-            "'${TREE_ARCHITECTURE_X_CONFIG_PATH};. You can create an empty file for a new machine and update it with "
+            "'${TREE_ARCHITECTURE_X_CONFIG_PATH}'. You can create an empty file for a new machine and update it with "
             "the exported CMake config in the root of the source code.")
   ENDIF ()
 ELSE ()
