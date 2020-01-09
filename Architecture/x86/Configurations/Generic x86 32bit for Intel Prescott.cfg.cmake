@@ -18,12 +18,7 @@
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
 
-# This is a recognizable name for the machine
 # MACHINE_NAME: SET_AND_EXPORT STRING
 SET(MACHINE_NAME "Generic/Legacy BIOS x86 machine for 32bit Intel Prescott or better"
   CACHE STRING
   "This variable is the machine for the build, a human readable name for the machine.")
-# KERNEL_ARCH: SET_AND_EXPORT_FORCE STRING
-SET(KERNEL_ARCH "x86"
-  CACHE STRING
-  "This variable is the architecture to build, which is the CPU architecture that the machine runs." FORCE)

@@ -32,7 +32,10 @@ MESSAGE(STATUS "Importing the SET_AND_EXPORT CMake extension...")
 IF (NOT SAE_INITDB)
   MESSAGE(STATUS "Initializing module for SET_AND_EXPORT command")
 
-  IF (NOT SAE_DBFILE OR NOT SAE_OUTPUT_FILE OR NOT SAE_TEMPLATE_FILE OR NOT SAE_HELPER)
+  IF (NOT SAE_DBFILE OR
+      NOT SAE_OUTPUT_FILE OR
+      NOT SAE_TEMPLATE_FILE OR
+      NOT SAE_HELPER)
     MESSAGE(FATAL_ERROR "To use the SET_AND_EXPORT extension you must set these variables: \
 SAE_DBFILE: Path to the database file, \
 SAE_OUTPUT_FILE: Path to generate the CMake config, \
@@ -46,10 +49,9 @@ SAE_HELPER: Path to the Python helper script")
 
   # Run the Python script to initialize the DB
   SET(CMD_ARGS
-      INT
-      --dbfile ${SAE_DBFILE})
-  RUN_PYTHON3_SCRIPT(${SAE_HELPER} "." "${CMD_ARGS}")
-
+      "INT"
+      "--dbfile" "${SAE_DBFILE}")
+  RUN_PYTHON3_SCRIPT("${SAE_HELPER}" "." "${CMD_ARGS}")
   SET(SAE_INITDB ON CACHE INTERNAL "SET_AND_EXPORT database initialized status")
   MESSAGE(STATUS "Module for SET_AND_EXPORT command initialized!")
 ENDIF ()
@@ -57,11 +59,11 @@ ENDIF ()
 # Dumps the database to a CMake script full of SET_AND_EXPORT and SET_AND_EXPORT_FORCE directives.
 FUNCTION(DATABASE_TO_CMAKE)
   SET(CMD_ARGS
-      END
-      --dbfile ${SAE_DBFILE}
-      --template ${SAE_TEMPLATE_FILE}
-      --file ${SAE_OUTPUT_FILE})
-  RUN_PYTHON3_SCRIPT(${SAE_HELPER} "." "${CMD_ARGS}")
+      "END"
+      "--dbfile" "${SAE_DBFILE}"
+      "--template" "${SAE_TEMPLATE_FILE}"
+      "--file" "${SAE_OUTPUT_FILE}")
+  RUN_PYTHON3_SCRIPT("${SAE_HELPER}" "." "${CMD_ARGS}")
   MESSAGE(STATUS "The current configuration was stored in "
           "'${SAE_OUTPUT_FILE}'")
 ENDFUNCTION()
@@ -72,17 +74,17 @@ ENDFUNCTION()
 FUNCTION(SET_AND_EXPORT VARIABLE VALUE TYPE DEFAULT DOCSTRING)
   # We run "SET" first as it is supposed to not change the cached value (that is the one that we export to the DB)
   # WE NEVER EXPORT THE VALUE GIVEN IN THE FUNCTION CALL, we always export the cached value
-  SET(${VARIABLE} "${VALUE}" CACHE ${TYPE} "${DOCSTRING}")
+  SET("${VARIABLE}" "${VALUE}" CACHE ${TYPE} "${DOCSTRING}")
   # Run the Python script to insert in the DB
   SET(CMD_ARGS
-      SAE
-      --dbfile ${SAE_DBFILE}
-      --variable ${VARIABLE}
-      --value $CACHE{${VARIABLE}}
-      --type ${TYPE}
-      --default ${DEFAULT}
-      --docstring ${DOCSTRING})
-  RUN_PYTHON3_SCRIPT(${SAE_HELPER} "." "${CMD_ARGS}")
+      "SAE"
+      "--dbfile" "${SAE_DBFILE}"
+      "--variable" "${VARIABLE}"
+      "--value" "$CACHE{${VARIABLE}}"
+      "--type" "${TYPE}"
+      "--default" "${DEFAULT}"
+      "--docstring" "${DOCSTRING}")
+  RUN_PYTHON3_SCRIPT("${SAE_HELPER}" "." "${CMD_ARGS}")
 ENDFUNCTION()
 
 # Forces a variable in the cache and uses a Python3 Script (helper script) to write the variable, type, value and
@@ -94,16 +96,16 @@ ENDFUNCTION()
 FUNCTION(SET_AND_EXPORT_FORCE VARIABLE VALUE TYPE DEFAULT DOCSTRING)
   # We run "SET" first as it is supposed to change the cached value (that is the one that we won't export to the DB)
   # WE ALWAYS EXPORT THE CACHED VALUE, it should have changed
-  SET(${VARIABLE} "${VALUE}" CACHE ${TYPE} "${DOCSTRING}" FORCE)
+  SET("${VARIABLE}" "${VALUE}" CACHE "${TYPE}" "${DOCSTRING}" FORCE)
   # Run the Python script to insert in the DB
   SET(CMD_ARGS
-      SAE
-      --dbfile ${SAE_DBFILE}
-      --variable ${VARIABLE}
-      --value $CACHE{${VARIABLE}}
-      --type ${TYPE}
-      --default ${DEFAULT}
-      --docstring ${DOCSTRING}
-      --force)
-  RUN_PYTHON3_SCRIPT(${SAE_HELPER} "." "${CMD_ARGS}")
+      "SAE"
+      "--dbfile" "${SAE_DBFILE}"
+      "--variable" "${VARIABLE}"
+      "--value" "$CACHE{${VARIABLE}}"
+      "--type" "${TYPE}"
+      "--default" "${DEFAULT}"
+      "--docstring" "${DOCSTRING}"
+      "--force")
+  RUN_PYTHON3_SCRIPT("${SAE_HELPER}" "." "${CMD_ARGS}")
 ENDFUNCTION()

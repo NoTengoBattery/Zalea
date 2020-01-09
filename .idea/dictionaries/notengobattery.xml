@@ -1,6 +1,7 @@
 <component name="ProjectDictionaryState">
   <dictionary name="notengobattery">
     <words>
+      <w>ccmake</w>
       <w>pytest</w>
       <w>spdx</w>
       <w>tinydb</w>

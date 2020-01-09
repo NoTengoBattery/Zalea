@@ -20,3 +20,15 @@
 #/ respective machine file will probably override some options.
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
+
+# This is a list of the *compilers* that are able to build this kernel for this architecture
+SET(AVAILABLE_COMPILERS "Clang" "GCC" "MINGW" "MSVC")
+INCLUDE("${TREE_ARCHITECTURE_PATH}/CheckCompilerName.cmake")
+
+# This is a list of *binutils* that are able to build the latest stages of this kernel for this architecture
+SET(AVAILABLE_BINUTILS "LLVM" "GNU")
+INCLUDE("${TREE_ARCHITECTURE_PATH}/CheckBinutilsName.cmake")
+
+# This is the default target for the compiler and binutils
+SET_AND_EXPORT(KERNEL_TARGET "i386-pc-elf" STRING "i386-pc-elf"
+               "This variable is the machine target the compiler and binutils.")

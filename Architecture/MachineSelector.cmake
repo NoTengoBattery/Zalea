@@ -45,12 +45,12 @@ CHECK_WITH_STRINGS(KERNEL_MACHINE VALID_MACHINE)
 IF (NOT VALID_MACHINE)
   IF (NOT KERNEL_MACHINE)
     MESSAGE(FATAL_ERROR "You must pick a valid machine configuration! All available configurations are listed in the "
-            "KERNEL_MACHINE-STRINGS variable in the cache. They are, also, listed in the CCMake GUI and they are files "
+            "KERNEL_MACHINE-STRINGS variable in the cache. They are, also, listed in the ccmake GUI and they are files "
             "in the '${TREE_ARCHITECTURE_X_CONFIG_PATH}' directory (without the extension).")
   ELSE ()
     MESSAGE(FATAL_ERROR "The machine picked does not have a '.cfg.cmake' configuration file in "
             "'${TREE_ARCHITECTURE_X_CONFIG_PATH}'. You can create an empty file for a new machine and update it with "
-            "the exported CMake config in the root of the source code.")
+            "the exported CMake config in the build important root path.")
   ENDIF ()
 ELSE ()
   IF (NOT _MACHINE_INCLUDED)

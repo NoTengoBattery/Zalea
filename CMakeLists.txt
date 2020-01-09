@@ -84,9 +84,9 @@ ENDIF ()
 INCLUDE("${TREE_SCRIPTS_CMAKE_PATH}/CMakeExtensions.cmake")
 
 # This file is the architecture selector, it forces the user to select a valid architecture to build
-INCLUDE(${TREE_ARCHITECTURE_PATH}/ArchitectureSelector.cmake)
+INCLUDE("${TREE_ARCHITECTURE_PATH}/ArchitectureSelector.cmake")
 # This file is the machine selector, it forces the user to select a valid machine to build
-INCLUDE(${TREE_ARCHITECTURE_PATH}/MachineSelector.cmake)
+INCLUDE("${TREE_ARCHITECTURE_PATH}/MachineSelector.cmake")
 
 # Include the CMake Toolchain file that will force the user to select a compiler for it's target
 SET(CMAKE_TOOLCHAIN_FILE "${TREE_SCRIPTS_CMAKE_TOOLCHAIN_PATH}/CMakeToolchain.cmake")

@@ -22,7 +22,3 @@
 SET(MACHINE_NAME "ARM Versatile Express for Cortex-A15"
   CACHE STRING
   "This variable is the machine for the build, a human readable name for the machine.")
-# KERNEL_ARCH: SET_AND_EXPORT_FORCE STRING
-SET(KERNEL_ARCH "ARM"
-  CACHE STRING
-  "This variable is the architecture to build, which is the CPU architecture that the machine runs." FORCE)
