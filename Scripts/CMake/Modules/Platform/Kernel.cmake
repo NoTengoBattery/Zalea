@@ -1,4 +1,4 @@
-#===-- CMakeToolchain.cmake - The root of the toolchain file for CMake cross compilation  -------------*- CMake -*-===//
+#===--Kernel.cmake - CMake System file  ---------------------------------------------------------------*- CMake -*-===//
 #
 # Copyright (c) 2020 Oever González
 #
@@ -15,16 +15,8 @@
 #===---------------------------------------------------------------------------------------------------------------===//
 #/
 #/ \file
-#/ This file is the root of the toolchain architecture for CMake. This file will evaluate and configure the toolchain as
-#/ it's detected. It will import some files which are ad-hoc for each toolchain.
+#/ This file contains System-specific, Compiler-generic and Language-generic code and variables. This file is called
+#/ just after CMake identifies the compiler, and before the Compiler-specific, Laguage-specific configuration file when
+#/ CMake checks for a "working compiler".
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
-
-# Compiler selection logic...
-MESSAGE(STATUS "The CMake Toolchain File is trying to auto-setup the '${KERNEL_COMPILER}' compiler...")
-IF ("${KERNEL_COMPILER}" STREQUAL "Clang")
-  SET(CMAKE_C_COMPILER "clang")
-  set(CMAKE_C_COMPILER_TARGET "${KERNEL_TARGET}")
-  SET(CMAKE_CXX_COMPILER "clang++")
-  set(CMAKE_CXX_COMPILER_TARGET "${KERNEL_TARGET}")
-ENDIF ()
