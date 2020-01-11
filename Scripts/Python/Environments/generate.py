@@ -41,7 +41,7 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         self.install_pip(context)
 
     @staticmethod
-    def reader(stream):
+    def reader(stream, context):
         while True:
             s = stream.readline()
             if not s:
