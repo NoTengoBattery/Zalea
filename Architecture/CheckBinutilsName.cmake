@@ -20,7 +20,7 @@
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
 
-SET_WITH_STRINGS(KERNEL_BINUTILS "-" "Select the binutils that will be used to build this kernel" AVAILABLE_BINUTILS)
+SET_WITH_STRINGS(KERNEL_BINUTILS "GNU" "Select the binutils that will be used to build this kernel" AVAILABLE_BINUTILS)
 CHECK_WITH_STRINGS(KERNEL_BINUTILS VALID_BINUTILS)
 IF (NOT VALID_BINUTILS)
   CLIST_TO_HLIST(AVAILABLE_BINUTILS H_AVAILABLE_BINUTILS)

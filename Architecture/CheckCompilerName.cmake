@@ -20,7 +20,7 @@
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
 
-SET_WITH_STRINGS(KERNEL_COMPILER "-" "Select the compiler that will be used to build this kernel" AVAILABLE_COMPILERS)
+SET_WITH_STRINGS(KERNEL_COMPILER "GCC" "Select the compiler that will be used to build this kernel" AVAILABLE_COMPILERS)
 CHECK_WITH_STRINGS(KERNEL_COMPILER VALID_COMPILER)
 IF (NOT VALID_COMPILER)
   CLIST_TO_HLIST(AVAILABLE_COMPILERS H_AVAILABLE_COMPILERS)
