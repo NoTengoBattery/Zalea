@@ -38,3 +38,10 @@ ENDIF ()
 IF (TREE_SCRIPTS_CMAKE_TOOLCHAIN_PATH)
   INCLUDE("${TREE_SCRIPTS_CMAKE_TOOLCHAIN_PATH}/CMakeCompilerToolchain.cmake")
 ENDIF ()
+
+# Ensure this lock. This way, the compiler name (or path) is in the path in the next run
+IF(NOT $CACHE{_COMPILER_LOCK})
+SET(_COMPILER_LOCK "Y" CACHE INTERNAL "This lock will force the user to re-run CMake after the compiler toolchain")
+  MESSAGE(FATAL_ERROR "The CMake was changed by the CMake Toolchain file. In order to apply the changes, you will need "
+          "to run CMake again.")
+ENDIF()
