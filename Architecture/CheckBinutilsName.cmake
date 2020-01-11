@@ -29,3 +29,4 @@ IF (NOT VALID_BINUTILS)
 ENDIF ()
 
 SET(CMAKE_BINUTILS_PATH "" CACHE FILEPATH "A hint path to use when searching for the binutils.")
+# TODO: Shall we implement a macro?

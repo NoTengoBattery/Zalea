@@ -29,3 +29,4 @@ IF (NOT VALID_COMPILER)
 ENDIF ()
 
 SET(CMAKE_COMPILER_PATH "" CACHE FILEPATH "A hint path to use when searching for the compiler.")
+# TODO: Shall we implement a macro?
