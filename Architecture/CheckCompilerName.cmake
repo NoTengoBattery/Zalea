@@ -28,4 +28,4 @@ IF (NOT VALID_COMPILER)
           "${H_AVAILABLE_COMPILERS}")
 ENDIF ()
 
-SET(CMAKE_COMPILER_BIN_PATH "" CACHE FILEPATH "A hint path to use when searching for the compiler.")
+SET(CMAKE_COMPILER_PATH "" CACHE FILEPATH "A hint path to use when searching for the compiler.")

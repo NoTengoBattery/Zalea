@@ -20,12 +20,12 @@
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
 
-# Try to use the binary installed by the user in non-standard PATH, which is set in CMAKE_COMPILER_BIN_PATH
-FIND_PROGRAM(CMAKE_ASM_EXE NAMES "${CMAKE_ASM_COMPILER}" HINTS "${CMAKE_COMPILER_BIN_PATH}" PATH_SUFFIXES "bin"
+# Try to use the binary installed by the user in non-standard PATH, which is set in CMAKE_COMPILER_PATH
+FIND_PROGRAM(CMAKE_ASM_EXE NAMES "${CMAKE_ASM_COMPILER}" HINTS "${CMAKE_COMPILER_PATH}" PATH_SUFFIXES "bin"
              DOC "This is a guess made by the build system for an assembly compiler")
-FIND_PROGRAM(CMAKE_C_EXE NAMES "${CMAKE_C_COMPILER}" HINTS "${CMAKE_COMPILER_BIN_PATH}" PATH_SUFFIXES "bin"
+FIND_PROGRAM(CMAKE_C_EXE NAMES "${CMAKE_C_COMPILER}" HINTS "${CMAKE_COMPILER_PATH}" PATH_SUFFIXES "bin"
              DOC "This is a guess made by the build system for an C compiler")
-FIND_PROGRAM(CMAKE_CXX_EXE NAMES "${CMAKE_CXX_COMPILER}" HINTS "${CMAKE_COMPILER_BIN_PATH}" PATH_SUFFIXES "bin"
+FIND_PROGRAM(CMAKE_CXX_EXE NAMES "${CMAKE_CXX_COMPILER}" HINTS "${CMAKE_COMPILER_PATH}" PATH_SUFFIXES "bin"
              DOC "This is a guess made by the build system for an C++ compiler")
 
 # Mark these 3 variables as advanced (not to be shown in the "normal" GUI

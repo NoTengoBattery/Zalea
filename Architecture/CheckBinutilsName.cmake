@@ -28,4 +28,4 @@ IF (NOT VALID_BINUTILS)
           "${H_AVAILABLE_BINUTILS}")
 ENDIF ()
 
-SET(CMAKE_BINUTILS_BIN_PATH "" CACHE FILEPATH "A hint path to use when searching for the binutils.")
+SET(CMAKE_BINUTILS_PATH "" CACHE FILEPATH "A hint path to use when searching for the binutils.")

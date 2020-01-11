@@ -1,4 +1,4 @@
-#===-- Kernel-Clang-ASM.cmake - CMake System-Compiler-Language file ====-------------------------------*- CMake -*-===//
+#===-- Kernel-GNU-ASM.cmake - CMake System-Compiler-Language file ====---------------------------------*- CMake -*-===//
 #
 # Copyright (c) 2020 Oever González
 #

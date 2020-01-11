@@ -1,4 +1,4 @@
-#===-- Kernel-Clang-ASM.cmake - CMake System-Compiler-Language file ====-------------------------------*- CMake -*-===//
+#===-- Kernel-GNU-CXX.cmake - CMake System-Compiler-Language file ====---------------------------------*- CMake -*-===//
 #
 # Copyright (c) 2020 Oever González
 #
@@ -20,3 +20,5 @@
 #/ CMake checks for a "working compiler".
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
+
+SET(CMAKE_CXX_FLAGS "-ffreestanding -nostdlib")
