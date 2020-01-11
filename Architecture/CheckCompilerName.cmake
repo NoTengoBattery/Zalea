@@ -27,3 +27,5 @@ IF (NOT VALID_COMPILER)
   MESSAGE(FATAL_ERROR "Please set a valid compiler in the KERNEL_COMPILER variable. Available compilers: "
           "${H_AVAILABLE_COMPILERS}")
 ENDIF ()
+
+SET(CMAKE_COMPILER_BIN_PATH "" CACHE FILEPATH "A hint path to use when searching for the compiler.")

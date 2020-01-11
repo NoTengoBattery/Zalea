@@ -31,4 +31,4 @@ INCLUDE("${TREE_ARCHITECTURE_PATH}/CheckBinutilsName.cmake")
 
 # This is the default target for the compiler and binutils
 SET_AND_EXPORT(KERNEL_TARGET "arm-none-eabi" STRING "arm-none-eabi"
-                     "This variable is the machine target the compiler and binutils.")
+               "This variable is the machine target the compiler and binutils.")

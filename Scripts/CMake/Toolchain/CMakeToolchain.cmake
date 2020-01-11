@@ -16,15 +16,21 @@
 #/
 #/ \file
 #/ This file is the root of the toolchain architecture for CMake. This file will evaluate and configure the toolchain as
-#/ it's detected. It will import some files which are ad-hoc for each toolchain.
+#/ it's detected.
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
 
 # Compiler selection logic...
 MESSAGE(STATUS "The CMake Toolchain File is trying to auto-setup the '${KERNEL_COMPILER}' compiler...")
 IF ("${KERNEL_COMPILER}" STREQUAL "Clang")
+  SET(CMAKE_ASM_COMPILER "clang")
+  SET(CMAKE_ASM_COMPILER_TARGET "${KERNEL_TARGET}")
   SET(CMAKE_C_COMPILER "clang")
-  set(CMAKE_C_COMPILER_TARGET "${KERNEL_TARGET}")
+  SET(CMAKE_C_COMPILER_TARGET "${KERNEL_TARGET}")
   SET(CMAKE_CXX_COMPILER "clang++")
-  set(CMAKE_CXX_COMPILER_TARGET "${KERNEL_TARGET}")
+  SET(CMAKE_CXX_COMPILER_TARGET "${KERNEL_TARGET}")
+ENDIF ()
+
+IF (TREE_SCRIPTS_CMAKE_TOOLCHAIN_PATH)
+  INCLUDE("${TREE_SCRIPTS_CMAKE_TOOLCHAIN_PATH}/CMakeCompilerToolchain.cmake")
 ENDIF ()

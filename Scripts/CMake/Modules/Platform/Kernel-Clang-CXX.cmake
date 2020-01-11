@@ -1,4 +1,4 @@
-#===-- CheckBinutilsName.cmake - Compiler Name Checker  ---------------------------------------*- CMake -*-===//
+#===-- Kernel-Clang-CXX.cmake - CMake System-Compiler-Language file ====-------------------------------*- CMake -*-===//
 #
 # Copyright (c) 2020 Oever González
 #
@@ -15,17 +15,10 @@
 #===---------------------------------------------------------------------------------------------------------------===//
 #/
 #/ \file
-#/ This file is the responsible of checking and enforcing a valid compiler from the list that is known to build this
-#/ kernel for this architecture.
+#/ This file contains System-specific, Compiler-specific and Language-specific code and variables. This file is called
+#/ just after CMake identifies the compiler, and before the Compiler-specific, Laguage-specific configuration file when
+#/ CMake checks for a "working compiler".
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
 
-SET_WITH_STRINGS(KERNEL_BINUTILS "-" "Select the binutils that will be used to build this kernel" AVAILABLE_BINUTILS)
-CHECK_WITH_STRINGS(KERNEL_BINUTILS VALID_BINUTILS)
-IF (NOT VALID_BINUTILS)
-  CLIST_TO_HLIST(AVAILABLE_BINUTILS H_AVAILABLE_BINUTILS)
-  MESSAGE(FATAL_ERROR "Please set a valid binutils in the KERNEL_BINUTILS variable. Available binutils: "
-          "${H_AVAILABLE_BINUTILS}")
-ENDIF ()
-
-SET(CMAKE_BINUTILS_BIN_PATH "" CACHE FILEPATH "A hint path to use when searching for the binutils.")
+SET(CMAKE_CXX_FLAGS "-ffreestanding -nostdlib")

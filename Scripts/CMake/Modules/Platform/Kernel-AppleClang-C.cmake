@@ -23,10 +23,12 @@
 
 MESSAGE(FATAL_ERROR "The Apple's version of Clang/LLVM is not supported by this project.\n"
         "In order to use Clang with this project, you will need to set up your environment variable 'PATH' to point "
-        "to an official LLVM/Clang build (including a self-built from source) before any other path in your 'PATH'.\n"
+        "to an official LLVM/Clang build (including a build from source) before any other path in your 'PATH'.\n"
         "See Apple's official help: "
         "https://support.apple.com/guide/terminal/apd382cc5fa-4f58-4449-b20a-41c53c006f8f/mac\n"
+        "Alternatively, you can set the CMake cache variable CMAKE_COMPILER_BIN_PATH to the path where the compiler "
+        "is installed.\n"
         "See LLVM's releases web page to get a copy of Clang/LLVM: "
         "http://releases.llvm.org/download.html\n"
-        "You will need to remove the CMake's cache after setting up your compiler and 'PATH' correctly in order to "
-        "remove this error message.")
+        "You will need to remove the CMake's cache after setting up your compiler and 'PATH' correctly, or before "
+        "setting the CMAKE_COMPILER_BIN_PATH variable with the -D flag, in order to remove this error message.")
