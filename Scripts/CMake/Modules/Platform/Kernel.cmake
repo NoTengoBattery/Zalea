@@ -16,7 +16,7 @@
 #/
 #/ \file
 #/ This file contains System-specific, Compiler-generic and Language-generic code and variables. This file is called
-#/ just after CMake identifies the compiler, and before the Compiler-specific, Laguage-specific configuration file when
+#/ just after CMake identifies the compiler, and before the Compiler-specific, Language-specific configuration file when
 #/ CMake checks for a "working compiler".
 #/
 #===---------------------------------------------------------------------------------------------------------------===//

@@ -74,7 +74,7 @@ ENDFUNCTION()
 FUNCTION(SET_AND_EXPORT VARIABLE VALUE TYPE DEFAULT DOCSTRING)
   # We run "SET" first as it is supposed to not change the cached value (that is the one that we export to the DB)
   # WE NEVER EXPORT THE VALUE GIVEN IN THE FUNCTION CALL, we always export the cached value
-  SET("${VARIABLE}" "${VALUE}" CACHE ${TYPE} "${DOCSTRING}")
+  SET("${VARIABLE}" "${VALUE}" CACHE "${TYPE}" "${DOCSTRING}")
   # Run the Python script to insert in the DB
   SET(CMD_ARGS
       "SAE"
