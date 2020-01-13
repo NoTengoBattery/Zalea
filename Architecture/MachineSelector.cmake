@@ -56,3 +56,6 @@ ENDIF ()
 # Export the current architecture to the default configuration
 SET_AND_EXPORT(MACHINE_NAME "${MACHINE_NAME}" STRING "-"
                "This variable is the machine for the build, a human readable name for the machine.")
+
+# This file will give the options for valid compilers (including compiler, assembler, linker and it's minimum versions)
+INCLUDE("${TREE_ARCHITECTURE_PATH}/${KERNEL_ARCH}/${KERNEL_ARCH}.cmake")
