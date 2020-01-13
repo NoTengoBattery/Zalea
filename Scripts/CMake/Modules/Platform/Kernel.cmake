@@ -20,3 +20,27 @@
 #/ CMake checks for a "working compiler".
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
+
+IF (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "${KERNEL_COMPILER}")
+  IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
+    MESSAGE(FATAL_ERROR "The Apple's version of Clang/LLVM is not supported by this project.\n"
+            "In order to use Clang with this project, you will need to set up your environment variable 'PATH' to "
+            " point to an official LLVM/Clang build (including a build from source) before any other path in your "
+            "'PATH'.\nSee Apple's official help: "
+            "https://support.apple.com/guide/terminal/apd382cc5fa-4f58-4449-b20a-41c53c006f8f/mac\n"
+            "Alternatively, you can set the CMake cache variable CMAKE_COMPILER_PATH to the path where the compiler is "
+            "installed.\n"
+            "See LLVM's releases web page to get a copy of Clang/LLVM: "
+            "http://releases.llvm.org/download.html\n")
+  ELSEIF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    MESSAGE(FATAL_ERROR "The Microsoft's MSVC compiler is not supported by this project.\n"
+            "This is because, even with a valid set of binutils, the compiler can't be configured to avoid generating "
+            "floating point instructions, among other assumptions that are useful for the Microsoft ABI but useless "
+            "and harmful for this project's ABI.")
+  ELSE ()
+    MESSAGE(FATAL_ERROR "The compiler ID inferred by CMake ('${CMAKE_CXX_COMPILER_ID}') is not the same as the "
+            "compiler ID selected by the user ('${KERNEL_COMPILER}') . This means that CMake did a fall-back algorithm "
+            "and didn't respected of found the requested compiler. Please install and configure the compiler "
+            "correctly.")
+  ENDIF ()
+ENDIF ()

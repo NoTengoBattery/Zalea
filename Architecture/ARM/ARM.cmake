@@ -22,7 +22,7 @@
 #===---------------------------------------------------------------------------------------------------------------===//
 
 # This is a list of the *compilers* that are able to build this kernel for this architecture
-SET(AVAILABLE_COMPILER "Clang" "GCC")
+SET(AVAILABLE_COMPILER "Clang" "GNU")
 CHECK_TOOL_BY_NAME(COMPILER "GCC")
 
 # This is a list of *binutils* that are able to build the latest stages of this kernel for this architecture
