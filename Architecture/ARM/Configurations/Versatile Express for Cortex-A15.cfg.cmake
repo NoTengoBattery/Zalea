@@ -18,7 +18,15 @@
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
 
+# MACHINE_MARCH: SET_AND_EXPORT STRING
+SET(MACHINE_MARCH "armv7-a"
+    CACHE STRING
+    "This variable is the machine minimum iteration of the ISA for the compiler and binutils.")
+# MACHINE_MTUNE: SET_AND_EXPORT STRING
+SET(MACHINE_MTUNE "cortex-a15"
+    CACHE STRING
+    "This variable is the default CPU for the compiler and binutils to tune the performance.")
 # MACHINE_NAME: SET_AND_EXPORT STRING
 SET(MACHINE_NAME "ARM Versatile Express for Cortex-A15"
-  CACHE STRING
-  "This variable is the machine for the build, a human readable name for the machine.")
+    CACHE STRING
+    "This variable is the machine for the build, a human readable name for the machine.")

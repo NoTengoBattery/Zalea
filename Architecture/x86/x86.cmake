@@ -34,5 +34,9 @@ SET_AND_EXPORT(KERNEL_TARGET "i386-pc-elf" STRING "i386-pc-elf"
                "This variable is the machine target for the compiler and binutils.")
 
 # This is the default ISA for the compiler and binutils (the minimum instruction set)
-SET_AND_EXPORT(KERNEL_MARCH "prescott" STRING "prescott"
+SET_AND_EXPORT(MACHINE_MARCH "prescott" STRING "prescott"
                "This variable is the machine minimum iteration of the ISA for the compiler and binutils.")
+
+# This is the default CPU for the compiler and binutils to tune the performance
+SET_AND_EXPORT(MACHINE_MTUNE "generic" STRING "generic"
+               "This variable is the default CPU for the compiler and binutils to tune the performance.")

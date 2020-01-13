@@ -16,9 +16,12 @@
 #/
 #/ \file
 #/ This file contains System-specific, Compiler-specific and Language-specific code and variables. This file is called
-#/ just after CMake identifies the compiler, and before the Compiler-specific, Laguage-specific configuration file when
+#/ just after CMake identifies the compiler, and before the Compiler-specific, Language-specific configuration file when
 #/ CMake checks for a "working compiler".
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
 
+# Those are the base "freestanding" flags
 SET(CMAKE_C_FLAGS "-ffreestanding -nostdlib")
+# Those are the base "machine" and "architecture" flags
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=${MACHINE_MARCH} -mtune=${MACHINE_MTUNE}")

@@ -34,5 +34,9 @@ SET_AND_EXPORT(KERNEL_TARGET "arm-none-eabi" STRING "arm-none-eabi"
                "This variable is the machine target for the compiler and binutils.")
 
 # This is the default ISA for the compiler and binutils (the minimum instruction set)
-SET_AND_EXPORT(KERNEL_MARCH "armv7" STRING "armv7"
+SET_AND_EXPORT(MACHINE_MARCH "armv7" STRING "armv7"
                "This variable is the machine minimum iteration of the ISA for the compiler and binutils.")
+
+# This is the default CPU for the compiler and binutils to tune the performance
+SET_AND_EXPORT(MACHINE_MTUNE "generic" STRING "generic"
+               "This variable is the default CPU for the compiler and binutils to tune the performance.")
