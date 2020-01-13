@@ -21,7 +21,8 @@
 #===---------------------------------------------------------------------------------------------------------------===//
 
 # Compiler selection logic...
-MESSAGE(STATUS "The CMake Toolchain File is trying to auto-setup the '${KERNEL_COMPILER}' compiler...")
+MESSAGE(STATUS "The CMake Toolchain File is attempting to auto configure the '${KERNEL_COMPILER}' compiler for the "
+        "target '${KERNEL_TARGET}'...")
 IF ("${KERNEL_COMPILER}" STREQUAL "Clang")
   SET(CMAKE_ASM_COMPILER "clang")
   SET(CMAKE_ASM_COMPILER_TARGET "${KERNEL_TARGET}")

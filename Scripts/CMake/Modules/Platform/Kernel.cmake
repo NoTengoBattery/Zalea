@@ -35,7 +35,7 @@ IF (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "${KERNEL_COMPILER}")
   ELSEIF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     MESSAGE(FATAL_ERROR "The Microsoft's MSVC compiler is not supported by this project.\n"
             "This is because, even with a valid set of binutils, the compiler can't be configured to avoid generating "
-            "floating point instructions, among other assumptions that are useful for the Microsoft ABI but useless "
+            "floating point instructions, among other assumptions that are useful for the Microsoft's ABI but useless "
             "and harmful for this project's ABI.")
   ELSE ()
     MESSAGE(FATAL_ERROR "The compiler ID inferred by CMake ('${CMAKE_CXX_COMPILER_ID}') is not the same as the "
