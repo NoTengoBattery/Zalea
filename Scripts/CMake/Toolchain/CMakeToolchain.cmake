@@ -42,4 +42,11 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   GUESS_TOOL_BY_NAME(C_COMPILER COMPILER)
   GUESS_TOOL_BY_NAME(CXX_COMPILER COMPILER)
 
+  # Ensure this lock. This way, the compiler name (or path) is in the path in the next run
+  IF (NOT $CACHE{_COMPILER_LOCK})
+    SET(_COMPILER_LOCK "Y" CACHE INTERNAL "This lock will force the user to re-run CMake after the compiler toolchain")
+    MESSAGE(FATAL_ERROR "The CMake was changed by the CMake Toolchain file. In order to apply the changes, you will "
+            "need to run CMake again.")
+  ENDIF ()
+
 ENDIF ()
