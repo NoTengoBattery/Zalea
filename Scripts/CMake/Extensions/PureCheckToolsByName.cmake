@@ -20,6 +20,7 @@
 #/
 #/ This extension provides:
 #/ -> CHECK_TOOL_BY_NAMES
+#/ -> GUESS_TOOL_BY_NAME
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
 
@@ -29,7 +30,7 @@
 # A special variable CMAKE_${TOOL}_PATH will be exposed in the cache and it will be a hint for CMake to find such tool.
 MACRO(CHECK_TOOL_BY_NAME TOOL DEFAULT)
   SET_WITH_STRINGS("KERNEL_${TOOL}" "${DEFAULT}"
-                   "Select the ${TOOL} that will be used to build this kernel"
+                   "Select the ${TOOL} that will be used to build this kernel."
                    "AVAILABLE_${TOOL}")
   CHECK_WITH_STRINGS("KERNEL_${TOOL}" "VALID_${TOOL}")
   IF (NOT "${VALID_${TOOL}}")
@@ -39,4 +40,17 @@ MACRO(CHECK_TOOL_BY_NAME TOOL DEFAULT)
   ENDIF ()
 
   SET(CMAKE_${TOOL}_PATH "" CACHE FILEPATH "A hint path to use when searching for the ${TOOL}.")
+ENDMACRO()
+
+# This macro will try to guess a tool executable by searching the user's provided PATH first, then letting CMake
+# fallback to a default compiler and failing later (if the compiler does not work).
+MACRO(GUESS_TOOL_BY_NAME TYPE TOOL)
+  IF (NOT "${CMAKE_${TYPE}}")
+    UNSET("CMAKE_${TYPE}" CACHE)
+    FIND_PROGRAM("CMAKE_${TYPE}_EXE" NAMES "${CMAKE_${TYPE}}" HINTS "${CMAKE_${TOOL}_PATH}" PATH_SUFFIXES "bin" ""
+                 DOC "This is a guess made by the build system for a tool.")
+  ENDIF ()
+  SET("CMAKE_${TYPE}" "${CMAKE_${TYPE}_EXE}" CACHE FILEPATH "A path to a tool used by CMake.")
+  MARK_AS_ADVANCED("CMAKE_${TYPE}")
+  MARK_AS_ADVANCED("CMAKE_${TYPE}_EXE")
 ENDMACRO()
