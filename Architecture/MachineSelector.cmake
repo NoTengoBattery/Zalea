@@ -32,13 +32,6 @@ IF (NOT AVAILABLE_MACHINES)
   MESSAGE(FATAL_ERROR "No machine configurations found in '${TREE_ARCHITECTURE_X_CONFIG_PATH}'")
 ENDIF ()
 
-# Get the list size and if only one config, pick that configuration
-LIST(LENGTH AVAILABLE_MACHINES AVAILABLE_MACHINES_LENGTH)
-IF (AVAILABLE_MACHINES_LENGTH EQUAL 1)
-  MESSAGE(STATUS "There is only one machine. We will pick that machine.")
-  LIST(GET AVAILABLE_MACHINES 0 KERNEL_MACHINE)
-ENDIF ()
-
 # Create a new cache variable, append these architectures to their available values and check if valid
 SET_WITH_STRINGS(KERNEL_MACHINE "${KERNEL_MACHINE}" "Target machine for building this kernel" AVAILABLE_MACHINES)
 CHECK_WITH_STRINGS(KERNEL_MACHINE VALID_MACHINE)

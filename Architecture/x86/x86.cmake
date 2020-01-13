@@ -22,7 +22,7 @@
 #===---------------------------------------------------------------------------------------------------------------===//
 
 # This is a list of the *compilers* that are able to build this kernel for this architecture
-SET(AVAILABLE_COMPILERS "Clang" "GCC" "MINGW" "MSVC")
+SET(AVAILABLE_COMPILERS "Clang" "GCC")
 INCLUDE("${TREE_ARCHITECTURE_PATH}/CheckCompilerName.cmake")
 
 # This is a list of *binutils* that are able to build the latest stages of this kernel for this architecture
