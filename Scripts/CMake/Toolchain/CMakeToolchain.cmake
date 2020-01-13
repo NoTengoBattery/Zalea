@@ -20,24 +20,26 @@
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
 
-# Compiler selection logic...
-MESSAGE(STATUS "The CMake Toolchain File is attempting to auto configure the '${KERNEL_COMPILER}' compiler for the "
-        "target '${KERNEL_TARGET}'...")
-IF ("${KERNEL_COMPILER}" STREQUAL "Clang")
-  SET(CMAKE_ASM_COMPILER "clang")
-  SET(CMAKE_ASM_COMPILER_TARGET "${KERNEL_TARGET}")
-  SET(CMAKE_C_COMPILER "clang")
-  SET(CMAKE_C_COMPILER_TARGET "${KERNEL_TARGET}")
-  SET(CMAKE_CXX_COMPILER "clang++")
-  SET(CMAKE_CXX_COMPILER_TARGET "${KERNEL_TARGET}")
-ELSEIF ("${KERNEL_COMPILER}" STREQUAL "GCC")
-  SET(CMAKE_ASM_COMPILER "${KERNEL_TARGET}-gcc")
-  SET(CMAKE_C_COMPILER "${KERNEL_TARGET}-gcc")
-  SET(CMAKE_CXX_COMPILER "${KERNEL_TARGET}-g++")
-ENDIF ()
-
 IF (TREE_SELF_PATH) # This will define if we have access to the scope variables and cache
+
+  # Compiler selection logic...
+  MESSAGE(STATUS "The CMake Toolchain File is attempting to auto configure the '${KERNEL_COMPILER}' compiler for the "
+          "target '${KERNEL_TARGET}'...")
+  IF ("${KERNEL_COMPILER}" STREQUAL "Clang")
+    SET(CMAKE_ASM_COMPILER "clang")
+    SET(CMAKE_ASM_COMPILER_TARGET "${KERNEL_TARGET}")
+    SET(CMAKE_C_COMPILER "clang")
+    SET(CMAKE_C_COMPILER_TARGET "${KERNEL_TARGET}")
+    SET(CMAKE_CXX_COMPILER "clang++")
+    SET(CMAKE_CXX_COMPILER_TARGET "${KERNEL_TARGET}")
+  ELSEIF ("${KERNEL_COMPILER}" STREQUAL "GNU")
+    SET(CMAKE_ASM_COMPILER "${KERNEL_TARGET}-gcc")
+    SET(CMAKE_C_COMPILER "${KERNEL_TARGET}-gcc")
+    SET(CMAKE_CXX_COMPILER "${KERNEL_TARGET}-g++")
+  ENDIF ()
+
   GUESS_TOOL_BY_NAME(ASM_COMPILER COMPILER)
   GUESS_TOOL_BY_NAME(C_COMPILER COMPILER)
   GUESS_TOOL_BY_NAME(CXX_COMPILER COMPILER)
+
 ENDIF ()
