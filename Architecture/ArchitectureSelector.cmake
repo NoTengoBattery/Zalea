@@ -35,7 +35,7 @@ ELSE ()
 ENDIF ()
 
 # Create a new cache variable, append these architectures to their available values and check if valid
-SET_WITH_STRINGS(KERNEL_ARCH "" "Target architecture for building this kernel" AVAILABLE_ARCHITECTURES)
+SET_WITH_STRINGS(KERNEL_ARCH "" "Target architecture for building this kernel." AVAILABLE_ARCHITECTURES)
 CHECK_WITH_STRINGS(KERNEL_ARCH VALID_ARCH)
 IF (NOT VALID_ARCH)
   MESSAGE(FATAL_ERROR "Please set a valid architecture in the KERNEL_ARCH variable. Available architectures: "

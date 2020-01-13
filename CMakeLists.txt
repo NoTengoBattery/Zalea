@@ -74,10 +74,10 @@ IF (NOT PYTHON3_GENERATED)
   UNSET(_Python3_EXECUTABLE CACHE)
   FIND_PROGRAM(_Python3_EXECUTABLE NAMES "python3" "python" PATHS
                "${TREE_SCRIPTS_PYTHON3_ENV_PATH}" PATH_SUFFIXES "Scripts" "bin" NO_DEFAULT_PATH)
-  SET(Python3_EXECUTABLE "${_Python3_EXECUTABLE}" CACHE INTERNAL "The Python 3 Virtual Environment executable" FORCE)
-  SET(_Python3_EXECUTABLE "${_Python3_EXECUTABLE}" CACHE INTERNAL "The Python 3 Virtual Environment executable" FORCE)
+  SET(Python3_EXECUTABLE "${_Python3_EXECUTABLE}" CACHE INTERNAL "The Python 3 Virtual Environment executable." FORCE)
+  SET(_Python3_EXECUTABLE "${_Python3_EXECUTABLE}" CACHE INTERNAL "The Python 3 Virtual Environment executable." FORCE)
   FIND_PACKAGE(Python3 REQUIRED COMPONENTS Interpreter)
-  SET(PYTHON3_GENERATED "YES" CACHE INTERNAL "Detect if the Python 3 Virtual Environment has been installed")
+  SET(PYTHON3_GENERATED "YES" CACHE INTERNAL "Detect if the Python 3 Virtual Environment has been installed.")
 ENDIF ()
 
 # Include "Language Extensions" (need Python), this file includes all available extensions

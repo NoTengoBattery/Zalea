@@ -23,7 +23,7 @@
 
 # This is a list of the *compilers* that are able to build this kernel for this architecture
 SET(AVAILABLE_COMPILER "Clang" "GNU")
-CHECK_TOOL_BY_NAME(COMPILER "GCC")
+CHECK_TOOL_BY_NAME(COMPILER "GNU")
 
 # This is a list of *binutils* that are able to build the latest stages of this kernel for this architecture
 SET(AVAILABLE_BINUTILS "GNU" "LLVM")
@@ -31,8 +31,8 @@ CHECK_TOOL_BY_NAME(BINUTILS "GNU")
 
 # This is the default target for the compiler and binutils
 SET_AND_EXPORT(KERNEL_TARGET "arm-none-eabi" STRING "arm-none-eabi"
-               "This variable is the machine target the compiler and binutils.")
+               "This variable is the machine target for the compiler and binutils.")
 
-# This is the default architecture for the compiler and binutils (the minimum instruction set)
+# This is the default ISA for the compiler and binutils (the minimum instruction set)
 SET_AND_EXPORT(KERNEL_MARCH "armv7" STRING "armv7"
-               "This variable is the machine minimum version of the instruction set for the compiler and binutils.")
+               "This variable is the machine minimum iteration of the ISA for the compiler and binutils.")

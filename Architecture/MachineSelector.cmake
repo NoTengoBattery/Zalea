@@ -33,7 +33,7 @@ IF (NOT AVAILABLE_MACHINES)
 ENDIF ()
 
 # Create a new cache variable, append these architectures to their available values and check if valid
-SET_WITH_STRINGS(KERNEL_MACHINE "${KERNEL_MACHINE}" "Target machine for building this kernel" AVAILABLE_MACHINES)
+SET_WITH_STRINGS(KERNEL_MACHINE "${KERNEL_MACHINE}" "Target machine for building this kernel." AVAILABLE_MACHINES)
 CHECK_WITH_STRINGS(KERNEL_MACHINE VALID_MACHINE)
 IF (NOT VALID_MACHINE)
   IF (NOT KERNEL_MACHINE)
@@ -48,9 +48,9 @@ IF (NOT VALID_MACHINE)
 ELSE ()
   IF (NOT _MACHINE_INCLUDED)
     INCLUDE("${TREE_ARCHITECTURE_X_CONFIG_PATH}/${KERNEL_MACHINE}.cfg.cmake")
-    SET(_MACHINE_INCLUDED "YES" CACHE INTERNAL "Switch to avoid overriding user's configuration")
+    SET(_MACHINE_INCLUDED "YES" CACHE INTERNAL "Switch to avoid overriding user's configuration.")
   ENDIF ()
-  MESSAGE(STATUS "Building for a machine called \"${MACHINE_NAME}\"...")
+  MESSAGE(STATUS "Building the \"${MACHINE_NAME}\" machine...")
 ENDIF ()
 
 # Export the current architecture to the default configuration
