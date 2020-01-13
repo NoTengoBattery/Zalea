@@ -27,6 +27,7 @@
 MESSAGE(STATUS "CMake Language Extensions for \"${PROJECT_NAME}\"")
 
 # Include all extensions, ordered alphabetically, one by one.
+INCLUDE("${TREE_SCRIPTS_CMAKE_EXTENSIONS_PATH}/PureCheckToolsByName.cmake")
 INCLUDE("${TREE_SCRIPTS_CMAKE_EXTENSIONS_PATH}/PureFileUtils.cmake")
 INCLUDE("${TREE_SCRIPTS_CMAKE_EXTENSIONS_PATH}/PurePythonRunner.cmake")
 INCLUDE("${TREE_SCRIPTS_CMAKE_EXTENSIONS_PATH}/PureVarsUtils.cmake")

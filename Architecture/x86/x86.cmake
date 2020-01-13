@@ -22,13 +22,17 @@
 #===---------------------------------------------------------------------------------------------------------------===//
 
 # This is a list of the *compilers* that are able to build this kernel for this architecture
-SET(AVAILABLE_COMPILERS "Clang" "GCC")
-INCLUDE("${TREE_ARCHITECTURE_PATH}/CheckCompilerName.cmake")
+SET(AVAILABLE_COMPILER "Clang" "GCC")
+CHECK_TOOL_BY_NAME(COMPILER "GCC")
 
 # This is a list of *binutils* that are able to build the latest stages of this kernel for this architecture
-SET(AVAILABLE_BINUTILS "LLVM" "GNU")
-INCLUDE("${TREE_ARCHITECTURE_PATH}/CheckBinutilsName.cmake")
+SET(AVAILABLE_BINUTILS "GNU" "LLVM")
+CHECK_TOOL_BY_NAME(BINUTILS "GNU")
 
 # This is the default target for the compiler and binutils
 SET_AND_EXPORT(KERNEL_TARGET "i386-pc-elf" STRING "i386-pc-elf"
                "This variable is the machine target the compiler and binutils.")
+
+# This is the default architecture for the compiler and binutils (the minimum instruction set)
+SET_AND_EXPORT(KERNEL_MARCH "prescott" STRING "prescott"
+               "This variable is the machine minimum version of the instruction set for the compiler and binutils.")
