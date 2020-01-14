@@ -31,21 +31,22 @@
     <scope name="Assembler/C Header Files" pattern="file[Colorize]:*.h" />
     <scope name="Assembler Preprocessed Source Files" pattern="file[Colorize]:*.sx" />
     <scope name="Assembler Source Files" pattern="file[Colorize]:*.s" />
-    <scope name="C Header Files" pattern="file[Colorize]:*.hh" />
     <scope name="CMake Caches" pattern="file[Colorize]:*//CMakeCache.txt||file[Colorize]:CMakeCache.txt" />
     <scope name="CMake Projects" pattern="file[Colorize]:*//CMakeLists.txt||file[Colorize]:CMakeLists.txt" />
     <scope name="CMake Scripts" pattern="file[Colorize]:*.cmake" />
-    <scope name="Configuration Files" pattern="file[Colorize]:*.cfg.*" />
     <scope name="C++ Header Files" pattern="file[Colorize]:*.hxx" />
     <scope name="C++ Source Files" pattern="file[Colorize]:*.cxx" />
+    <scope name="C Header Files" pattern="file[Colorize]:*.hh" />
     <scope name="C Source Files" pattern="file[Colorize]:*.c" />
     <scope name="Documentation Files" pattern="file[Colorize]:*.md||file[Colorize]:*.tex" />
     <scope name="GNU LD Scripts" pattern="file[Colorize]:*.ld" />
+    <scope name="Python Scripts" pattern="file[Colorize]:*.py||file[Colorize]:Scripts/Python/Sources//*" />
+
+    <scope name="Configuration Files" pattern="file[Colorize]:*.cfg.*" />
     <scope name="Ignored Files" pattern="file[Colorize]:*.ignore.*" />
-    <scope name="Python Scripts" pattern="file[Colorize]:*.py||file[Python]:*/" />
     <scope name="Temp Files" pattern="file[Colorize]:*.tmp.*" />
     <scope name="Template Files" pattern="file[Colorize]:*.in.*" />
-    <scope name="Test Files" pattern="file[Colorize]:*.tst.*" />
+    <scope name="Test Files" pattern="file[Colorize]:*.tst.*||file[Colorize]:Scripts/Python/Tests//*" />
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
