@@ -33,7 +33,7 @@
     <scope name="Assembler Source Files" pattern="file[Colorize]:*.s" />
     <scope name="CMake Caches" pattern="file[Colorize]:*//CMakeCache.txt||file[Colorize]:CMakeCache.txt" />
     <scope name="CMake Projects" pattern="file[Colorize]:*//CMakeLists.txt||file[Colorize]:CMakeLists.txt" />
-    <scope name="CMake Scripts" pattern="file[Colorize]:*.cmake" />
+    <scope name="CMake Scripts" pattern="file[Colorize]:*.cmake||file[Colorize]:Scripts/CMake//*" />
     <scope name="C++ Header Files" pattern="file[Colorize]:*.hxx" />
     <scope name="C++ Source Files" pattern="file[Colorize]:*.cxx" />
     <scope name="C Header Files" pattern="file[Colorize]:*.hh" />
