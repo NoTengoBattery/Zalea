@@ -23,10 +23,13 @@
 
 IF (TREE_SELF_PATH) # This will define if we have access to the scope variables and cache
 
+  # Check some special cases for compiler IDs
   IF (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "${KERNEL_COMPILER}")
+    # Let AppleClang go on! We support AppleClang
     IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
       MESSAGE(STATUS "Using Apple's Clang instead of vanilla Clang/LLVM...")
     ELSEIF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+      # Stop MSVC and say why!
       MESSAGE(FATAL_ERROR "The Microsoft's MSVC compiler is not supported by this project.\n"
               "This is because, even with a valid set of binutils, the compiler can't be configured to avoid "
               " generating floating point instructions, among other assumptions that are useful for the Microsoft's "
@@ -39,11 +42,43 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     ENDIF ()
   ENDIF ()
 
+  # When using GCC and LLVM, GCC must have to be version 9.0 or greater
   IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"
       AND "${KERNEL_BINUTILS}" STREQUAL "LLVM"
       AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
-    MESSAGE(FATAL_ERROR "When using the GCC compiler with the LLVM binutils, GCC's version must have to be 9.0 or "
-            "greater to use ld.lld as the linker.")
+    MESSAGE(FATAL_ERROR "When using the GCC compiler + LLVM binutils, GCC's version must have to be 9.0 or greater.")
+  ENDIF ()
+
+  # When using Clang (but not AppleClang), version must have to be 6.0 or greater
+  IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"
+      AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 6.0)
+    MESSAGE(FATAL_ERROR "When using the Clang compiler, Clang's version must have to be 6.0 or greater.")
+  ENDIF ()
+
+  # When using AppleClang, version must have to be 11.0.0 or greater
+  IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang"
+      AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 11.0.0)
+    MESSAGE(FATAL_ERROR "When using the Apple's Clang compiler, Clang's version must have to be 11.0.0 or greater.")
+  ENDIF ()
+
+  # When using LLVM binutils, version must have to be 9.0 or greater
+  IF ("${KERNEL_BINUTILS}" STREQUAL "LLVM")
+    EXECUTE_PROCESS(COMMAND "${CMAKE_OBJCOPY}" "--version" OUTPUT_VARIABLE OBJCOPY_VERSION)
+    STRING(REGEX MATCH "[0-9]+\\.[0-9]+[^\n\r\t\ ]*" OBJCOPY_VERSION "${OBJCOPY_VERSION}")
+    MESSAGE("OBJCOPY_VERSION=${OBJCOPY_VERSION}")
+    IF (OBJCOPY_VERSION VERSION_LESS 9.0)
+      MESSAGE(FATAL_ERROR "When using the LLVM binutils, LLVM's version must have to be 9.0 or greater.")
+    ENDIF ()
+  ENDIF ()
+
+  # When using LLVM binutils, version must have to be 2.30 or greater
+  IF ("${KERNEL_BINUTILS}" STREQUAL "GNU")
+    EXECUTE_PROCESS(COMMAND "${CMAKE_OBJCOPY}" "--version" OUTPUT_VARIABLE OBJCOPY_VERSION)
+    STRING(REGEX MATCH "[0-9]+\\.[0-9]+[^\n\r\t\ ]*" OBJCOPY_VERSION "${OBJCOPY_VERSION}")
+    MESSAGE("OBJCOPY_VERSION=${OBJCOPY_VERSION}")
+    IF (OBJCOPY_VERSION VERSION_LESS 2.30)
+      MESSAGE(FATAL_ERROR "When using the GNU binutils, binutils's version must have to be 2.30 or greater.")
+    ENDIF ()
   ENDIF ()
 
 ENDIF ()
