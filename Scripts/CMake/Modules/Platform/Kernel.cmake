@@ -39,4 +39,11 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     ENDIF ()
   ENDIF ()
 
+  IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"
+      AND "${KERNEL_BINUTILS}" STREQUAL "LLVM"
+      AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
+    MESSAGE(FATAL_ERROR "When using the GCC compiler with the LLVM binutils, GCC's version must have to be 9.0 or "
+            "greater to use ld.lld as the linker.")
+  ENDIF ()
+
 ENDIF ()
