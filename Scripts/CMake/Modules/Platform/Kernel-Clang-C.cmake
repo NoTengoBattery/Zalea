@@ -21,13 +21,23 @@
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
 
-# Those are the base "freestanding" flags
-SET(CMAKE_C_FLAGS "\"--target=${KERNEL_TARGET}\" \"-ffreestanding\" \"-nostdlib\"")
-# Those are the base "machine" and "architecture" flags
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \"-march=${MACHINE_MARCH}\" \"-mtune=${MACHINE_MTUNE}\"")
-# This flag defines the linker to be used
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \"-fuse-ld=${CMAKE_LD}\"")
-# If the user gave the system a path for binutils, tell the driver to use it first
-IF (CMAKE_BINUTILS_BIN_PATH)
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} \"-B${CMAKE_BINUTILS_BIN_PATH}\"")
+IF (TREE_SELF_PATH) # This will define if we have access to the scope variables and cache
+
+  SET(CMAKE_C_FLAGS_INIT)
+
+  # If the user gave the system a path for binutils, tell the driver to use it first
+  IF (CMAKE_BINUTILS_BIN_PATH)
+    STRING(APPEND CMAKE_C_FLAGS_INIT "\"-B${CMAKE_BINUTILS_BIN_PATH}\" ")
+  ENDIF ()
+
+  # Those are the base "freestanding" flags
+  STRING(APPEND CMAKE_C_FLAGS_INIT "--target=${KERNEL_TARGET} ")
+  STRING(APPEND CMAKE_C_FLAGS_INIT "-ffreestanding ")
+  STRING(APPEND CMAKE_C_FLAGS_INIT "-nostdlib ")
+  # Those are the base "machine" and "architecture" flags
+  STRING(APPEND CMAKE_C_FLAGS_INIT "-march=${MACHINE_MARCH} ")
+  STRING(APPEND CMAKE_C_FLAGS_INIT "-mtune=${MACHINE_MTUNE} ")
+  # This flag defines the linker to be used (this is needed for all cross compilers)
+  STRING(APPEND CMAKE_C_FLAGS_INIT "\"-fuse-ld=${CMAKE_LD}\"")
+
 ENDIF ()
