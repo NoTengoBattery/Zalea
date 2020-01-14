@@ -23,8 +23,8 @@
 IF (TREE_SELF_PATH) # This will define if we have access to the scope variables and cache
 
   # Compiler selection logic...
-  MESSAGE(STATUS "The CMake Toolchain File is attempting to auto configure the '${KERNEL_COMPILER}' compiler for the "
-          "target '${KERNEL_TARGET}'...")
+  MESSAGE(STATUS "CMake is attempting to auto configure the '${KERNEL_COMPILER}' compiler for the target "
+          "'${KERNEL_TARGET}'...")
   IF ("${KERNEL_COMPILER}" STREQUAL "Clang")
     SET(CMAKE_ASM_COMPILER "clang")
     SET(CMAKE_C_COMPILER "clang")
@@ -41,16 +41,19 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   GUESS_TOOL_BY_NAME(C_COMPILER COMPILER)
   GUESS_TOOL_BY_NAME(CXX_COMPILER COMPILER)
 
-  MESSAGE(STATUS "The CMake Toolchain File is attempting to auto configure the '${KERNEL_BINUTILS}' binutils for the "
-          "target '${KERNEL_TARGET}'...")
+  MESSAGE(STATUS "CMake is attempting to auto configure the '${KERNEL_BINUTILS}' binutils for the  target "
+          "'${KERNEL_TARGET}'...")
   IF ("${KERNEL_BINUTILS}" STREQUAL "LLVM")
     SET(CMAKE_LD "ld.lld")
     SET(CMAKE_LD_NAME "lld")
+    SET(CMAKE_OBJCOPY "llvm-objcopy")
   ELSEIF ("${KERNEL_BINUTILS}" STREQUAL "GNU")
     SET(CMAKE_LD "${KERNEL_TARGET}-ld")
     SET(CMAKE_LD_NAME "bfd")
+    SET(CMAKE_OBJCOPY "${KERNEL_TARGET}-objcopy")
   ENDIF ()
   FORCE_TOOL_BY_NAME(LD BINUTILS)
+  FORCE_TOOL_BY_NAME(OBJCOPY BINUTILS)
 
   GET_FILENAME_COMPONENT(CMAKE_BINUTILS_BIN_PATH "${CMAKE_LD}" DIRECTORY CACHE)
 
