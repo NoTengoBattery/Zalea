@@ -27,7 +27,7 @@ SET(CMAKE_CXX_FLAGS "'-ffreestanding' '-nostdlib'")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} '-march=${MACHINE_MARCH}' '-mtune=${MACHINE_MTUNE}'")
 # This flag defines the linker to be used
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} '-fuse-ld=${CMAKE_LD_NAME}'")
+# If the user gave the system a path for binutils, tell the driver to use it first
 IF (CMAKE_BINUTILS_BIN_PATH)
-  # If the user gave the system a path for binutils, tell the driver to use it first
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} '-B${CMAKE_BINUTILS_BIN_PATH}'")
 ENDIF ()

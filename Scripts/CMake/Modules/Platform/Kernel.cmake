@@ -22,6 +22,7 @@
 #===---------------------------------------------------------------------------------------------------------------===//
 
 IF (TREE_SELF_PATH) # This will define if we have access to the scope variables and cache
+
   IF (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "${KERNEL_COMPILER}")
     IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
       MESSAGE(STATUS "Using Apple's Clang instead of vanilla Clang/LLVM...")
@@ -37,4 +38,5 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
               "compiler correctly.")
     ENDIF ()
   ENDIF ()
+
 ENDIF ()
