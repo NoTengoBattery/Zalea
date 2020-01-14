@@ -23,13 +23,8 @@
 
 IF (TREE_SELF_PATH) # This will define if we have access to the scope variables and cache
   IF (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "${KERNEL_COMPILER}")
-    IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang"
-        AND "${KERNEL_BINUTILS}" STREQUAL "LLVM")
-      MESSAGE(WARNING "The Apple's version of Clang is supported, but Apple does not ship the LLVM binutils needed to "
-              "continue on macOS. As with vanilla Clang, Apple's Clang can use external binutils to finish the "
-              "process of linking and binary handling. However, by default it will look for LLVM's tools. This means "
-              "that a version of LLVM must be in the path, with the 'ld.lld' binary available for Apple's Clang to "
-              "find it.")
+    IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
+      MESSAGE(STATUS "Using Apple's Clang instead of vanilla Clang/LLVM...")
     ELSEIF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
       MESSAGE(FATAL_ERROR "The Microsoft's MSVC compiler is not supported by this project.\n"
               "This is because, even with a valid set of binutils, the compiler can't be configured to avoid "
