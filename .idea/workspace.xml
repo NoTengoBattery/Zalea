@@ -48,6 +48,9 @@
     <scope name="Template Files" pattern="file[Colorize]:*.in.*" />
     <scope name="Test Files" pattern="file[Colorize]:*.tst.*||file[Colorize]:Scripts/Python/Tests//*" />
   </component>
+  <component name="ProjectViewState">
+    <option name="showExcludedFiles" value="false" />
+  </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
   </component>
