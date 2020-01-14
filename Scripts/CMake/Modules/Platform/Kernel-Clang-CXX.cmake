@@ -23,20 +23,18 @@
 
 IF (TREE_SELF_PATH) # This will define if we have access to the scope variables and cache
 
-  SET(CMAKE_CXX_FLAGS_INIT)
-
   # If the user gave the system a path for binutils, tell the driver to use it first
   IF (CMAKE_BINUTILS_BIN_PATH)
     STRING(APPEND CMAKE_CXX_FLAGS_INIT "\"-B${CMAKE_BINUTILS_BIN_PATH}\" ")
   ENDIF ()
 
   # Those are the base "freestanding" flags
-  STRING(APPEND CMAKE_CXX_FLAGS_INIT "--target=${KERNEL_TARGET} ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-ffreestanding ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-nostdlib ")
-  # Those are the base "machine" and "architecture" flags
-  STRING(APPEND CMAKE_CXX_FLAGS_INIT "-march=${MACHINE_MARCH} ")
-  STRING(APPEND CMAKE_CXX_FLAGS_INIT "-mtune=${MACHINE_MTUNE} ")
+  STRING(APPEND CMAKE_CXX_FLAGS_INIT "-pipe ")
+  # Those flags define the diagnostics to be issued (or not) by the compiler
+  STRING(APPEND CMAKE_CXX_FLAGS_INIT "-Wextra -Wall -Wpedantic -Werror -Wformat=2 ")
+  STRING(APPEND CMAKE_CXX_FLAGS_INIT "-Wno-error=unused-command-line-argument ")
   # This flag defines the linker to be used (this is needed for all cross compilers)
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "\"-fuse-ld=${CMAKE_LD}\"")
 
