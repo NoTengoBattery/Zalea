@@ -42,13 +42,6 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     ENDIF ()
   ENDIF ()
 
-  # When using GCC and LLVM, GCC must have to be version 9.0 or greater
-  IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"
-      AND "${KERNEL_BINUTILS}" STREQUAL "LLVM"
-      AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
-    MESSAGE(FATAL_ERROR "When using the GCC compiler + LLVM binutils, GCC's version must have to be 9.0 or greater.")
-  ENDIF ()
-
   # When using Clang (but not AppleClang), version must have to be 6.0 or greater
   IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"
       AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 6.0)
@@ -68,6 +61,19 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     IF (OBJCOPY_VERSION VERSION_LESS 9.0)
       MESSAGE(FATAL_ERROR "When using the LLVM binutils, LLVM's version must have to be 9.0 or greater.")
     ENDIF ()
+  ENDIF ()
+
+  # When using GCC, version must have to be 7.0 or greater
+  IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"
+      AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7.0)
+    MESSAGE(FATAL_ERROR "When using the GCC compiler, GCC's version must have to be 7.0 or greater.")
+  ENDIF ()
+
+  # When using GCC and LLVM, GCC must have to be version 9.0 or greater
+  IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"
+      AND "${KERNEL_BINUTILS}" STREQUAL "LLVM"
+      AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
+    MESSAGE(FATAL_ERROR "When using the GCC compiler + LLVM binutils, GCC's version must have to be 9.0 or greater.")
   ENDIF ()
 
   # When using LLVM binutils, version must have to be 2.30 or greater
