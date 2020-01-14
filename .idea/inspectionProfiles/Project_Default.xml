@@ -1,11 +1,9 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
-    <option name="projectDefaultInspections" value="Project Default" />
+    <option name="myName" value="Project Default" />
     <inspection_tool class="ClangTidy" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="clangTidyChecks" value="*" />
     </inspection_tool>
-    <inspection_tool class="EqualityInConditionalOperatorWithSelf" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="ImplicitDeclarationOfIvar" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="InconsistentLineSeparators" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="LongLine" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="OCInconsistentNaming" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
@@ -28,8 +26,6 @@
     <inspection_tool class="PyMissingTypeHintsInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="RegExpAnonymousGroup" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SSBasedInspection" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="SeveralTargetsMessage" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="TodoComment" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="UnusedDefine" enabled="true" level="WARNING" enabled_by_default="true" />
   </profile>
 </component>
