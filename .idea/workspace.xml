@@ -12,6 +12,14 @@
       <configuration PROFILE_NAME="Default" />
     </configurations>
   </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+    <option name="clangWarnings" value="-Wall,-Wextra,-Wpedantic,-Wformat=2,-Werror" />
+  </component>
+  <component name="FileColors">
+    <fileColor scope="Test Files" color="Rose" />
+    <fileColor scope="Problems" color="Orange" />
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="SCHEME" value="Project" />
   </component>
@@ -20,45 +28,65 @@
     <option name="SIGN_OFF_COMMIT" value="true" />
   </component>
   <component name="NamedScopeManager">
-    <scope name="CMake Projects" pattern="file[Colorize]:*//CMakeLists.txt||file[Colorize]:CMakeLists.txt" />
-    <scope name="CMake Caches" pattern="file[Colorize]:*//CMakeCache.txt||file[Colorize]:CMakeCache.txt" />
-    <scope name="CMake Scripts" pattern="file[Colorize]:*.cmake" />
-    <scope name="Python Scripts" pattern="file[Colorize]:*.py||file[Python]:*/" />
-    <scope name="GNU LD Scripts" pattern="file[Colorize]:*.ld" />
-    <scope name="Assembler Preprocessed Files" pattern="file[Colorize]:*.sx" />
-    <scope name="Assembler Source Files" pattern="file[Colorize]:*.asm" />
     <scope name="Assembler/C Header Files" pattern="file[Colorize]:*.h" />
-    <scope name="C Source Files" pattern="file[Colorize]:*.c" />
+    <scope name="Assembler Preprocessed Source Files" pattern="file[Colorize]:*.sx" />
+    <scope name="Assembler Source Files" pattern="file[Colorize]:*.s" />
     <scope name="C Header Files" pattern="file[Colorize]:*.hh" />
-    <scope name="C++ Source Files" pattern="file[Colorize]:*.cxx" />
-    <scope name="C++ Header Files" pattern="file[Colorize]:*.hxx" />
+    <scope name="CMake Caches" pattern="file[Colorize]:*//CMakeCache.txt||file[Colorize]:CMakeCache.txt" />
+    <scope name="CMake Projects" pattern="file[Colorize]:*//CMakeLists.txt||file[Colorize]:CMakeLists.txt" />
+    <scope name="CMake Scripts" pattern="file[Colorize]:*.cmake" />
     <scope name="Configuration Files" pattern="file[Colorize]:*.cfg.*" />
+    <scope name="C++ Header Files" pattern="file[Colorize]:*.hxx" />
+    <scope name="C++ Source Files" pattern="file[Colorize]:*.cxx" />
+    <scope name="C Source Files" pattern="file[Colorize]:*.c" />
     <scope name="Documentation Files" pattern="file[Colorize]:*.md||file[Colorize]:*.tex" />
+    <scope name="GNU LD Scripts" pattern="file[Colorize]:*.ld" />
     <scope name="Ignored Files" pattern="file[Colorize]:*.ignore.*" />
+    <scope name="Python Scripts" pattern="file[Colorize]:*.py||file[Python]:*/" />
     <scope name="Temp Files" pattern="file[Colorize]:*.tmp.*" />
     <scope name="Template Files" pattern="file[Colorize]:*.in.*" />
     <scope name="Test Files" pattern="file[Colorize]:*.tst.*" />
   </component>
-  <component name="ProjectId" id="1VjtzCrRNK1JUVCF1tLLHgAHcdv" />
+  <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+  </component>
+  <component name="PyConsoleOptionsProvider">
+    <option name="projectPythonConsoleState">
+      <console-settings module-name="Colorize">
+        <option name="consoleModuleName" value="Colorize" />
+      </console-settings>
+    </option>
+  </component>
+  <component name="PyDebuggerOptionsProvider">
+    <option name="doSaveCallSignatures" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="FORCE_NON_EMPTY_COMMENT" value="true" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
   <component name="projectDetails">
     <states>
       <state key="ScopeChooserConfigurable.UI">
         <settings>
           <order>
-            <scope name="CMake Projects" />
-            <scope name="CMake Caches" />
-            <scope name="CMake Scripts" />
-            <scope name="Python Scripts" />
-            <scope name="GNU LD Scripts" />
-            <scope name="Assembler Preprocessed Files" />
-            <scope name="Assembler Source Files" />
             <scope name="Assembler/C Header Files" />
-            <scope name="C Source Files" />
-            <scope name="C Header Files" />
-            <scope name="C++ Source Files" />
+            <scope name="Assembler Preprocessed Source Files" />
+            <scope name="Assembler Source Files" />
+            <scope name="CMake Caches" />
+            <scope name="CMake Projects" />
+            <scope name="CMake Scripts" />
             <scope name="C++ Header Files" />
-            <scope name="Configuration Files" />
+            <scope name="C++ Source Files" />
+            <scope name="C Header Files" />
+            <scope name="C Source Files" />
             <scope name="Documentation Files" />
+            <scope name="GNU LD Scripts" />
+            <scope name="Python Scripts" />
+
+            <scope name="Configuration Files" />
             <scope name="Ignored Files" />
             <scope name="Temp Files" />
             <scope name="Template Files" />

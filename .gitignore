@@ -750,5 +750,6 @@ MigrationBackup/
 
 !Architecture/*
 .idea/.name
+*.kate-swp
 config.i.json
 Scripts/Python/Environments
