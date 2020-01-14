@@ -20,6 +20,7 @@
 #/
 #/ This extension provides:
 #/ -> CHECK_TOOL_BY_NAMES
+#/ -> FORCE_TOOL_BY_NAME
 #/ -> GUESS_TOOL_BY_NAME
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
@@ -42,14 +43,36 @@ MACRO(CHECK_TOOL_BY_NAME TOOL DEFAULT)
   SET(CMAKE_${TOOL}_PATH "" CACHE FILEPATH "A hint path to use when searching for the ${TOOL}.")
 ENDMACRO()
 
-# This macro will try to guess a tool executable by searching the user's provided PATH first, then letting CMake
-# fallback to a default compiler and failing later (if the compiler does not work).
-MACRO(GUESS_TOOL_BY_NAME TYPE TOOL)
-  IF (NOT "${CMAKE_${TYPE}}")
+# This macro will force the guess of a tool executable by searching the user's provided PATH first.
+MACRO(FORCE_TOOL_BY_NAME TYPE TOOL)
+  IF (NOT CMAKE_${TYPE}_EXE)
     UNSET("CMAKE_${TYPE}" CACHE)
+    UNSET("CMAKE_${TYPE}_EXE" CACHE)
     FIND_PROGRAM("CMAKE_${TYPE}_EXE" NAMES "${CMAKE_${TYPE}}" HINTS "${CMAKE_${TOOL}_PATH}" PATH_SUFFIXES "bin" ""
                  DOC "This is a guess made by the build system for a tool.")
   ENDIF ()
+  SET("CMAKE_${TYPE}" "${CMAKE_${TYPE}_EXE}")
+  SET("CMAKE_${TYPE}" "${CMAKE_${TYPE}_EXE}" CACHE FILEPATH "A path to a tool used by CMake.")
+  MARK_AS_ADVANCED("CMAKE_${TYPE}")
+  MARK_AS_ADVANCED("CMAKE_${TYPE}_EXE")
+  IF (NOT CMAKE_${TYPE})
+    MESSAGE(FATAL_ERROR
+            "The CMake build system could not find the 'CMAKE_${TYPE}' tool. The configuration process will stop now. "
+            "You can give the CMake build system a hint by setting up the cache 'CMAKE_${TOOL}_PATH' variable to the "
+            "path where the tool can be found, or by fixing your 'PATH' environment variable.")
+  ENDIF ()
+ENDMACRO()
+
+# This macro will try to guess a tool executable by searching the user's provided PATH first, then letting CMake
+# fallback to a default compiler and failing later (if the compiler does not work).
+MACRO(GUESS_TOOL_BY_NAME TYPE TOOL)
+  IF (NOT CMAKE_${TYPE}_EXE)
+    UNSET("CMAKE_${TYPE}" CACHE)
+    UNSET("CMAKE_${TYPE}_EXE" CACHE)
+    FIND_PROGRAM("CMAKE_${TYPE}_EXE" NAMES "${CMAKE_${TYPE}}" HINTS "${CMAKE_${TOOL}_PATH}" PATH_SUFFIXES "bin" ""
+                 DOC "This is a guess made by the build system for a tool.")
+  ENDIF ()
+  SET("CMAKE_${TYPE}" "${CMAKE_${TYPE}_EXE}")
   SET("CMAKE_${TYPE}" "${CMAKE_${TYPE}_EXE}" CACHE FILEPATH "A path to a tool used by CMake.")
   MARK_AS_ADVANCED("CMAKE_${TYPE}")
   MARK_AS_ADVANCED("CMAKE_${TYPE}_EXE")
