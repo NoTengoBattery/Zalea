@@ -14,7 +14,7 @@
   </component>
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
-    <option name="clangWarnings" value="-Wall,-Wextra,-Wpedantic,-Wformat=2,-Werror" />
+    <option name="clangWarnings" value="-Wall,-Werror,-Wextra,-Wformat=2,-Wpedantic,-Wundef" />
   </component>
   <component name="FileColors">
     <fileColor scope="Test Files" color="Rose" />

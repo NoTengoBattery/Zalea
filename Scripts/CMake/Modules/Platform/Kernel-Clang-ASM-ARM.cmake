@@ -34,7 +34,6 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   # Those are special base flags which will setup the ABI for the compiler
   STRING(APPEND CMAKE_ASM_FLAGS_INIT "-mabi=aapcs ")
   STRING(APPEND CMAKE_ASM_FLAGS_INIT "-mfloat-abi=soft ")
-  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-mgeneral-regs-only ")
   STRING(APPEND CMAKE_ASM_FLAGS_INIT "-mtp=soft ")
 
   # TODO: marm and mthumb for minsizerel

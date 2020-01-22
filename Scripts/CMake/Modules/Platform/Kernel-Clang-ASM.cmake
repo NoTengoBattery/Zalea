@@ -33,9 +33,13 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_ASM_FLAGS_INIT "-nostdlib ")
   STRING(APPEND CMAKE_ASM_FLAGS_INIT "-pipe ")
   # Those flags define the diagnostics to be issued (or not) by the compiler
-  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-Wall -Wextra -Wpedantic -Wformat=2 -Werror ")
-  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-Wno-error=unused-command-line-argument ")
+  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-Wall ")
+  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-Werror ")
+  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-Wextra ")
+  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-Wformat=2 ")
+  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-Wpedantic ")
+  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-Wundef ")
   # Those flags define the linker to be used (this is needed for all cross compilers)
-  STRING(APPEND CMAKE_ASM_FLAGS_INIT "\"-fuse-ld=${CMAKE_LD}\"")
+  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-fuse-ld=\"${CMAKE_LD}\"")
 
 ENDIF ()
