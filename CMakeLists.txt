@@ -1,6 +1,6 @@
 #===-- CMakeLists.txt - Root of the CMake project  ----------------------------------------------------*- CMake -*-===//
 #
-# Copyright (c) 2019 Oever González
+# Copyright (c) 2020 Oever González
 #
 #  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
 #  the License. You may obtain a copy of the License at
@@ -89,7 +89,8 @@ INCLUDE("${TREE_ARCHITECTURE_PATH}/ArchitectureSelector.cmake")
 INCLUDE("${TREE_ARCHITECTURE_PATH}/MachineSelector.cmake")
 
 # Include the CMake Toolchain file that will force the user to select a compiler for it's target
-SET(CMAKE_TOOLCHAIN_FILE "${TREE_SCRIPTS_CMAKE_TOOLCHAIN_PATH}/CMakeToolchain.cmake")
+SET(CMAKE_TOOLCHAIN_FILE "${TREE_SCRIPTS_CMAKE_TOOLCHAIN_PATH}/CMakeToolchain.cmake"
+    CACHE INTERNAL "The CMake toolchain file.")
 
 # Update these variables and the tree before the project and after a sane configuration
 SET(CMAKE_SYSTEM_PROCESSOR ${KERNEL_ARCH})

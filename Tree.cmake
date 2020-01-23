@@ -1,6 +1,6 @@
 #===-- Tree.cmake - Project's source tree description  ------------------------------------------------*- CMake -*-===//
 #
-# Copyright (c) 2019 Oever González
+# Copyright (c) 2020 Oever González
 #
 #  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
 #  the License. You may obtain a copy of the License at
