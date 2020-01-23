@@ -24,9 +24,11 @@
 IF (TREE_SELF_PATH) # This will define if we have access to the scope variables and cache
 
   SET(CMAKE_C_FLAGS_INIT)
+  SET(CMAKE_EXE_LINKER_FLAGS_INIT)
 
   # Those are the base "Architecture" flags
   STRING(APPEND CMAKE_C_FLAGS_INIT "--target=${KERNEL_TARGET} ")
+  STRING(APPEND CMAKE_EXE_LINKER_FLAGS_INIT "-target i686-linux-elf ") # TODO: Some day llvm will allow bare metal...
   # Those are the base "machine" and "architecture" flags
   STRING(APPEND CMAKE_C_FLAGS_INIT "-march=${MACHINE_MARCH} ")
   STRING(APPEND CMAKE_C_FLAGS_INIT "-mtune=${MACHINE_MTUNE} ")

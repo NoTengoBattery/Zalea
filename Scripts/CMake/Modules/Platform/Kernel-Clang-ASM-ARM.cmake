@@ -24,6 +24,7 @@
 IF (TREE_SELF_PATH) # This will define if we have access to the scope variables and cache
 
   SET(CMAKE_ASM_FLAGS_INIT)
+  SET(CMAKE_EXE_LINKER_FLAGS_INIT)
 
   # Those are the base "Architecture" flags
   STRING(APPEND CMAKE_ASM_FLAGS_INIT "--target=${KERNEL_TARGET} ")

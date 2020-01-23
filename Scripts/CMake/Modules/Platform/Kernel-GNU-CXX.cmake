@@ -44,6 +44,6 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-Wpedantic ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-Wundef ")
   # This flag defines the linker to be used (this is needed for all cross compilers)
-  SET(CMAKE_EXE_LINKER_FLAGS_INIT "-fuse-ld=${CMAKE_LD_NAME}")
+  STRING(APPEND CMAKE_EXE_LINKER_FLAGS_INIT "-fuse-ld=${CMAKE_LD_NAME}")
 
 ENDIF ()

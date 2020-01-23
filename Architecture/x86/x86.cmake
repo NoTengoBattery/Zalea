@@ -30,7 +30,7 @@ SET(AVAILABLE_BINUTILS "GNU" "LLVM")
 CHECK_TOOL_BY_NAME(BINUTILS "GNU")
 
 # This is the default target for the compiler and binutils
-SET_AND_EXPORT(KERNEL_TARGET "i386-pc-elf" STRING "i386-pc-elf"
+SET_AND_EXPORT(KERNEL_TARGET "i686-elf" STRING "i686-elf"
                "This variable is the machine target for the compiler and binutils.")
 
 # This is the default ISA for the compiler and binutils (the minimum instruction set)
