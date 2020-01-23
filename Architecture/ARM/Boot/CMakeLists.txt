@@ -20,9 +20,8 @@
 #===---------------------------------------------------------------------------------------------------------------===//
 
 # The name of this particular library
-SET ( THIS_LIB_NAME "EntryPoint" )
+SET(THIS_LIB_NAME "EntryPoint")
 
 # Add the library to the project
-ADD_LIBRARY ( "${THIS_LIB_NAME}" STATIC
-              "EntryPoint.sx"
-              "Startup.c")
+ADD_LIBRARY("${THIS_LIB_NAME}" STATIC
+            "EntryPoint.sx")

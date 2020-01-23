@@ -1,6 +1,4 @@
-#!/usr/bin/env python3
-# coding=utf-8
-# ===-- TestCMakeConfigExporter.py - Configuration exporter for CMake  -------------------------------*- Python -*-===//
+# ===-- TestCMakeConfigExporter.py - Test the Configuration Exporter for CMake  ----------------------*- Python -*-===//
 #
 # Copyright (c) 2020 Oever González
 #

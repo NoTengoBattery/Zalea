@@ -1,4 +1,4 @@
-﻿#===-- CMakeLists.txt - Root of the ARM subtree  ------------------------------------------------------*- CMake -*-===//
+﻿#===-- CMakeLists.txt - Root of the x86 subtree  ------------------------------------------------------*- CMake -*-===//
 #
 # Copyright (c) 2020 Oever González
 #

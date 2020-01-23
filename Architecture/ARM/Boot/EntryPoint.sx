@@ -1,5 +1,29 @@
-﻿.section .start, "ax"
-.type	_start, #function
-.globl	_start
+﻿#===-- EntryPoint.sx - Entry point for booting in ARM  --------------------------------------------------*- ASM -*-===//
+#
+# Copyright (c) 2020 Oever González
+#
+#  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+#  the License. You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+#  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+#  specific language governing permissions and limitations under the License.
+# SPDX-License-Identifier: Apache-2.0
+#
+#===---------------------------------------------------------------------------------------------------------------===//
+#/
+#/ \file
+#/ This file is the entry point for booting in ARM. This entry point is the very first code that will be executed as
+#/ soon as we have control over the CPU. Most of the time, the bootloader will load the image in memory and perform a
+#/ long jump. Other devices might requiere special boot code after this function, so this function will be limited to
+#/ initialize the minimal C environment (which will initialize the C++ environment later).
+#/
+#===---------------------------------------------------------------------------------------------------------------===//
+
+.section .start, "ax"
+.type _start, #function
+.globl _start
 _start:
-  bl	_start
+  BL _start

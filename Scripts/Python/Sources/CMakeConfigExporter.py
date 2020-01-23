@@ -1,6 +1,4 @@
-#!/usr/bin/env python3
-# coding=utf-8
-# ===-- CMakeConfigExporter.py - Configuration exporter for CMake  -----------------------------------*- Python -*-===//
+# ===-- CMakeConfigExporter.py - Configuration Exporter for CMake  -----------------------------------*- Python -*-===//
 #
 # Copyright (c) 2020 Oever González
 #

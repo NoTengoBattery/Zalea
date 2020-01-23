@@ -1,4 +1,4 @@
-﻿#===-- CMakeLists.txt - Root of the x86/Boot subtree  -------------------------------------------------*- CMake -*-===//
+﻿#===-- EntryPoint.sx - Entry point for booting in x86  --------------------------------------------------*- ASM -*-===//
 #
 # Copyright (c) 2020 Oever González
 #
@@ -15,13 +15,14 @@
 #===---------------------------------------------------------------------------------------------------------------===//
 #/
 #/ \file
-#/ This file will include the entry point for ARM.
+#/ This file is the entry point for booting in x86. This entry point is the very first code that will be executed as
+#/ soon as we have control over the CPU. Most of the time, the bootloader will load the image in memory and perform a
+#/ long jump. Other devices might requiere special boot code after this function, so this function will be limited to
+#/ initialize the minimal C environment (which will initialize the C++ environment later).
 #/
 #===---------------------------------------------------------------------------------------------------------------===//
 
-# The name of this particular library
-SET(THIS_LIB_NAME "EntryPoint")
-
-# Add the library to the project
-ADD_LIBRARY("${THIS_LIB_NAME}" STATIC
-            "EntryPoint.sx")
+.section .start, "ax"
+.global _start
+_start:
+  JMP _start

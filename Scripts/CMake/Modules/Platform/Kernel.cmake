@@ -1,4 +1,4 @@
-#===--Kernel.cmake - CMake System file  ---------------------------------------------------------------*- CMake -*-===//
+#===--Kernel.cmake - CMake System File  ---------------------------------------------------------------*- CMake -*-===//
 #
 # Copyright (c) 2020 Oever González
 #

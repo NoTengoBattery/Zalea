@@ -1,4 +1,4 @@
-#===-- PurePythonRunner.cmake - Python runner  --------------------------------------------------------*- CMake -*-===//
+#===-- PurePythonRunner.cmake - Python Runner  --------------------------------------------------------*- CMake -*-===//
 #
 # Copyright (c) 2020 Oever González
 #

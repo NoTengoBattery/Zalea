@@ -1,4 +1,4 @@
-#===-- SetAndExport.cmake - SET_AND_EXPORT extension  -------------------------------------------------*- CMake -*-===//
+#===-- SetAndExport.cmake - SET_AND_EXPORT Extension  -------------------------------------------------*- CMake -*-===//
 #
 # Copyright (c) 2020 Oever González
 #
