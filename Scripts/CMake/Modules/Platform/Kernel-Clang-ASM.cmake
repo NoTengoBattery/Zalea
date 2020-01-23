@@ -43,6 +43,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_ASM_FLAGS_INIT "-Wformat=2 ")
   STRING(APPEND CMAKE_ASM_FLAGS_INIT "-Wpedantic ")
   STRING(APPEND CMAKE_ASM_FLAGS_INIT "-Wundef ")
+  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-Wno-unused-command-line-argument ")
   # Those flags define the linker to be used (this is needed for all cross compilers)
   STRING(APPEND CMAKE_EXE_LINKER_FLAGS_INIT "-fuse-ld=\"${CMAKE_LD}\"")
 
@@ -51,5 +52,8 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_ASM_FLAGS_MINSIZEREL_INIT "-Os -DMINSIZEREL ")
   STRING(APPEND CMAKE_ASM_FLAGS_RELEASE_INIT "-O3 -DRELEASE ")
   STRING(APPEND CMAKE_ASM_FLAGS_RELWITHDEBINFO_INIT "-O2 -g -DRELWITHDEBINFO ")
+
+  SET(CMAKE_ASM_SOURCE_FILE_EXTENSIONS "sx")
+  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-x assembler-with-cpp ")
 
 ENDIF ()

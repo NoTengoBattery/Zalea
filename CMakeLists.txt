@@ -100,5 +100,11 @@ INCLUDE("${TREE_SELF_PATH}")
 PROJECT("${PROJECT_NAME}" VERSION ${CMAKE_SYSTEM_VERSION} LANGUAGES ASM C CXX)#CPP)
 MESSAGE(STATUS "The \"${PROJECT_NAME}\" project version ${CMAKE_PROJECT_VERSION} for ${KERNEL_ARCH}")
 
+# Set the INTERPROCEDURAL_OPTIMIZATION default to true (LTO)
+SET(CMAKE_INTERPROCEDURAL_OPTIMIZATION YES)
+
+# Add all subdirectories (the root subdirectories) that will be ever used
+ADD_SUBDIRECTORY("${TREE_ARCHITECTURE_PATH}")
+
 # Dump the Current Config database to a CMake file at the end of configuration
 DATABASE_TO_CMAKE()

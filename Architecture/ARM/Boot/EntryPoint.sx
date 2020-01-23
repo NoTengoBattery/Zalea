@@ -1,0 +1,5 @@
+﻿.section .start, "ax"
+.type	_start, #function
+.globl	_start
+_start:
+  bl	_start

@@ -42,10 +42,10 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     ENDIF ()
   ENDIF ()
 
-  # When using Clang (but not AppleClang), version must have to be 6.0 or greater
+  # When using Clang (but not AppleClang), version must have to be 9.0 or greater
   IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"
-      AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 6.0)
-    MESSAGE(FATAL_ERROR "When using the Clang compiler, Clang's version must have to be 6.0 or greater.")
+      AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
+    MESSAGE(FATAL_ERROR "When using the Clang compiler, Clang's version must have to be 9.0 or greater.")
   ENDIF ()
 
   # When using AppleClang, version must have to be 11.0.0 or greater
@@ -63,25 +63,18 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     ENDIF ()
   ENDIF ()
 
-  # When using GCC, version must have to be 7.0 or greater
+  # When using GCC, version must have to be 9.0 or greater
   IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"
-      AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7.0)
-    MESSAGE(FATAL_ERROR "When using the GCC compiler, GCC's version must have to be 7.0 or greater.")
-  ENDIF ()
-
-  # When using GCC and LLVM, GCC must have to be version 9.0 or greater
-  IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"
-      AND "${KERNEL_BINUTILS}" STREQUAL "LLVM"
       AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
-    MESSAGE(FATAL_ERROR "When using the GCC compiler + LLVM binutils, GCC's version must have to be 9.0 or greater.")
+    MESSAGE(FATAL_ERROR "When using the GCC compiler, GCC's version must have to be 9.0 or greater.")
   ENDIF ()
 
-  # When using LLVM binutils, version must have to be 2.30 or greater
+  # When using GNU binutils, version must have to be 2.33 or greater
   IF ("${KERNEL_BINUTILS}" STREQUAL "GNU")
     EXECUTE_PROCESS(COMMAND "${CMAKE_OBJCOPY}" "--version" OUTPUT_VARIABLE OBJCOPY_VERSION)
     STRING(REGEX MATCH "[0-9]+\\.[0-9]+[^\n\r\t\ ]*" OBJCOPY_VERSION "${OBJCOPY_VERSION}")
-    IF (OBJCOPY_VERSION VERSION_LESS 2.30)
-      MESSAGE(FATAL_ERROR "When using the GNU binutils, binutils's version must have to be 2.30 or greater.")
+    IF (OBJCOPY_VERSION VERSION_LESS 2.33)
+      MESSAGE(FATAL_ERROR "When using the GNU binutils, binutils's version must have to be 2.33 or greater.")
     ENDIF ()
   ENDIF ()
 
