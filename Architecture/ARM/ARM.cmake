@@ -1,4 +1,4 @@
-#===-- ARM.cmake - CMake Architecture file for ARM ----------------------------------------------------*- CMake -*-===//
+#===-- ARM.cmake - CMake Architecture file for ARM -----------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -12,14 +12,14 @@
 #  specific language governing permissions and limitations under the License.
 # SPDX-License-Identifier: Apache-2.0
 #
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
 #/ This file will define the general settings for the compiler. This includes the compiler itself (i.e. gcc, clang,
 #/ msvc), the binutils such as the assembler and linker and some other "generic" options for the architecture. The
 #/ respective machine file will probably override some options.
 #/
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 
 # This is a list of the *compilers* that are able to build this kernel for this architecture
 SET(AVAILABLE_COMPILER "Clang" "GNU")

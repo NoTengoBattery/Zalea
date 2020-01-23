@@ -1,4 +1,4 @@
-#===-- PureFileUtils.cmake - File Utils  --------------------------------------------------------------*- CMake -*-===//
+#===-- PureFileUtils.cmake - File Utils  ---------------------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -12,7 +12,7 @@
 #  specific language governing permissions and limitations under the License.
 # SPDX-License-Identifier: Apache-2.0
 #
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
 #/ Includes some utilities for handling, discovering and listing files and directories.
@@ -21,7 +21,7 @@
 #/ -> LIST_FILE_FILTER
 #/ -> LIST_SUBDIR
 #/
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 
 # List all the files in the directory DIR whose name matches with the EXPR. Stores the result in the variable provided
 # in RESULT. When REMOVE_MATCHER is set, all file names will be returned with a simple regex replace from EXPR to an

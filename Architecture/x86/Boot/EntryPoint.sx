@@ -27,4 +27,5 @@
 .section .start, "ax"
 .global _start
 _start:
+  XCHG bx, bx # BOCHS magic breakpoint
   JMP _start

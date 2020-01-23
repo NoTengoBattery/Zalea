@@ -1,4 +1,4 @@
-#===-- PureCheckToolsByName.cmake - Check Tools By Name  ----------------------------------------------*- CMake -*-===//
+#===-- PureCheckToolsByName.cmake - Check Tools By Name  -----------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -12,7 +12,7 @@
 #  specific language governing permissions and limitations under the License.
 # SPDX-License-Identifier: Apache-2.0
 #
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
 #/ Includes some a special ad-hoc macro that tries to check the compiler/binutils by name from a list of supported
@@ -23,7 +23,7 @@
 #/ -> FORCE_TOOL_BY_NAME
 #/ -> GUESS_TOOL_BY_NAME
 #/
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 
 # This macro will check a tool by it's name. The tool will have it's name in the KERNEL_${TOOL} variable in the cache.
 #  The list of available options for the tool must be in the AVAILABLE_${TOOL} variable, as it's the same for

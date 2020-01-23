@@ -1,4 +1,4 @@
-#===-- SetAndExport.cmake - SET_AND_EXPORT Extension  -------------------------------------------------*- CMake -*-===//
+#===-- SetAndExport.cmake - SET_AND_EXPORT Extension  --------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -12,7 +12,7 @@
 #  specific language governing permissions and limitations under the License.
 # SPDX-License-Identifier: Apache-2.0
 #
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
 #/ This is an extension file. This file implements the SetAndExport extension providing command to set a variable to the
@@ -24,7 +24,7 @@
 #/ -> SET_AND_EXPORT
 #/ -> SET_AND_EXPORT_FORCE
 #/
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 
 MESSAGE(STATUS "Importing the SET_AND_EXPORT CMake extension...")
 

@@ -1,6 +1,6 @@
 
-# Created by https://www.gitignore.io/api/c,c++,xcode,linux,macos,cmake,clion,python,windows,assembler,kdevelop4,codeblocks,visualstudio
-# Edit at https://www.gitignore.io/?templates=c,c++,xcode,linux,macos,cmake,clion,python,windows,assembler,kdevelop4,codeblocks,visualstudio
+# Created by https://www.gitignore.io/api/assembler,c,c++,clion+all,cmake,codeblocks,jetbrains+all,kate,kdevelop4,linux,macos,pycharm+all,python,visualstudio,windows,xcode
+# Edit at https://www.gitignore.io/?templates=assembler,c,c++,clion+all,cmake,codeblocks,jetbrains+all,kate,kdevelop4,linux,macos,pycharm+all,python,visualstudio,windows,xcode
 
 ### Assembler ###
 *.exe
@@ -78,7 +78,7 @@ dkms.conf
 
 # Executables
 
-### CLion ###
+### CLion+all ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
@@ -148,23 +148,21 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 
-### CLion Patch ###
-# Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
+### CLion+all Patch ###
+# Ignores the whole .idea folder and all .iml files
+# See https://github.com/joeblau/gitignore.io/issues/186 and https://github.com/joeblau/gitignore.io/issues/360
 
-# *.iml
-# modules.xml
-# .idea/misc.xml
-# *.ipr
+.idea/
+
+# Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-249601023
+
+*.iml
+modules.xml
+.idea/misc.xml
+*.ipr
 
 # Sonarlint plugin
-.idea/**/sonarlint/
-
-# SonarQube Plugin
-.idea/**/sonarIssues.xml
-
-# Markdown Navigator plugin
-.idea/**/markdown-navigator.xml
-.idea/**/markdown-navigator/
+.idea/sonarlint
 
 ### CMake ###
 CMakeLists.txt.user
@@ -190,6 +188,63 @@ _deps
 # generated directories
 bin/
 obj/
+
+### JetBrains+all ###
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
+# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+
+# User-specific stuff
+
+# Generated files
+
+# Sensitive or high-churn files
+
+# Gradle
+
+# Gradle and Maven with auto-import
+# When using Gradle or Maven with auto-import, you should exclude module files,
+# since they will be recreated, and may cause churn.  Uncomment if using
+# auto-import.
+# .idea/modules.xml
+# .idea/*.iml
+# .idea/modules
+# *.iml
+# *.ipr
+
+# CMake
+
+# Mongo Explorer plugin
+
+# File-based project format
+
+# IntelliJ
+
+# mpeltonen/sbt-idea plugin
+
+# JIRA plugin
+
+# Cursive Clojure plugin
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+
+# Editor-based Rest Client
+
+# Android studio 3.1+ serialized cache file
+
+### JetBrains+all Patch ###
+# Ignores the whole .idea folder and all .iml files
+# See https://github.com/joeblau/gitignore.io/issues/186 and https://github.com/joeblau/gitignore.io/issues/360
+
+
+# Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-249601023
+
+
+# Sonarlint plugin
+
+### Kate ###
+# Swap Files #
+.*.kate-swp
+.swp.*
 
 ### KDevelop4 ###
 *.kdev4
@@ -237,6 +292,58 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+### PyCharm+all ###
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
+# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+
+# User-specific stuff
+
+# Generated files
+
+# Sensitive or high-churn files
+
+# Gradle
+
+# Gradle and Maven with auto-import
+# When using Gradle or Maven with auto-import, you should exclude module files,
+# since they will be recreated, and may cause churn.  Uncomment if using
+# auto-import.
+# .idea/modules.xml
+# .idea/*.iml
+# .idea/modules
+# *.iml
+# *.ipr
+
+# CMake
+
+# Mongo Explorer plugin
+
+# File-based project format
+
+# IntelliJ
+
+# mpeltonen/sbt-idea plugin
+
+# JIRA plugin
+
+# Cursive Clojure plugin
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+
+# Editor-based Rest Client
+
+# Android studio 3.1+ serialized cache file
+
+### PyCharm+all Patch ###
+# Ignores the whole .idea folder and all .iml files
+# See https://github.com/joeblau/gitignore.io/issues/186 and https://github.com/joeblau/gitignore.io/issues/360
+
+
+# Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-249601023
+
+
+# Sonarlint plugin
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -746,10 +853,7 @@ healthchecksdb
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
 MigrationBackup/
 
-# End of https://www.gitignore.io/api/c,c++,xcode,linux,macos,cmake,clion,python,windows,assembler,kdevelop4,codeblocks,visualstudio
+# End of https://www.gitignore.io/api/assembler,c,c++,clion+all,cmake,codeblocks,jetbrains+all,kate,kdevelop4,linux,macos,pycharm+all,python,visualstudio,windows,xcode
 
-!Architecture/*
-.idea/.name
-*.kate-swp
-config.i.json
-Scripts/Python/Environments
+# Files ignored by the project
+Scripts/Python/Environments/3

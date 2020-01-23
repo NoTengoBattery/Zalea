@@ -1,4 +1,4 @@
-# ===-- CMakeConfigExporter.py - Configuration Exporter for CMake  -----------------------------------*- Python -*-===//
+# ===-- CMakeConfigExporter.py - Configuration Exporter for CMake  -----------------------------------*- Python -*-=== #
 #
 # Copyright (c) 2020 Oever González
 #
@@ -12,7 +12,7 @@
 #  specific language governing permissions and limitations under the License.
 # SPDX-License-Identifier: Apache-2.0
 #
-# ===--------------------------------------------------------------------------------------------------------------===//
+# ===--------------------------------------------------------------------------------------------------------------=== #
 # /
 # / \file
 # / This is a CMake Language Extension. This extension allows the build system to generate an "initial cache" file for
@@ -20,7 +20,7 @@
 # / configurations" (properly known as "configuration seeds") for your targets, or distribute the file in order to
 # / allow users to generate a binary copy of your kernel from source. Also, useful when building modules.
 # /
-# ===--------------------------------------------------------------------------------------------------------------===//
+# ===--------------------------------------------------------------------------------------------------------------=== #
 import argparse
 import io
 import logging
@@ -194,8 +194,14 @@ def dump_table(table: str, file, header, default):
             dicts = {data[i]['variable']: data[i] for i in range(0, len(data))}
             for key in sorted(dicts):
                 doc = dicts[key]
+                if table == 'SET':
+                    msg = 'SET_AND_EXPORT'
+                elif table == 'SET_FORCE':
+                    msg = 'SET_AND_EXPORT_FORCE'
+                else:
+                    raise SystemExit(13, 'Invalid table was provided!')
                 file.write('// {}: {} {}\n'
-                           .format(key, 'SET_AND_EXPORT', doc['type']))
+                           .format(key, msg, doc['type']))
                 if doc['type'] == 'BOOL':
                     file.write('#cmakedefine\t{}\n'
                                .format(key))

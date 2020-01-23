@@ -1,4 +1,4 @@
-#===-- PurePythonRunner.cmake - Python Runner  --------------------------------------------------------*- CMake -*-===//
+#===-- PurePythonRunner.cmake - Python Runner  ---------------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -12,7 +12,7 @@
 #  specific language governing permissions and limitations under the License.
 # SPDX-License-Identifier: Apache-2.0
 #
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
 #/ Run a python script with arguments.
@@ -20,7 +20,7 @@
 #/ This extension provides:
 #/ -> RUN_PYTHON_SCRIPT
 #/
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 
 # Runs a Python script given in the SCRIPT_PATH using the interpreter from a variable Python3_EXECUTABLE which is set by
 # FIND_PACKAGE. The ARGUMENTS_LIST is a CMake list which holds all arguments. The arguments may not be shell expanded.

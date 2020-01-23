@@ -1,4 +1,4 @@
-//===-- #[[$FileName$ - $Description$ -$FillWithDash$------*- $Languge$]]# -*-===//
+//===-- #[[$FileName$.c - $Description$ -$FillWithDash$-]]#-*- C -*-===//
 //
 // Copyright (c) #[[$Year$ $UserName$]]#
 //
@@ -18,4 +18,3 @@
 /// #[[$CompleteFileDescription$]]#
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
-

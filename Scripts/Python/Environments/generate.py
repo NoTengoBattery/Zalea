@@ -1,4 +1,4 @@
-# ===-- generate.py - Generate a Python 3 virtual environment  ---------------------------------------*- Python -*-===//
+# ===-- generate.py - Generate a Python 3 virtual environment  ---------------------------------------*- Python -*-=== #
 #
 # Copyright (c) 2020 Oever González
 #
@@ -12,14 +12,14 @@
 #  specific language governing permissions and limitations under the License.
 # SPDX-License-Identifier: Apache-2.0
 #
-# ===--------------------------------------------------------------------------------------------------------------===//
+# ===--------------------------------------------------------------------------------------------------------------=== #
 # /
 # / \file
 # / This is an ad-hoc script that is meant to be run by CMake when it initializes the cache. This file will generate a
 # / clean Virtual Environment with all the tools needed to run the CMake Language Extensions, without relying on the
 # / host Python 3.
 # /
-# ===--------------------------------------------------------------------------------------------------------------===//
+# ===--------------------------------------------------------------------------------------------------------------=== #
 import argparse
 import os
 import subprocess

@@ -1,4 +1,4 @@
-#===-- CMakeToolchain.cmake - The root of the toolchain file for CMake cross compilation  -------------*- CMake -*-===//
+#===-- CMakeToolchain.cmake - The root of the toolchain file for CMake cross compilation  --------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -12,13 +12,13 @@
 #  specific language governing permissions and limitations under the License.
 # SPDX-License-Identifier: Apache-2.0
 #
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
 #/ This file is the root of the toolchain architecture for CMake. This file will evaluate and configure the toolchain as
 #/ it's detected.
 #/
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 
 IF (TREE_SELF_PATH) # This will define if we have access to the scope variables and cache
 

@@ -1,4 +1,4 @@
-#===-- MachineSelector.cmake - Machine Selector  ------------------------------------------------------*- CMake -*-===//
+#===-- MachineSelector.cmake - Machine Selector  -------------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -12,14 +12,14 @@
 #  specific language governing permissions and limitations under the License.
 # SPDX-License-Identifier: Apache-2.0
 #
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
 #/ This file list all available default configuration files in the architecture directory, exposes them to the cache and
 #/ forces the user to select a machine. If an architecture contains only a single machine configuration, that will be
 #/ selected.
 #/
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 
 # List all configuration files in a subdirectory
 #  Those files have a special extension .cfg.cmake which will make them available to the cache

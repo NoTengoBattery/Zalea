@@ -1,4 +1,4 @@
-#===-- Tree.cmake - Project's Source Tree Description  ------------------------------------------------*- CMake -*-===//
+#===-- Tree.cmake - Project's Source Tree Description  -------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -12,7 +12,7 @@
 #  specific language governing permissions and limitations under the License.
 # SPDX-License-Identifier: Apache-2.0
 #
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
 #/ Contains many variables exported to CMake describing the source tree structure. These variables are relative to the
@@ -28,7 +28,7 @@
 #/
 #/ All variables in this script contains parts that are hardcoded! This is intentional: you can rely in these variables.
 #/
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 
 # Root folders
 SET(TREE_SRC_ROOT_PATH "${CMAKE_SOURCE_DIR}")                                                                # <- Parent

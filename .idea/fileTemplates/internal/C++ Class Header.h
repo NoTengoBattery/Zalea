@@ -1,4 +1,4 @@
-#parse("Notice For C.h")
+#parse("Notice For C++.h")
 #[[#ifndef]]# ${INCLUDE_GUARD}
 #[[#define]]# ${INCLUDE_GUARD}
 
@@ -11,4 +11,3 @@ class ${NAME} {
 ${NAMESPACES_CLOSE}
 
 #[[#endif]]# //${INCLUDE_GUARD}
-

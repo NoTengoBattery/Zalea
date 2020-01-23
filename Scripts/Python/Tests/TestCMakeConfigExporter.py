@@ -1,4 +1,4 @@
-# ===-- TestCMakeConfigExporter.py - Test the Configuration Exporter for CMake  ----------------------*- Python -*-===//
+# ===-- TestCMakeConfigExporter.py - Test the Configuration Exporter for CMake  ----------------------*- Python -*-=== #
 #
 # Copyright (c) 2020 Oever González
 #
@@ -12,12 +12,12 @@
 #  specific language governing permissions and limitations under the License.
 # SPDX-License-Identifier: Apache-2.0
 #
-# ===--------------------------------------------------------------------------------------------------------------===//
+# ===--------------------------------------------------------------------------------------------------------------=== #
 # /
 # / \file
 # / This file will test the correctness of the CMakeConfigExporter.py script.
 # /
-# ===--------------------------------------------------------------------------------------------------------------===//
+# ===--------------------------------------------------------------------------------------------------------------=== #
 import os
 
 import pytest
@@ -499,9 +499,9 @@ def test_dumped_format_header(db_file, template_header, cmake_header):
                                 '#cmakedefine\tE\n' \
                                 '// V: SET_AND_EXPORT BOOL\n' \
                                 '#cmakedefine\tV\n' \
-                                '// EL: SET_AND_EXPORT BOOL\n' \
+                                '// EL: SET_AND_EXPORT_FORCE BOOL\n' \
                                 '#cmakedefine\tEL\n' \
-                                '// VA: SET_AND_EXPORT BOOL\n' \
+                                '// VA: SET_AND_EXPORT_FORCE BOOL\n' \
                                 '#cmakedefine\tVA\n'
 
 

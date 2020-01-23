@@ -1,4 +1,4 @@
-#===-- ArchitectureSelector.cmake - Architecture Selector  --------------------------------------------*- CMake -*-===//
+#===-- ArchitectureSelector.cmake - Architecture Selector  ---------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -12,7 +12,7 @@
 #  specific language governing permissions and limitations under the License.
 # SPDX-License-Identifier: Apache-2.0
 #
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
 #/ This file is used to select an architecture from the available ones. This is important because is the root of the
@@ -22,7 +22,7 @@
 #/ The other script is Machine Selector. This script selects the machine from the available machines and includes it's
 #/ default config. This "default config" is populated to the cache before selecting the compiler.
 #/
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 
 # List all subdirectories, they are the available architectures
 LIST_SUBDIR("${TREE_ARCHITECTURE_PATH}" AVAILABLE_ARCHITECTURES)
@@ -49,3 +49,6 @@ SET(TREE_ARCHITECTURE_X_CONFIG_PATH "${TREE_ARCHITECTURE_X_PATH}/Configurations"
 # Export the current architecture to the default configuration
 SET_AND_EXPORT_FORCE(KERNEL_ARCH "${KERNEL_ARCH}" STRING "${KERNEL_ARCH}"
                      "This variable is the architecture to build, which is the CPU architecture that the machine runs.")
+SET_AND_EXPORT_FORCE("KERNEL_${KERNEL_ARCH}" ON BOOL ON
+                     "This variable is intended to be used in the CMake Header file.")
+MARK_AS_ADVANCED("KERNEL_${KERNEL_ARCH}")

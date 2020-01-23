@@ -1,4 +1,4 @@
-#===-- CMakeExtensions.cmake - CMake Language Extensions  ---------------------------------------------*- CMake -*-===//
+#===-- CMakeExtensions.cmake - CMake Language Extensions  ----------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -12,7 +12,7 @@
 #  specific language governing permissions and limitations under the License.
 # SPDX-License-Identifier: Apache-2.0
 #
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
 #/ Extensions for the CMake language. These extensions may be in "pure CMake" (because they come from a file that
@@ -22,7 +22,7 @@
 #/ scripts one by one. For new extensions to be added, you may have to add them to a extension script or create a new
 #/ extension script and modify this file by hand.
 #/
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 
 MESSAGE(STATUS "CMake Language Extensions for \"${PROJECT_NAME}\"")
 

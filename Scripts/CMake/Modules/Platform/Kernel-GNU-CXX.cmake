@@ -1,4 +1,4 @@
-#===-- Kernel-GNU-CXX.cmake - CMake System-Compiler-Language file ====---------------------------------*- CMake -*-===//
+#===-- Kernel-GNU-CXX.cmake - CMake System-Compiler-Language file ====----------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -12,14 +12,14 @@
 #  specific language governing permissions and limitations under the License.
 # SPDX-License-Identifier: Apache-2.0
 #
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
 #/ This file contains System-specific, Compiler-specific and Language-specific code and variables. This file is called
 #/ just after CMake identifies the compiler, and before the Compiler-specific, Language-specific configuration file when
 #/ CMake checks for a "working compiler".
 #/
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 
 IF (TREE_SELF_PATH) # This will define if we have access to the scope variables and cache
 

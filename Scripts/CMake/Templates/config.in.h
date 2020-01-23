@@ -6,7 +6,7 @@
 ///
 /// \file
 /// Contains the current configuration, exported using the SET_AND_EXPORT and SET_AND_EXPORT_FORCE directives. This file
-/// has a correct C/C++ syntax, therefore, it can be imported directly into C/C++ source files. Some variables can also
+/// has a correct C/C++ syntax, therefore, it can be imported directly into C/C++ source files. Some defines can also
 /// be used by the assembler.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//

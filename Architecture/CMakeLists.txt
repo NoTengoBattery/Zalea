@@ -1,4 +1,4 @@
-﻿#===-- CMakeLists.txt - Root of the Architecture subtree  ---------------------------------------------*- CMake -*-===//
+﻿#===-- CMakeLists.txt - Root of the Architecture subtree  ----------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -12,12 +12,12 @@
 #  specific language governing permissions and limitations under the License.
 # SPDX-License-Identifier: Apache-2.0
 #
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
 #/ This file will include the architecture tree of libraries.
 #/
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 
 # Add all subdirectories that will be ever used, one by one
 ADD_SUBDIRECTORY("${TREE_ARCHITECTURE_X_PATH}")

@@ -1,4 +1,4 @@
-#===-- PureVarsUtils.cmake - Variables Utils  ---------------------------------------------------------*- CMake -*-===//
+#===-- PureVarsUtils.cmake - Variables Utils  ----------------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -12,7 +12,7 @@
 #  specific language governing permissions and limitations under the License.
 # SPDX-License-Identifier: Apache-2.0
 #
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
 #/ Contains some utilities and macros for handling variables.
@@ -22,7 +22,7 @@
 #/ -> CLIST_TO_HLIST
 #/ -> SET_WITH_STRINGS
 #/
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 
 # Checks the current value of a variable VARIABLE against the list of strings in it's STRINGS property.
 FUNCTION(CHECK_WITH_STRINGS VARIABLE RESULT)

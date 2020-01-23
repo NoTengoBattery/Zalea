@@ -1,4 +1,4 @@
-#===-- CMakeLists.txt - Root of the CMake project  ----------------------------------------------------*- CMake -*-===//
+#===-- CMakeLists.txt - Root of the CMake project  -----------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -12,14 +12,14 @@
 #  specific language governing permissions and limitations under the License.
 # SPDX-License-Identifier: Apache-2.0
 #
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
 #/ This is the main CMake file, the root of the CMake project. From this file the whole project is generated. The
 #/ functionality of this file is delegated among the whole tree of imported files and the files that they import,
 #/ therefore, this is a minimal file to get the project building and working.
 #/
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 
 # The following line sets the minimum CMake version required to build this project
 CMAKE_MINIMUM_REQUIRED(VERSION 3.15)
