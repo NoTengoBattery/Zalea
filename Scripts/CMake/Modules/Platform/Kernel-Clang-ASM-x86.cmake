@@ -24,6 +24,10 @@
 IF (TREE_SELF_PATH) # This will define if we have access to the scope variables and cache
 
   SET(CMAKE_ASM_FLAGS_INIT)
+  SET(CMAKE_ASM_FLAGS_DEBUG_INIT)
+  SET(CMAKE_ASM_FLAGS_MINSIZEREL_INIT)
+  SET(CMAKE_ASM_FLAGS_RELEASE_INIT)
+  SET(CMAKE_ASM_FLAGS_RELWITHDEBINFO_INIT)
   SET(CMAKE_EXE_LINKER_FLAGS_INIT)
 
   # Those are the base "Architecture" flags
@@ -35,5 +39,11 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
 
   # Those are special base flags which will setup the ABI for the compiler
   STRING(APPEND CMAKE_ASM_FLAGS_INIT "-msoft-float ")
+
+  # These flags are based on which kind of build we are doing
+  #STRING(APPEND CMAKE_ASM_FLAGS_DEBUG_INIT " ")
+  #STRING(APPEND CMAKE_ASM_FLAGS_MINSIZEREL_INIT " ")
+  #STRING(APPEND CMAKE_ASM_FLAGS_RELEASE_INIT " ")
+  #STRING(APPEND CMAKE_ASM_FLAGS_RELWITHDEBINFO_INIT " ")
 
 ENDIF ()

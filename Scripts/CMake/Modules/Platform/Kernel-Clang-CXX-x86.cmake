@@ -34,6 +34,12 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-mtune=${MACHINE_MTUNE} ")
 
   # Those are special base flags which will setup the ABI for the compiler
-  STRING(APPEND CMAKE_C_FLAGS_INIT "-msoft-float ")
+  STRING(APPEND CMAKE_CXX_FLAGS_INIT "-msoft-float ")
+
+  # These flags are based on which kind of build we are doing
+  #STRING(APPEND CMAKE_CXX_FLAGS_DEBUG_INIT " ")
+  #STRING(APPEND CMAKE_CXX_FLAGS_MINSIZEREL_INIT " ")
+  #STRING(APPEND CMAKE_CXX_FLAGS_RELEASE_INIT " ")
+  #STRING(APPEND CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT " ")
 
 ENDIF ()

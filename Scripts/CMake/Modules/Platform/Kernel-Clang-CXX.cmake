@@ -46,4 +46,10 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   # This flag defines the linker to be used (this is needed for all cross compilers)
   STRING(APPEND CMAKE_EXE_LINKER_FLAGS_INIT "-fuse-ld=\"${CMAKE_LD}\"")
 
+  # These flags are based on which kind of build we are doing
+  STRING(APPEND CMAKE_CXX_FLAGS_DEBUG_INIT "-g -DDEBUG")
+  STRING(APPEND CMAKE_CXX_FLAGS_MINSIZEREL_INIT "-Os -DMINSIZEREL ")
+  STRING(APPEND CMAKE_CXX_FLAGS_RELEASE_INIT "-O3 -DRELEASE ")
+  STRING(APPEND CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g -DRELWITHDEBINFO ")
+
 ENDIF ()
