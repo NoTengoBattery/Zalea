@@ -22,6 +22,8 @@
 
 IF (TREE_SELF_PATH) # This will define if we have access to the scope variables and cache
 
+  SET(KERNEL_USE_GOLD "OFF" CACHE BOOL "If this variable is on, the GNU gold linker will be used.")
+
   # Compiler selection logic...
   MESSAGE(STATUS "CMake is attempting to auto configure the '${KERNEL_COMPILER}' compiler for the target "
           "'${KERNEL_TARGET}'...")
@@ -51,6 +53,10 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     SET(CMAKE_LD "${KERNEL_TARGET}-ld")
     SET(CMAKE_LD_NAME "bfd")
     SET(CMAKE_OBJCOPY "${KERNEL_TARGET}-objcopy")
+  ENDIF ()
+  IF (KERNEL_USE_GOLD)
+    SET(CMAKE_LD "${KERNEL_TARGET}-ld.gold")
+    SET(CMAKE_LD_NAME "gold")
   ENDIF ()
   FORCE_TOOL_BY_NAME(LD BINUTILS)
   FORCE_TOOL_BY_NAME(OBJCOPY BINUTILS)
