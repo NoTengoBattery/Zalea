@@ -42,6 +42,7 @@ ENDIF ()
 
 # Output important root folder
 SET(TREE_BIN_IMPORTANT_PATH ${CMAKE_BINARY_DIR}/Important)                                                   # <- Parent
+SET(TREE_BIN_IMPORTANT_INCLUDE_PATH ${TREE_BIN_IMPORTANT_PATH}/Include)
 IF (NOT TREE_SELF_PATH)
   MESSAGE(STATUS "Build important files root path: '${TREE_BIN_IMPORTANT_PATH}'")
 ENDIF ()
@@ -73,9 +74,14 @@ SET(TREE_SCRIPTS_PYTHON3_ENV_PATH "${TREE_SCRIPTS_PYTHON_PATH}/Environments/3")
 SET(PYTHON_GENERATE_PY "${TREE_SCRIPTS_PYTHON_ENV_PATH}/generate.py")
 ## SAE: Set and Export extension for CMake
 SET(SAE_OUTPUT_FILE "${TREE_BIN_IMPORTANT_PATH}/Current Config.cfg.cmake")
+SET(SAE_OUTPUT_HEADER "${TREE_BIN_IMPORTANT_PATH}/config.in.h")
 SET(SAE_DBFILE "${TREE_BIN_IMPORTANT_PATH}/Current Config.json")
 SET(SAE_HELPER "${TREE_SCRIPTS_PYTHON_SRC_PATH}/CMakeConfigExporter.py")
 SET(SAE_TEMPLATE_FILE "${TREE_SCRIPTS_CMAKE_TEMPLATES_PATH}/ExportedConfig.in.cmake")
+SET(SAE_TEMPLATE_HEADER "${TREE_SCRIPTS_CMAKE_TEMPLATES_PATH}/config.in.h")
+
+# This is the CMake configuration file for C/C++/ASM
+SET(CONFIGURATION_HEADER "${TREE_BIN_IMPORTANT_INCLUDE_PATH}/config.h")
 
 # Point to this file itself
 SET(TREE_SELF_PATH "${CMAKE_CURRENT_LIST_FILE}")

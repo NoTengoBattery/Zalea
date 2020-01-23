@@ -68,6 +68,19 @@ FUNCTION(DATABASE_TO_CMAKE)
           "'${SAE_OUTPUT_FILE}'")
 ENDFUNCTION()
 
+# Dumps the database to a header script full of #cmakedefine directives.
+FUNCTION(DATABASE_TO_HEADER)
+  SET(CMD_ARGS
+      "END"
+      "--header"
+      "--dbfile" "${SAE_DBFILE}"
+      "--template" "${SAE_TEMPLATE_HEADER}"
+      "--file" "${SAE_OUTPUT_HEADER}")
+  RUN_PYTHON3_SCRIPT("${SAE_HELPER}" "." "${CMD_ARGS}")
+  MESSAGE(STATUS "The current configuration was stored in "
+          "'${SAE_OUTPUT_FILE}'")
+ENDFUNCTION()
+
 # Sets a variable in the cache and uses a Python3 Script (helper script) to write the variable, type, value and
 # docstring to a database. The command that updates the database always use the current value of the variable, no matter
 # how the function was called.

@@ -96,6 +96,9 @@ SET(CMAKE_TOOLCHAIN_FILE "${TREE_SCRIPTS_CMAKE_TOOLCHAIN_PATH}/CMakeToolchain.cm
 SET(CMAKE_SYSTEM_PROCESSOR ${KERNEL_ARCH})
 INCLUDE("${TREE_SELF_PATH}")
 
+# Add the important "Include" directory for the whole build system (it contains config.h)
+INCLUDE_DIRECTORIES("${TREE_BIN_IMPORTANT_INCLUDE_PATH}")
+
 # Create and configure the actual CMake project and enable the languages: C, C++, CPP and Assembler
 PROJECT("${PROJECT_NAME}" VERSION ${CMAKE_SYSTEM_VERSION} LANGUAGES ASM C CXX)#CPP)
 MESSAGE(STATUS "The \"${PROJECT_NAME}\" project version ${CMAKE_PROJECT_VERSION} for ${KERNEL_ARCH}")
@@ -106,5 +109,9 @@ SET(CMAKE_INTERPROCEDURAL_OPTIMIZATION YES)
 # Add all subdirectories (the root subdirectories) that will be ever used
 ADD_SUBDIRECTORY("${TREE_ARCHITECTURE_PATH}")
 
-# Dump the Current Config database to a CMake file at the end of configuration
+# Dump the Current Config database to a CMake and header file at the end of configuration
 DATABASE_TO_CMAKE()
+DATABASE_TO_HEADER()
+
+# Configure the CMake Header
+CONFIGURE_FILE("${SAE_OUTPUT_HEADER}" "${CONFIGURATION_HEADER}" ESCAPE_QUOTES)

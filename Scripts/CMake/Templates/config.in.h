@@ -1,0 +1,12 @@
+//===-- Default Config - A CMake Header file to expose the CMake configuration  ---------------------------*- C -*-===//
+//
+// Automatically generated file. DO NOT MODIFY THIS FILE: ANY MODIFICATION WILL BE REVERTED.
+//
+//===--------------------------------------------------------------------------------------------------------------===//
+///
+/// \file
+/// Contains the current configuration, exported using the SET_AND_EXPORT and SET_AND_EXPORT_FORCE directives. This file
+/// has a correct C/C++ syntax, therefore, it can be imported directly into C/C++ source files. Some variables can also
+/// be used by the assembler.
+///
+//===--------------------------------------------------------------------------------------------------------------===//
