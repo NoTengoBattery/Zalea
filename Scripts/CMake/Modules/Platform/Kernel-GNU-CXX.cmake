@@ -52,4 +52,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_CXX_FLAGS_RELEASE_INIT "-O3 -DRELEASE ")
   STRING(APPEND CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g -DRELWITHDEBINFO ")
 
+  # Options for the CMake compiler
+  SET(CMAKE_CXX_SOURCE_FILE_EXTENSIONS "cxx")
+
 ENDIF ()

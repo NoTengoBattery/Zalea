@@ -1,4 +1,4 @@
-#===-- MainExecutable.cmake - Rules to build the final (main) executable  ------------------------------*- CMake -*-===#
+#===-- CMakeLists.txt - Rules to build the final (main) executable  ------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -24,7 +24,8 @@
 SET(THIS_EXE_NAME LinkedImage)
 
 # Add the executable to the project
-ADD_EXECUTABLE("${THIS_EXE_NAME}")
+ADD_EXECUTABLE("${THIS_EXE_NAME}"
+               "CPlusPlusMainExecutable.cxx")
 
 # Link these "libraries" to the executable. These libraries are the full build tree: they depend on other "libraries"
 TARGET_LINK_LIBRARIES("${THIS_EXE_NAME}"

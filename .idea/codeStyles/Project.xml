@@ -12,6 +12,12 @@
     <CMakeCodeStyleSettings>
       <option name="FORCE_COMMANDS_CASE" value="0" />
     </CMakeCodeStyleSettings>
+    <Objective-C-extensions>
+      <extensions>
+        <pair source="cxx" header="hxx" fileNamingConvention="PASCAL_CASE" />
+        <pair source="c" header="h" fileNamingConvention="PASCAL_CASE" />
+      </extensions>
+    </Objective-C-extensions>
     <Python>
       <option name="USE_CONTINUATION_INDENT_FOR_ARGUMENTS" value="true" />
       <option name="OPTIMIZE_IMPORTS_SORT_NAMES_IN_FROM_IMPORTS" value="true" />
