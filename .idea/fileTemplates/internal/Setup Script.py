@@ -12,4 +12,3 @@ setup(
     author_email='$Author_Email',
     description='$Description'
 )
- 

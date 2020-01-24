@@ -1,4 +1,4 @@
-#===-- #[[$ScriptName$.cmake - $Description$  -$FillWithDash$-]]#-*- CMake -*-===#
+#===-- #[[$ScriptName$.sx - $Description$  -$FillWithDash$-]]#-*- ASM -*-===#
 #
 # Copyright (c) #[[$Year$ $YourName$]]#
 #

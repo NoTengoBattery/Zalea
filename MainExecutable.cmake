@@ -1,6 +1,6 @@
-#===-- #[[$ScriptName$.cmake - $Description$  -$FillWithDash$-]]#-*- CMake -*-===#
+#===-- MainExecutable.cmake - Rules to build the final (main) executable  ------------------------------*- CMake -*-===#
 #
-# Copyright (c) #[[$Year$ $YourName$]]#
+# Copyright (c) 2020 Oever González
 #
 #  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
 #  the License. You may obtain a copy of the License at
@@ -15,6 +15,17 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
-#/ #[[$FullFileDescription$]]#
+#/ This file will define the CMake rules to build the final executable. Some rules are generic, which are listed here.
+#/ Some other rules are architecture-specific, which are included from the Architecture subtree.
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
+
+# The name of the executable image (just after linking)
+SET(THIS_EXE_NAME LinkedImage)
+
+# Add the executable to the project
+ADD_EXECUTABLE("${THIS_EXE_NAME}")
+
+# Link these "libraries" to the executable. These libraries are the full build tree: they depend on other "libraries"
+TARGET_LINK_LIBRARIES("${THIS_EXE_NAME}"
+                      EntryPoint)
