@@ -31,10 +31,13 @@ ADD_EXECUTABLE("${THIS_EXE_NAME}"
 TARGET_LINK_LIBRARIES("${THIS_EXE_NAME}"
                       EntryPoint)
 
-# Add the linker script to the linker command line (requires binutils detection)
-IF ("${KERNEL_BINUTILS}" STREQUAL "LLVM"
-    OR "${KERNEL_BINUTILS}" STREQUAL "GNU")
-  TARGET_LINK_LIBRARIES("${THIS_EXE_NAME}" "-Wl,-T" "-Wl,\"${TREE_BIN_IMPORTANT_PATH}/MainExecutable.ld\""
+# Add the linker script to the linker command line (requires binutils and compiler detection)
+IF (("${KERNEL_BINUTILS}" STREQUAL "LLVM"
+     OR "${KERNEL_BINUTILS}" STREQUAL "GNU")
+     AND ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"
+     OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"
+     OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang"))
+  TARGET_LINK_LIBRARIES("${THIS_EXE_NAME}" "-Wl,-T\"${TREE_BIN_IMPORTANT_PATH}/MainExecutable.ld\""
                         "-Wl,-Map=\"${TREE_BIN_IMPORTANT_PATH}/MainExecutable.map\"")
 ENDIF ()
 
@@ -50,7 +53,7 @@ IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"
                      "-E" "${TREE_EXECUTABLES_PATH}/${KERNEL_ARCH}/${KERNEL_BINUTILS}.MainExecutable.in.ld")
 ENDIF ()
 
-# Add the custom command which will dump the contents of the linked image to a file
+# Add the custom command which will dump the contents of the linked image to a file (requires binutils detection)
 IF ("${KERNEL_BINUTILS}" STREQUAL "LLVM"
     OR "${KERNEL_BINUTILS}" STREQUAL "GNU")
   ADD_CUSTOM_COMMAND(TARGET "${THIS_EXE_NAME}" POST_BUILD VERBATIM
@@ -61,7 +64,7 @@ IF ("${KERNEL_BINUTILS}" STREQUAL "LLVM"
                      COMMENT "Generating the object dump for the main executable...")
 ENDIF ()
 
-# Add the custom command which will strip the binary and generate the raw binary
+# Add the custom command which will strip the binary and generate the raw binary (requires binutils detection)
 IF ("${KERNEL_BINUTILS}" STREQUAL "LLVM"
     OR "${KERNEL_BINUTILS}" STREQUAL "GNU")
   ADD_CUSTOM_COMMAND(TARGET "${THIS_EXE_NAME}" POST_BUILD VERBATIM

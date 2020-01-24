@@ -31,7 +31,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   SET(CMAKE_EXE_LINKER_FLAGS_INIT)
 
   # Those are the base "Architecture" flags
-  STRING(APPEND CMAKE_CXX_FLAGS_INIT "--target=${KERNEL_TARGET} ")
+  STRING(APPEND CMAKE_CXX_FLAGS_INIT "-target ${KERNEL_TARGET} ")
   # Those are the base "machine" and "architecture" flags
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-march=${MACHINE_MARCH} ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-mtune=${MACHINE_MTUNE} ")

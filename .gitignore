@@ -857,3 +857,4 @@ MigrationBackup/
 
 # Files ignored by the project
 Scripts/Python/Environments/3
+Scripts/Python/Tests/config.i.json

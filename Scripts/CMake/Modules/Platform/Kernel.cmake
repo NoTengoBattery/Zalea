@@ -78,6 +78,14 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     ENDIF ()
   ENDIF ()
 
+  # Enable LTO only when using GNU+GNU or LLVM+CLANG
+  IF (("${KERNEL_BINUTILS}" STREQUAL "${CMAKE_CXX_COMPILER_ID}")
+       OR
+  ("${KERNEL_BINUTILS}" STREQUAL "LLVM" AND
+  ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")))
+    SET(LTO_AVAILABLE TRUE)
+  ENDIF ()
+
   IF (CMAKE_BUILD_TYPE)
     SET_AND_EXPORT_FORCE("KERNEL_BUILD_${CMAKE_BUILD_TYPE}" ON BOOL ON
                          "This variable is intended to be used in the CMake Header file.")
