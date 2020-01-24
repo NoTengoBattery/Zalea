@@ -855,6 +855,9 @@ MigrationBackup/
 
 # End of https://www.gitignore.io/api/assembler,c,c++,clion+all,cmake,codeblocks,jetbrains+all,kate,kdevelop4,linux,macos,pycharm+all,python,visualstudio,windows,xcode
 
-# Files ignored by the project
+# Files ignored and not ignored by the project
+!Architecture/*
+!Executables/*
+!Scripts/*
 Scripts/Python/Environments/3
 Scripts/Python/Tests/config.i.json
