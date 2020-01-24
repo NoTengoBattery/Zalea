@@ -78,4 +78,9 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     ENDIF ()
   ENDIF ()
 
+  IF (CMAKE_BUILD_TYPE)
+    SET_AND_EXPORT_FORCE("KERNEL_BUILD_${CMAKE_BUILD_TYPE}" ON BOOL ON
+                         "This variable is intended to be used in the CMake Header file.")
+  ENDIF ()
+
 ENDIF ()

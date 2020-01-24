@@ -24,8 +24,8 @@ extern "C" {
 void _start();
 }
 
-void NotMain(void);
+void NotMain();
 
-void NotMain(void) {
+void NotMain() {
     _start();
 }

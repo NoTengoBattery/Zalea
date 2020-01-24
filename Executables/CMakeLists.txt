@@ -30,3 +30,59 @@ ADD_EXECUTABLE("${THIS_EXE_NAME}"
 # Link these "libraries" to the executable. These libraries are the full build tree: they depend on other "libraries"
 TARGET_LINK_LIBRARIES("${THIS_EXE_NAME}"
                       EntryPoint)
+
+# Add the linker script to the linker command line (requires binutils detection)
+IF ("${KERNEL_BINUTILS}" STREQUAL "LLVM"
+    OR "${KERNEL_BINUTILS}" STREQUAL "GNU")
+  TARGET_LINK_LIBRARIES("${THIS_EXE_NAME}" "-Wl,-T" "-Wl,\"${TREE_BIN_IMPORTANT_PATH}/MainExecutable.ld\""
+                        "-Wl,-Map=\"${TREE_BIN_IMPORTANT_PATH}/MainExecutable.map\"")
+ENDIF ()
+
+# Add the custom command which will run the C++ preprocessor to generate a linker script (requires compiler detection)
+IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"
+    OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"
+    OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
+  ADD_CUSTOM_COMMAND(TARGET "${THIS_EXE_NAME}" PRE_LINK VERBATIM
+                     COMMAND "${CMAKE_CXX_COMPILER}"
+                     ARGS "-x" "assembler-with-cpp" "-P"
+                     "-I" "${TREE_BIN_IMPORTANT_INCLUDE_PATH}"
+                     "-o" "${TREE_BIN_IMPORTANT_PATH}/MainExecutable.ld"
+                     "-E" "${TREE_EXECUTABLES_PATH}/${KERNEL_ARCH}/${KERNEL_BINUTILS}.MainExecutable.in.ld")
+ENDIF ()
+
+# Add the custom command which will dump the contents of the linked image to a file
+IF ("${KERNEL_BINUTILS}" STREQUAL "LLVM"
+    OR "${KERNEL_BINUTILS}" STREQUAL "GNU")
+  ADD_CUSTOM_COMMAND(TARGET "${THIS_EXE_NAME}" POST_BUILD VERBATIM
+                     COMMAND "${CMAKE_OBJDUMP}"
+                     ARGS "-x" "-d" "-s" "-S"
+                     "$<TARGET_FILE:${THIS_EXE_NAME}>"
+                     ">" "$<TARGET_FILE:${THIS_EXE_NAME}>.objdump"
+                     COMMENT "Generating the object dump for the main executable...")
+ENDIF ()
+
+# Add the custom command which will strip the binary and generate the raw binary
+IF ("${KERNEL_BINUTILS}" STREQUAL "LLVM"
+    OR "${KERNEL_BINUTILS}" STREQUAL "GNU")
+  ADD_CUSTOM_COMMAND(TARGET "${THIS_EXE_NAME}" POST_BUILD VERBATIM
+                     COMMAND "${CMAKE_OBJCOPY}"
+                     ARGS "--only-keep-debug"
+                     "$<TARGET_FILE:${THIS_EXE_NAME}>"
+                     "${TREE_BIN_IMPORTANT_PATH}/MainExecutable.dbg"
+                     COMMAND "${CMAKE_OBJCOPY}"
+                     ARGS "--strip-all"
+                     "$<TARGET_FILE:${THIS_EXE_NAME}>"
+                     "${TREE_BIN_IMPORTANT_PATH}/MainExecutable.elf"
+                     COMMAND "${CMAKE_OBJCOPY}"
+                     ARGS "--add-gnu-debuglink=${TREE_BIN_IMPORTANT_PATH}/MainExecutable.dbg"
+                     "${TREE_BIN_IMPORTANT_PATH}/MainExecutable.elf"
+                     COMMAND "${CMAKE_OBJDUMP}"
+                     ARGS "-x" "-d" "-s" "-S"
+                     "${TREE_BIN_IMPORTANT_PATH}/MainExecutable.elf"
+                     ">" "${TREE_BIN_IMPORTANT_PATH}/MainExecutable.objdump"
+                     COMMAND "${CMAKE_OBJCOPY}"
+                     ARGS "-O" "binary"
+                     "$<TARGET_FILE:${THIS_EXE_NAME}>"
+                     "${TREE_BIN_IMPORTANT_PATH}/MainExecutable.bin"
+                     COMMENT "Stripping the binary and generating the raw binary for the main executable...")
+ENDIF ()
