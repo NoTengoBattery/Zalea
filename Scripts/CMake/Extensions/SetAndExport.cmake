@@ -87,6 +87,9 @@ ENDFUNCTION()
 FUNCTION(SET_AND_EXPORT VARIABLE VALUE TYPE DEFAULT DOCSTRING)
   # We run "SET" first as it is supposed to not change the cached value (that is the one that we export to the DB)
   # WE NEVER EXPORT THE VALUE GIVEN IN THE FUNCTION CALL, we always export the cached value
+  IF (NOT VALUE)
+    SET(VALUE "${DEFAULT}")
+  ENDIF ()
   SET("${VARIABLE}" "${VALUE}" CACHE "${TYPE}" "${DOCSTRING}")
   # Run the Python script to insert in the DB
   SET(CMD_ARGS
@@ -109,6 +112,9 @@ ENDFUNCTION()
 FUNCTION(SET_AND_EXPORT_FORCE VARIABLE VALUE TYPE DEFAULT DOCSTRING)
   # We run "SET" first as it is supposed to change the cached value (that is the one that we won't export to the DB)
   # WE ALWAYS EXPORT THE CACHED VALUE, it should have changed
+  IF (NOT VALUE)
+    SET(VALUE "${DEFAULT}")
+  ENDIF ()
   SET("${VARIABLE}" "${VALUE}" CACHE "${TYPE}" "${DOCSTRING}" FORCE)
   # Run the Python script to insert in the DB
   SET(CMD_ARGS

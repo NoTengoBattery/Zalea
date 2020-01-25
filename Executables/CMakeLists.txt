@@ -25,7 +25,10 @@ SET(THIS_EXE_NAME LinkedImage)
 
 # Add the executable to the project
 ADD_EXECUTABLE("${THIS_EXE_NAME}"
-               "CPlusPlusMainExecutable.cxx")
+               "CPlusPlusMainExecutable.cxx"
+               "LinkerScriptDefinitions.h"
+               "MainExecutableBase.h"
+               "${CONFIGURATION_HEADER}")
 
 # Link these "libraries" to the executable. These libraries are the full build tree: they depend on other "libraries"
 TARGET_LINK_LIBRARIES("${THIS_EXE_NAME}"
@@ -49,8 +52,9 @@ IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"
                      COMMAND "${CMAKE_CXX_COMPILER}"
                      ARGS "-x" "assembler-with-cpp" "-P"
                      "-I" "${TREE_BIN_IMPORTANT_INCLUDE_PATH}"
+                     "-I" "${CMAKE_CURRENT_LIST_DIR}"
                      "-o" "${TREE_BIN_IMPORTANT_PATH}/MainExecutable.ld"
-                     "-E" "${TREE_EXECUTABLES_PATH}/${KERNEL_ARCH}/${KERNEL_BINUTILS}.MainExecutable.in.ld")
+                     "-E" "${TREE_EXECUTABLES_PATH}/${KERNEL_ARCH}/MainExecutable.in.ld")
 ENDIF ()
 
 # Add the custom command which will dump the contents of the linked image to a file (requires binutils detection)
@@ -87,5 +91,9 @@ IF ("${KERNEL_BINUTILS}" STREQUAL "LLVM"
                      ARGS "-O" "binary"
                      "$<TARGET_FILE:${THIS_EXE_NAME}>"
                      "${TREE_BIN_IMPORTANT_PATH}/MainExecutable.bin"
+                     COMMAND "${CMAKE_OBJCOPY}"
+                     ARGS "-O" "binary"
+                     "$<TARGET_FILE:${THIS_EXE_NAME}>"
+                     "${TREE_BIN_IMPORTANT_PATH}/${MACHINE_LOADABLE_IMAGE_NAME}"
                      COMMENT "Stripping the binary and generating the raw binary for the main executable...")
 ENDIF ()

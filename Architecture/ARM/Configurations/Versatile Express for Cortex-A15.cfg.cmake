@@ -18,6 +18,14 @@
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
+# MACHINE_LOADABLE_IMAGE_NAME: SET_AND_EXPORT STRING
+SET(MACHINE_LOADABLE_IMAGE_NAME "kernel.img"
+    CACHE STRING
+    "This will set the name of the binary that the machine can load. Some machines require a specific file.")
+# MACHINE_LOAD_ADDRESS: SET_AND_EXPORT STRING
+SET(MACHINE_LOAD_ADDRESS "0x8000"
+    CACHE STRING
+    "This will set the ELF load address.")
 # MACHINE_MARCH: SET_AND_EXPORT STRING
 SET(MACHINE_MARCH "armv7-a"
     CACHE STRING
@@ -30,3 +38,7 @@ SET(MACHINE_MTUNE "cortex-a15"
 SET(MACHINE_NAME "ARM Versatile Express for Cortex-A15"
     CACHE STRING
     "This variable is the machine for the build, a human readable name for the machine.")
+# MACHINE_PHYSICAL_ADDRESS: SET_AND_EXPORT STRING
+SET(MACHINE_PHYSICAL_ADDRESS "0x8000"
+    CACHE STRING
+    "This will set the ELF physical address.")

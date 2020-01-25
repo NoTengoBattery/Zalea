@@ -40,3 +40,5 @@ SET_AND_EXPORT(MACHINE_MARCH "armv7" STRING "armv7"
 # This is the default CPU for the compiler and binutils to tune the performance
 SET_AND_EXPORT(MACHINE_MTUNE "generic" STRING "generic"
                "This variable is the default CPU for the compiler and binutils to tune the performance.")
+
+INCLUDE("${TREE_ARCHITECTURE_X_CONFIG_PATH}/ArchitectureExporter.cmake")

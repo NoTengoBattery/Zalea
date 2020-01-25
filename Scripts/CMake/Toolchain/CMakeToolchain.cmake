@@ -97,6 +97,20 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   FORCE_TOOL_BY_NAME(OBJDUMP BINUTILS)
   FORCE_TOOL_BY_NAME(RANLIB BINUTILS)
 
+  # Export which linker is being used to the database, so we can use it in the preprocessed linker scripts
+  IF (KERNEL_USE_GOLD)
+    SET_AND_EXPORT_FORCE(GNU_GOLD "ON" BOOL "ON" "-")
+    MARK_AS_ADVANCED(GNU_GOLD)
+  ELSE ()
+    IF ("${KERNEL_BINUTILS}" STREQUAL "LLVM")
+      SET_AND_EXPORT_FORCE(LLVM_LLD "ON" BOOL "ON" "-")
+      MARK_AS_ADVANCED(LLVM_LLD)
+    ELSEIF ("${KERNEL_BINUTILS}" STREQUAL "GNU")
+      SET_AND_EXPORT_FORCE(GNU_LD "ON" BOOL "ON" "-")
+      MARK_AS_ADVANCED(GNU_LD)
+    ENDIF ()
+  ENDIF ()
+
   # When using Clang or GCC, this will tell the compiler where to find it's binutils (mainly the linker)
   GET_FILENAME_COMPONENT(CMAKE_BINUTILS_BIN_PATH "${CMAKE_LD}" DIRECTORY)
   SET(CMAKE_BINUTILS_BIN_PATH "${CMAKE_BINUTILS_BIN_PATH}" CACHE INTERNAL

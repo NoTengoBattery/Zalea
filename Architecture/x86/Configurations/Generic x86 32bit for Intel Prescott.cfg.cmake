@@ -18,7 +18,15 @@
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
+# MACHINE_LOAD_ADDRESS: SET_AND_EXPORT STRING
+SET(MACHINE_LOAD_ADDRESS "0x100000"
+    CACHE STRING
+    "This will set the ELF load address.")
 # MACHINE_NAME: SET_AND_EXPORT STRING
 SET(MACHINE_NAME "Generic/Legacy BIOS x86 machine for 32bit Intel Prescott or better"
-  CACHE STRING
-  "This variable is the machine for the build, a human readable name for the machine.")
+    CACHE STRING
+    "This variable is the machine for the build, a human readable name for the machine.")
+# MACHINE_PHYSICAL_ADDRESS: SET_AND_EXPORT STRING
+SET(MACHINE_PHYSICAL_ADDRESS "0x100000"
+    CACHE STRING
+    "This will set the ELF physical address.")

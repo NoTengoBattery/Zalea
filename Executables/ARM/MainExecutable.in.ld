@@ -1,4 +1,4 @@
-//===-- LLVM.MainExecutable.in.ld - LLVM Linker Script --------------------------------------------------*- C++ -*-===//
+//===-- MainExecutable.in.ld - Linker Script --------------------------------------------------------------*- C -*-===//
 //
 // Copyright (c) 2020 Oever González
 //
@@ -16,19 +16,17 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 ///
 /// \file
-/// This file is a LLVM linker script which will be preprocessed and then used for the linker to generate the Main
+/// This file is a GNU linker script which will be preprocessed and then used for the linker to generate the Main
 /// Executable, which is the monolithic part of this project.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
 #include <config.h>
+#include <LinkerScriptDefinitions.h>
 
 OUTPUT_FORMAT("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 OUTPUT_ARCH(arm)
-ENTRY(_start)
+_ENTRY
 SECTIONS {
-    PROVIDE (__executable_start = SEGMENT_START("text-segment", 0x8000));
-    . = SEGMENT_START("text-segment", 0x8000);
-
-    .start                                                  :                   { *(.start) }
+#include <MainExecutableBase.h>
 }

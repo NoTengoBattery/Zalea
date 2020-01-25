@@ -206,7 +206,7 @@ def dump_table(table: str, file, header, default):
                     file.write('#cmakedefine\t{}\n'
                                .format(key))
                 else:
-                    file.write('#cmakedefine\t{}\t"@{}@"\n'
+                    file.write('#cmakedefine\t{}\t@{}@\n'
                                .format(key, key))
                 this_logger.debug("Dumped CMake entry for variable '%s'" % key)
     else:
