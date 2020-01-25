@@ -97,6 +97,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   FORCE_TOOL_BY_NAME(OBJDUMP BINUTILS)
   FORCE_TOOL_BY_NAME(RANLIB BINUTILS)
 
+  # When using Clang or GCC, this will tell the compiler where to find it's binutils (mainly the linker)
   GET_FILENAME_COMPONENT(CMAKE_BINUTILS_BIN_PATH "${CMAKE_LD}" DIRECTORY)
   SET(CMAKE_BINUTILS_BIN_PATH "${CMAKE_BINUTILS_BIN_PATH}" CACHE INTERNAL
       "Absolute path from the C compiler to the binutils.")
