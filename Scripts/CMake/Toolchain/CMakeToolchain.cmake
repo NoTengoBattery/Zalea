@@ -22,11 +22,19 @@
 
 IF (TREE_SELF_PATH) # This will define if we have access to the scope variables and cache
 
+  # Use GNU Gold as the linker (overrides the default linker)
   SET(KERNEL_USE_GOLD "OFF" CACHE BOOL "If this variable is on, the GNU gold linker will be used.")
+  MARK_AS_ADVANCED(KERNEL_USE_GOLD)
+
+  # Set the target for the compiler (this is architecture specific and makes sense to Clang)
+  SET(CMAKE_ASM_COMPILER_TARGET "${KERNEL_TARGET}")
+  SET(CMAKE_C_COMPILER_TARGET "${KERNEL_TARGET}")
+  SET(CMAKE_CXX_COMPILER_TARGET "${KERNEL_TARGET}")
 
   # Compiler selection logic...
   MESSAGE(STATUS "CMake is attempting to auto configure the '${KERNEL_COMPILER}' compiler for the target "
           "'${KERNEL_TARGET}'...")
+
   IF ("${KERNEL_COMPILER}" STREQUAL "Clang")
     SET(CMAKE_ASM_COMPILER "clang")
     SET(CMAKE_ASM_COMPILER_AR "llvm-ar")
@@ -37,9 +45,6 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     SET(CMAKE_CXX_COMPILER "clang++")
     SET(CMAKE_CXX_COMPILER_AR "llvm-ar")
     SET(CMAKE_CXX_COMPILER_RANLIB "llvm-ranlib")
-    SET(CMAKE_ASM_COMPILER_TARGET "${KERNEL_TARGET}")
-    SET(CMAKE_C_COMPILER_TARGET "${KERNEL_TARGET}")
-    SET(CMAKE_CXX_COMPILER_TARGET "${KERNEL_TARGET}")
   ELSEIF ("${KERNEL_COMPILER}" STREQUAL "GNU")
     SET(CMAKE_ASM_COMPILER "${KERNEL_TARGET}-gcc")
     SET(CMAKE_ASM_COMPILER_AR "${KERNEL_TARGET}-gcc-ar")
@@ -51,6 +56,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     SET(CMAKE_CXX_COMPILER_AR "${KERNEL_TARGET}-gcc-ar")
     SET(CMAKE_CXX_COMPILER_RANLIB "${KERNEL_TARGET}-gcc-ranlib")
   ENDIF ()
+
   GUESS_TOOL_BY_NAME(ASM_COMPILER COMPILER)
   GUESS_TOOL_BY_NAME(ASM_COMPILER_AR COMPILER)
   GUESS_TOOL_BY_NAME(ASM_COMPILER_RANLIB COMPILER)
@@ -61,27 +67,30 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   GUESS_TOOL_BY_NAME(CXX_COMPILER_AR COMPILER)
   GUESS_TOOL_BY_NAME(CXX_COMPILER_RANLIB COMPILER)
 
+  # Binutils selection logic...
   MESSAGE(STATUS "CMake is attempting to auto configure the '${KERNEL_BINUTILS}' binutils for the  target "
           "'${KERNEL_TARGET}'...")
+
   IF ("${KERNEL_BINUTILS}" STREQUAL "LLVM")
     SET(CMAKE_AR "llvm-ar")
     SET(CMAKE_LD "ld.lld")
-    SET(CMAKE_LD_NAME "lld")
     SET(CMAKE_OBJCOPY "llvm-objcopy")
     SET(CMAKE_OBJDUMP "llvm-objdump")
     SET(CMAKE_RANLIB "llvm-ranlib")
+    SET(CMAKE_LD_NAME "lld")
   ELSEIF ("${KERNEL_BINUTILS}" STREQUAL "GNU")
     SET(CMAKE_AR "${KERNEL_TARGET}-gcc-ar")
     SET(CMAKE_LD "${KERNEL_TARGET}-ld")
-    SET(CMAKE_LD_NAME "bfd")
     SET(CMAKE_OBJCOPY "${KERNEL_TARGET}-objcopy")
     SET(CMAKE_OBJDUMP "${KERNEL_TARGET}-objdump")
     SET(CMAKE_RANLIB "${KERNEL_TARGET}-gcc-ranlib")
+    SET(CMAKE_LD_NAME "bfd")
   ENDIF ()
   IF (KERNEL_USE_GOLD)
     SET(CMAKE_LD "${KERNEL_TARGET}-ld.gold")
     SET(CMAKE_LD_NAME "gold")
   ENDIF ()
+
   FORCE_TOOL_BY_NAME(AR BINUTILS)
   FORCE_TOOL_BY_NAME(LD BINUTILS)
   FORCE_TOOL_BY_NAME(OBJCOPY BINUTILS)
@@ -90,6 +99,6 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
 
   GET_FILENAME_COMPONENT(CMAKE_BINUTILS_BIN_PATH "${CMAKE_LD}" DIRECTORY)
   SET(CMAKE_BINUTILS_BIN_PATH "${CMAKE_BINUTILS_BIN_PATH}" CACHE INTERNAL
-      "Relative path from the C compiler to the binutils.")
+      "Absolute path from the C compiler to the binutils.")
 
 ENDIF ()

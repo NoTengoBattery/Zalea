@@ -86,9 +86,11 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     SET(LTO_AVAILABLE TRUE)
   ENDIF ()
 
+  # Export the CMake build type to the config.h CMake Header
   IF (CMAKE_BUILD_TYPE)
     SET_AND_EXPORT_FORCE("KERNEL_BUILD_${CMAKE_BUILD_TYPE}" ON BOOL ON
                          "This variable is intended to be used in the CMake Header file.")
+    MARK_AS_ADVANCED("KERNEL_BUILD_${CMAKE_BUILD_TYPE}")
   ENDIF ()
 
 ENDIF ()
