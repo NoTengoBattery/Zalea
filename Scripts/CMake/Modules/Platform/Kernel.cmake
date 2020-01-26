@@ -25,7 +25,19 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
 
   # Reset these variables... just in case something nasty happen to the cache.
   UNSET(KERNEL_COMPILER_GNU CACHE)
+  MARK_AS_ADVANCED(KERNEL_COMPILER_GNU)
+  UNSET(KERNEL_COMPILER_GCC CACHE)
+  MARK_AS_ADVANCED(KERNEL_COMPILER_GCC)
+  UNSET(KERNEL_COMPILER_CLANG CACHE)
+  MARK_AS_ADVANCED(KERNEL_COMPILER_CLANG)
+  UNSET(KERNEL_COMPILER_APPLECLANG CACHE)
+  MARK_AS_ADVANCED(KERNEL_COMPILER_APPLECLANG)
   UNSET(KERNEL_BINUTILS_GNU CACHE)
+  MARK_AS_ADVANCED(KERNEL_BINUTILS_GNU)
+  UNSET(KERNEL_BINUTILS_GNU_GNU CACHE)
+  MARK_AS_ADVANCED(KERNEL_BINUTILS_GNU_GNU)
+  UNSET(KERNEL_BINUTILS_LLVM CACHE)
+  MARK_AS_ADVANCED(KERNEL_BINUTILS_LLVM)
 
   # Check some special cases for compiler IDs
   IF (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "${KERNEL_COMPILER}")
@@ -50,54 +62,61 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
 
   # When using Clang (but not AppleClang), version must have to be 9.0 or greater
   IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_GNU ON BOOL ON "-")
     IF (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
       MESSAGE(FATAL_ERROR "When using the Clang compiler, Clang's version must have to be 9.0 or greater.")
     ENDIF ()
+    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_GNU ON BOOL ON "-")
+    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_CLANG ON BOOL ON "-")
   ENDIF ()
 
   # When using AppleClang, version must have to be 11.0.0 or greater
   IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
-    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_GNU ON BOOL ON "-")
     IF (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 11.0.0)
       MESSAGE(FATAL_ERROR "When using the Apple's Clang compiler, Clang's version must have to be 11.0.0 or greater.")
     ENDIF ()
+    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_GNU ON BOOL ON "-")
+    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_CLANG ON BOOL ON "-")
+    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_APPLECLANG ON BOOL ON "-")
   ENDIF ()
 
   # When using LLVM binutils, version must have to be 9.0 or greater
   IF ("${KERNEL_BINUTILS}" STREQUAL "LLVM")
     EXECUTE_PROCESS(COMMAND "${CMAKE_OBJCOPY}" "--version" OUTPUT_VARIABLE OBJCOPY_VERSION)
     STRING(REGEX MATCH "[0-9]+\\.[0-9]+[^\n\r\t\ ]*" OBJCOPY_VERSION "${OBJCOPY_VERSION}")
-    SET_AND_EXPORT_FORCE(KERNEL_BINUTILS_GNU ON BOOL ON "-")
     IF (OBJCOPY_VERSION VERSION_LESS 9.0)
       MESSAGE(FATAL_ERROR "When using the LLVM binutils, LLVM's version must have to be 9.0 or greater.")
     ENDIF ()
+    SET_AND_EXPORT_FORCE(KERNEL_BINUTILS_GNU ON BOOL ON "-")
+    SET_AND_EXPORT_FORCE(KERNEL_BINUTILS_LLVM ON BOOL ON "-")
   ENDIF ()
 
   # When using GCC, version must have to be 9.0 or greater
   IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_GNU ON BOOL ON "-")
     IF (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
       MESSAGE(FATAL_ERROR "When using the GCC compiler, GCC's version must have to be 9.0 or greater.")
     ENDIF ()
+    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_GNU ON BOOL ON "-")
+    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_GCC ON BOOL ON "-")
   ENDIF ()
 
   # When using GNU binutils, version must have to be 2.33 or greater
   IF ("${KERNEL_BINUTILS}" STREQUAL "GNU")
     EXECUTE_PROCESS(COMMAND "${CMAKE_OBJCOPY}" "--version" OUTPUT_VARIABLE OBJCOPY_VERSION)
     STRING(REGEX MATCH "[0-9]+\\.[0-9]+[^\n\r\t\ ]*" OBJCOPY_VERSION "${OBJCOPY_VERSION}")
-    SET_AND_EXPORT_FORCE(KERNEL_BINUTILS_GNU ON BOOL ON "-")
     IF (OBJCOPY_VERSION VERSION_LESS 2.33)
       MESSAGE(FATAL_ERROR "When using the GNU binutils, binutils's version must have to be 2.33 or greater.")
     ENDIF ()
+    SET_AND_EXPORT_FORCE(KERNEL_BINUTILS_GNU ON BOOL ON "-")
+    SET_AND_EXPORT_FORCE(KERNEL_BINUTILS_GNU_GNU ON BOOL ON "-")
   ENDIF ()
 
-  # Enable LTO only when using GNU+GNU or LLVM+CLANG
-  IF (("${KERNEL_BINUTILS}" STREQUAL "${CMAKE_CXX_COMPILER_ID}")
-       OR ("${KERNEL_BINUTILS}" STREQUAL "LLVM"
-       AND ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang"
-       OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")))
+  # Enable LTO only when using [GNU+GNU] or [LLVM+CLANG (not working in Windows)]
+  IF ((KERNEL_BINUTILS_GNU_GNU AND KERNEL_COMPILER_GCC)
+       OR (KERNEL_BINUTILS_LLVM AND KERNEL_COMPILER_CLANG AND (NOT "${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Windows")))
     SET(LTO_AVAILABLE TRUE)
+    MESSAGE(STATUS "LTO is available and will be used for this project")
+  ELSE ()
+    MESSAGE(STATUS "LTO is not available and will not be used for this project")
   ENDIF ()
 
   # Export the CMake build type to the config.h CMake Header
