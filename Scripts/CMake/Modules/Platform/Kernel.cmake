@@ -32,18 +32,20 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     # Let AppleClang go on! We support AppleClang as long as we can find the LLVM toolchain (mainly LLD)
     IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
       MESSAGE(STATUS "Using Apple's Clang instead of vanilla Clang/LLVM...")
-    ELSEIF ("${CMAKE_CXX_COMPILER_ID}" MATCHES "*[M|m][S|s][V|v][C|c]*")
-      # Stop MSVC and say why!
-      MESSAGE(FATAL_ERROR "The Microsoft's MSVC compiler is not supported by this project.\n"
-              "This is because, even with a valid set of binutils, the compiler can't be configured to avoid "
-              "generating floating point instructions, among other assumptions that are useful for the Microsoft's "
-              "ABI, but useless or harmful for this project's ABI.")
     ELSE ()
       MESSAGE(FATAL_ERROR "The compiler ID inferred by CMake ('${CMAKE_CXX_COMPILER_ID}') is not the same as the "
               "compiler ID selected by the user ('${KERNEL_COMPILER}') . This means that CMake ran a fallback "
               "algorithm and didn't respected (or found) the requested compiler. Please install and configure the "
               "compiler correctly.")
     ENDIF ()
+  ENDIF ()
+
+  # Do not use MSVC because it can't be fine tuned to produce sane code for freestanding
+  IF ("${CMAKE_CXX_COMPILER_ID}" MATCHES ".*[Mm][Ss][Vv][Cc].*")
+    MESSAGE(FATAL_ERROR "The Microsoft's MSVC compiler is not supported by this project.\n"
+            "This is because, even with a valid set of binutils, the compiler can't be configured to avoid "
+            "generating floating point instructions, among other assumptions that are useful for the Microsoft's "
+            "ABI, but useless or harmful for this project's ABI.")
   ENDIF ()
 
   # When using Clang (but not AppleClang), version must have to be 9.0 or greater
