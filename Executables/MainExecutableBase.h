@@ -32,45 +32,43 @@
 
     _SEGMENTSTART("text-segment")
     .start : AT(MACHINE_LOAD_ADDRESS) {
-        _start_start = .;
         *(.start);
-        _start_end = .;
     }
     .text ALIGN(MINI_ALIGN) : ALIGN(MINI_ALIGN) {
-        _text_start = .;
         *(.text.unlikely);
         *(.text.hot);
         *(SORT(.text.sorted.*));
         *(.text .text.*);
-        _text_end = .;
     }
     _ALIGNED_CPS_SEGMENTSTART("rodata-segment")
     .rodata ALIGN(MINI_ALIGN) : ALIGN(MINI_ALIGN) {
-        _rodata_start = .;
         *(.rodata);
-        _rodata_end = .;
+    }
+    .eh_frame_hdr ALIGN(MINI_ALIGN) : ALIGN(MINI_ALIGN) {
+        *(.eh_frame_hdr);
+        *(.eh_frame_entry .eh_frame_entry.*);
+    }
+    .eh_frame ALIGN(MINI_ALIGN) : ALIGN(MINI_ALIGN) ONLY_IF_RO {
+        KEEP (*(.eh_frame));
+        *(.eh_frame.*);
     }
     _ALIGNED_CPS_SEGMENTSTART("data-segment")
     .data ALIGN(MINI_ALIGN) : ALIGN(MINI_ALIGN) {
-        _data_start = .;
         *(.data);
-        _data_end = .;
+    }
+    .eh_frame ALIGN(MINI_ALIGN) : ALIGN(MINI_ALIGN) ONLY_IF_RW {
+        KEEP(*(.eh_frame));
+        *(.eh_frame.*);
     }
     _ALIGNED_CPS_SEGMENTSTART("bss-segment")
     .bss ALIGN(MINI_ALIGN) : ALIGN(MINI_ALIGN) {
-        _bss_start = .;
         *(.bss);
         *(COMMON);
-        _bss_end = .;
     }
-
 
     .stack MACHINE_VIRTUAL_ADDRESS : AT(MACHINE_LOAD_ADDRESS) {
-        _stack_start = .;
         *(.stack);
-        _stack_end = .;
     }
-
 
     .comment 0 : {
         *(.comment);
