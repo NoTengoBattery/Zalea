@@ -33,35 +33,37 @@
     _SEGMENTSTART("text-segment")
     .start : AT(MACHINE_LOAD_ADDRESS) {
         *(.start);
+        . = ALIGN (8);
+        KEEP (*(.multiboot2));
     }
-    .text ALIGN(MINI_ALIGN) : ALIGN(MINI_ALIGN) {
+    .text ALIGN (MINI_ALIGN) : ALIGN (MINI_ALIGN) {
         *(.text.unlikely);
         *(.text.hot);
         *(SORT(.text.sorted.*));
         *(.text .text.*);
     }
     _ALIGNED_CPS_SEGMENTSTART("rodata-segment")
-    .rodata ALIGN(MINI_ALIGN) : ALIGN(MINI_ALIGN) {
+    .rodata ALIGN (MINI_ALIGN) : ALIGN (MINI_ALIGN) {
         *(.rodata);
     }
-    .eh_frame_hdr ALIGN(MINI_ALIGN) : ALIGN(MINI_ALIGN) {
+    .eh_frame_hdr ALIGN (MINI_ALIGN) : ALIGN (MINI_ALIGN) {
         *(.eh_frame_hdr);
         *(.eh_frame_entry .eh_frame_entry.*);
     }
-    .eh_frame ALIGN(MINI_ALIGN) : ALIGN(MINI_ALIGN) ONLY_IF_RO {
+    .eh_frame ALIGN (MINI_ALIGN) : ALIGN (MINI_ALIGN) ONLY_IF_RO {
         KEEP (*(.eh_frame));
         *(.eh_frame.*);
     }
     _ALIGNED_CPS_SEGMENTSTART("data-segment")
-    .data ALIGN(MINI_ALIGN) : ALIGN(MINI_ALIGN) {
+    .data ALIGN (MINI_ALIGN) : ALIGN (MINI_ALIGN) {
         *(.data);
     }
-    .eh_frame ALIGN(MINI_ALIGN) : ALIGN(MINI_ALIGN) ONLY_IF_RW {
+    .eh_frame ALIGN (MINI_ALIGN) : ALIGN (MINI_ALIGN) ONLY_IF_RW {
         KEEP(*(.eh_frame));
         *(.eh_frame.*);
     }
     _ALIGNED_CPS_SEGMENTSTART("bss-segment")
-    .bss ALIGN(MINI_ALIGN) : ALIGN(MINI_ALIGN) {
+    .bss ALIGN (MINI_ALIGN) : ALIGN (MINI_ALIGN) {
         *(.bss);
         *(COMMON);
     }

@@ -28,6 +28,8 @@ ADD_EXECUTABLE("${THIS_EXE_NAME}"
                "CPlusPlusMainExecutable.cxx"
                "LinkerScriptDefinitions.h"
                "MainExecutableBase.h"
+               "Multiboot2.c"
+               "Multiboot2.h"
                "${CONFIGURATION_HEADER}")
 
 # Link these "libraries" to the executable. These libraries are the rest of the compiled source code

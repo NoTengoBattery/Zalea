@@ -4,6 +4,7 @@
       <w>ccmake</w>
       <w>filepath</w>
       <w>interprocedural</w>
+      <w>multiboot</w>
       <w>preprocess</w>
       <w>pytest</w>
       <w>spdx</w>

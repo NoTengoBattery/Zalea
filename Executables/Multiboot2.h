@@ -1,4 +1,4 @@
-//===-- CPlusPlusMainExecutable.cxx - Source File for the Main Executable -------------------------------*- C++ -*-===//
+//===-- Multiboot2.h - The Multiboot Header  --------------------------------------------------------------*- C -*-===//
 //
 // Copyright (c) 2020 Oever González
 //
@@ -11,22 +11,20 @@
 //  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 //  specific language governing permissions and limitations under the License.
 //  SPDX-License-Identifier: Apache-2.0
+//  @formatter:off
 //
 //===--------------------------------------------------------------------------------------------------------------===//
 ///
 /// \file
-/// This is a phony file. This file will tell CMake to use the C++ linker for the final executable. This file is empty
-/// and dead code. This file is common to all architectures and targets and it's sole purpose is to be a placeholder.
+/// This file contains the Multiboot 2 header which will be used by all architectures. Even tho it's only useful for x86
+/// when it's being loaded by GRUB. This can also be useful when using the loader.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-extern "C" {
-extern void _start();
-extern void *_MultiBootHeader;
-}
+#include <stdint.h>
+#define MULTIBOOT_ATTRIBUTES __attribute__ ((section (".multiboot2")))
+#define MULTIBOOT_MAGIC 0xE85250D6
 
-void NotMain();
-
-void NotMain() {
-    _start();
-}
+struct MultiBootHeader {
+    uint32_t magic;
+};
