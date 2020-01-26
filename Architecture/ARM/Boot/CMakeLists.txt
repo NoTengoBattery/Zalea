@@ -15,13 +15,15 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
-#/ This file will include the entry point for ARM.
+#/ This file will include the entry point for the Main Executable for ARM. The Main Executable contains all the code
+#/ that will make the device fully functional.
+#/ TODO: a small loader will uncompress, verify, setup and jump this code.
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
-# The name of this particular library
+# The name of this particular library to be referenced in the rest of this file
 SET(THIS_LIB_NAME "EntryPoint")
 
-# Add the library to the project
+# Add the library to the project: this is a static library to be linked in the executable
 ADD_LIBRARY("${THIS_LIB_NAME}" STATIC
             "EntryPoint.sx")

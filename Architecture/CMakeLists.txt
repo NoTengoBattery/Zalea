@@ -15,7 +15,7 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
-#/ This file will include the architecture tree of libraries.
+#/ This file will include the architecture tree of libraries and modules to be linked in the Main Executable.
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 

@@ -1,4 +1,4 @@
-//===-- CPlusPlusMainExecutable.cxx - This file is the source file for the CMakeLists.txt----------------*- C++ -*-===//
+//===-- CPlusPlusMainExecutable.cxx - Source File for the Main Executable -------------------------------*- C++ -*-===//
 //
 // Copyright (c) 2020 Oever González
 //

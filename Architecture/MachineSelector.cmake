@@ -16,8 +16,7 @@
 #/
 #/ \file
 #/ This file list all available default configuration files in the architecture directory, exposes them to the cache and
-#/ forces the user to select a machine. If an architecture contains only a single machine configuration, that will be
-#/ selected.
+#/ forces the user to select a machine.
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
@@ -26,9 +25,9 @@
 LIST_FILE_FILTER("${TREE_ARCHITECTURE_X_CONFIG_PATH}" "\\.cfg\\.cmake$" ON AVAILABLE_MACHINES)
 IF (NOT AVAILABLE_MACHINES)
   MESSAGE(AUTHOR_WARNING "Implementing a new architecture? You can create an empty temporary configuration file. The "
-          "current configuration will be in the root directory, this current configuration has the same format as the "
-          "default settings. When the current configuration is ready, you can move or copy the to create an authentic "
-          "default configuration.")
+          "current configuration will be in the Important directory. This current configuration has the same format as "
+          "the default settings. When the current configuration is ready, you can move or copy the to create an "
+          "authentic default configuration.")
   MESSAGE(FATAL_ERROR "No machine configurations found in '${TREE_ARCHITECTURE_X_CONFIG_PATH}'")
 ENDIF ()
 
@@ -38,12 +37,12 @@ CHECK_WITH_STRINGS(KERNEL_MACHINE VALID_MACHINE)
 IF (NOT VALID_MACHINE)
   IF (NOT KERNEL_MACHINE)
     MESSAGE(FATAL_ERROR "You must pick a valid machine configuration! All available configurations are listed in the "
-            "KERNEL_MACHINE-STRINGS variable in the cache. They are, also, listed in the ccmake GUI and they are files "
-            "in the '${TREE_ARCHITECTURE_X_CONFIG_PATH}' directory (without the extension).")
+            "KERNEL_MACHINE-STRINGS variable in the cache. They are, also, listed in the ccmake GUI and they are the "
+            "files in the '${TREE_ARCHITECTURE_X_CONFIG_PATH}' directory (without the extension).")
   ELSE ()
     MESSAGE(FATAL_ERROR "The machine picked does not have a '.cfg.cmake' configuration file in "
             "'${TREE_ARCHITECTURE_X_CONFIG_PATH}'. You can create an empty file for a new machine and update it with "
-            "the exported CMake config in the build important root path.")
+            "the exported CMake config in the Important path.")
   ENDIF ()
 ELSE ()
   IF (NOT _MACHINE_INCLUDED)

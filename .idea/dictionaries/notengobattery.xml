@@ -2,7 +2,9 @@
   <dictionary name="notengobattery">
     <words>
       <w>ccmake</w>
+      <w>filepath</w>
       <w>interprocedural</w>
+      <w>preprocess</w>
       <w>pytest</w>
       <w>spdx</w>
       <w>tinydb</w>

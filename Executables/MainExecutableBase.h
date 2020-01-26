@@ -21,13 +21,13 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#ifndef ZALEA_LD_BASE_H
-#define ZALEA_LD_BASE_H
+#ifndef ZALEA_MAINEXECUTABLEBASE_H
+#define ZALEA_MAINEXECUTABLEBASE_H
 #include <config.h>
 #include "LinkerScriptDefinitions.h"
 
-#if (defined(GNU_LD) || defined(GNU_GOLD)) || defined(LLVM_LLD)
-    _ASSERT_PHYSICAL_ADDRESS
+#ifdef KERNEL_LINKER_GNU
+    _ASSERT_VIRTUAL_ADDRESS
     _ASSERT_LOAD_ADDRESS
 
     _SEGMENTSTART("text-segment")
@@ -65,7 +65,7 @@
     }
 
 
-    .stack MACHINE_PHYSICAL_ADDRESS : AT(MACHINE_LOAD_ADDRESS) {
+    .stack MACHINE_VIRTUAL_ADDRESS : AT(MACHINE_LOAD_ADDRESS) {
         _stack_start = .;
         *(.stack);
         _stack_end = .;
@@ -81,4 +81,4 @@
     }
 #endif
 #endif
-#endif //ZALEA_LD_BASE_H
+#endif //ZALEA_MAINEXECUTABLEBASE_H

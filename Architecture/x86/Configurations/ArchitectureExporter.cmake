@@ -1,4 +1,4 @@
-#===-- ArchitectureExporter.cmake - Export Variables Defined by the Configuration  ----*- CMake -*-===#
+#===-- ArchitectureExporter.cmake - Export Variables Defined by the Configurations ---------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -16,13 +16,15 @@
 #/
 #/ \file
 #/ This file will export some variables to the auto-generated files to make them accessible to C/C++/ASM/Linker Scripts
-#/ and to the CMake default configuration.
+#/ and to the CMake default configuration. All of these variables are "MACHINE" variables, they only exist here to be
+#/ exported, to not overload the rest of the files.
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
 SET_AND_EXPORT(MACHINE_LOAD_ADDRESS "${MACHINE_LOAD_ADDRESS}" STRING "0x00000000"
-               "This will set the ELF load address.")
-SET_AND_EXPORT(MACHINE_PHYSICAL_ADDRESS "${MACHINE_PHYSICAL_ADDRESS}" STRING "0x00000000"
-               "This will set the ELF physical address.")
+               "This is the load address of the image, used by the loader to place the image in memory.")
+SET_AND_EXPORT(MACHINE_VIRTUAL_ADDRESS "${MACHINE_VIRTUAL_ADDRESS}" STRING "0x00000000"
+               "This is the 'virtual' address, which is the one that is referenced by the compiled code.")
 SET_AND_EXPORT(MACHINE_LOADABLE_IMAGE_NAME "${MACHINE_LOADABLE_IMAGE_NAME}" STRING "KernelImage"
-               "This will set the name of the binary that the machine can load. Some machines require a specific file.")
+               "This will set the name of the binary that the machine can run. Some machines require a specific file "
+               "name.")

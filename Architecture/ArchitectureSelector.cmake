@@ -42,13 +42,14 @@ IF (NOT VALID_ARCH)
           "${H_VALID_ARCH}")
 ENDIF ()
 
-# Update these variables (because they are needed by the MachineSelector script)
-SET(TREE_ARCHITECTURE_X_PATH "${TREE_ARCHITECTURE_PATH}/${KERNEL_ARCH}")
-SET(TREE_ARCHITECTURE_X_CONFIG_PATH "${TREE_ARCHITECTURE_X_PATH}/Configurations")
+# Update the source tree variables (because they are needed by the MachineSelector script)
+MESSAGE(STATUS "Valid architecture selected: \"${KERNEL_ARCH}\". Updating the source tree definition...")
+INCLUDE("${TREE_SELF_PATH}")
 
 # Export the current architecture to the default configuration
 SET_AND_EXPORT_FORCE(KERNEL_ARCH "${KERNEL_ARCH}" STRING "${KERNEL_ARCH}"
                      "This variable is the architecture to build, which is the CPU architecture that the machine runs.")
-SET_AND_EXPORT_FORCE("KERNEL_${KERNEL_ARCH}" ON BOOL ON
-                     "This variable is intended to be used in the CMake Header file.")
+
+# This will export a variable to the config.h file which can be used by C/C++ to enable architecture specific code.
+SET_AND_EXPORT_FORCE("KERNEL_${KERNEL_ARCH}" ON BOOL ON "-")
 MARK_AS_ADVANCED("KERNEL_${KERNEL_ARCH}")

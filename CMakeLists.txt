@@ -47,22 +47,6 @@ ELSE ()
   MESSAGE(STATUS "Python executable: '${Python3_EXECUTABLE}'")
 ENDIF ()
 
-# For a CMake cross-compilation (the one used throughout this process), you must specify some variables that will
-# disable compilation for the host and enable the use of Platform, Compiler and Language files. Along with the
-# toolchain files, it is possible to create a fully customized compilation system based on CMake
-# -> CMAKE_SYSTEM_NAME is set to Kernel
-# -> CMAKE_SYSTEM_VERSION is set to a particular version, shared between the image and the loader
-# -> CMAKE_CROSSCOMPILING to ON
-# -> CMAKE_SYSTEM_PROCESSOR is set in a temp cache variable from another CMake file and then set here
-SET(CMAKE_SYSTEM_NAME Kernel)
-SET(CMAKE_SYSTEM_VERSION 0.0.0.1)
-SET(CMAKE_CROSSCOMPILING ON)
-
-# Identify the "project name" with the name of the root folder of the source code
-GET_FILENAME_COMPONENT(KERNEL_SOURCE_DIR_NAME "${CMAKE_SOURCE_DIR}" NAME_WE)
-MESSAGE(STATUS "Using the directory name as the project identifier: \"${KERNEL_SOURCE_DIR_NAME}\"")
-SET(PROJECT_NAME "Zalea ${CMAKE_SYSTEM_NAME} (${KERNEL_SOURCE_DIR_NAME})")
-
 # Manually include this Python extension. This is the Python runner, a pure CMake runner needed to install the VENV
 INCLUDE("${TREE_SCRIPTS_CMAKE_EXTENSIONS_PATH}/PurePythonRunner.cmake")
 
@@ -80,6 +64,22 @@ IF (NOT PYTHON3_GENERATED)
   SET(PYTHON3_GENERATED "YES" CACHE INTERNAL "Detect if the Python 3 Virtual Environment has been installed.")
 ENDIF ()
 
+# For a CMake cross-compilation (the one used throughout this process), you must specify some variables that will
+# disable compilation for the host and enable the use of Platform, Compiler and Language files. Along with the
+# toolchain files, it is possible to create a fully customized compilation system based on CMake
+# -> CMAKE_SYSTEM_NAME is set to Kernel
+# -> CMAKE_SYSTEM_VERSION is set to a particular version, shared between the image and the loader
+# -> CMAKE_CROSSCOMPILING to ON
+# -> CMAKE_SYSTEM_PROCESSOR is set in a temp cache variable from another CMake file and then set here
+SET(CMAKE_SYSTEM_NAME Kernel)
+SET(CMAKE_SYSTEM_VERSION 0.0.0.1)
+SET(CMAKE_CROSSCOMPILING ON)
+
+# Identify the "project name" with the name of the root folder of the source code
+GET_FILENAME_COMPONENT(KERNEL_SOURCE_DIR_NAME "${CMAKE_SOURCE_DIR}" NAME_WE)
+MESSAGE(STATUS "Using the directory name as the project identifier: \"${KERNEL_SOURCE_DIR_NAME}\"")
+SET(PROJECT_NAME "Zalea ${CMAKE_SYSTEM_NAME} (${KERNEL_SOURCE_DIR_NAME})")
+
 # Include "Language Extensions" (need Python), this file includes all available extensions
 INCLUDE("${TREE_SCRIPTS_CMAKE_PATH}/CMakeExtensions.cmake")
 
@@ -93,20 +93,22 @@ SET(CMAKE_TOOLCHAIN_FILE "${TREE_SCRIPTS_CMAKE_TOOLCHAIN_PATH}/CMakeToolchain.cm
     CACHE INTERNAL "The CMake toolchain file.")
 
 # Update these variables and the tree before the project and after a sane configuration
-SET(CMAKE_SYSTEM_PROCESSOR ${KERNEL_ARCH})
+SET(CMAKE_SYSTEM_PROCESSOR "${KERNEL_ARCH}")
 INCLUDE("${TREE_SELF_PATH}")
 
 # Add the important "Include" directory for the whole build system (it contains config.h)
 INCLUDE_DIRECTORIES("${TREE_BIN_IMPORTANT_INCLUDE_PATH}")
 
-# Create and configure the actual CMake project and enable the languages: C, C++, CPP and Assembler
-PROJECT("${PROJECT_NAME}" VERSION ${CMAKE_SYSTEM_VERSION} LANGUAGES ASM C CXX)#CPP)
+# Create and configure the actual CMake project and enable the languages: C, C++ and Assembler
+PROJECT("${PROJECT_NAME}" VERSION ${CMAKE_SYSTEM_VERSION} LANGUAGES ASM C CXX)
 MESSAGE(STATUS "The \"${PROJECT_NAME}\" project version ${CMAKE_PROJECT_VERSION} for ${KERNEL_ARCH}")
 
 # Set the INTERPROCEDURAL_OPTIMIZATION default to true (LTO)
 IF (LTO_AVAILABLE)
   SET(CMAKE_INTERPROCEDURAL_OPTIMIZATION YES)
 ENDIF ()
+
+# Set the language standard for the project (C11, C++2x)
 SET(CMAKE_C_STANDARD 11)
 SET(CMAKE_C_STANDARD_REQUIRED YES)
 SET(CMAKE_CXX_STANDARD 20)
@@ -122,4 +124,5 @@ DATABASE_TO_HEADER()
 # Configure the CMake Header
 CONFIGURE_FILE("${SAE_OUTPUT_HEADER}" "${CONFIGURATION_HEADER}" ESCAPE_QUOTES)
 
+# In this directory we add the main executable and the loader
 ADD_SUBDIRECTORY("${TREE_EXECUTABLES_PATH}")

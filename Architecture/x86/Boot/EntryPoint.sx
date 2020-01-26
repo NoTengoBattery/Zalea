@@ -1,4 +1,4 @@
-﻿#===-- EntryPoint.sx - Entry point for booting in x86  --------------------------------------------------*- ASM -*-===//
+﻿#===-- EntryPoint.sx - Entry point for booting in x86  ---------------------------------------------------*- ASM -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -12,15 +12,14 @@
 #  specific language governing permissions and limitations under the License.
 # SPDX-License-Identifier: Apache-2.0
 #
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
-#/ This file is the entry point for booting in x86. This entry point is the very first code that will be executed as
-#/ soon as we have control over the CPU. Most of the time, the bootloader will load the image in memory and perform a
-#/ long jump. Other devices might requiere special boot code after this function, so this function will be limited to
-#/ initialize the minimal C environment (which will initialize the C++ environment later).
+#/ This file is the entry point for booting in x86. This is the first code executed by the Main Executable. In the
+#/ future, a small loader will uncompress the Main Executable in memory and will turn on the MMU (and will put the CPU
+#/ in the final kernel-mode state). Once the loader has done that, this code should be the very first thing to run.
 #/
-#===---------------------------------------------------------------------------------------------------------------===//
+#===----------------------------------------------------------------------------------------------------------------===#
 
 #include <config.h>
 

@@ -21,12 +21,12 @@
 # MACHINE_LOAD_ADDRESS: SET_AND_EXPORT STRING
 SET(MACHINE_LOAD_ADDRESS "0x100000"
     CACHE STRING
-    "This will set the ELF load address.")
+    "This is the load address of the image, used by the loader to place the image in memory.")
 # MACHINE_NAME: SET_AND_EXPORT STRING
 SET(MACHINE_NAME "Generic/Legacy BIOS x86 machine for 32bit Intel Prescott or better"
     CACHE STRING
     "This variable is the machine for the build, a human readable name for the machine.")
-# MACHINE_PHYSICAL_ADDRESS: SET_AND_EXPORT STRING
-SET(MACHINE_PHYSICAL_ADDRESS "0x100000"
+# MACHINE_VIRTUAL_ADDRESS: SET_AND_EXPORT STRING
+SET(MACHINE_VIRTUAL_ADDRESS "0x100000"
     CACHE STRING
-    "This will set the ELF physical address.")
+    "This is the 'virtual' address, which is the one that is referenced by the compiled code.")

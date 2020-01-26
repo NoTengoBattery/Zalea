@@ -15,7 +15,8 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
-#/ This file will include all architecture specific (but ISA wide) libraries.
+#/ This file will include all architecture specific libraries. Those files are generic run in all supported machines
+#/ within this architecture.
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 

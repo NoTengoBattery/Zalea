@@ -16,8 +16,8 @@
 #/
 #/ \file
 #/ This file will define the general settings for the compiler. This includes the compiler itself (i.e. gcc, clang,
-#/ msvc), the binutils such as the assembler and linker and some other "generic" options for the architecture. The
-#/ respective machine file will probably override some options.
+#/ etc), the binutils such as the assembler and linker and some other global options for the architecture. The
+#/ respective machine file will probably override some options to be more specific to such machine.
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
@@ -31,14 +31,18 @@ CHECK_TOOL_BY_NAME(BINUTILS "GNU")
 
 # This is the default target for the compiler and binutils
 SET_AND_EXPORT(KERNEL_TARGET "arm-none-eabi" STRING "arm-none-eabi"
-               "This variable is the machine target for the compiler and binutils.")
+               "This variable is the machine target for the compiler and binutils to generate code and executables.")
+
+# This is the secondary target (LLVM needs this to correctly run the linker)
+SET_AND_EXPORT(KERNEL_SECOND_TARGET "arm-linux-elf" STRING "arm-linux-elf"
+               "This variable is the second machine target for the binutils to generate code and executables.")
 
 # This is the default ISA for the compiler and binutils (the minimum instruction set)
 SET_AND_EXPORT(MACHINE_MARCH "armv7" STRING "armv7"
-               "This variable is the machine minimum iteration of the ISA for the compiler and binutils.")
+               "This variable is the machine minimum iteration of the ISA for the compiler and assembler to emit code.")
 
 # This is the default CPU for the compiler and binutils to tune the performance
 SET_AND_EXPORT(MACHINE_MTUNE "generic" STRING "generic"
-               "This variable is the default CPU for the compiler and binutils to tune the performance.")
+               "This variable is the default CPU for the compiler and binutils to optimize and tune the performance.")
 
 INCLUDE("${TREE_ARCHITECTURE_X_CONFIG_PATH}/ArchitectureExporter.cmake")

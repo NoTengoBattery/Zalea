@@ -22,6 +22,12 @@
 
 IF (TREE_SELF_PATH) # This will define if we have access to the scope variables and cache
 
+  # Reset these variables... just in case something nasty happen to the cache.
+  UNSET(KERNEL_LINKER_GNU CACHE)
+  UNSET(KERNEL_LINKER_GNU_BFD CACHE)
+  UNSET(KERNEL_LINKER_GNU_GOLD CACHE)
+  UNSET(KERNEL_LINKER_LLVM_LLD CACHE)
+
   # Use GNU Gold as the linker (overrides the default linker)
   SET(KERNEL_USE_GOLD "OFF" CACHE BOOL "If this variable is on, the GNU gold linker will be used.")
   MARK_AS_ADVANCED(KERNEL_USE_GOLD)
@@ -99,15 +105,21 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
 
   # Export which linker is being used to the database, so we can use it in the preprocessed linker scripts
   IF (KERNEL_USE_GOLD)
-    SET_AND_EXPORT_FORCE(GNU_GOLD "ON" BOOL "ON" "-")
-    MARK_AS_ADVANCED(GNU_GOLD)
+    SET_AND_EXPORT_FORCE(KERNEL_LINKER_GNU ON BOOL ON "-")
+    SET_AND_EXPORT_FORCE(KERNEL_LINKER_GNU_GOLD ON BOOL ON "-")
+    MARK_AS_ADVANCED(KERNEL_LINKER_GNU)
+    MARK_AS_ADVANCED(KERNEL_LINKER_GNU_GOLD)
   ELSE ()
     IF ("${KERNEL_BINUTILS}" STREQUAL "LLVM")
-      SET_AND_EXPORT_FORCE(LLVM_LLD "ON" BOOL "ON" "-")
-      MARK_AS_ADVANCED(LLVM_LLD)
+      SET_AND_EXPORT_FORCE(KERNEL_LINKER_GNU ON BOOL ON "-")
+      SET_AND_EXPORT_FORCE(KERNEL_LINKER_LLVM_LLD ON BOOL ON "-")
+      MARK_AS_ADVANCED(KERNEL_LINKER_GNU)
+      MARK_AS_ADVANCED(KERNEL_LINKER_LLVM_LLD)
     ELSEIF ("${KERNEL_BINUTILS}" STREQUAL "GNU")
-      SET_AND_EXPORT_FORCE(GNU_LD "ON" BOOL "ON" "-")
-      MARK_AS_ADVANCED(GNU_LD)
+      SET_AND_EXPORT_FORCE(KERNEL_LINKER_GNU ON BOOL ON "-")
+      SET_AND_EXPORT_FORCE(KERNEL_LINKER_GNU_BFD ON BOOL ON "-")
+      MARK_AS_ADVANCED(KERNEL_LINKER_GNU)
+      MARK_AS_ADVANCED(KERNEL_LINKER_GNU_BFD)
     ENDIF ()
   ENDIF ()
 

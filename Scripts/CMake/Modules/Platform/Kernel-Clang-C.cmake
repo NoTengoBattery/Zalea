@@ -1,4 +1,4 @@
-#===-- Kernel-Clang-C.cmake - CMake System-Compiler-Language file ====----------------------------------*- CMake -*-===#
+#===-- Kernel-Clang-C.cmake - CMake System-Compiler-Language File ====----------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -43,8 +43,15 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_C_FLAGS_INIT "-Wformat=2 ")
   STRING(APPEND CMAKE_C_FLAGS_INIT "-Wpedantic ")
   STRING(APPEND CMAKE_C_FLAGS_INIT "-Wundef ")
-  # This flag defines the linker to be used (this is needed for all cross compilers)
+  STRING(APPEND CMAKE_C_FLAGS_INIT "-Wno-unused-command-line-argument ")
+  # Those flags define the linker to be used (this is needed for all cross compilers)
   STRING(APPEND CMAKE_EXE_LINKER_FLAGS_INIT "-fuse-ld=\"${CMAKE_LD}\" ")
+  STRING(APPEND CMAKE_EXE_LINKER_FLAGS_INIT "-target ${KERNEL_SECOND_TARGET} ")
+  # For LLVM, we need to add the target because otherwise it will fail the CMake test. CMake will add this anyway.
+  STRING(APPEND CMAKE_C_FLAGS_INIT "--target=${KERNEL_TARGET} ")
+  # Add the march and mtune flags
+  STRING(APPEND CMAKE_C_FLAGS_INIT "-march=${MACHINE_MARCH} ")
+  STRING(APPEND CMAKE_C_FLAGS_INIT "-mtune=${MACHINE_MTUNE} ")
 
   # These flags are based on which kind of build we are doing
   STRING(APPEND CMAKE_C_FLAGS_DEBUG_INIT "-g -DDEBUG ")

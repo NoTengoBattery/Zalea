@@ -16,12 +16,13 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 ///
 /// \file
-/// Contains a batch of definitions that can be inserted in the linker scripts to be preprocessed, just like C macros.
+/// Contains a batch of definitions that can be inserted in the linker scripts to be preprocessed, use them just like C
+/// preprocessor macros.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#ifndef ZALEA_LD_DEFINITIONS_H
-#define ZALEA_LD_DEFINITIONS_H
+#ifndef ZALEA_LINKERSCRIPTDEFINITIONS_H
+#define ZALEA_LINKERSCRIPTDEFINITIONS_H
 #include <config.h>
 
 #if defined(KERNEL_ARM) || defined(KERNEL_x86)
@@ -30,18 +31,17 @@
 #error "Not a valid architecture."
 #endif
 
-#if (defined(GNU_LD) || defined(GNU_GOLD)) || defined(LLVM_LLD)
+#ifdef KERNEL_LINKER_GNU
 #define _ENTRY ENTRY(_start)
-#define _ASSERT_PHYSICAL_ADDRESS . = MACHINE_PHYSICAL_ADDRESS; \
-ASSERT( MACHINE_PHYSICAL_ADDRESS == ALIGN ( CONSTANT ( COMMONPAGESIZE ) ) , \
-"The MACHINE_PHYSICAL_ADDRESS must have to be aligned to the COMMONPAGESIZE." ) /**/
-#define _ASSERT_LOAD_ADDRESS . = MACHINE_LOAD_ADDRESS; \
-ASSERT( MACHINE_LOAD_ADDRESS == ALIGN ( CONSTANT ( COMMONPAGESIZE ) ) , \
-"The MACHINE_LOAD_ADDRESS must have to be aligned to the COMMONPAGESIZE." ) /**/
-#define _SEGMENTSTART(x) . = SEGMENT_START ( x , MACHINE_PHYSICAL_ADDRESS );
+#define _ASSERT_ADDRESS(x, y) . = x; \
+ASSERT( x == ALIGN ( CONSTANT ( y ) ) , \
+"This assertion was raised because the addresses from the current position need a special alignment." )
+#define _ASSERT_LOAD_ADDRESS _ASSERT_ADDRESS(MACHINE_LOAD_ADDRESS, COMMONPAGESIZE)
+#define _ASSERT_VIRTUAL_ADDRESS _ASSERT_ADDRESS(MACHINE_VIRTUAL_ADDRESS, COMMONPAGESIZE)
+#define _SEGMENTSTART(x) . = SEGMENT_START ( x , MACHINE_VIRTUAL_ADDRESS );
 #define _ALIGNED_CPS_SEGMENTSTART(x) . = SEGMENT_START ( x , ALIGN ( CONSTANT ( COMMONPAGESIZE ) ) );
 #else
 #error "Not a valid linker."
 #endif
 
-#endif //ZALEA_LD_DEFINITIONS_H
+#endif //ZALEA_LINKERSCRIPTDEFINITIONS_H

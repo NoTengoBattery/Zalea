@@ -16,8 +16,8 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 ///
 /// \file
-/// This file is a GNU linker script which will be preprocessed and then used for the linker to generate the Main
-/// Executable, which is the monolithic part of this project.
+/// This file is a GNU Linker Script which will be preprocessed and then used for the linker to generate the Main
+/// Executable, which is the monolithic part of this kernel.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 

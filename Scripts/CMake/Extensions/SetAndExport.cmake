@@ -17,10 +17,11 @@
 #/ \file
 #/ This is an extension file. This file implements the SetAndExport extension providing command to set a variable to the
 #/ cache, and exporting the variable to a database; also dumping the database to a file that can be loaded and used to
-#/ populate the cache on a first run.
+#/ populate the cache on a first run and a header to be used as a configuration header for C/C++.
 #/
 #/ This extension provides:
 #/ -> DATABASE_TO_CMAKE
+#/ -> DATABASE_TO_HEADER
 #/ -> SET_AND_EXPORT
 #/ -> SET_AND_EXPORT_FORCE
 #/

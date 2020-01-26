@@ -1,4 +1,4 @@
-#===-- Kernel-Clang-C-x86.cmake - CMake System-Compiler-Language-Architecture file ====-----------------*- CMake -*-===#
+#===-- Kernel-Clang-C-x86.cmake - CMake System-Compiler-Language-Architecture File ====-----------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -29,13 +29,6 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   SET(CMAKE_C_FLAGS_RELEASE_INIT)
   SET(CMAKE_C_FLAGS_RELWITHDEBINFO_INIT)
   SET(CMAKE_EXE_LINKER_FLAGS_INIT)
-
-  # Those are the base "Architecture" flags
-  STRING(APPEND CMAKE_C_FLAGS_INIT "-target ${KERNEL_TARGET} ")
-  STRING(APPEND CMAKE_EXE_LINKER_FLAGS_INIT "-target i686-linux-elf ") # TODO: Some day llvm will allow bare metal...
-  # Those are the base "machine" and "architecture" flags
-  STRING(APPEND CMAKE_C_FLAGS_INIT "-march=${MACHINE_MARCH} ")
-  STRING(APPEND CMAKE_C_FLAGS_INIT "-mtune=${MACHINE_MTUNE} ")
 
   # Those are special base flags which will setup the ABI for the compiler
   STRING(APPEND CMAKE_C_FLAGS_INIT "-msoft-float ")

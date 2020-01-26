@@ -1,4 +1,4 @@
-#===-- Kernel-GNU-CXX-x86.cmake - CMake System-Compiler-Language-Architecture file ====-----------------*- CMake -*-===#
+#===-- Kernel-GNU-CXX-x86.cmake - CMake System-Compiler-Language-Architecture File ====-----------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -29,10 +29,6 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   SET(CMAKE_CXX_FLAGS_RELEASE_INIT)
   SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT)
   SET(CMAKE_EXE_LINKER_FLAGS_INIT)
-
-  # Those are the base "machine" and "architecture" flags
-  STRING(APPEND CMAKE_CXX_FLAGS_INIT "-march=${MACHINE_MARCH} ")
-  STRING(APPEND CMAKE_CXX_FLAGS_INIT "-mtune=${MACHINE_MTUNE} ")
 
   # Those are special base flags which will setup the ABI for the compiler
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-msoft-float ")
