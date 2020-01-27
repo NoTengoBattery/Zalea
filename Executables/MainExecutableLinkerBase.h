@@ -21,57 +21,73 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#ifndef ZALEA_MAINEXECUTABLEBASE_H
-#define ZALEA_MAINEXECUTABLEBASE_H
+#ifndef ZALEA_MAINEXECUTABLELINKERBASE_H
+#define ZALEA_MAINEXECUTABLELINKERBASE_H
+
 #include <config.h>
 #include "LinkerScriptDefinitions.h"
 
 #ifdef KERNEL_LINKER_GNU
-    _ASSERT_VIRTUAL_ADDRESS
-    _ASSERT_LOAD_ADDRESS
 
     _SEGMENTSTART("text-segment")
-    .start : AT(MACHINE_LOAD_ADDRESS) {
+    .start _ALIGN_COMMONPAGE : AT(MACHINE_LOAD_ADDRESS) _ALIGN_COMMONPAGE {
         *(.start);
-        . = ALIGN (MINI_ALIGN);
+    }
+    .multiboot2 _ALIGN_MINI : _ALIGN_MINI {
         KEEP (*(.multiboot2));
     }
-    .text ALIGN (MINI_ALIGN) : ALIGN (MINI_ALIGN) {
+    .text _ALIGN_MINI : _ALIGN_MINI {
         *(.text.unlikely);
         *(.text.hot);
         *(SORT(.text.sorted.*));
         *(.text .text.*);
     }
-    _ALIGNED_CPS_SEGMENTSTART("rodata-segment")
-    .rodata ALIGN (MINI_ALIGN) : ALIGN (MINI_ALIGN) {
-        *(.rodata);
-    }
-    .eh_frame_hdr ALIGN (MINI_ALIGN) : ALIGN (MINI_ALIGN) {
-        *(.eh_frame_hdr);
-        *(.eh_frame_entry .eh_frame_entry.*);
-    }
-    .eh_frame ALIGN (MINI_ALIGN) : ALIGN (MINI_ALIGN) ONLY_IF_RO {
-        KEEP (*(.eh_frame));
-        *(.eh_frame.*);
-    }
     _ALIGNED_CPS_SEGMENTSTART("data-segment")
-    .data ALIGN (MINI_ALIGN) : ALIGN (MINI_ALIGN) {
+    .data _ALIGN_MINI : _ALIGN_MINI {
         *(.data);
     }
-    .eh_frame ALIGN (MINI_ALIGN) : ALIGN (MINI_ALIGN) ONLY_IF_RW {
+    .eh_frame _ALIGN_MINI : _ALIGN_MINI ONLY_IF_RW {
         KEEP(*(.eh_frame));
         *(.eh_frame.*);
     }
     _ALIGNED_CPS_SEGMENTSTART("bss-segment")
-    .bss ALIGN (MINI_ALIGN) : ALIGN (MINI_ALIGN) {
+    .bss _ALIGN_MINI : _ALIGN_MINI {
         *(.bss);
         *(COMMON);
     }
-
-    .stack MACHINE_VIRTUAL_ADDRESS : AT(MACHINE_LOAD_ADDRESS) {
-        *(.stack);
+    _ALIGNED_CPS_SEGMENTSTART("rodata-segment")
+    .rodata _ALIGN_MINI : _ALIGN_MINI {
+        *(.rodata);
+    }
+    .eh_frame_hdr _ALIGN_MINI : _ALIGN_MINI {
+        *(.eh_frame_hdr);
+        *(.eh_frame_entry .eh_frame_entry.*);
+    }
+    .eh_frame _ALIGN_MINI : _ALIGN_MINI ONLY_IF_RO {
+        KEEP (*(.eh_frame));
+        *(.eh_frame.*);
     }
 
+
+    // The stack section, this section is the start of the executable and reaches until the entry point
+    _ALIGNED_CPS_SEGMENTSTART("stack-segment")
+    .stack _ALIGN_COMMONPAGE : _ALIGN_COMMONPAGE {
+#ifndef MACHINE_STACK_DOWNWARDS
+        _stack_start = .; _stack_lowermost = .;
+#else
+        _stack_end = .; _stack_lowermost = .;
+#endif
+        *(.stack);
+        . = _stack_lowermost + MACHINE_STACK_SIZE;
+#ifdef MACHINE_STACK_DOWNWARDS
+        _stack_start = .; _image_end = .;
+#else
+        _stack_end = .; _image_end = .;
+#endif
+    }
+
+
+    // Sections emitted by the compiler (they are stripped in the final binary)
     .comment 0 : {
         *(.comment);
     }
@@ -80,5 +96,14 @@
         KEEP (*(.ARM.attributes));
     }
 #endif
+
+    // Run 4 special assertions that will ensure the correct alignment of the entry point, load address and stack
+    _ASSERT_VIRTUAL_ADDRESS
+    _ASSERT_LOAD_ADDRESS
+    _ASSERT_STACK_SIZE
+
+#else
+#error "What linker are you using?"
 #endif
-#endif //ZALEA_MAINEXECUTABLEBASE_H
+
+#endif //ZALEA_MAINEXECUTABLELINKERBASE_H

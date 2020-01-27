@@ -23,8 +23,12 @@
 
 SET_AND_EXPORT(MACHINE_LOAD_ADDRESS "${MACHINE_LOAD_ADDRESS}" STRING "0x00000000"
                "This is the load address of the image, used by the loader to place the image in memory.")
-SET_AND_EXPORT(MACHINE_VIRTUAL_ADDRESS "${MACHINE_VIRTUAL_ADDRESS}" STRING "0x00000000"
-               "This is the 'virtual' address, which is the one that is referenced by the compiled code.")
 SET_AND_EXPORT(MACHINE_LOADABLE_IMAGE_NAME "${MACHINE_LOADABLE_IMAGE_NAME}" STRING "KernelImage"
                "This will set the name of the binary that the machine can run. Some machines require a specific file "
                "name.")
+SET_AND_EXPORT(MACHINE_STACK_DOWNWARDS ON BOOL ON
+               "If this value is true, the machine's stack will grow downwards. Otherwise it will grow upward.")
+SET_AND_EXPORT(MACHINE_STACK_SIZE "${MACHINE_STACK_SIZE}" STRING "0x20000"
+               "This is the stack size for the machine. It's default is 0x20000, which is 128KiB.")
+SET_AND_EXPORT(MACHINE_VIRTUAL_ADDRESS "${MACHINE_VIRTUAL_ADDRESS}" STRING "0x00000000"
+               "This is the 'virtual' address, which is the one that is referenced by the compiled code.")

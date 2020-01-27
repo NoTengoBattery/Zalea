@@ -22,3 +22,17 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 
 #include <config.h>
+
+#ifndef ZALEA_COMPILERMAGIC_H
+#define ZALEA_COMPILERMAGIC_H
+
+#ifdef KERNEL_COMPILER_GNU
+
+#define ATTR_SECTION(x) __attribute__ ((section (x)))
+#define ATTR_ALIGNED(x) __attribute__ ((aligned (x)))
+
+#else
+#error "What compiler are you using?"
+#endif
+
+#endif //ZALEA_COMPILERMAGIC_H

@@ -27,7 +27,7 @@ SET(THIS_EXE_NAME LinkedImage)
 ADD_EXECUTABLE("${THIS_EXE_NAME}"
                "CPlusPlusMainExecutable.cxx"
                "LinkerScriptDefinitions.h"
-               "MainExecutableBase.h"
+               "MainExecutableLinkerBase.h"
                "Multiboot2.c"
                "Multiboot2.h")
 
@@ -63,7 +63,7 @@ ENDIF ()
 IF (KERNEL_BINUTILS_GNU)
   ADD_CUSTOM_COMMAND(TARGET "${THIS_EXE_NAME}" POST_BUILD VERBATIM
                      COMMAND "${CMAKE_OBJDUMP}"
-                     ARGS "-x" "-d" "-s" "-S"
+                     ARGS "-x" "-d" "-s" "-S" "-w" "-t"
                      "$<TARGET_FILE:${THIS_EXE_NAME}>" ">" "$<TARGET_FILE:${THIS_EXE_NAME}>.objdump"
                      COMMENT "Generating the Object Dump for the Main Executable...")
 ELSE ()
@@ -90,7 +90,7 @@ IF (KERNEL_BINUTILS_GNU)
                      "${TREE_BIN_IMPORTANT_PATH}/MainExecutable.elf"
 
                      COMMAND "${CMAKE_OBJDUMP}"
-                     ARGS "-x" "-d" "-s" "-S"
+                     ARGS "-x" "-d" "-s" "-S" "-w" "-t"
                      "${TREE_BIN_IMPORTANT_PATH}/MainExecutable.elf"
                      ">" "${TREE_BIN_IMPORTANT_PATH}/MainExecutable.objdump"
 
