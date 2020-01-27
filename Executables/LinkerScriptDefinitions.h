@@ -26,7 +26,7 @@
 #include <config.h>
 
 #if defined(KERNEL_ARM) || defined(KERNEL_x86)
-#define MINI_ALIGN 0x10
+#define MINI_ALIGN 0x10 // 64 bit (8 bytes)
 #else
 #error "Not a valid architecture."
 #endif

@@ -22,9 +22,26 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 
 #include <stdint.h>
-#define MULTIBOOT_ATTRIBUTES __attribute__ ((section (".multiboot2")))
-#define MULTIBOOT_MAGIC 0xE85250D6
 
-struct MultiBootHeader {
+#define MULTIBOOT_ATTRIBUTES __attribute__ ((section (".multiboot2")))
+#define MULIBOOT_SIZEOF_HEADER sizeof(struct multibootHeader)
+
+#define MULTIBOOT_MAGIC 0xE85250D6
+#define MULTIBOOT_PROTECTED_MODE 0x00000000
+#define MULTIBOOT_MIPS32 0x00000004
+
+
+#ifdef KERNEL_x86
+#define MULTIBOOT_ARCHITECTURE MULTIBOOT_PROTECTED_MODE
+#else
+#define MULTIBOOT_ARCHITECTURE 0xffffffff
+#endif
+
+#define MULTIBOOT_CHECKSUM 0x100000000 - (MULTIBOOT_MAGIC + MULTIBOOT_ARCHITECTURE + MULIBOOT_SIZEOF_HEADER)
+
+struct multibootHeader {
     uint32_t magic;
+    uint32_t architecture;
+    uint32_t size;
+    uint32_t checksum;
 };

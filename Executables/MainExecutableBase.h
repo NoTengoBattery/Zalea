@@ -33,7 +33,7 @@
     _SEGMENTSTART("text-segment")
     .start : AT(MACHINE_LOAD_ADDRESS) {
         *(.start);
-        . = ALIGN (8);
+        . = ALIGN (MINI_ALIGN);
         KEEP (*(.multiboot2));
     }
     .text ALIGN (MINI_ALIGN) : ALIGN (MINI_ALIGN) {

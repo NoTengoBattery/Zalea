@@ -1,2 +1,2 @@
-#parse("Notice For C++.h")
+#parse("Notice For C++.hxx")
 #[[#include]]# "${HEADER_FILENAME}"

@@ -1,4 +1,4 @@
-﻿#===-- CMakeLists.txt - Root of the x86 Subtree -------------------------------------------------------*- CMake -*-===#
+﻿#===-- CMakeLists.txt - Compiler Library ---------------------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -15,10 +15,23 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
-#/ This file will include all architecture specific libraries. Those files are generic run in all supported machines
-#/ within this architecture.
+#/ This contains the basic compiler support. This contains a series of headers, imported by the CompilerMagic, which
+#/ defines some macros to deal with compiler peculiarities.
+#/
+#/ This module include:
+#/ -> CompilerMagic
+#/ -> CompilerRuntime
+#/ -> ExceptionHandler
+#/ -> RuntimeTypeInformation
+#/ -> Unwinder
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
-# Add all subdirectories that will be ever used, one by one
-ADD_SUBDIRECTORY("${TREE_ARCHITECTURE_X_BOOT_PATH}")
+# The name of the interface library
+SET(THIS_INTERFACE_NAME CompilerMagic)
+
+# Add the interface library to the project and all it's source code files
+ADD_LIBRARY("${THIS_INTERFACE_NAME}" INTERFACE)
+TARGET_INCLUDE_DIRECTORIES("${THIS_INTERFACE_NAME}" INTERFACE "CompilerMagic")
+TARGET_LINK_LIBRARIES("${THIS_INTERFACE_NAME}" INTERFACE "ImportantOutputDirectory")
+TARGET_SOURCES("${THIS_INTERFACE_NAME}" INTERFACE "CompilerMagic/CompilerMagic.h")

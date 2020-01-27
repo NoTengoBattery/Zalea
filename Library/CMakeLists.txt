@@ -1,4 +1,4 @@
-﻿#===-- CMakeLists.txt - Root of the x86 Subtree -------------------------------------------------------*- CMake -*-===#
+﻿#===-- CMakeLists.txt - Root of the Library Subtree ---------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -15,10 +15,18 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
-#/ This file will include all architecture specific libraries. Those files are generic run in all supported machines
-#/ within this architecture.
+#/ Contains several libraries for the runtime support for the compiler, C and C++. These are not low-level libraries but
+#/ rather support libraries. In theory, any low level support must have to be implemented in the machine or platform.
+#/
+#/ However, these libraries will support the runtime, the compiler, the data structures and the standard library.
+#/
+#/ This module includes
+#/ -> AssemblyLibrary
+#/ -> CPlusPlusLibrary
+#/ -> CLibrary
+#/ -> Compiler
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
 # Add all subdirectories that will be ever used, one by one
-ADD_SUBDIRECTORY("${TREE_ARCHITECTURE_X_BOOT_PATH}")
+ADD_SUBDIRECTORY("${TREE_LIBRARY_COMPILER_PATH}")

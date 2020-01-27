@@ -59,6 +59,11 @@ SET(TREE_EXECUTABLES_PATH "${TREE_SRC_ROOT_PATH}/Executables")                  
 IF (NOT TREE_SELF_PATH)
   MESSAGE(STATUS "Executables root path: '${TREE_EXECUTABLES_PATH}'")
 ENDIF ()
+SET(TREE_LIBRARY_PATH "${TREE_SRC_ROOT_PATH}/Library")                                                       # <- Parent
+IF (NOT TREE_SELF_PATH)
+  MESSAGE(STATUS "Library root path: '${TREE_LIBRARY_PATH}'")
+ENDIF ()
+SET(TREE_LIBRARY_COMPILER_PATH "${TREE_LIBRARY_PATH}/Compiler")
 SET(TREE_SCRIPTS_PATH "${TREE_SRC_ROOT_PATH}/Scripts")                                                       # <- Parent
 IF (NOT TREE_SELF_PATH)
   MESSAGE(STATUS "Scripts root path: '${TREE_SCRIPTS_PATH}'")

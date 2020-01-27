@@ -1,4 +1,4 @@
-//===-- Multiboot2.c - The Multiboot Header  --------------------------------------------------------------*- C -*-===//
+//===-- CompilerMagic.h - Support and Alleviate Differences Between Compilers -----------------------------*- C -*-===//
 //
 // Copyright (c) 2020 Oever González
 //
@@ -16,17 +16,9 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 ///
 /// \file
-/// This file contains the Multiboot 2 header which will be used by all architectures. Even tho it's only useful for x86
-/// when it's being loaded by GRUB. This can also be useful when using the loader.
+/// This file can be imported inside any other target, and used inside any source file where compiler-specific
+/// directives are needed. This file will attempt to
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
 #include <config.h>
-#include "Multiboot2.h"
-
-struct multibootHeader _multibootHeader MULTIBOOT_ATTRIBUTES = {
-        MULTIBOOT_MAGIC,
-        MULTIBOOT_ARCHITECTURE,
-        MULIBOOT_SIZEOF_HEADER,
-        MULTIBOOT_CHECKSUM
-};

@@ -1,4 +1,4 @@
-﻿#===-- CMakeLists.txt - Root of the Architecture subtree  ----------------------------------------------*- CMake -*-===#
+﻿#===-- CMakeLists.txt - Root of the Architecture Subtree ----------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #

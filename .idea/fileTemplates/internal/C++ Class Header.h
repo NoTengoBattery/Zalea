@@ -1,4 +1,4 @@
-#parse("Notice For C++.h")
+#parse("Notice For C++.hxx")
 #[[#ifndef]]# ${INCLUDE_GUARD}
 #[[#define]]# ${INCLUDE_GUARD}
 

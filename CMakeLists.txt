@@ -1,4 +1,4 @@
-#===-- CMakeLists.txt - Root of the CMake project  -----------------------------------------------------*- CMake -*-===#
+#===-- CMakeLists.txt - Root of the CMake project ------------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -96,9 +96,6 @@ SET(CMAKE_TOOLCHAIN_FILE "${TREE_SCRIPTS_CMAKE_TOOLCHAIN_PATH}/CMakeToolchain.cm
 SET(CMAKE_SYSTEM_PROCESSOR "${KERNEL_ARCH}")
 INCLUDE("${TREE_SELF_PATH}")
 
-# Add the important "Include" directory for the whole build system (it contains config.h)
-INCLUDE_DIRECTORIES("${TREE_BIN_IMPORTANT_INCLUDE_PATH}")
-
 # Create and configure the actual CMake project and enable the languages: C, C++ and Assembler
 PROJECT("${PROJECT_NAME}" VERSION ${CMAKE_SYSTEM_VERSION} LANGUAGES ASM C CXX)
 MESSAGE(STATUS "The \"${PROJECT_NAME}\" project version ${CMAKE_PROJECT_VERSION} for ${KERNEL_ARCH}")
@@ -114,8 +111,16 @@ SET(CMAKE_C_STANDARD_REQUIRED YES)
 SET(CMAKE_CXX_STANDARD 20)
 SET(CMAKE_CXX_STANDARD_REQUIRED YES)
 
+# Add an interface library for config.h (and friends)
+ADD_LIBRARY(ImportantOutputDirectory INTERFACE)
+TARGET_INCLUDE_DIRECTORIES(ImportantOutputDirectory INTERFACE "${TREE_BIN_IMPORTANT_INCLUDE_PATH}")
+TARGET_SOURCES(ImportantOutputDirectory INTERFACE "${CONFIGURATION_HEADER}")
+SET(GLOBAL_INTERFACES "CompilerMagic"
+    "ImportantOutputDirectory")
+
 # Add all subdirectories (the root subdirectories) that will be ever used
 ADD_SUBDIRECTORY("${TREE_ARCHITECTURE_PATH}")
+ADD_SUBDIRECTORY("${TREE_LIBRARY_PATH}")
 
 # Dump the Current Config database to a CMake and header file at the end of configuration
 DATABASE_TO_CMAKE()

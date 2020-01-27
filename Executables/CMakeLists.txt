@@ -1,4 +1,4 @@
-#===-- CMakeLists.txt - Rules to build the Main Executable  --------------------------------------------*- CMake -*-===#
+#===-- CMakeLists.txt - Rules to build the Main Executable ---------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -29,12 +29,12 @@ ADD_EXECUTABLE("${THIS_EXE_NAME}"
                "LinkerScriptDefinitions.h"
                "MainExecutableBase.h"
                "Multiboot2.c"
-               "Multiboot2.h"
-               "${CONFIGURATION_HEADER}")
+               "Multiboot2.h")
 
 # Link these "libraries" to the executable. These libraries are the rest of the compiled source code
 TARGET_LINK_LIBRARIES("${THIS_EXE_NAME}"
-                      EntryPoint)
+                      "${GLOBAL_INTERFACES}"
+                      "EntryPoint")
 
 # Add the linker script to the linker command line (requires linker and compiler detection)
 IF (KERNEL_COMPILER_GNU AND KERNEL_LINKER_GNU)

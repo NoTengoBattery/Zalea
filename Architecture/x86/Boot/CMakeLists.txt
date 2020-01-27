@@ -1,4 +1,4 @@
-﻿#===-- CMakeLists.txt - Root of the x86/Boot subtree  --------------------------------------------------*- CMake -*-===#
+﻿#===-- CMakeLists.txt - Root of the x86/Boot Subtree --------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -17,7 +17,6 @@
 #/ \file
 #/ This file will include the entry point for the Main Executable for x86. The Main Executable contains all the code
 #/ that will make the device fully functional.
-#/ TODO: a small loader will uncompress, verify, setup and jump this code.
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
@@ -25,5 +24,6 @@
 SET(THIS_LIB_NAME "EntryPoint")
 
 # Add the library to the project: this is a static library to be linked in the executable
-ADD_LIBRARY("${THIS_LIB_NAME}" STATIC
+ADD_LIBRARY("${THIS_LIB_NAME}" OBJECT
             "EntryPoint.sx")
+TARGET_LINK_LIBRARIES("${THIS_LIB_NAME}" "${GLOBAL_INTERFACES}")

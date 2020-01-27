@@ -27,5 +27,5 @@
 .global _start
 _start:
   XCHGW %bx, %bx # BOCHS magic breakpoint
-  MOVL %eax, _MultiBootHeader # This will stop the compiler from removing the header
+  MOVL %eax, _multibootHeader # This will stop the compiler from removing the header
   JMP _start
