@@ -1,4 +1,4 @@
-//===-- CompilerMagic.h - Support and Alleviate Differences Between Compilers -----------------------------*- C -*-===//
+//===-- BitwiseMacros.h - Macros to Use Bitwise Operations ------------------------------------------------*- C -*-===//
 //
 // Copyright (c) 2020 Oever González
 //
@@ -21,18 +21,12 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 
 #include <config.h>
+#include <CompilerMagic.h>
 
-#ifndef ZALEA_COMPILER_MAGIC_H
-#define ZALEA_COMPILER_MAGIC_H
+#ifndef ZALEA_BITWISE_MACROS_H
+#define ZALEA_BITWISE_MACROS_H
 
-#ifdef KERNEL_COMPILER_GNU
+#define SET_UNSIGNED_NBIT(x, y) (x ## U | (1U << y ## U))
+#define CLEAR_UNSIGNED_NBIT(x, y) (x ## U & ~(1U << y ## U))
 
-#define ATTR_SECTION(x) __attribute__ ((section (x)))
-#define ATTR_ALIGNED(x) __attribute__ ((aligned (x)))
-#define ATTR_USED __attribute__ ((used))
-
-#else
-#error "What compiler are you using?"
-#endif
-
-#endif //ZALEA_COMPILER_MAGIC_H
+#endif //ZALEA_BITWISE_MACROS_H

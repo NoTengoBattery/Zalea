@@ -27,5 +27,4 @@
 .type _start, #function
 .globl _start
 _start:
-  LDR r12, =_multibootHeader
   BL _start

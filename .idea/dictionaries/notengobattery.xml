@@ -1,6 +1,8 @@
 <component name="ProjectDictionaryState">
   <dictionary name="notengobattery">
     <words>
+      <w>bootable</w>
+      <w>bootloader</w>
       <w>ccmake</w>
       <w>filepath</w>
       <w>interprocedural</w>
@@ -9,6 +11,7 @@
       <w>pytest</w>
       <w>spdx</w>
       <w>tinydb</w>
+      <w>unwinder</w>
       <w>zalea</w>
     </words>
   </dictionary>

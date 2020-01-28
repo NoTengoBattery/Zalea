@@ -23,7 +23,7 @@
 #/ -> CompilerRuntime
 #/ -> ExceptionHandler
 #/ -> RuntimeTypeInformation
-#/ -> Unwinder
+#/ -> StackUnwinder
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
@@ -35,3 +35,4 @@ ADD_LIBRARY("${THIS_INTERFACE_NAME}" INTERFACE)
 TARGET_INCLUDE_DIRECTORIES("${THIS_INTERFACE_NAME}" INTERFACE "CompilerMagic")
 TARGET_LINK_LIBRARIES("${THIS_INTERFACE_NAME}" INTERFACE "ImportantOutputDirectory")
 TARGET_SOURCES("${THIS_INTERFACE_NAME}" INTERFACE "CompilerMagic/CompilerMagic.h")
+TARGET_SOURCES("${THIS_INTERFACE_NAME}" INTERFACE "CompilerMagic/BitwiseMacros.h")
