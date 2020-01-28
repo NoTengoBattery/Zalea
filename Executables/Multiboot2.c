@@ -11,7 +11,6 @@
 //  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 //  specific language governing permissions and limitations under the License.
 //  SPDX-License-Identifier: Apache-2.0
-//  @formatter:off
 //
 //===--------------------------------------------------------------------------------------------------------------===//
 ///
@@ -24,9 +23,16 @@
 #include <config.h>
 #include "Multiboot2.h"
 
-struct multibootHeader _multibootHeader MULTIBOOT_ATTRIBUTES = {
-        MULTIBOOT_MAGIC,
-        MULTIBOOT_ARCHITECTURE,
-        MULIBOOT_SIZEOF_HEADER,
-        MULTIBOOT_CHECKSUM
+struct multibootHeader _multibootHeader MULTIBOOT_ATTR = {
+        MULTIBOOT_HEADER_MAGIC,
+        MULTIBOOT_HEADER_ARCHITECTURE,
+        MULIBOOT_HEADER_SIZEOF,
+        MULTIBOOT_HEADER_CHECKSUM
+};
+
+struct multibootInformationTag _multibootInformationTag MULTIBOOT_ATTR = {
+        MULTIBOOT_TAG_INFORMATION,
+        MULTIBOOT_REQUIRED_FLAG(0),
+        MULIBOOT_TAG_INFORMATION_SIZEOF,
+        0
 };
