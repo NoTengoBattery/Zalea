@@ -29,49 +29,49 @@
 
 #ifdef KERNEL_LINKER_GNU
 
-    _SEGMENTSTART("text-segment")
-    .start _ALIGN_COMMONPAGE : AT(MACHINE_LOAD_ADDRESS) _ALIGN_COMMONPAGE {
+    SEGMENTSTART("text-segment")
+    .start ALIGN_COMMONPAGE : AT(MACHINE_LOAD_ADDRESS) ALIGN_COMMONPAGE {
         *(.start);
     }
-    .multiboot2 _ALIGN_MINI : _ALIGN_MINI {
+    .multiboot2 ALIGN_MINI : ALIGN_MINI {
         KEEP (*(.multiboot2));
     }
-    .text _ALIGN_MINI : _ALIGN_MINI {
+    .text ALIGN_MINI : ALIGN_MINI {
         *(.text.unlikely);
         *(.text.hot);
         *(SORT(.text.sorted.*));
         *(.text .text.*);
     }
-    _ALIGNED_CPS_SEGMENTSTART("data-segment")
-    .data _ALIGN_MINI : _ALIGN_MINI {
+    ALIGNED_CPS_SEGMENTSTART("data-segment")
+    .data ALIGN_MINI : ALIGN_MINI {
         *(.data);
     }
-    .eh_frame _ALIGN_MINI : _ALIGN_MINI ONLY_IF_RW {
+    .eh_frame ALIGN_MINI : ALIGN_MINI ONLY_IF_RW {
         KEEP(*(.eh_frame));
         *(.eh_frame.*);
     }
-    _ALIGNED_CPS_SEGMENTSTART("bss-segment")
-    .bss _ALIGN_MINI : _ALIGN_MINI {
+    ALIGNED_CPS_SEGMENTSTART("bss-segment")
+    .bss ALIGN_MINI : ALIGN_MINI {
         *(.bss);
         *(COMMON);
     }
-    _ALIGNED_CPS_SEGMENTSTART("rodata-segment")
-    .rodata _ALIGN_MINI : _ALIGN_MINI {
+    ALIGNED_CPS_SEGMENTSTART("rodata-segment")
+    .rodata ALIGN_MINI : ALIGN_MINI {
         *(.rodata);
     }
-    .eh_frame_hdr _ALIGN_MINI : _ALIGN_MINI {
+    .eh_frame_hdr ALIGN_MINI : ALIGN_MINI {
         *(.eh_frame_hdr);
         *(.eh_frame_entry .eh_frame_entry.*);
     }
-    .eh_frame _ALIGN_MINI : _ALIGN_MINI ONLY_IF_RO {
+    .eh_frame ALIGN_MINI : ALIGN_MINI ONLY_IF_RO {
         KEEP (*(.eh_frame));
         *(.eh_frame.*);
     }
 
 
     // The stack section, this section is the start of the executable and reaches until the entry point
-    _ALIGNED_CPS_SEGMENTSTART("stack-segment")
-    .stack _ALIGN_COMMONPAGE : _ALIGN_COMMONPAGE {
+    ALIGNED_CPS_SEGMENTSTART("stack-segment")
+    .stack ALIGN_COMMONPAGE : ALIGN_COMMONPAGE {
 #ifndef MACHINE_STACK_DOWNWARDS
         _stack_start = .; _stack_lowermost = .;
 #else
@@ -98,9 +98,9 @@
 #endif
 
     // Run 4 special assertions that will ensure the correct alignment of the entry point, load address and stack
-    _ASSERT_VIRTUAL_ADDRESS
-    _ASSERT_LOAD_ADDRESS
-    _ASSERT_STACK_SIZE
+    ASSERT_VIRTUAL_ADDRESS
+    ASSERT_LOAD_ADDRESS
+    ASSERT_STACK_SIZE
 
 #else
 #error "What linker are you using?"

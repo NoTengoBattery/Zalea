@@ -26,7 +26,7 @@ struct multibootHeader multibootHeader MULTIBOOT_ATTR = {
         MULTIBOOT_HEADER_MAGIC,
         MULTIBOOT_HEADER_ARCHITECTURE,
         MULIBOOT_HEADER_SIZEOF,
-        MULTIBOOT_HEADER_CHECKSUM
+        (uint32_t) MULTIBOOT_HEADER_CHECKSUM
 };
 
 struct multibootInformationTag multibootInformationTag MULTIBOOT_ATTR = {
