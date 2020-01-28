@@ -34,7 +34,6 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
 
   # Use GNU Gold as the linker (overrides the default linker)
   SET(KERNEL_USE_GOLD "OFF" CACHE BOOL "If this variable is on, the GNU gold linker will be used.")
-  MARK_AS_ADVANCED(KERNEL_USE_GOLD)
 
   # Set the target for the compiler (this is architecture specific and makes sense to Clang)
   SET(CMAKE_ASM_COMPILER_TARGET "${KERNEL_TARGET}")
