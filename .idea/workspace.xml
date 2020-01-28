@@ -32,25 +32,25 @@
     <option name="SIGN_OFF_COMMIT" value="true" />
   </component>
   <component name="NamedScopeManager">
-    <scope name="Assembler/C Header Files" pattern="file[Colorize]:*.h" />
-    <scope name="Assembly Preprocessed Source Files" pattern="file[Colorize]:*.sx" />
-    <scope name="Assembly Non-Preprocessed Source Files" pattern="file[Colorize]:*.s" />
-    <scope name="CMake Caches" pattern="file[Colorize]:*//CMakeCache.txt||file[Colorize]:CMakeCache.txt" />
-    <scope name="CMake Projects" pattern="file[Colorize]:*//CMakeLists.txt||file[Colorize]:CMakeLists.txt" />
-    <scope name="CMake Scripts" pattern="file[Colorize]:*.cmake||file[Colorize]:Scripts/CMake//*" />
-    <scope name="C++ Header Files" pattern="file[Colorize]:*.hxx" />
-    <scope name="C++ Source Files" pattern="file[Colorize]:*.cxx" />
-    <scope name="C Header Files" pattern="file[Colorize]:*.hh" />
-    <scope name="C Source Files" pattern="file[Colorize]:*.c" />
-    <scope name="Documentation Files" pattern="file[Colorize]:*.md||file[Colorize]:*.tex" />
-    <scope name="GNU LD Scripts" pattern="file[Colorize]:*.ld" />
+    <scope name="Assembler/C Header Files" pattern="file[Colorize]:*.h&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
+    <scope name="Assembly Preprocessed Source Files" pattern="file[Colorize]:*.sx&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
+    <scope name="Assembly Non-Preprocessed Source Files" pattern="file[Colorize]:*.s&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
+    <scope name="CMake Caches" pattern="(file[Colorize]:*//CMakeCache.txt||file[Colorize]:CMakeCache.txt)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
+    <scope name="CMake Projects" pattern="(file[Colorize]:*//CMakeLists.txt||file[Colorize]:CMakeLists.txt)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
+    <scope name="CMake Scripts" pattern="(file[Colorize]:*.cmake||file[Colorize]:Scripts/CMake//*)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
+    <scope name="C++ Header Files" pattern="file[Colorize]:*.hxx&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
+    <scope name="C++ Source Files" pattern="file[Colorize]:*.cxx&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
+    <scope name="C Header Files" pattern="file[Colorize]:*.hh&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
+    <scope name="C Source Files" pattern="file[Colorize]:*.cc&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
+    <scope name="Documentation Files" pattern="(file[Colorize]:*.md||file[Colorize]:*.rst||file[Colorize]:*.tex)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
+    <scope name="GNU LD Scripts" pattern="file[Colorize]:*.ld&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
     <scope name="Python Scripts" pattern="(file[Colorize]:*.py||file[Colorize]:Scripts/Python/Sources//*||file[Colorize]:Scripts/Python/Tests//*)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
 
-    <scope name="Configuration Files" pattern="file[Colorize]:*.cfg.*||file[Colorize]:*.cfg" />
-    <scope name="Ignored Files" pattern="file[Colorize]:*.ignore.*||file[Colorize]:*.ignore" />
-    <scope name="Temp Files" pattern="file[Colorize]:*.tmp.*||file[Colorize]:*.tmp" />
-    <scope name="Template Files" pattern="file[Colorize]:*.in.*||file[Colorize]:*.in" />
-    <scope name="Test Files" pattern="file[Colorize]:*.tst.*||file[Colorize]:*.tst||file[Colorize]:Scripts/Python/Tests//*" />
+    <scope name="Configuration Files" pattern="(file[Colorize]:*.cfg.*||file[Colorize]:*.cfg)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
+    <scope name="Ignored Files" pattern="(file[Colorize]:*.ignore.*||file[Colorize]:*.ignore)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
+    <scope name="Temp Files" pattern="(file[Colorize]:*.tmp.*||file[Colorize]:*.tmp)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
+    <scope name="Template Files" pattern="(file[Colorize]:*.in.*||file[Colorize]:*.in)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
+    <scope name="Test Files" pattern="(file[Colorize]:*.tst.*||file[Colorize]:*.tst||file[Colorize]:Scripts/Python/Tests//*)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
   </component>
   <component name="ProjectId" id="1X0lgzs0B8ajlYJD89yQXdQT1q4" />
   <component name="ProjectViewState">
