@@ -99,6 +99,15 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     SET_AND_EXPORT_FORCE(KERNEL_COMPILER_GCC ON BOOL ON "-")
   ENDIF ()
 
+  # When using ICC, version must have to be 19.0 or greater
+  IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
+    IF (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 19.0)
+      MESSAGE(FATAL_ERROR "When using the ICC compiler, ICC's version must have to be 19.0 or greater.")
+    ENDIF ()
+    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_GNU ON BOOL ON "-")
+    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_ICC ON BOOL ON "-")
+  ENDIF ()
+
   # When using GNU binutils, version must have to be 2.33 or greater
   IF ("${KERNEL_BINUTILS}" STREQUAL "GNU")
     EXECUTE_PROCESS(COMMAND "${CMAKE_OBJCOPY}" "--version" OUTPUT_VARIABLE OBJCOPY_VERSION)

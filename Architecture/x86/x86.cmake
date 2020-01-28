@@ -22,7 +22,7 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 
 # This is a list of the *compilers* that are able to build this kernel for this architecture
-SET(AVAILABLE_COMPILER "Clang" "GNU")
+SET(AVAILABLE_COMPILER "Clang" "GNU" "Intel")
 CHECK_TOOL_BY_NAME(COMPILER "GNU")
 
 # This is a list of *binutils* that are able to build the latest stages of this kernel for this architecture
@@ -38,7 +38,7 @@ SET_AND_EXPORT(KERNEL_SECOND_TARGET "i686-linux-elf" STRING "i686-linux-elf"
                "This variable is the second machine target for the binutils to generate code and executables.")
 
 # This is the default ISA for the compiler and binutils (the minimum instruction set)
-SET_AND_EXPORT(MACHINE_MARCH "prescott" STRING "prescott"
+SET_AND_EXPORT(MACHINE_MARCH "pentium4m" STRING "pentium4m"
                "This variable is the machine minimum iteration of the ISA for the compiler and assembler to emit code.")
 
 # This is the default CPU for the compiler and binutils to tune the performance
