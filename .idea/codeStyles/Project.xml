@@ -15,7 +15,7 @@
     <Objective-C-extensions>
       <extensions>
         <pair source="cxx" header="hxx" fileNamingConvention="PASCAL_CASE" />
-        <pair source="cc" header="hh" fileNamingConvention="PASCAL_CASE" />
+        <pair source="c" header="h" fileNamingConvention="PASCAL_CASE" />
       </extensions>
     </Objective-C-extensions>
     <Python>

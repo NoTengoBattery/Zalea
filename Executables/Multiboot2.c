@@ -15,7 +15,7 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 ///
 /// \file
-/// This file contains the Multiboot 2 header which will be used by all architectures. Even tho it's only useful for x86
+/// This file contains the Multiboot2 header which will be used by all architectures. Even tho it's only useful for x86
 /// when it's being loaded by GRUB. This can also be useful when using the loader.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//

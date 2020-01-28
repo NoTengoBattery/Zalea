@@ -32,7 +32,7 @@
     <option name="SIGN_OFF_COMMIT" value="true" />
   </component>
   <component name="NamedScopeManager">
-    <scope name="Assembler/C Header Files" pattern="file[Colorize]:*.h&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
+    <scope name="Assembler Header Files" pattern="file[Colorize]:*.h&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
     <scope name="Assembly Preprocessed Source Files" pattern="file[Colorize]:*.sx&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
     <scope name="Assembly Non-Preprocessed Source Files" pattern="file[Colorize]:*.s&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
     <scope name="CMake Caches" pattern="(file[Colorize]:*//CMakeCache.txt||file[Colorize]:CMakeCache.txt)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
@@ -40,8 +40,8 @@
     <scope name="CMake Scripts" pattern="(file[Colorize]:*.cmake||file[Colorize]:Scripts/CMake//*)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
     <scope name="C++ Header Files" pattern="file[Colorize]:*.hxx&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
     <scope name="C++ Source Files" pattern="file[Colorize]:*.cxx&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
-    <scope name="C Header Files" pattern="file[Colorize]:*.hh&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
-    <scope name="C Source Files" pattern="file[Colorize]:*.cc&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
+    <scope name="C Header Files" pattern="file[Colorize]:*.h&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
+    <scope name="C Source Files" pattern="file[Colorize]:*.c&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
     <scope name="Documentation Files" pattern="(file[Colorize]:*.md||file[Colorize]:*.rst||file[Colorize]:*.tex)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
     <scope name="GNU LD Scripts" pattern="file[Colorize]:*.ld&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
     <scope name="Python Scripts" pattern="(file[Colorize]:*.py||file[Colorize]:Scripts/Python/Sources//*||file[Colorize]:Scripts/Python/Tests//*)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
@@ -61,6 +61,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
   </component>
   <component name="PyDebuggerOptionsProvider">
     <option name="doSaveCallSignatures" value="true" />
