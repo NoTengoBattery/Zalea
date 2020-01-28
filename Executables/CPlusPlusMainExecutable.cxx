@@ -22,11 +22,11 @@
 
 extern "C" {
 extern void _start();
-extern void *_MultiBootHeader;
+extern void *multiBootHeader;
 }
 
-void NotMain();
+void notMain();
 
-void NotMain() {
+void notMain() {
     _start();
 }

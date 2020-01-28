@@ -1,4 +1,4 @@
-//===-- LinkerScriptDefinitions.h - Macro Definitions for the Preprocessed Liker Script -------------------*- C -*-===//
+//===-- LinkerScriptDefinitions.in - Macro Definitions for the Preprocessed Liker Script ------------------*- C -*-===//
 //
 // Copyright (c) 2020 Oever González
 //
@@ -21,8 +21,8 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#ifndef ZALEA_LINKERSCRIPTDEFINITIONS_H
-#define ZALEA_LINKERSCRIPTDEFINITIONS_H
+#ifndef ZALEA_LINKERSCRIPTDEFINITIONS_IN
+#define ZALEA_LINKERSCRIPTDEFINITIONS_IN
 
 #include <config.h>
 
@@ -48,4 +48,4 @@ ASSERT( x ==  y, \
 #error "Not a valid linker."
 #endif
 
-#endif //ZALEA_LINKERSCRIPTDEFINITIONS_H
+#endif //ZALEA_LINKERSCRIPTDEFINITIONS_IN

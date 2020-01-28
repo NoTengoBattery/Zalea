@@ -20,10 +20,10 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#include <config.h>
+#ifndef ZALEA_COMPILERMAGIC_H
+#define ZALEA_COMPILERMAGIC_H
 
-#ifndef ZALEA_COMPILER_MAGIC_H
-#define ZALEA_COMPILER_MAGIC_H
+#include <config.h>
 
 #ifdef KERNEL_COMPILER_GNU
 
@@ -35,4 +35,4 @@
 #error "What compiler are you using?"
 #endif
 
-#endif //ZALEA_COMPILER_MAGIC_H
+#endif //ZALEA_COMPILERMAGIC_H

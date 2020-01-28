@@ -26,8 +26,8 @@ SET(THIS_EXE_NAME LinkedImage)
 # Add the executable to the project and all it's source code files
 ADD_EXECUTABLE("${THIS_EXE_NAME}"
                "CPlusPlusMainExecutable.cxx"
-               "LinkerScriptDefinitions.h"
-               "MainExecutableLinkerBase.h"
+               "LinkerScriptDefinitions.in"
+               "MainExecutableLinkerBase.in"
                "Multiboot2.c"
                "Multiboot2.h")
 

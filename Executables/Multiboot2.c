@@ -20,17 +20,16 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#include <config.h>
 #include "Multiboot2.h"
 
-struct multibootHeader _multibootHeader MULTIBOOT_ATTR = {
+struct multibootHeader multibootHeader MULTIBOOT_ATTR = {
         MULTIBOOT_HEADER_MAGIC,
         MULTIBOOT_HEADER_ARCHITECTURE,
         MULIBOOT_HEADER_SIZEOF,
         MULTIBOOT_HEADER_CHECKSUM
 };
 
-struct multibootInformationTag _multibootInformationTag MULTIBOOT_ATTR = {
+struct multibootInformationTag multibootInformationTag MULTIBOOT_ATTR = {
         MULTIBOOT_TAG_INFORMATION_REQUEST,
         MULTIBOOT_REQUIRED_FLAG(MULTIBOOT_TAG_INFORMATION_REQUEST_FLAGS),
         MULTIBOOT_TAG_INFORMATION_REQUEST_SIZEOF,
@@ -42,10 +41,10 @@ struct multibootInformationTag _multibootInformationTag MULTIBOOT_ATTR = {
          MULTIBOOT_TAG_TYPE_FRAMEBUFFER,
          MULTIBOOT_TAG_TYPE_APM,
 #ifdef KERNEL_x86_EFI
-                MULTIBOOT_TAG_TYPE_EFI32,
+                MULTIBOOT_TAG_TYPE_EFI_32,
 #endif
 #ifdef KERNEL_AMD64_EFI
-                MULTIBOOT_TAG_TYPE_EFI64,
+                MULTIBOOT_TAG_TYPE_EFI_64,
 #endif
          MULTIBOOT_TAG_TYPE_SMBIOS,
          MULTIBOOT_TAG_TYPE_ACPI_OLD,
@@ -56,10 +55,10 @@ struct multibootInformationTag _multibootInformationTag MULTIBOOT_ATTR = {
         MULTIBOOT_TAG_TYPE_EFI_BS,
 #endif
 #ifdef KERNEL_x86_EFI
-                MULTIBOOT_TAG_TYPE_EFI32_IH,
+                MULTIBOOT_TAG_TYPE_EFI_32_IH,
 #endif
 #ifdef KERNEL_AMD64_EFI
-                MULTIBOOT_TAG_TYPE_EFI64_IH,
+                MULTIBOOT_TAG_TYPE_EFI_64_IH,
 #endif
          MULTIBOOT_TAG_TYPE_END}
 };

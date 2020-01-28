@@ -20,13 +20,13 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#include <config.h>
-#include <CompilerMagic.h>
+#ifndef ZALEA_BITWISEMACROS_H
+#define ZALEA_BITWISEMACROS_H
 
-#ifndef ZALEA_BITWISE_MACROS_H
-#define ZALEA_BITWISE_MACROS_H
+#include <CompilerMagic.h>
+#include <config.h>
 
 #define SET_UNSIGNED_NBIT(x, y) (x ## U | (1U << y ## U))
 #define CLEAR_UNSIGNED_NBIT(x, y) (x ## U & ~(1U << y ## U))
 
-#endif //ZALEA_BITWISE_MACROS_H
+#endif //ZALEA_BITWISEMACROS_H

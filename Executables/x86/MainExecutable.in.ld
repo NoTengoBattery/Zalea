@@ -22,12 +22,12 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 
 #include <config.h>
-#include <LinkerScriptDefinitions.h>
+#include <LinkerScriptDefinitions.in>
 #undef i386
 
 OUTPUT_FORMAT("elf32-i386", "elf32-i386", "elf32-i386")
 OUTPUT_ARCH(i386)
 _ENTRY
 SECTIONS {
-#include <MainExecutableLinkerBase.h>
+#include <MainExecutableLinkerBase.in>
 }

@@ -1,4 +1,4 @@
-//===-- MainExecutableBase.h - The Base Linker Script  ----------------------------------------------------*- C -*-===//
+//===-- MainExecutableBase.in - The Base Linker Script  ---------------------------------------------------*- C -*-===//
 //
 // Copyright (c) 2020 Oever González
 //
@@ -21,11 +21,11 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#ifndef ZALEA_MAINEXECUTABLELINKERBASE_H
-#define ZALEA_MAINEXECUTABLELINKERBASE_H
+#ifndef ZALEA_MAINEXECUTABLELINKERBASE_IN
+#define ZALEA_MAINEXECUTABLELINKERBASE_IN
 
+#include "LinkerScriptDefinitions.in"
 #include <config.h>
-#include "LinkerScriptDefinitions.h"
 
 #ifdef KERNEL_LINKER_GNU
 
@@ -106,4 +106,4 @@
 #error "What linker are you using?"
 #endif
 
-#endif //ZALEA_MAINEXECUTABLELINKERBASE_H
+#endif //ZALEA_MAINEXECUTABLELINKERBASE_IN

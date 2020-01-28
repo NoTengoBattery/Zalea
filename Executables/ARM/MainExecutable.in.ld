@@ -22,11 +22,11 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 
 #include <config.h>
-#include <LinkerScriptDefinitions.h>
+#include <LinkerScriptDefinitions.in>
 
 OUTPUT_FORMAT("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 OUTPUT_ARCH(arm)
 _ENTRY
 SECTIONS {
-#include <MainExecutableLinkerBase.h>
+#include <MainExecutableLinkerBase.in>
 }

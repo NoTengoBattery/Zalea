@@ -90,7 +90,7 @@ def parse_args(args):
                         action='store', type=str, metavar='docstring', default="",
                         help='An optional docstring to describe the variable in the CMake cache. Can be empty.')
     parser.add_argument('-e', '--template',
-                        action='store', type=argparse.FileType(mode='r', bufsize=buffer_size), metavar='templ',
+                        action='store', type=argparse.FileType(bufsize=buffer_size), metavar='templ',
                         help='A "template" file that will be opened for read, read and then appended to the beginning '
                              'of the output CMake file. This file must exist. This value cannot be empty.')
     parser.add_argument('-x', '--header',
