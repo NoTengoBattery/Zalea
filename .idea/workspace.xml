@@ -17,7 +17,7 @@
   </component>
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
-    <option name="clangWarnings" value="-Wall,-Werror,-Wextra,-Wformat=2,-Wpedantic,-Wundef" />
+    <option name="clangWarnings" value="-pedantic,-Wall,-Werror,-Wextra,-Wformat=2,-Wpedantic,-Wundef" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="FileColors">
