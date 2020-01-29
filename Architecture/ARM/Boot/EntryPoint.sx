@@ -47,8 +47,3 @@ dataPlaceholder:
 .globl rodataPlaceholder
 rodataPlaceholder:
   .ascii "rodataPlaceholder"
-
-.section .roguard, "a"
-.globl roguardPlaceholder
-roguardPlaceholder:
-  .ascii "roguardPlaceholder"

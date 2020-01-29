@@ -46,8 +46,3 @@ dataPlaceholder:
 .global rodataPlaceholder
 rodataPlaceholder:
   .ascii "rodataPlaceholder"
-
-.section .roguard, "a", @progbits
-.global roguardPlaceholder
-roguardPlaceholder:
-  .ascii "roguardPlaceholder"

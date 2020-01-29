@@ -36,7 +36,6 @@ PHDRS {
     data PT_LOAD FLAGS (PF_W | PF_R) ;
     rodata PT_LOAD FLAGS (PF_R) ;
     bss PT_LOAD FLAGS (PF_W | PF_R) ;
-    roguard PT_LOAD FLAGS (PF_R) ;
     stack PT_STACK FLAGS (PF_W | PF_R) ;
 }
 
@@ -70,6 +69,9 @@ SECTIONS {
     .rodata ALIGN_MINI : ALIGN_MINI {
         *(.rodata);
     } :rodata
+    .note.gnu.build-id ALIGN_MINI : ALIGN_MINI {
+        *(.note.gnu.build-id);
+    }
     .eh_frame_hdr ALIGN_MINI : ALIGN_MINI {
         *(.eh_frame_hdr);
         *(.eh_frame_entry .eh_frame_entry.*);
@@ -83,18 +85,13 @@ SECTIONS {
     .bss ALIGN_MINI (NOLOAD) : ALIGN_MINI {
         bssStart = .;
         *(.bss);
-        *(COMMON);
+        *(COMMON);]
         bssEnd = .;
     } :bss
-    // Guarantee a canary page that is RO so we can have an exception from the MMU on stack overflow
-    . += 0x1; ALIGNED_CPS_SEGMENTSTART("roguard-segment")
-    .note.gnu.build-id ALIGN_MINI : ALIGN_MINI {
-        *(.note.gnu.build-id)
-    } :roguard
-    .roguard ALIGN_MINI : ALIGN_MINI {
-        *(.roguard)
-    } :roguard
-    . += 0x1; ALIGNED_CPS_SEGMENTSTART("stack-segment")
+    . += MINI_ALIGN; . = ALIGN_COMMONPAGE;
+    // Leave 2 pages between bss and stack (it's a RO page which will rise exception upon stack overflow)
+    . += MINI_ALIGN; . = ALIGN_COMMONPAGE;
+    . += MINI_ALIGN; . = ALIGN_COMMONPAGE;
     .stack ALIGN_MINI (NOLOAD) : ALIGN_MINI {
 #ifndef MACHINE_STACK_DOWNWARDS
         stackStart = .; stackLowermost = .;
