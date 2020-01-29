@@ -36,6 +36,9 @@
     .multiboot2 ALIGN_MINI : ALIGN_MINI {
         KEEP (*(.multiboot2));
     }
+    .note.gnu.build-id ALIGN_MINI : ALIGN_MINI {
+        *(.note.gnu.build-id)
+    } // Intel compiler emits these
     .text ALIGN_MINI : ALIGN_MINI {
         *(.text.unlikely);
         *(.text.hot);
