@@ -23,6 +23,11 @@
 
 IF (TREE_SELF_PATH) # This will define if we have access to the scope variables and cache
 
+  # If the user gave the system a path for binutils, tell the driver to use it first
+  IF (CMAKE_BINUTILS_BIN_PATH)
+    STRING(APPEND CMAKE_CXX_FLAGS_INIT "\"-B${CMAKE_BINUTILS_BIN_PATH}\" ")
+  ENDIF ()
+
   # Those are the base "freestanding" flags
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-ffreestanding ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-nostdlib ")

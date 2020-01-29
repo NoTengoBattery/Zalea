@@ -23,6 +23,11 @@
 
 IF (TREE_SELF_PATH) # This will define if we have access to the scope variables and cache
 
+  # If the user gave the system a path for binutils, tell the driver to use it first
+  IF (CMAKE_BINUTILS_BIN_PATH)
+    STRING(APPEND CMAKE_CXX_FLAGS_INIT "\"-B${CMAKE_BINUTILS_BIN_PATH}\" ")
+  ENDIF ()
+
   # Those are the base "freestanding" flags
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-ffreestanding ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-nostdlib ")
@@ -30,7 +35,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-pedantic ")
   # Those flags define part of the ABI that is common to all architectures
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-fno-delete-null-pointer-checks ")
-  STRING(APPEND CMAKE_CXX_FLAGS_INIT "-fstack-protector-strong -fstack-check ")
+  STRING(APPEND CMAKE_CXX_FLAGS_INIT "-fstack-protector-strong ")
   # Those flags define the diagnostics to be issued (or not) by the compiler
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-Wall ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-Werror ")
