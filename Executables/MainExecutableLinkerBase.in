@@ -29,39 +29,46 @@
 
 #ifdef KERNEL_LINKER_GNU
 
-    SEGMENTSTART("text-segment")
-    .start ALIGN_COMMONPAGE : AT(MACHINE_LOAD_ADDRESS) ALIGN_COMMONPAGE {
+PHDRS {
+    start PT_LOAD FLAGS (PF_X | PF_R) ;
+    multiboot PT_LOAD FLAGS (PF_R) ;
+    code PT_LOAD FLAGS (PF_X | PF_R) ;
+    data PT_LOAD FLAGS (PF_W | PF_R) ;
+    rodata PT_LOAD FLAGS (PF_R) ;
+    bss PT_LOAD FLAGS (PF_W | PF_R) ;
+    stack PT_STACK FLAGS (PF_W | PF_R) ;
+}
+
+SECTIONS {
+    SEGMENTSTART("start-segment")
+    .start ALIGN_COMMONPAGE : AT ( MACHINE_LOAD_ADDRESS ) {
+        imageStart = .;
         *(.start);
-    }
+    } :start
+    ALIGNED_CPS_SEGMENTSTART("multiboot-segment")
     .multiboot2 ALIGN_MINI : ALIGN_MINI {
         KEEP (*(.multiboot2));
-    }
-    .note.gnu.build-id ALIGN_MINI : ALIGN_MINI {
-        *(.note.gnu.build-id)
-    } // Intel compiler emits these
+        ASSERT (((. - imageStart) < 0x8000), "Multiboot header is out of bounds. Reduce the size of '.start' section.");
+    } :multiboot
+    ALIGNED_CPS_SEGMENTSTART("text-segment")
     .text ALIGN_MINI : ALIGN_MINI {
         *(.text.unlikely);
         *(.text.hot);
         *(SORT(.text.sorted.*));
         *(.text .text.*);
-    }
+    } :code
     ALIGNED_CPS_SEGMENTSTART("data-segment")
     .data ALIGN_MINI : ALIGN_MINI {
         *(.data);
-    }
+    } :data
     .eh_frame ALIGN_MINI : ALIGN_MINI ONLY_IF_RW {
         KEEP(*(.eh_frame));
         *(.eh_frame.*);
     }
-    ALIGNED_CPS_SEGMENTSTART("bss-segment")
-    .bss ALIGN_MINI : ALIGN_MINI {
-        *(.bss);
-        *(COMMON);
-    }
     ALIGNED_CPS_SEGMENTSTART("rodata-segment")
     .rodata ALIGN_MINI : ALIGN_MINI {
         *(.rodata);
-    }
+    } :rodata
     .eh_frame_hdr ALIGN_MINI : ALIGN_MINI {
         *(.eh_frame_hdr);
         *(.eh_frame_entry .eh_frame_entry.*);
@@ -70,27 +77,37 @@
         KEEP (*(.eh_frame));
         *(.eh_frame.*);
     }
-
-
-    // The stack section, this section is the start of the executable and reaches until the entry point
+    // The stack and bss section, those sections are at the very end of the executable and extends to the image end
+    ALIGNED_CPS_SEGMENTSTART("bss-segment")
+    .bss ALIGN_COMMONPAGE (NOLOAD) : ALIGN_COMMONPAGE {
+        bssStart = .;
+        *(.bss);
+        *(COMMON);
+        bssEnd = .;
+    } :bss
+    // Guarantee a canary page that is RO so we can have an exception from the MMU on stack overflow
+    . += (CONSTANT ( COMMONPAGESIZE ) + 0x01);
     ALIGNED_CPS_SEGMENTSTART("stack-segment")
-    .stack ALIGN_COMMONPAGE : ALIGN_COMMONPAGE {
+    .stack ALIGN_COMMONPAGE (NOLOAD) : ALIGN_COMMONPAGE {
 #ifndef MACHINE_STACK_DOWNWARDS
-        _stack_start = .; _stack_lowermost = .;
+        stackStart = .; stackLowermost = .;
 #else
-        _stack_end = .; _stack_lowermost = .;
+        stackEnd = .; stackLowermost = .;
 #endif
         *(.stack);
-        . = _stack_lowermost + MACHINE_STACK_SIZE;
+        . = stackLowermost + MACHINE_STACK_SIZE;
 #ifdef MACHINE_STACK_DOWNWARDS
-        _stack_start = .; _image_end = .;
+        stackStart = .; imageEnd = .;
 #else
-        _stack_end = .; _image_end = .;
+        stackEnd = .; imageEnd = .;
 #endif
-    }
+    } :bss :stack
 
 
     // Sections emitted by the compiler (they are stripped in the final binary)
+    .note.gnu.build-id : {
+        *(.note.gnu.build-id)
+    }
     .comment 0 : {
         *(.comment);
     }
@@ -100,7 +117,7 @@
     }
 #endif
 
-    // Run 4 special assertions that will ensure the correct alignment of the entry point, load address and stack
+    // Run 3 special assertions that will ensure the correct alignment of the entry point, load address and stack
     ASSERT_VIRTUAL_ADDRESS
     ASSERT_LOAD_ADDRESS
     ASSERT_STACK_SIZE
@@ -108,5 +125,6 @@
 #else
 #error "What linker are you using?"
 #endif
+}
 
 #endif //ZALEA_MAINEXECUTABLELINKERBASE_IN

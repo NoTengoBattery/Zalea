@@ -24,7 +24,25 @@
 #include <config.h>
 
 .section .start, "ax"
-.global _start
-_start:
+.global start
+start:
   XCHGW %bx, %bx # BOCHS magic breakpoint
-  JMP _start
+  JMP start
+
+# Those are placeholders (needed because LLD will not identify the sections correctly when no data is in the sections)
+# but they are only needed when no data is in the section. Most likely to not happen ever but anyway...
+
+.section .text, "ax", @progbits
+.global textPlaceholder
+textPlaceholder:
+  JMP textPlaceholder
+
+.section .data, "aw", @progbits
+.global dataPlaceholder
+dataPlaceholder:
+  .ascii "dataPlaceholder"
+
+.section .rodata, "aw", @progbits
+.global rodataPlaceholder
+rodataPlaceholder:
+  .ascii "rodataPlaceholder"

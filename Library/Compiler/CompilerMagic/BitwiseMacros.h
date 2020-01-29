@@ -26,7 +26,7 @@
 #include <CompilerMagic.h>
 #include <config.h>
 
-#define SET_UNSIGNED_NBIT(x, y) (x ## U | (1U << y ## U))
-#define CLEAR_UNSIGNED_NBIT(x, y) (x ## U & ~(1U << y ## U))
+#define CLEAR_NTH_BIT(x, y) (x & ~(1U << y ## U))
+#define SET_NTH_BIT(x, y) (x | (1U << y ## U))
 
 #endif //ZALEA_BITWISEMACROS_H

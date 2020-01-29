@@ -21,12 +21,12 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 
 extern "C" {
-extern void _start();
+extern void start();
 extern void *multiBootHeader;
 }
 
 void notMain();
 
 void notMain() {
-    _start();
+    start();
 }

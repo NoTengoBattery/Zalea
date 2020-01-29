@@ -24,7 +24,27 @@
 #include <config.h>
 
 .section .start, "ax"
-.type _start, #function
-.globl _start
-_start:
-  BL _start
+.type start, #function
+.globl start
+start:
+  BL start
+
+# Those are placeholders (needed because LLD will not identify the sections correctly when no data is in the sections)
+# but they are only needed when no data is in the section. Most likely to not happen ever but anyway...
+
+.section .text, "ax"
+.type start, #function
+.globl textPlaceholder
+textPlaceholder:
+  BL textPlaceholder
+
+.section .data, "aw"
+.globl dataPlaceholder
+dataPlaceholder:
+  .ascii "dataPlaceholder"
+
+.section .rodata, "aw"
+.globl rodataPlaceholder
+rodataPlaceholder:
+  .ascii "rodataPlaceholder"
+

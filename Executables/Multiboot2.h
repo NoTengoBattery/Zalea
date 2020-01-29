@@ -56,8 +56,8 @@ struct multibootHeaderTag {
 };
 
 /* These two macros define the "optional" bit flag, which is the bit 0 of the FLAGS field */
-#define MULTIBOOT_OPTIONAL_FLAG(x) SET_UNSIGNED_NBIT(x, 0)
-#define MULTIBOOT_REQUIRED_FLAG(x) CLEAR_UNSIGNED_NBIT(x, 0)
+#define MULTIBOOT_OPTIONAL_FLAG(x) SET_NTH_BIT(x, 0)
+#define MULTIBOOT_REQUIRED_FLAG(x) CLEAR_NTH_BIT(x, 0)
 
 /* The following macros, enums and structs are the information request tag and responses, along with their magic types,
  * and their structure. */
@@ -100,15 +100,16 @@ struct multibootInformationRequestTag {
 };
 
 /* These macros and structs are the address tag, which is used to synchronize the physical address */
-extern void *_start;
-extern void *_image_end;
+extern void *imageStart;
+extern void *bssStart;
+extern void *imageEnd;
 #define MULTIBOOT_HEADER_TAG_ADDRESS 0x0002
 #define MULTIBOOT_HEADER_TAG_ADDRESS_FLAGS 0x0000
 #define  MULTIBOOT_HEADER_TAG_ADDRESS_SIZEOF sizeof(struct multibootAddressTag)
 #define  MULTIBOOT_HEADER_TAG_ADDRESS_HEADER_ADDRESS &multibootHeader
-#define  MULTIBOOT_HEADER_TAG_ADDRESS_LOAD_ADDRESS &_start
-#define  MULTIBOOT_HEADER_TAG_ADDRESS_LOAD_END_ADDRESS &_image_end
-#define  MULTIBOOT_HEADER_TAG_ADDRESS_BSS_END_ADDRESS &_image_end
+#define  MULTIBOOT_HEADER_TAG_ADDRESS_LOAD_ADDRESS &imageStart
+#define  MULTIBOOT_HEADER_TAG_ADDRESS_LOAD_END_ADDRESS &bssStart
+#define  MULTIBOOT_HEADER_TAG_ADDRESS_BSS_END_ADDRESS &imageEnd
 
 struct multibootAddressTag {
     uint16_t type;
@@ -124,13 +125,29 @@ struct multibootAddressTag {
 #define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS 0x0003
 #define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_FLAGS 0x0000
 #define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_SIZEOF sizeof(struct multibootEntryAddressTag)
-#define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_ENTRY_ADDRESS &_start
+#define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_ENTRY_ADDRESS &imageStart
 
 struct multibootEntryAddressTag {
     uint16_t type;
     uint16_t flags;
     uint32_t size;
     uint32_t entryAddress;
+};
+
+#define MULTIBOOT_HEADER_TAG_CONSOLE_FLAGS 0x0004
+#define MULTIBOOT_HEADER_TAG_CONSOLE_FLAGS_FLAGS 0x0000
+#define MULTIBOOT_HEADER_TAG_CONSOLE_FLAGS_SIZEOF sizeof(struct multibootConsoleFlagsTag)
+#define MULTIBOOT_HEADER_CONSOLE_FLAGS 0x0000
+#define MULTIBOOT_HEADER_CONSOLE_FLAG_REQUIRED(x) SET_NTH_BIT(x, 0)
+#define MULTIBOOT_HEADER_CONSOLE_FLAG_OPTIONAL(x) CLEAR_NTH_BIT(x, 0)
+#define MULTIBOOT_HEADER_CONSOLE_FLAG_HAS_EGA(x) SET_NTH_BIT(x, 1)
+#define MULTIBOOT_HEADER_CONSOLE_FLAG_HAS_NO_EGA(x) CLEAR_NTH_BIT(x, 1)
+
+struct multibootConsoleFlagsTag {
+    uint16_t type;
+    uint16_t flags;
+    uint32_t size;
+    uint32_t consoleFlags;
 };
 
 #endif //ZALEA_MULTIBOOT2_H
