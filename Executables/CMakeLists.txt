@@ -39,8 +39,8 @@ TARGET_LINK_LIBRARIES("${THIS_EXE_NAME}"
 # Add the linker script to the linker command line (requires linker and compiler detection)
 IF (KERNEL_COMPILER_GNU AND KERNEL_LINKER_GNU)
   TARGET_LINK_OPTIONS("${THIS_EXE_NAME}" BEFORE
-                      PRIVATE "-Wl,-T${TREE_BIN_IMPORTANT_PATH}/MainExecutable.ld"
-                      PRIVATE "-Wl,-Map=${TREE_BIN_IMPORTANT_PATH}/MainExecutable.map")
+                      PRIVATE "-Wl,-T${TREE_BIN_IMPORTANT_PATH}/${THIS_EXE_NAME}.ld"
+                      PRIVATE "-Wl,-Map=${TREE_BIN_IMPORTANT_PATH}/${THIS_EXE_NAME}.map")
 ELSE ()
   MESSAGE(AUTHOR_WARNING "Could not setup the linker script. The binaries generated this way will probably not work.")
 ENDIF ()
@@ -52,7 +52,7 @@ IF (KERNEL_COMPILER_GNU)
                      ARGS "-x" "assembler-with-cpp" "-P"
                      "-I" "${TREE_BIN_IMPORTANT_INCLUDE_PATH}"
                      "-I" "${CMAKE_CURRENT_LIST_DIR}"
-                     "-o" "${TREE_BIN_IMPORTANT_PATH}/MainExecutable.ld"
+                     "-o" "${TREE_BIN_IMPORTANT_PATH}/${THIS_EXE_NAME}.ld"
                      "-E" "${TREE_EXECUTABLES_PATH}/${KERNEL_ARCH}/MainExecutable.in.ld")
 ELSE ()
   MESSAGE(AUTHOR_WARNING
