@@ -43,8 +43,12 @@ textPlaceholder:
 dataPlaceholder:
   .ascii "dataPlaceholder"
 
-.section .rodata, "aw"
+.section .rodata, "a"
 .globl rodataPlaceholder
 rodataPlaceholder:
   .ascii "rodataPlaceholder"
 
+.section .roguard, "a"
+.globl roguardPlaceholder
+roguardPlaceholder:
+  .ascii "roguardPlaceholder"

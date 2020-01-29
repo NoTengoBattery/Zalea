@@ -42,7 +42,12 @@ textPlaceholder:
 dataPlaceholder:
   .ascii "dataPlaceholder"
 
-.section .rodata, "aw", @progbits
+.section .rodata, "a", @progbits
 .global rodataPlaceholder
 rodataPlaceholder:
   .ascii "rodataPlaceholder"
+
+.section .roguard, "a", @progbits
+.global roguardPlaceholder
+roguardPlaceholder:
+  .ascii "roguardPlaceholder"

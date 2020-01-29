@@ -36,6 +36,7 @@ PHDRS {
     data PT_LOAD FLAGS (PF_W | PF_R) ;
     rodata PT_LOAD FLAGS (PF_R) ;
     bss PT_LOAD FLAGS (PF_W | PF_R) ;
+    roguard PT_LOAD FLAGS (PF_R) ;
     stack PT_STACK FLAGS (PF_W | PF_R) ;
 }
 
@@ -86,8 +87,14 @@ SECTIONS {
         bssEnd = .;
     } :bss
     // Guarantee a canary page that is RO so we can have an exception from the MMU on stack overflow
-    . += (CONSTANT ( COMMONPAGESIZE ) + 0x01);
-    ALIGNED_CPS_SEGMENTSTART("stack-segment")
+    . += 0x1; ALIGNED_CPS_SEGMENTSTART("roguard-segment")
+    .note.gnu.build-id ALIGN_COMMONPAGE : ALIGN_COMMONPAGE {
+        *(.note.gnu.build-id)
+    } :roguard
+    .roguard ALIGN_COMMONPAGE : ALIGN_COMMONPAGE {
+        *(.roguard)
+    } :roguard
+    . += 0x1; ALIGNED_CPS_SEGMENTSTART("stack-segment")
     .stack ALIGN_COMMONPAGE (NOLOAD) : ALIGN_COMMONPAGE {
 #ifndef MACHINE_STACK_DOWNWARDS
         stackStart = .; stackLowermost = .;
@@ -105,9 +112,6 @@ SECTIONS {
 
 
     // Sections emitted by the compiler (they are stripped in the final binary)
-    .note.gnu.build-id : {
-        *(.note.gnu.build-id)
-    }
     .comment 0 : {
         *(.comment);
     }
