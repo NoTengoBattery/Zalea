@@ -61,7 +61,7 @@ IF (NOT PYTHON3_GENERATED)
   SET(Python3_EXECUTABLE "${_Python3_EXECUTABLE}" CACHE INTERNAL "The Python 3 Virtual Environment executable." FORCE)
   SET(_Python3_EXECUTABLE "${_Python3_EXECUTABLE}" CACHE INTERNAL "The Python 3 Virtual Environment executable." FORCE)
   FIND_PACKAGE(Python3 REQUIRED COMPONENTS Interpreter)
-  SET(PYTHON3_GENERATED  ON  CACHE INTERNAL "Detect if the Python 3 Virtual Environment has been installed.")
+  SET(PYTHON3_GENERATED ON CACHE INTERNAL "Detect if the Python 3 Virtual Environment has been installed.")
 ENDIF ()
 
 # For a CMake cross-compilation (the one used throughout this process), you must specify some variables that will

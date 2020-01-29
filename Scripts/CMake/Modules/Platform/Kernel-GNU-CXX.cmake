@@ -29,7 +29,6 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-pipe ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-pedantic ")
   # Those flags define part of the ABI that is common to all architectures
-  STRING(APPEND CMAKE_CXX_FLAGS_INIT "-fno-asynchronous-unwind-tables ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-fno-delete-null-pointer-checks ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-fstack-protector-strong ")
   # Those flags define the diagnostics to be issued (or not) by the compiler
@@ -38,7 +37,6 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-Wextra ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-Wformat=2 ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-Wpedantic ")
-  STRING(APPEND CMAKE_CXX_FLAGS_INIT "-Wundef ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-Wno-unused-command-line-argument ")
   # Those flags define the linker to be used (this is needed for all cross compilers)
   STRING(APPEND CMAKE_EXE_LINKER_FLAGS_INIT "-fuse-ld=\"${CMAKE_LD_NAME}\" ")
