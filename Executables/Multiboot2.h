@@ -49,10 +49,10 @@
 (MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_ARCHITECTURE + MULIBOOT_HEADER_SIZEOF))
 
 struct multibootHeaderTag {
-    uint32_t magic;
-    uint32_t architecture;
-    uint32_t size;
-    uint32_t checksum;
+    const uint32_t magic;
+    const uint32_t architecture;
+    const uint32_t size;
+    const uint32_t checksum;
 };
 
 /* These two macros define the "optional" bit flag, which is the bit 0 of the FLAGS field */
@@ -93,10 +93,10 @@ enum {
 }; /* Because standard C does not support static flexible array initialization */
 
 struct multibootInformationRequestTag {
-    uint16_t type;
-    uint16_t flags;
-    uint32_t size;
-    uint32_t requests[RequestNumber]; /* We use the (current) maximum amount of requests as the size of the array */
+    const uint16_t type;
+    const uint16_t flags;
+    const uint32_t size;
+    const uint32_t requests[RequestNumber]; /* We use the (current) maximum amount of requests as the size of the array */
 };
 
 /* These macros and structs are the address tag, which is used to synchronize the physical address */
@@ -112,13 +112,13 @@ extern void *imageEnd;
 #define  MULTIBOOT_HEADER_TAG_ADDRESS_BSS_END_ADDRESS &imageEnd
 
 struct multibootAddressTag {
-    uint16_t type;
-    uint16_t flags;
-    uint32_t size;
-    uint32_t headerAddress;
-    uint32_t loadAddress;
-    uint32_t loadEndAddress;
-    uint32_t bssEndAddress;
+    const uint16_t type;
+    const uint16_t flags;
+    const uint32_t size;
+    const uint32_t headerAddress;
+    const uint32_t loadAddress;
+    const uint32_t loadEndAddress;
+    const uint32_t bssEndAddress;
 };
 
 /* These macros and structs are the entry tag, which tells the bootloader the physical address of the entry point */
@@ -128,10 +128,10 @@ struct multibootAddressTag {
 #define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_ENTRY_ADDRESS &imageStart
 
 struct multibootEntryAddressTag {
-    uint16_t type;
-    uint16_t flags;
-    uint32_t size;
-    uint32_t entryAddress;
+    const uint16_t type;
+    const uint16_t flags;
+    const uint32_t size;
+    const uint32_t entryAddress;
 };
 
 #define MULTIBOOT_HEADER_TAG_CONSOLE_FLAGS 0x0004
@@ -144,10 +144,10 @@ struct multibootEntryAddressTag {
 #define MULTIBOOT_HEADER_CONSOLE_FLAG_HAS_NO_EGA(x) CLEAR_NTH_BIT(x, 1)
 
 struct multibootConsoleFlagsTag {
-    uint16_t type;
-    uint16_t flags;
-    uint32_t size;
-    uint32_t consoleFlags;
+    const uint16_t type;
+    const uint16_t flags;
+    const uint32_t size;
+    const uint32_t consoleFlags;
 };
 
 #endif //ZALEA_MULTIBOOT2_H
