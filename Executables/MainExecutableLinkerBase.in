@@ -80,7 +80,7 @@ SECTIONS {
     }
     // The stack and bss section, those sections are at the very end of the executable and extends to the image end
     ALIGNED_CPS_SEGMENTSTART("bss-segment")
-    .bss ALIGN_COMMONPAGE (NOLOAD) : ALIGN_COMMONPAGE {
+    .bss ALIGN_MINI (NOLOAD) : ALIGN_MINI {
         bssStart = .;
         *(.bss);
         *(COMMON);
@@ -88,14 +88,14 @@ SECTIONS {
     } :bss
     // Guarantee a canary page that is RO so we can have an exception from the MMU on stack overflow
     . += 0x1; ALIGNED_CPS_SEGMENTSTART("roguard-segment")
-    .note.gnu.build-id ALIGN_COMMONPAGE : ALIGN_COMMONPAGE {
+    .note.gnu.build-id ALIGN_MINI : ALIGN_MINI {
         *(.note.gnu.build-id)
     } :roguard
-    .roguard ALIGN_COMMONPAGE : ALIGN_COMMONPAGE {
+    .roguard ALIGN_MINI : ALIGN_MINI {
         *(.roguard)
     } :roguard
     . += 0x1; ALIGNED_CPS_SEGMENTSTART("stack-segment")
-    .stack ALIGN_COMMONPAGE (NOLOAD) : ALIGN_COMMONPAGE {
+    .stack ALIGN_MINI (NOLOAD) : ALIGN_MINI {
 #ifndef MACHINE_STACK_DOWNWARDS
         stackStart = .; stackLowermost = .;
 #else
