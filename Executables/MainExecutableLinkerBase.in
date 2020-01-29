@@ -85,7 +85,7 @@ SECTIONS {
     .bss ALIGN_MINI (NOLOAD) : ALIGN_MINI {
         bssStart = .;
         *(.bss);
-        *(COMMON);]
+        *(COMMON);
         bssEnd = .;
     } :bss
     . += MINI_ALIGN; . = ALIGN_COMMONPAGE;
