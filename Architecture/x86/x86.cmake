@@ -39,10 +39,10 @@ SET_AND_EXPORT(KERNEL_ALTERNATIVE_TARGET "i386-elf" STRING "i386-elf"
 
 # This is the secondary target (LLVM needs this to correctly run the linker)
 SET_AND_EXPORT(KERNEL_SECOND_TARGET "i686-linux-elf" STRING "i686-linux-elf"
-               "This variable is the second machine target for the binutils to generate code and executables.")
+               "This variable is the second machine target for the LLVM toolchain to generate code and executables.")
 
 # This is the default ISA for the compiler and binutils (the minimum instruction set)
-SET_AND_EXPORT(MACHINE_MARCH "pentium4m" STRING "pentium4m"
+SET_AND_EXPORT(MACHINE_MARCH "pentium4" STRING "pentium4"
                "This variable is the machine minimum iteration of the ISA for the compiler and assembler to emit code.")
 
 # This is the default CPU for the compiler and binutils to tune the performance

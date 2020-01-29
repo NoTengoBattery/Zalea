@@ -39,7 +39,7 @@ SET_AND_EXPORT(KERNEL_ALTERNATIVE_TARGET "arm-eabi" STRING "arm-eabi"
 
 # This is the secondary target (LLVM needs this to correctly run the linker)
 SET_AND_EXPORT(KERNEL_SECOND_TARGET "arm-linux-elf" STRING "arm-linux-elf"
-               "This variable is the second machine target for the LLVM binutils to generate code and executables.")
+               "This variable is the second machine target for the LLVM toolchain to generate code and executables.")
 
 # This is the default ISA for the compiler and binutils (the minimum instruction set)
 SET_AND_EXPORT(MACHINE_MARCH "armv7" STRING "armv7"
