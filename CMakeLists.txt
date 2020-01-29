@@ -61,7 +61,7 @@ IF (NOT PYTHON3_GENERATED)
   SET(Python3_EXECUTABLE "${_Python3_EXECUTABLE}" CACHE INTERNAL "The Python 3 Virtual Environment executable." FORCE)
   SET(_Python3_EXECUTABLE "${_Python3_EXECUTABLE}" CACHE INTERNAL "The Python 3 Virtual Environment executable." FORCE)
   FIND_PACKAGE(Python3 REQUIRED COMPONENTS Interpreter)
-  SET(PYTHON3_GENERATED "YES" CACHE INTERNAL "Detect if the Python 3 Virtual Environment has been installed.")
+  SET(PYTHON3_GENERATED  ON  CACHE INTERNAL "Detect if the Python 3 Virtual Environment has been installed.")
 ENDIF ()
 
 # For a CMake cross-compilation (the one used throughout this process), you must specify some variables that will
@@ -102,16 +102,16 @@ MESSAGE(STATUS "The \"${PROJECT_NAME}\" project version ${CMAKE_PROJECT_VERSION}
 
 # Set the INTERPROCEDURAL_OPTIMIZATION default to true (LTO)
 IF (LTO_AVAILABLE)
-  SET(CMAKE_INTERPROCEDURAL_OPTIMIZATION YES)
+  SET(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
 ENDIF ()
 
 # Set the language standard for the project (C11, C++2x)
 SET(CMAKE_C_EXTENSIONS OFF)
 SET(CMAKE_C_STANDARD 11)
-SET(CMAKE_C_STANDARD_REQUIRED YES)
+SET(CMAKE_C_STANDARD_REQUIRED ON)
 SET(CMAKE_CXX_EXTENSIONS OFF)
 SET(CMAKE_CXX_STANDARD 20)
-SET(CMAKE_CXX_STANDARD_REQUIRED YES)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Add an interface library for config.h (and friends)
 ADD_LIBRARY(ImportantOutputDirectory INTERFACE)

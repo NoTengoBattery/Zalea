@@ -122,7 +122,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   # Enable LTO only when using [GNU+GNU] or [LLVM+CLANG (not working in Windows)]
   IF ((KERNEL_BINUTILS_GNU_GNU AND KERNEL_COMPILER_GCC)
        OR (KERNEL_BINUTILS_LLVM AND KERNEL_COMPILER_CLANG AND (NOT "${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Windows")))
-    SET(LTO_AVAILABLE TRUE)
+    SET(LTO_AVAILABLE ON)
     MESSAGE(STATUS "LTO is available and will be used for this project")
   ELSE ()
     MESSAGE(STATUS "LTO is not available and will not be used for this project")

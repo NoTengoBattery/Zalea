@@ -33,6 +33,10 @@ CHECK_TOOL_BY_NAME(BINUTILS "GNU")
 SET_AND_EXPORT(KERNEL_TARGET "i686-elf" STRING "i686-elf"
                "This variable is the machine target for the compiler and binutils to generate code and executables.")
 
+# This is the default target for the compiler and binutils
+SET_AND_EXPORT(KERNEL_ALTERNATIVE_TARGET "i386-elf" STRING "i386-elf"
+               "This variable is the alternative machine target for the compiler and binutils to generate code.")
+
 # This is the secondary target (LLVM needs this to correctly run the linker)
 SET_AND_EXPORT(KERNEL_SECOND_TARGET "i686-linux-elf" STRING "i686-linux-elf"
                "This variable is the second machine target for the binutils to generate code and executables.")

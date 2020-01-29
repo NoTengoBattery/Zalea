@@ -33,9 +33,13 @@ CHECK_TOOL_BY_NAME(BINUTILS "GNU")
 SET_AND_EXPORT(KERNEL_TARGET "arm-none-eabi" STRING "arm-none-eabi"
                "This variable is the machine target for the compiler and binutils to generate code and executables.")
 
+# This is the default target for the compiler and binutils
+SET_AND_EXPORT(KERNEL_ALTERNATIVE_TARGET "arm-eabi" STRING "arm-eabi"
+               "This variable is the alternative machine target for the compiler and binutils to generate code.")
+
 # This is the secondary target (LLVM needs this to correctly run the linker)
 SET_AND_EXPORT(KERNEL_SECOND_TARGET "arm-linux-elf" STRING "arm-linux-elf"
-               "This variable is the second machine target for the binutils to generate code and executables.")
+               "This variable is the second machine target for the LLVM binutils to generate code and executables.")
 
 # This is the default ISA for the compiler and binutils (the minimum instruction set)
 SET_AND_EXPORT(MACHINE_MARCH "armv7" STRING "armv7"

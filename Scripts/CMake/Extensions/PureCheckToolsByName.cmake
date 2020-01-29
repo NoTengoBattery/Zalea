@@ -45,8 +45,6 @@ ENDMACRO()
 
 # This macro will force the guess of a tool executable by searching the user's provided PATH first.
 MACRO(FORCE_TOOL_BY_NAME TYPE TOOL)
-  UNSET("CMAKE_${TYPE}" CACHE)
-  UNSET("CMAKE_${TYPE}_EXE" CACHE)
   FIND_PROGRAM("CMAKE_${TYPE}_EXE" NAMES "${CMAKE_${TYPE}}" HINTS "${CMAKE_${TOOL}_PATH}" PATH_SUFFIXES "bin" ""
                DOC "This is a guess forced by the build system for a tool.")
   SET("CMAKE_${TYPE}" "${CMAKE_${TYPE}_EXE}")
@@ -54,6 +52,8 @@ MACRO(FORCE_TOOL_BY_NAME TYPE TOOL)
   MARK_AS_ADVANCED("CMAKE_${TYPE}")
   MARK_AS_ADVANCED("CMAKE_${TYPE}_EXE")
   IF (NOT CMAKE_${TYPE})
+    UNSET("CMAKE_${TYPE}" CACHE)
+    UNSET("CMAKE_${TYPE}_EXE" CACHE)
     MESSAGE(FATAL_ERROR
             "The CMake build system could not find the 'CMAKE_${TYPE}' tool. The configuration process will stop now. "
             "You can give the CMake build system a hint by setting up the cache 'CMAKE_${TOOL}_PATH' variable to the "
