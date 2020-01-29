@@ -22,14 +22,14 @@
 
 #include "Multiboot2.h"
 
-struct multibootHeader multibootHeader MULTIBOOT_ATTR = {
+struct multibootHeaderTag multibootHeader MULTIBOOT_ATTR = {
         MULTIBOOT_HEADER_MAGIC,
         MULTIBOOT_HEADER_ARCHITECTURE,
         MULIBOOT_HEADER_SIZEOF,
         (uint32_t) MULTIBOOT_HEADER_CHECKSUM
 };
 
-struct multibootInformationTag multibootInformationTag MULTIBOOT_ATTR = {
+struct multibootInformationRequestTag multibootInformation MULTIBOOT_ATTR = {
         MULTIBOOT_TAG_INFORMATION_REQUEST,
         MULTIBOOT_REQUIRED_FLAG(MULTIBOOT_TAG_INFORMATION_REQUEST_FLAGS),
         MULTIBOOT_TAG_INFORMATION_REQUEST_SIZEOF,
@@ -61,4 +61,21 @@ struct multibootInformationTag multibootInformationTag MULTIBOOT_ATTR = {
                 MULTIBOOT_TAG_TYPE_EFI_64_IH,
 #endif
          MULTIBOOT_TAG_TYPE_END}
+};
+
+struct multibootAddressTag multibootAddress MULTIBOOT_ATTR = {
+        MULTIBOOT_HEADER_TAG_ADDRESS,
+        MULTIBOOT_REQUIRED_FLAG(MULTIBOOT_HEADER_TAG_ADDRESS_FLAGS),
+        MULTIBOOT_HEADER_TAG_ADDRESS_SIZEOF,
+        (uint32_t) MULTIBOOT_HEADER_TAG_ADDRESS_HEADER_ADDRESS,
+        (uint32_t) MULTIBOOT_HEADER_TAG_ADDRESS_LOAD_ADDRESS,
+        (uint32_t) MULTIBOOT_HEADER_TAG_ADDRESS_LOAD_END_ADDRESS,
+        (uint32_t) MULTIBOOT_HEADER_TAG_ADDRESS_BSS_END_ADDRESS
+};
+
+struct multibootEntryAddressTag multibootEntryAddress MULTIBOOT_ATTR = {
+        MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS,
+        MULTIBOOT_REQUIRED_FLAG(MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_FLAGS),
+        MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_SIZEOF,
+        (uint32_t) MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_ENTRY_ADDRESS
 };

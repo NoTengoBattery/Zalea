@@ -44,11 +44,11 @@
 #else
 #define MULTIBOOT_HEADER_ARCHITECTURE 0xffffffff
 #endif
-#define MULIBOOT_HEADER_SIZEOF sizeof(struct multibootHeader)
+#define MULIBOOT_HEADER_SIZEOF sizeof(struct multibootHeaderTag)
 #define MULTIBOOT_HEADER_CHECKSUM (0x100000000 - \
 (MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_ARCHITECTURE + MULIBOOT_HEADER_SIZEOF))
 
-struct multibootHeader {
+struct multibootHeaderTag {
     uint32_t magic;
     uint32_t architecture;
     uint32_t size;
@@ -59,11 +59,11 @@ struct multibootHeader {
 #define MULTIBOOT_OPTIONAL_FLAG(x) SET_UNSIGNED_NBIT(x, 0)
 #define MULTIBOOT_REQUIRED_FLAG(x) CLEAR_UNSIGNED_NBIT(x, 0)
 
-/* The following macros, enums and structs are the information request headers and responses, along with their magic
- * types, and their structure. */
+/* The following macros, enums and structs are the information request tag and responses, along with their magic types,
+ * and their structure. */
 #define MULTIBOOT_TAG_INFORMATION_REQUEST 0x0001
 #define MULTIBOOT_TAG_INFORMATION_REQUEST_FLAGS 0x0000
-#define MULTIBOOT_TAG_INFORMATION_REQUEST_SIZEOF sizeof(struct multibootInformationTag)
+#define MULTIBOOT_TAG_INFORMATION_REQUEST_SIZEOF sizeof(struct multibootInformationRequestTag)
 
 #define MULTIBOOT_TAG_TYPE_END 0x00000000
 #define MULTIBOOT_TAG_TYPE_CMDLINE 0x00000001
@@ -92,11 +92,45 @@ enum {
     RequestNumber = 22
 }; /* Because standard C does not support static flexible array initialization */
 
-struct multibootInformationTag {
+struct multibootInformationRequestTag {
     uint16_t type;
     uint16_t flags;
     uint32_t size;
     uint32_t requests[RequestNumber]; /* We use the (current) maximum amount of requests as the size of the array */
+};
+
+/* These macros and structs are the address tag, which is used to synchronize the physical address */
+extern void *_start;
+extern void *_image_end;
+#define MULTIBOOT_HEADER_TAG_ADDRESS 0x0002
+#define MULTIBOOT_HEADER_TAG_ADDRESS_FLAGS 0x0000
+#define  MULTIBOOT_HEADER_TAG_ADDRESS_SIZEOF sizeof(struct multibootAddressTag)
+#define  MULTIBOOT_HEADER_TAG_ADDRESS_HEADER_ADDRESS &multibootHeader
+#define  MULTIBOOT_HEADER_TAG_ADDRESS_LOAD_ADDRESS &_start
+#define  MULTIBOOT_HEADER_TAG_ADDRESS_LOAD_END_ADDRESS &_image_end
+#define  MULTIBOOT_HEADER_TAG_ADDRESS_BSS_END_ADDRESS &_image_end
+
+struct multibootAddressTag {
+    uint16_t type;
+    uint16_t flags;
+    uint32_t size;
+    uint32_t headerAddress;
+    uint32_t loadAddress;
+    uint32_t loadEndAddress;
+    uint32_t bssEndAddress;
+};
+
+/* These macros and structs are the entry tag, which tells the bootloader the physical address of the entry point */
+#define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS 0x0003
+#define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_FLAGS 0x0000
+#define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_SIZEOF sizeof(struct multibootEntryAddressTag)
+#define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_ENTRY_ADDRESS &_start
+
+struct multibootEntryAddressTag {
+    uint16_t type;
+    uint16_t flags;
+    uint32_t size;
+    uint32_t entryAddress;
 };
 
 #endif //ZALEA_MULTIBOOT2_H
