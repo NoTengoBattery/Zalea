@@ -27,6 +27,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-ffreestanding ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-nostdlib ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-pipe ")
+  STRING(APPEND CMAKE_CXX_FLAGS_INIT "-pedantic ")
   # Those flags define part of the ABI that is common to all architectures
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-fno-asynchronous-unwind-tables ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-fno-delete-null-pointer-checks ")
