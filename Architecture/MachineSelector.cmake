@@ -49,7 +49,7 @@ ELSE ()
     INCLUDE("${TREE_ARCHITECTURE_X_CONFIG_PATH}/${KERNEL_MACHINE}.cfg.cmake")
     SET(_MACHINE_INCLUDED ON CACHE INTERNAL "Switch to avoid overriding user's configuration.")
   ENDIF ()
-  MESSAGE(STATUS "Building the \"${MACHINE_NAME}\" machine...")
+  MESSAGE(STATUS "Building for the \"${MACHINE_NAME}\" machine...")
 ENDIF ()
 
 # Export the current architecture to the default configuration

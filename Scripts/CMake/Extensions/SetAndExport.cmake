@@ -65,7 +65,7 @@ FUNCTION(DATABASE_TO_CMAKE)
       "--template" "${SAE_TEMPLATE_FILE}"
       "--file" "${SAE_OUTPUT_FILE}")
   RUN_PYTHON3_SCRIPT("${SAE_HELPER}" "." "${CMD_ARGS}")
-  MESSAGE(STATUS "The current configuration was stored in "
+  MESSAGE(STATUS "The current configuration is stored in "
           "'${SAE_OUTPUT_FILE}'")
 ENDFUNCTION()
 
@@ -78,8 +78,8 @@ FUNCTION(DATABASE_TO_HEADER)
       "--template" "${SAE_TEMPLATE_HEADER}"
       "--file" "${SAE_OUTPUT_HEADER}")
   RUN_PYTHON3_SCRIPT("${SAE_HELPER}" "." "${CMD_ARGS}")
-  MESSAGE(STATUS "The current configuration was stored in "
-          "'${SAE_OUTPUT_FILE}'")
+  MESSAGE(STATUS "The current 'config.h' header is stored in "
+          "'${SAE_OUTPUT_HEADER}'")
 ENDFUNCTION()
 
 # Sets a variable in the cache and uses a Python3 Script (helper script) to write the variable, type, value and
