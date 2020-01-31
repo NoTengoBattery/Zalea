@@ -1,4 +1,4 @@
-# ===-- CMakeConfigExporter.py - Configuration Exporter for CMake  -----------------------------------*- Python -*-=== #
+# ===-- CMakeConfigExporter.py - Configuration Exporter for CMake ------------------------------------*- Python -*-=== #
 #
 # Copyright (c) 2020 Oever González
 #
@@ -10,6 +10,7 @@
 #  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 #  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 #  specific language governing permissions and limitations under the License.
+#
 # SPDX-License-Identifier: Apache-2.0
 #
 # ===--------------------------------------------------------------------------------------------------------------=== #
@@ -18,7 +19,7 @@
 # / This is a CMake Language Extension. This extension allows the build system to generate an "initial cache" file for
 # / CMake, which will populate all the variables in order to reproduce a build. This way, you can generate "default
 # / configurations" (properly known as "configuration seeds") for your targets, or distribute the file in order to
-# / allow users to generate a binary copy of your kernel from source. Also, useful when building modules.
+# / allow users to generate a binary copy of the project.
 # /
 # ===--------------------------------------------------------------------------------------------------------------=== #
 import argparse

@@ -1,4 +1,4 @@
-#===-- CMakeToolchain.cmake - The root of the toolchain file for CMake cross compilation  --------------*- CMake -*-===#
+#===-- CMakeToolchain.cmake - The Root of the Toolchain File for CMake Cross Compilation ---------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -10,13 +10,14 @@
 #  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 #  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 #  specific language governing permissions and limitations under the License.
+#
 # SPDX-License-Identifier: Apache-2.0
 #
 #===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
-#/ This file is the root of the toolchain architecture for CMake. This file will evaluate and configure the toolchain as
-#/ it's detected.
+#/ This file is the root of the Toolchain for CMake. This file will evaluate and configure the toolchain as it's
+#/ detected.
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
@@ -33,23 +34,18 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   MARK_AS_ADVANCED(KERNEL_LINKER_LLVM_LLD)
 
   # Use GNU Gold as the linker (overrides the default linker)
-  SET(KERNEL_USE_GOLD "OFF" CACHE BOOL "If this variable is on, the GNU gold linker will be used.")
+  SET(KERNEL_USE_GOLD OFF CACHE BOOL "If this variable is on, the GNU gold linker will be used.")
 
   # Set the target for the compiler (this is architecture specific and makes sense to Clang)
   SET(CMAKE_ASM_COMPILER_TARGET "${KERNEL_TARGET}")
   SET(CMAKE_C_COMPILER_TARGET "${KERNEL_TARGET}")
   SET(CMAKE_CXX_COMPILER_TARGET "${KERNEL_TARGET}")
 
-  # Change the binutils to GNU when using the Intel compiler
-  IF ("${KERNEL_COMPILER}" STREQUAL "Intel")
-    SET(KERNEL_BINUTILS "GNU" CACHE INTERNAL "When using ICC, the binutils are forced to be GNU binutils.")
-  ENDIF ()
-
   # Test the available targets to determine which one is available before giving up...
   SET(_KERNEL_TARGET "${KERNEL_TARGET}")
-  FOREACH (_TEST_TARGET ${KERNEL_TARGET} ${KERNEL_ALTERNATIVE_TARGET} ${KERNEL_SECOND_TARGET})
+  FOREACH (_TEST_TARGET "${KERNEL_TARGET}" "${KERNEL_ALTERNATIVE_TARGET}" "${KERNEL_SECOND_TARGET}")
     SET(CMAKE_AS "${_TEST_TARGET}-as")
-    MESSAGE(STATUS "Trying to find tools for the target '${_TEST_TARGET}'...")
+    MESSAGE(STATUS "Trying to find the needed tools for the target '${_TEST_TARGET}'...")
     GUESS_TOOL_BY_NAME(AS BINUTILS)
     IF (CMAKE_AS)
       SET(_KERNEL_TARGET "${_TEST_TARGET}")
@@ -116,12 +112,14 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
 
   IF ("${KERNEL_BINUTILS}" STREQUAL "LLVM")
     SET(CMAKE_LD "ld.lld")
+    SET(CMAKE_NM "llvm-nm")
     SET(CMAKE_OBJCOPY "llvm-objcopy")
     SET(CMAKE_OBJDUMP "llvm-objdump")
     SET(CMAKE_RANLIB "llvm-ranlib")
     SET(CMAKE_LD_NAME "lld")
   ELSEIF ("${KERNEL_BINUTILS}" STREQUAL "GNU")
     SET(CMAKE_LD "${_KERNEL_TARGET}-ld")
+    SET(CMAKE_LD "${_KERNEL_TARGET}-nm")
     SET(CMAKE_OBJCOPY "${_KERNEL_TARGET}-objcopy")
     SET(CMAKE_OBJDUMP "${_KERNEL_TARGET}-objdump")
     SET(CMAKE_RANLIB "${_KERNEL_TARGET}-ranlib")
@@ -133,6 +131,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   ENDIF ()
 
   FORCE_TOOL_BY_NAME(LD BINUTILS)
+  FORCE_TOOL_BY_NAME(NM BINUTILS)
   FORCE_TOOL_BY_NAME(OBJCOPY BINUTILS)
   FORCE_TOOL_BY_NAME(OBJDUMP BINUTILS)
   FORCE_TOOL_BY_NAME(RANLIB BINUTILS)
@@ -142,18 +141,21 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     SET_AND_EXPORT_FORCE(KERNEL_LINKER_GNU ON BOOL ON "-")
     SET_AND_EXPORT_FORCE(KERNEL_LINKER_GNU_GOLD ON BOOL ON "-")
   ELSE ()
-    IF ("${KERNEL_BINUTILS}" STREQUAL "LLVM")
-      SET_AND_EXPORT_FORCE(KERNEL_LINKER_GNU ON BOOL ON "-")
-      SET_AND_EXPORT_FORCE(KERNEL_LINKER_LLVM_LLD ON BOOL ON "-")
-    ELSEIF ("${KERNEL_BINUTILS}" STREQUAL "GNU")
+    IF ("${KERNEL_BINUTILS}" STREQUAL "GNU")
       SET_AND_EXPORT_FORCE(KERNEL_LINKER_GNU ON BOOL ON "-")
       SET_AND_EXPORT_FORCE(KERNEL_LINKER_GNU_BFD ON BOOL ON "-")
+    ELSEIF ("${KERNEL_BINUTILS}" STREQUAL "LLVM")
+      SET_AND_EXPORT_FORCE(KERNEL_LINKER_GNU ON BOOL ON "-")
+      SET_AND_EXPORT_FORCE(KERNEL_LINKER_LLVM_LLD ON BOOL ON "-")
     ENDIF ()
   ENDIF ()
 
-  # When using Clang or GCC, this will tell the compiler where to find it's binutils (mainly the linker)
+  # When using a GNU compatible driver, this will tell the compiler where to find it's binutils (mainly the linker)
+  IF ("${KERNEL_COMPILER}" STREQUAL "Clang"
+          OR "${KERNEL_COMPILER}" STREQUAL "Intel"
+          OR "${KERNEL_COMPILER}" STREQUAL "GNU")
   GET_FILENAME_COMPONENT(CMAKE_BINUTILS_BIN_PATH "${CMAKE_LD}" DIRECTORY)
-  SET(CMAKE_BINUTILS_BIN_PATH "${CMAKE_BINUTILS_BIN_PATH}" CACHE INTERNAL
-      "Absolute path from the C compiler to the binutils.")
+  SET(CMAKE_BINUTILS_BIN_PATH "${CMAKE_BINUTILS_BIN_PATH}" CACHE INTERNAL "Absolute path to the binutils.")
+  ENDIF()
 
 ENDIF ()

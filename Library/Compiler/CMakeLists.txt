@@ -10,6 +10,7 @@
 #  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 #  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 #  specific language governing permissions and limitations under the License.
+#
 # SPDX-License-Identifier: Apache-2.0
 #
 #===----------------------------------------------------------------------------------------------------------------===#
@@ -27,10 +28,7 @@
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
-# The name of the interface library
 SET(THIS_INTERFACE_NAME CompilerMagic)
-
-# Add the interface library to the project and all it's source code files
 ADD_LIBRARY("${THIS_INTERFACE_NAME}" INTERFACE)
 TARGET_INCLUDE_DIRECTORIES("${THIS_INTERFACE_NAME}" INTERFACE "CompilerMagic")
 TARGET_LINK_LIBRARIES("${THIS_INTERFACE_NAME}" INTERFACE "ImportantOutputDirectory")

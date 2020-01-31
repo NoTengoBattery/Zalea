@@ -1,4 +1,4 @@
-#===-- CMakeLists.txt - Root of the CMake project ------------------------------------------------------*- CMake -*-===#
+#===-- CMakeLists.txt - Root of the CMake Project ------------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -10,6 +10,7 @@
 #  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 #  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 #  specific language governing permissions and limitations under the License.
+#
 # SPDX-License-Identifier: Apache-2.0
 #
 #===----------------------------------------------------------------------------------------------------------------===#
@@ -72,7 +73,7 @@ ENDIF ()
 # -> CMAKE_CROSSCOMPILING to ON
 # -> CMAKE_SYSTEM_PROCESSOR is set in a temp cache variable from another CMake file and then set here
 SET(CMAKE_SYSTEM_NAME Kernel)
-SET(CMAKE_SYSTEM_VERSION 0.0.0.1)
+SET(CMAKE_SYSTEM_VERSION 0.0.0.2)
 SET(CMAKE_CROSSCOMPILING ON)
 
 # Identify the "project name" with the name of the root folder of the source code
@@ -117,8 +118,7 @@ SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 ADD_LIBRARY(ImportantOutputDirectory INTERFACE)
 TARGET_INCLUDE_DIRECTORIES(ImportantOutputDirectory INTERFACE "${TREE_BIN_IMPORTANT_INCLUDE_PATH}")
 TARGET_SOURCES(ImportantOutputDirectory INTERFACE "${CONFIGURATION_HEADER}")
-SET(GLOBAL_INTERFACES "CompilerMagic"
-    "ImportantOutputDirectory")
+SET(GLOBAL_INTERFACES "CompilerMagic" "ImportantOutputDirectory")
 
 # Add all subdirectories (the root subdirectories) that will be ever used
 ADD_SUBDIRECTORY("${TREE_ARCHITECTURE_PATH}")

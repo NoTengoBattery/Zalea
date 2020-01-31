@@ -10,6 +10,7 @@
 #  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 #  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 #  specific language governing permissions and limitations under the License.
+#
 # SPDX-License-Identifier: Apache-2.0
 #
 #===----------------------------------------------------------------------------------------------------------------===#
@@ -31,8 +32,8 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   # Those are the base "freestanding" flags
   STRING(APPEND CMAKE_C_FLAGS_INIT "-ffreestanding ")
   STRING(APPEND CMAKE_C_FLAGS_INIT "-nostdlib ")
-  STRING(APPEND CMAKE_C_FLAGS_INIT "-pipe ")
   STRING(APPEND CMAKE_C_FLAGS_INIT "-pedantic ")
+  STRING(APPEND CMAKE_C_FLAGS_INIT "-pipe ")
   # Those flags define part of the ABI that is common to all architectures
   STRING(APPEND CMAKE_C_FLAGS_INIT "-fno-delete-null-pointer-checks ")
   STRING(APPEND CMAKE_C_FLAGS_INIT "-fstack-protector-strong ")

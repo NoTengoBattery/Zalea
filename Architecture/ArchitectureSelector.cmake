@@ -1,4 +1,4 @@
-#===-- ArchitectureSelector.cmake - Architecture Selector  ---------------------------------------------*- CMake -*-===#
+#===-- ArchitectureSelector.cmake - Architecture Selector ----------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -10,17 +10,14 @@
 #  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 #  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 #  specific language governing permissions and limitations under the License.
+#
 # SPDX-License-Identifier: Apache-2.0
 #
 #===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
-#/ This file is used to select an architecture from the available ones. This is important because is the root of the
-#/ whole configuration process. As from the architecture you can select your machine, compiler and only then you can
-#/ configure the kernel features.
-#/
-#/ The other script is Machine Selector. This script selects the machine from the available machines and includes it's
-#/ default config. This "default config" is populated to the cache before selecting the compiler.
+#/ This file is used to select an architecture from the available ones. The architecture files will setup the supported
+#/ tools and the available machines.
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
@@ -31,7 +28,7 @@ IF (NOT AVAILABLE_ARCHITECTURES)
           "No architectures to build! You shouldn't have to read this message ever!")
 ELSE ()
   CLIST_TO_HLIST(AVAILABLE_ARCHITECTURES H_VALID_ARCH)
-  MESSAGE(STATUS "Found the following architectures: ${H_VALID_ARCH}")
+  MESSAGE(STATUS "Found the following architectures: ${H_VALID_ARCH}.")
 ENDIF ()
 
 # Create a new cache variable, append these architectures to their available values and check if valid
@@ -39,7 +36,7 @@ SET_WITH_STRINGS(KERNEL_ARCH "" "Target architecture for building this kernel." 
 CHECK_WITH_STRINGS(KERNEL_ARCH VALID_ARCH)
 IF (NOT VALID_ARCH)
   MESSAGE(FATAL_ERROR "Please set a valid architecture in the KERNEL_ARCH variable. Available architectures: "
-          "${H_VALID_ARCH}")
+          "${H_VALID_ARCH}.")
 ENDIF ()
 
 # Update the source tree variables (because they are needed by the MachineSelector script)
@@ -50,6 +47,6 @@ INCLUDE("${TREE_SELF_PATH}")
 SET_AND_EXPORT_FORCE(KERNEL_ARCH "${KERNEL_ARCH}" STRING "${KERNEL_ARCH}"
                      "This variable is the architecture to build, which is the CPU architecture that the machine runs.")
 
-# This will export a variable to the config.h file which can be used by C/C++ to enable architecture specific code.
+# This will export a variable to the config.h file which can be used by C/C++ to enable architecture specific code
 SET_AND_EXPORT_FORCE("KERNEL_${KERNEL_ARCH}" ON BOOL ON "-")
 MARK_AS_ADVANCED("KERNEL_${KERNEL_ARCH}")

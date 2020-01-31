@@ -12,7 +12,7 @@
       <configuration PROFILE_NAME="Release" CONFIG_NAME="Release" />
       <configuration PROFILE_NAME="RelWithDebInfo" CONFIG_NAME="Release With Debug Information" />
       <configuration PROFILE_NAME="MinSizeRel" CONFIG_NAME="Minimal Size Release" />
-      <configuration PROFILE_NAME="Default" />
+      <configuration PROFILE_NAME="Default" CONFIG_NAME="Default" />
     </configurations>
   </component>
   <component name="ClangdSettings">

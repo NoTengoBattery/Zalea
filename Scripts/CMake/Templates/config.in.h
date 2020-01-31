@@ -1,4 +1,4 @@
-//===-- config.h - A CMake Header file to expose the CMake configuration  ---------------------------------*- C -*-===//
+//===-- config.h - A CMake Header File to Expose the CMake Configuration ----------------------------------*- C -*-===//
 //
 // Automatically generated file. DO NOT MODIFY THIS FILE: ANY MODIFICATION WILL BE REVERTED.
 //

@@ -1,4 +1,4 @@
-#===-- CMakeLists.txt - Rules to build the Main Executable ---------------------------------------------*- CMake -*-===#
+#===-- CMakeLists.txt - Rules to Build the Main Executable ---------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -10,6 +10,7 @@
 #  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 #  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 #  specific language governing permissions and limitations under the License.
+#
 # SPDX-License-Identifier: Apache-2.0
 #
 #===----------------------------------------------------------------------------------------------------------------===#
@@ -20,18 +21,11 @@
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
-# The name of the executable image (just after linking)
 SET(THIS_EXE_NAME LinkedImage)
-
-# Add the executable to the project and all it's source code files
 ADD_EXECUTABLE("${THIS_EXE_NAME}"
                "CPlusPlusMainExecutable.cxx"
-               "LinkerScriptDefinitions.in"
-               "MainExecutableLinkerBase.in"
                "Multiboot2.c"
                "Multiboot2.h")
-
-# Link these "libraries" to the executable. These libraries are the rest of the compiled source code
 TARGET_LINK_LIBRARIES("${THIS_EXE_NAME}"
                       "${GLOBAL_INTERFACES}"
                       "EntryPoint")
@@ -42,10 +36,10 @@ IF (KERNEL_COMPILER_GNU AND KERNEL_LINKER_GNU)
                       PRIVATE "-Wl,-T${TREE_BIN_IMPORTANT_PATH}/${THIS_EXE_NAME}.ld"
                       PRIVATE "-Wl,-Map=${TREE_BIN_IMPORTANT_PATH}/${THIS_EXE_NAME}.map")
 ELSE ()
-  MESSAGE(AUTHOR_WARNING "Could not setup the linker script. The binaries generated this way will probably not work.")
+  MESSAGE(AUTHOR_WARNING "Could not setup the linker script. The generated binaty will not work.")
 ENDIF ()
 
-# Add the custom command which will run the C++ preprocessor to generate a linker script (requires compiler detection)
+# Add the custom command which will run the C preprocessor to generate a linker script (requires compiler detection)
 IF (KERNEL_COMPILER_GNU)
   ADD_CUSTOM_COMMAND(TARGET "${THIS_EXE_NAME}" PRE_LINK VERBATIM
                      COMMAND "${CMAKE_C_COMPILER}"
@@ -63,9 +57,14 @@ ENDIF ()
 IF (KERNEL_BINUTILS_GNU)
   ADD_CUSTOM_COMMAND(TARGET "${THIS_EXE_NAME}" POST_BUILD VERBATIM
                      COMMAND "${CMAKE_OBJDUMP}"
-                     ARGS "-x" "-d" "-s" "-S" "-w" "-t"
+                     ARGS "-S" "-d" "-s" "-t" "-w" "-x"
                      "$<TARGET_FILE:${THIS_EXE_NAME}>" ">" "$<TARGET_FILE:${THIS_EXE_NAME}>.objdump"
-                     COMMENT "Generating the Object Dump for the Main Executable...")
+                     COMMENT "Generating the object dump for ${THIS_EXE_NAME}...")
+  ADD_CUSTOM_COMMAND(TARGET "${THIS_EXE_NAME}" POST_BUILD VERBATIM
+                     COMMAND "${CMAKE_NM}"
+                     ARGS "--special-syms" "-C" "-S" "-f" "sysv" "-n"
+                     "$<TARGET_FILE:${THIS_EXE_NAME}>" ">" "$<TARGET_FILE:${THIS_EXE_NAME}>.nm"
+                     COMMENT "Generating the symbol dump (nm) for ${THIS_EXE_NAME}...")
 ELSE ()
   MESSAGE(AUTHOR_WARNING
           "Could not setup the object dump rule. This means that you are using incompatible binutils.")
@@ -90,7 +89,7 @@ IF (KERNEL_BINUTILS_GNU)
                      "${TREE_BIN_IMPORTANT_PATH}/MainExecutable.elf"
 
                      COMMAND "${CMAKE_OBJDUMP}"
-                     ARGS "-x" "-d" "-s" "-S" "-w" "-t"
+                     ARGS "-S" "-d" "-s" "-t" "-w" "-x"
                      "${TREE_BIN_IMPORTANT_PATH}/MainExecutable.elf"
                      ">" "${TREE_BIN_IMPORTANT_PATH}/MainExecutable.objdump"
 

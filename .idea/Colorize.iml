@@ -8,14 +8,11 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.idea" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
-      <excludeFolder url="file://$MODULE_DIR$/cmake-build-debug" />
-      <excludeFolder url="file://$MODULE_DIR$/cmake-build-default" />
-      <excludeFolder url="file://$MODULE_DIR$/cmake-build-minsizerel" />
-      <excludeFolder url="file://$MODULE_DIR$/cmake-build-release" />
-      <excludeFolder url="file://$MODULE_DIR$/cmake-build-relwithdebinfo" />
-      <excludeFolder url="file://$MODULE_DIR$/Scripts/Python/Environments" />
+      <excludeFolder url="file://$MODULE_DIR$/cmake-build-*" />
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Architecture" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Executables" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Library" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Platform" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Scripts" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Scripts/Python/Tests" isTestSource="true" />

@@ -1,4 +1,4 @@
-#===-- ArchitectureExporter.cmake - Export Variables Defined by the Configurations ---------------------*- CMake -*-===#
+#===-- ArchitectureExporter.cmake - Export Variables Defined by the Configuration Files ----------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -10,6 +10,7 @@
 #  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 #  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 #  specific language governing permissions and limitations under the License.
+#
 # SPDX-License-Identifier: Apache-2.0
 #
 #===----------------------------------------------------------------------------------------------------------------===#

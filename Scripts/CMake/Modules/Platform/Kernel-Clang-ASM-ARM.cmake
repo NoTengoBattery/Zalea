@@ -10,6 +10,7 @@
 #  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 #  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 #  specific language governing permissions and limitations under the License.
+#
 # SPDX-License-Identifier: Apache-2.0
 #
 #===----------------------------------------------------------------------------------------------------------------===#
@@ -36,9 +37,9 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_ASM_FLAGS_INIT "-mtp=soft ")
 
   # These flags are based on which kind of build we are doing
-  STRING(APPEND CMAKE_ASM_FLAGS_DEBUG_INIT "-marm ")
+  STRING(APPEND CMAKE_ASM_FLAGS_DEBUG_INIT " ")
   STRING(APPEND CMAKE_ASM_FLAGS_MINSIZEREL_INIT "-mthumb ")
   STRING(APPEND CMAKE_ASM_FLAGS_RELEASE_INIT "-mthumb ")
-  STRING(APPEND CMAKE_ASM_FLAGS_RELWITHDEBINFO_INIT "-marm ")
+  STRING(APPEND CMAKE_ASM_FLAGS_RELWITHDEBINFO_INIT " ")
 
 ENDIF ()

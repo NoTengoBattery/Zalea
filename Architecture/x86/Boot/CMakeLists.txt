@@ -10,6 +10,7 @@
 #  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 #  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 #  specific language governing permissions and limitations under the License.
+#
 # SPDX-License-Identifier: Apache-2.0
 #
 #===----------------------------------------------------------------------------------------------------------------===#
@@ -18,12 +19,12 @@
 #/ This file will include the entry point for the Main Executable for x86. The Main Executable contains all the code
 #/ that will make the device fully functional.
 #/
+#/ TODO: In the future, we probably will compress the Main Executable image and append a "header" that will uncompress
+#/ TODO: it, and put it in the VMA (by enabling the MMU).
+#/
 #===----------------------------------------------------------------------------------------------------------------===#
 
-# The name of this particular library to be referenced in the rest of this file
 SET(THIS_LIB_NAME "EntryPoint")
-
-# Add the library to the project: this is a static library to be linked in the executable
 ADD_LIBRARY("${THIS_LIB_NAME}" OBJECT
             "EntryPoint.sx")
 TARGET_LINK_LIBRARIES("${THIS_LIB_NAME}" "${GLOBAL_INTERFACES}")

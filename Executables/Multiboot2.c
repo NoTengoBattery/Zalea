@@ -1,4 +1,4 @@
-//===-- Multiboot2.c - The Multiboot Header  --------------------------------------------------------------*- C -*-===//
+//===-- Multiboot2.c - The Multiboot Header ---------------------------------------------------------------*- C -*-===//
 //
 // Copyright (c) 2020 Oever González
 //
@@ -10,13 +10,14 @@
 //  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 //  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 //  specific language governing permissions and limitations under the License.
+//
 //  SPDX-License-Identifier: Apache-2.0
 //
 //===--------------------------------------------------------------------------------------------------------------===//
 ///
 /// \file
 /// This file contains the Multiboot2 header which will be used by all architectures. Even tho it's only useful for x86
-/// when it's being loaded by GRUB. This can also be useful when using the loader.
+/// when it's being loaded by GRUB. This can also be useful when thinking about compressing the Main Executable.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 

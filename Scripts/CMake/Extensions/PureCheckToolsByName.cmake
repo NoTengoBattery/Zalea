@@ -1,4 +1,4 @@
-#===-- PureCheckToolsByName.cmake - Check Tools By Name  -----------------------------------------------*- CMake -*-===#
+#===-- PureCheckToolsByName.cmake - Check Tools by Name ------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -10,6 +10,7 @@
 #  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 #  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 #  specific language governing permissions and limitations under the License.
+#
 # SPDX-License-Identifier: Apache-2.0
 #
 #===----------------------------------------------------------------------------------------------------------------===#
@@ -39,11 +40,10 @@ MACRO(CHECK_TOOL_BY_NAME TOOL DEFAULT)
     MESSAGE(FATAL_ERROR "Please set a valid ${TOOL} in the KERNEL_${TOOL} variable. Available options for ${TOOL}: "
             "${H_AVAILABLE_${TOOL}}")
   ENDIF ()
-
   SET(CMAKE_${TOOL}_PATH "" CACHE FILEPATH "A hint path to use when searching for the ${TOOL}.")
 ENDMACRO()
 
-# This macro will force the guess of a tool executable by searching the user's provided PATH first.
+# This macro will force the search of a tool executable by searching the user's provided PATH first.
 MACRO(FORCE_TOOL_BY_NAME TYPE TOOL)
   FIND_PROGRAM("CMAKE_${TYPE}_EXE" NAMES "${CMAKE_${TYPE}}" HINTS "${CMAKE_${TOOL}_PATH}" PATH_SUFFIXES "bin" ""
                DOC "This is a guess forced by the build system for a tool.")
@@ -62,7 +62,7 @@ MACRO(FORCE_TOOL_BY_NAME TYPE TOOL)
 ENDMACRO()
 
 # This macro will try to guess a tool executable by searching the user's provided PATH first, then letting CMake
-# fallback to a default compiler and failing later (if the compiler does not work).
+# fallback to a default compiler and fail later (if the compiler does not work, most likely anyway).
 MACRO(GUESS_TOOL_BY_NAME TYPE TOOL)
   IF (NOT CMAKE_${TYPE}_EXE)
     UNSET("CMAKE_${TYPE}" CACHE)

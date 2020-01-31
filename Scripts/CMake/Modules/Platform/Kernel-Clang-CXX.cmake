@@ -10,6 +10,7 @@
 #  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 #  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 #  specific language governing permissions and limitations under the License.
+#
 # SPDX-License-Identifier: Apache-2.0
 #
 #===----------------------------------------------------------------------------------------------------------------===#
@@ -31,8 +32,8 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   # Those are the base "freestanding" flags
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-ffreestanding ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-nostdlib ")
-  STRING(APPEND CMAKE_CXX_FLAGS_INIT "-pipe ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-pedantic ")
+  STRING(APPEND CMAKE_CXX_FLAGS_INIT "-pipe ")
   # Those flags define part of the ABI that is common to all architectures
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-fno-delete-null-pointer-checks ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-fstack-protector-strong -fstack-check ")
@@ -46,11 +47,11 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   # Those flags define the linker to be used (this is needed for all cross compilers)
   STRING(APPEND CMAKE_EXE_LINKER_FLAGS_INIT "-fuse-ld=\"${CMAKE_LD}\" ")
   STRING(APPEND CMAKE_EXE_LINKER_FLAGS_INIT "-target ${KERNEL_SECOND_TARGET} ")
-  # For LLVM, we need to add the target because otherwise it will fail the CMake test. CMake will add this anyway.
-  STRING(APPEND CMAKE_CXX_FLAGS_INIT "--target=${KERNEL_TARGET} ")
   # Add the march and mtune flags
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-march=${MACHINE_MARCH} ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-mtune=${MACHINE_MTUNE} ")
+  # For LLVM, we need to add the target because otherwise it will fail the CMake test. CMake will add this anyway.
+  STRING(APPEND CMAKE_CXX_FLAGS_INIT "--target=${KERNEL_TARGET} ")
 
   # These flags are based on which kind of build we are doing
   STRING(APPEND CMAKE_CXX_FLAGS_DEBUG_INIT "-g -DDEBUG ")

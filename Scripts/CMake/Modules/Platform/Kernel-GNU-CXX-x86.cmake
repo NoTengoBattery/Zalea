@@ -10,6 +10,7 @@
 #  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
 #  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 #  specific language governing permissions and limitations under the License.
+#
 # SPDX-License-Identifier: Apache-2.0
 #
 #===----------------------------------------------------------------------------------------------------------------===#
@@ -31,8 +32,8 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   SET(CMAKE_EXE_LINKER_FLAGS_INIT)
 
   # Those are special base flags which will setup the ABI for the compiler
-  STRING(APPEND CMAKE_CXX_FLAGS_INIT "-msoft-float ")
   STRING(APPEND CMAKE_CXX_FLAGS_INIT "-m32 ")
+  STRING(APPEND CMAKE_CXX_FLAGS_INIT "-msoft-float ")
 
   # These flags are based on which kind of build we are doing
   STRING(APPEND CMAKE_CXX_FLAGS_DEBUG_INIT " ")
