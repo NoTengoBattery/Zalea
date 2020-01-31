@@ -101,9 +101,9 @@ struct multibootInformationRequestTag {
 };
 
 /* These macros and structs are the address tag, which is used to synchronize the physical address */
-extern void *imageStart;
-extern void *bssStart;
-extern void *imageEnd;
+extern const void *imageStart;
+extern const void *bssStart;
+extern const void *imageEnd;
 #define MULTIBOOT_HEADER_TAG_ADDRESS 0x0002
 #define MULTIBOOT_HEADER_TAG_ADDRESS_FLAGS 0x0000
 #define  MULTIBOOT_HEADER_TAG_ADDRESS_SIZEOF sizeof(struct multibootAddressTag)
