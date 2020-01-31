@@ -9,11 +9,35 @@
   </component>
   <component name="CMakeSettings" AUTO_RELOAD="true">
     <configurations>
-      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
-      <configuration PROFILE_NAME="Release" CONFIG_NAME="Release" />
-      <configuration PROFILE_NAME="RelWithDebInfo" CONFIG_NAME="Release With Debug Information" />
-      <configuration PROFILE_NAME="MinSizeRel" CONFIG_NAME="Minimal Size Release" />
-      <configuration PROFILE_NAME="Default" />
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug">
+        <ADDITIONAL_GENERATION_ENVIRONMENT>
+          <envs>
+            <env name="PATH" value="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin" />
+          </envs>
+        </ADDITIONAL_GENERATION_ENVIRONMENT>
+      </configuration>
+      <configuration PROFILE_NAME="Release" CONFIG_NAME="Release">
+        <ADDITIONAL_GENERATION_ENVIRONMENT>
+          <envs>
+            <env name="PATH" value="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin" />
+          </envs>
+        </ADDITIONAL_GENERATION_ENVIRONMENT>
+      </configuration>
+      <configuration PROFILE_NAME="RelWithDebInfo" CONFIG_NAME="Release With Debug Information">
+        <ADDITIONAL_GENERATION_ENVIRONMENT>
+          <envs>
+            <env name="PATH" value="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin" />
+          </envs>
+        </ADDITIONAL_GENERATION_ENVIRONMENT>
+      </configuration>
+      <configuration PROFILE_NAME="MinSizeRel" CONFIG_NAME="Minimal Size Release">
+        <ADDITIONAL_GENERATION_ENVIRONMENT>
+          <envs>
+            <env name="PATH" value="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin" />
+          </envs>
+        </ADDITIONAL_GENERATION_ENVIRONMENT>
+      </configuration>
+      <configuration PROFILE_NAME="Default" CONFIG_NAME="Default" />
     </configurations>
   </component>
   <component name="ChangeListManager">
