@@ -46,8 +46,9 @@ IF (KERNEL_COMPILER_GNU)
                      ARGS "-x" "assembler-with-cpp" "-P"
                      "-I" "${TREE_BIN_IMPORTANT_INCLUDE_PATH}"
                      "-I" "${CMAKE_CURRENT_LIST_DIR}"
+                     "-E"
                      "-o" "${TREE_BIN_IMPORTANT_PATH}/${THIS_EXE_NAME}.ld"
-                     "-E" "${TREE_EXECUTABLES_PATH}/${KERNEL_ARCH}/MainExecutable.in.ld")
+                     "${TREE_EXECUTABLES_PATH}/${KERNEL_ARCH}/MainExecutable.in.ld")
 ELSE ()
   MESSAGE(AUTHOR_WARNING
           "Could not preprocess the linker script. This means that you are using an incompatible compiler.")
@@ -59,12 +60,17 @@ IF (KERNEL_BINUTILS_GNU)
                      COMMAND "${CMAKE_OBJDUMP}"
                      ARGS "-S" "-d" "-s" "-t" "-w" "-x"
                      "$<TARGET_FILE:${THIS_EXE_NAME}>" ">" "$<TARGET_FILE:${THIS_EXE_NAME}>.objdump"
-                     COMMENT "Generating the object dump for ${THIS_EXE_NAME}...")
+                     COMMENT "Generating the object dump (objdump) for ${THIS_EXE_NAME}...")
   ADD_CUSTOM_COMMAND(TARGET "${THIS_EXE_NAME}" POST_BUILD VERBATIM
                      COMMAND "${CMAKE_NM}"
                      ARGS "--special-syms" "-C" "-S" "-f" "sysv" "-n"
                      "$<TARGET_FILE:${THIS_EXE_NAME}>" ">" "$<TARGET_FILE:${THIS_EXE_NAME}>.nm"
                      COMMENT "Generating the symbol dump (nm) for ${THIS_EXE_NAME}...")
+  ADD_CUSTOM_COMMAND(TARGET "${THIS_EXE_NAME}" POST_BUILD VERBATIM
+                     COMMAND "${CMAKE_READELF}"
+                     ARGS "-a" "-e" "-g" "-n" "-u"
+                     "$<TARGET_FILE:${THIS_EXE_NAME}>" ">" "$<TARGET_FILE:${THIS_EXE_NAME}>.readelf"
+                     COMMENT "Generating the ELF dump (readelf) for ${THIS_EXE_NAME}...")
 ELSE ()
   MESSAGE(AUTHOR_WARNING
           "Could not setup the object dump rule. This means that you are using incompatible binutils.")
