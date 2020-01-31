@@ -21,7 +21,7 @@
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
-IF (TREE_SELF_PATH) # This will define if we have access to the scope variables and cache
+IF (TREE_SELF_PATH AND NOT TOOLCHAIN_DONE) # This will define if we have access to the scope variables and cache
 
   # Reset these variables... just in case something nasty happen to the cache.
   UNSET(KERNEL_LINKER_GNU CACHE)
@@ -193,4 +193,6 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     SET(CMAKE_BINUTILS_BIN_PATH "${CMAKE_BINUTILS_BIN_PATH}" CACHE INTERNAL "Absolute path to the binutils.")
   ENDIF ()
 
+  SET(TOOLCHAIN_DONE ON)
+  
 ENDIF ()
