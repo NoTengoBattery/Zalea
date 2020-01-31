@@ -11,6 +11,8 @@
 //  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
 //  specific language governing permissions and limitations under the License.
 //
+// @formatter:off
+//
 //  SPDX-License-Identifier: Apache-2.0
 //
 //===--------------------------------------------------------------------------------------------------------------===//
@@ -32,8 +34,7 @@
 #endif
 
 #ifdef KERNEL_x86 // All of the x86 specific macros for the GNU assembler
-.
-intel_syntax noprefix // All x86 code should be in the x86 Intel Syntax without prefix
+.intel_syntax noprefix // All x86 code should be in the x86 Intel Syntax without prefix
 #endif
 
 #else
