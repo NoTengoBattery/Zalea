@@ -9,6 +9,7 @@
       <w>multiboot</w>
       <w>preprocess</w>
       <w>pytest</w>
+      <w>readelf</w>
       <w>spdx</w>
       <w>tinydb</w>
       <w>unwinder</w>
