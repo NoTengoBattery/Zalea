@@ -1,4 +1,4 @@
-﻿#===-- CMakeLists.txt - Root of the Library Subtree ---------------------------------------------------*- CMake -*-===#
+#===-- CMakeLists.txt - Root of the Library Subtree ---------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #

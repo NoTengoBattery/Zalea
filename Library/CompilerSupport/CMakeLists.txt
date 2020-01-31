@@ -1,4 +1,4 @@
-﻿#===-- CMakeLists.txt - Compiler Library ---------------------------------------------------------------*- CMake -*-===#
+#===-- CMakeLists.txt - Compiler Library ---------------------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #

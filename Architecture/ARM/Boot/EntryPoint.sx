@@ -1,4 +1,4 @@
-﻿#===-- EntryPoint.sx - Entry Point for Booting in ARM ----------------------------------------------------*- ASM -*-===#
+#===-- EntryPoint.sx - Entry Point for Booting in ARM ----------------------------------------------------*- ASM -*-===#
 #
 # Copyright (c) 2020 Oever González
 #

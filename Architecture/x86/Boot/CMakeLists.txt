@@ -1,4 +1,4 @@
-﻿#===-- CMakeLists.txt - Root of the x86/Boot Subtree --------------------------------------------------*- CMake -*-===#
+#===-- CMakeLists.txt - Root of the x86/Boot Subtree --------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
