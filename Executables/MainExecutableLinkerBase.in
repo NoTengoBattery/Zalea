@@ -69,7 +69,7 @@ SECTIONS {
     .rodata ALIGN_MINI : ALIGN_MINI {
         *(.rodata);
     } :rodata
-    .note.gnu.build-id ALIGN_MINI : ALIGN_MINI {
+    .note.gnu.build-id ALIGN_MICRO : ALIGN_MICRO {
         *(.note.gnu.build-id);
     }
     .eh_frame_hdr ALIGN_MINI : ALIGN_MINI {

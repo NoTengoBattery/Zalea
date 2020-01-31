@@ -29,7 +29,8 @@
 #include <config.h>
 
 #if defined(KERNEL_ARM) || defined(KERNEL_x86)
-#define MINI_ALIGN 0x10 // 64 bit (8 bytes)
+#define MINI_ALIGN 0x10 // 128 bit (16 bytes)
+#define MICRO_ALIGN 0x08 // 64 bit (8 bytes)
 #else
 #error "Not a valid architecture."
 #endif
@@ -39,6 +40,7 @@
 #define ALIGN_COMMONPAGE ALIGN ( CONSTANT ( COMMONPAGESIZE ) )
 #define ALIGN_MAXPAGE ALIGN ( CONSTANT ( MAXPAGESIZE ) )
 #define ALIGN_MINI ALIGN ( MINI_ALIGN )
+#define ALIGN_MICRO ALIGN ( ALIGN_MICRO )
 #define ASSERT_ADDRESS(x, y) . = x; \
 ASSERT ( x ==  y, \
 "This assertion was raised because the addresses from the current position need a special alignment." )
