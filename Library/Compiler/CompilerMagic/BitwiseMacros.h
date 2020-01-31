@@ -15,18 +15,15 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 ///
 /// \file
-/// This file can be imported inside any other target, and used inside any source file where compiler-specific
-/// directives are needed. This file will attempt to
+/// The macros in this file will help the developers to easily and clearly modify and perform some bitwise operations
+/// inside the C/C++ source code (which sometimes is not trivial to do).
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
 #ifndef ZALEA_BITWISEMACROS_H
 #define ZALEA_BITWISEMACROS_H
 
-#include <CompilerMagic.h>
-#include <config.h>
-
-#define CLEAR_NTH_BIT(x, y) (x & ~(1U << y ## U))
-#define SET_NTH_BIT(x, y) (x | (1U << y ## U))
+#define CLEAR_NTH_BIT(x, y) ((x) & ~(1U << y ## U))
+#define SET_NTH_BIT(x, y) ((x) | (1U << y ## U))
 
 #endif //ZALEA_BITWISEMACROS_H

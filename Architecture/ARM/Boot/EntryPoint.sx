@@ -22,6 +22,7 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 
 #include <config.h>
+#include <AssemblerMagic.h>
 
 .section .start, "ax"
 .type start, #function

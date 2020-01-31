@@ -22,11 +22,12 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 
 #include <config.h>
+#include <AssemblerMagic.h>
 
 .section .start, "ax"
 .global start
 start:
-  XCHGW %bx, %bx # BOCHS magic breakpoint
+  XCHG bx, bx # BOCHS magic breakpoint
   JMP start
 
 # Those are placeholders (needed because LLD will not identify the sections correctly when no data is in the sections)

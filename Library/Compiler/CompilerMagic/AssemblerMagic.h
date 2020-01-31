@@ -1,4 +1,4 @@
-//===-- CompilerMagic.h - Support and Alleviate Differences Between Compilers -----------------------------*- C -*-===//
+//===-- AssemblerMagic.h - Macros to Help Inside Assembler Files ------------------------------------------*- C -*-===//
 //
 // Copyright (c) 2020 Oever González
 //
@@ -15,24 +15,27 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 ///
 /// \file
-/// This file can be imported inside any other target, and used inside any source file where compiler-specific
-/// directives are needed. This file will attempt to mask the differences between the supported compilers.
+/// All of the macros in here should be used inside the ASM files, they define the correct prologues and epilogues for
+/// all assemblers for all architectures.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#ifndef ZALEA_COMPILERMAGIC_H
-#define ZALEA_COMPILERMAGIC_H
+#ifndef ZALEA_ASSEMBLERMAGIC_H
+#define ZALEA_ASSEMBLERMAGIC_H
 
 #include <config.h>
 
-#ifdef KERNEL_COMPILER_GNU
-
-#define ATTR_SECTION(x) __attribute__ ((section (x)))
-#define ATTR_ALIGNED(x) __attribute__ ((aligned (x)))
-#define ATTR_USED __attribute__ ((used))
-
-#else
-#error "What compiler are you using?"
+#ifdef KERNEL_BINUTILS_GNU
+#ifndef __ASSEMBLER__
+#error "You should include this file only inside preprocessed assembler files."
 #endif
 
-#endif //ZALEA_COMPILERMAGIC_H
+#ifdef KERNEL_x86 // All of the x86 specific macros for the GNU assembler
+.intel_syntax noprefix // All x86 code should be in the x86 Intel Syntax without prefix
+#endif
+
+#else
+#error "What assembler are you using?"
+#endif
+
+#endif //ZALEA_ASSEMBLERMAGIC_H
