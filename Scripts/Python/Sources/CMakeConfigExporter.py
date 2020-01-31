@@ -201,7 +201,7 @@ def dump_table(table: str, file, header, default):
                     msg = 'SET_AND_EXPORT_FORCE'
                 else:
                     raise SystemExit(13, 'Invalid table was provided!')
-                file.write('// {}: {} {}\n'
+                file.write('/* {}: {} {} */\n'
                            .format(key, msg, doc['type']))
                 if doc['type'] == 'BOOL':
                     file.write('#cmakedefine\t{}\n'

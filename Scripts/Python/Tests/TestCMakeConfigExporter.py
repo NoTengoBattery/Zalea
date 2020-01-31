@@ -496,13 +496,13 @@ def test_dumped_format_header(db_file, template_header, cmake_header):
 
     with open(cmake_header) as f:
         assert str(f.read()) == '//////\n' \
-                                '// E: SET_AND_EXPORT BOOL\n' \
+                                '/* E: SET_AND_EXPORT BOOL */\n' \
                                 '#cmakedefine\tE\n' \
-                                '// V: SET_AND_EXPORT BOOL\n' \
+                                '/* V: SET_AND_EXPORT BOOL */\n' \
                                 '#cmakedefine\tV\n' \
-                                '// EL: SET_AND_EXPORT_FORCE BOOL\n' \
+                                '/* EL: SET_AND_EXPORT_FORCE BOOL */\n' \
                                 '#cmakedefine\tEL\n' \
-                                '// VA: SET_AND_EXPORT_FORCE BOOL\n' \
+                                '/* VA: SET_AND_EXPORT_FORCE BOOL */\n' \
                                 '#cmakedefine\tVA\n'
 
 
