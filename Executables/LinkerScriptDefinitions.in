@@ -40,7 +40,7 @@
 #define ALIGN_COMMONPAGE ALIGN ( CONSTANT ( COMMONPAGESIZE ) )
 #define ALIGN_MAXPAGE ALIGN ( CONSTANT ( MAXPAGESIZE ) )
 #define ALIGN_MINI ALIGN ( MINI_ALIGN )
-#define ALIGN_MICRO ALIGN ( ALIGN_MICRO )
+#define ALIGN_MICRO ALIGN ( MICRO_ALIGN )
 #define ASSERT_ADDRESS(x, y) . = x; \
 ASSERT ( x ==  y, \
 "This assertion was raised because the addresses from the current position need a special alignment." )
