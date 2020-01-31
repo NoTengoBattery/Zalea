@@ -114,6 +114,33 @@ SET(CMAKE_CXX_EXTENSIONS OFF)
 SET(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Enable clang-tidy if found by the toolchain file. Try to keep them in sync with CLion.
+IF (CMAKE_CLANG_TIDY
+    AND KERNEL_COMPILER_CLANG) # clang-tidy will use the default target, and generate false diagnostic errors, unless
+  # the compiler has a -target or --target= flag, which only makes sense to Clang. This way, clang-tidy is only useful
+  # to Clang
+  SET(TIDY_CHECKS -checks=*,-llvm-header-guard,-hicpp-signed-bitwise)
+  SET(CMAKE_ASM_CLANG_TIDY "${CMAKE_CLANG_TIDY}" "${TIDY_CHECKS}")
+  SET(CMAKE_C_CLANG_TIDY "${CMAKE_CLANG_TIDY}" "${TIDY_CHECKS}")
+  SET(CMAKE_CXX_CLANG_TIDY "${CMAKE_CLANG_TIDY}" "${TIDY_CHECKS}")
+ENDIF ()
+
+# Enable cpplint if found the toolchain file.
+IF (CMAKE_CPPLINT)
+  SET(CPPLINT_CHECKS --linelength=120)
+  SET(CMAKE_ASM_CPPLINT "${CMAKE_CPPLINT}" "${CPPLINT_CHECKS}")
+  SET(CMAKE_C_CPPLINT "${CMAKE_CPPLINT}" "${CPPLINT_CHECKS}")
+  SET(CMAKE_CXX_CPPLINT "${CMAKE_CPPLINT}" "${CPPLINT_CHECKS}")
+ENDIF ()
+
+# Enable cppcheck if found the toolchain file.
+IF (CMAKE_CPPCHECK)
+  SET(CPPCHECK_CHECKS --enable=all)
+  SET(CMAKE_ASM_CPPCHECK "${CMAKE_CPPCHECK}" "${CPPCHECK_CHECKS}")
+  SET(CMAKE_C_CPPCHECK "${CMAKE_CPPCHECK}" "${CPPCHECK_CHECKS}")
+  SET(CMAKE_CXX_CPPCHECK "${CMAKE_CPPCHECK}" "${CPPCHECK_CHECKS}")
+ENDIF ()
+
 # Add an interface library for config.h (and friends)
 ADD_LIBRARY(ImportantOutputDirectory INTERFACE)
 TARGET_INCLUDE_DIRECTORIES(ImportantOutputDirectory INTERFACE "${TREE_BIN_IMPORTANT_INCLUDE_PATH}")

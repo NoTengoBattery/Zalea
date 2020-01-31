@@ -45,13 +45,13 @@ ENDMACRO()
 
 # This macro will force the search of a tool executable by searching the user's provided PATH first.
 MACRO(FORCE_TOOL_BY_NAME TYPE TOOL)
-  FIND_PROGRAM("CMAKE_${TYPE}_EXE" NAMES "${CMAKE_${TYPE}}" HINTS "${CMAKE_${TOOL}_PATH}" PATH_SUFFIXES "bin" ""
-               DOC "This is a guess forced by the build system for a tool.")
-  SET("CMAKE_${TYPE}" "${CMAKE_${TYPE}_EXE}")
-  SET("CMAKE_${TYPE}" "${CMAKE_${TYPE}_EXE}" CACHE FILEPATH "A path to a tool used by CMake.")
-  MARK_AS_ADVANCED("CMAKE_${TYPE}")
+  FIND_PROGRAM("CMAKE_${TYPE}_EXE" NAMES "${CMAKE_${TYPE}}" HINTS "${CMAKE_${TOOL}_PATH}" PATH_SUFFIXES "bin"
+               DOC "This is a guess forced by the build system for a tool. Please ignore this variable.")
   MARK_AS_ADVANCED("CMAKE_${TYPE}_EXE")
-  IF (NOT CMAKE_${TYPE})
+  SET("CMAKE_${TYPE}" "${CMAKE_${TYPE}_EXE}")
+  SET("CMAKE_${TYPE}" "${CMAKE_${TYPE}_EXE}" CACHE FILEPATH "A path to a tool used by the CMake build system." FORCE)
+  MARK_AS_ADVANCED("CMAKE_${TYPE}")
+  IF (NOT EXISTS "${CMAKE_${TYPE}}")
     UNSET("CMAKE_${TYPE}" CACHE)
     UNSET("CMAKE_${TYPE}_EXE" CACHE)
     MESSAGE(FATAL_ERROR
@@ -64,14 +64,26 @@ ENDMACRO()
 # This macro will try to guess a tool executable by searching the user's provided PATH first, then letting CMake
 # fallback to a default compiler and fail later (if the compiler does not work, most likely anyway).
 MACRO(GUESS_TOOL_BY_NAME TYPE TOOL)
-  IF (NOT CMAKE_${TYPE}_EXE)
-    UNSET("CMAKE_${TYPE}" CACHE)
+  IF (NOT EXISTS "${CMAKE_${TYPE}}")
+    IF (NOT CMAKE_${TYPE}_O)
+      SET("CMAKE_${TYPE}_O" "${CMAKE_${TYPE}}")
+    ENDIF ()
     UNSET("CMAKE_${TYPE}_EXE" CACHE)
-    FIND_PROGRAM("CMAKE_${TYPE}_EXE" NAMES "${CMAKE_${TYPE}}" HINTS "${CMAKE_${TOOL}_PATH}" PATH_SUFFIXES "bin" ""
-                 DOC "This is a guess made by the build system for a tool.")
+    FIND_PROGRAM("CMAKE_${TYPE}_EXE" NAMES "${CMAKE_${TYPE}_O}" HINTS "${CMAKE_${TOOL}_PATH}" PATH_SUFFIXES "bin"
+                 DOC "This is a guess made by the build system for a tool. Please ignore this variable.")
+    MARK_AS_ADVANCED("CMAKE_${TYPE}_EXE")
+    IF (EXISTS "${CMAKE_${TYPE}_EXE}")
+      UNSET("CMAKE_${TYPE}")
+      UNSET("CMAKE_${TYPE}" CACHE)
+      SET("CMAKE_${TYPE}" "${CMAKE_${TYPE}_EXE}")
+      SET("CMAKE_${TYPE}"
+          "${CMAKE_${TYPE}_EXE}" CACHE FILEPATH "A path to a tool used by the CMake build system.")
+      MARK_AS_ADVANCED("CMAKE_${TYPE}")
+    ELSE ()
+      MESSAGE(STATUS "Note: The CMAKE_${TYPE} ('${CMAKE_${TYPE}_O}') tool was not found in the system PATH or in the "
+              "provided CMAKE_${TOOL}_PATH")
+      UNSET("CMAKE_${TYPE}")
+      UNSET("CMAKE_${TYPE}" CACHE)
+    ENDIF ()
   ENDIF ()
-  SET("CMAKE_${TYPE}" "${CMAKE_${TYPE}_EXE}")
-  SET("CMAKE_${TYPE}" "${CMAKE_${TYPE}_EXE}" CACHE FILEPATH "A path to a tool used by CMake.")
-  MARK_AS_ADVANCED("CMAKE_${TYPE}")
-  MARK_AS_ADVANCED("CMAKE_${TYPE}_EXE")
 ENDMACRO()

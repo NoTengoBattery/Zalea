@@ -36,6 +36,11 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   # Use GNU Gold as the linker (overrides the default linker)
   SET(KERNEL_USE_GOLD OFF CACHE BOOL "If this variable is on, the GNU gold linker will be used.")
 
+  # Show these 3 variables in the cache
+  SET(CMAKE_BINUTILS_PATH "" CACHE FILEPATH "A path where CMake can find the binutils tools.")
+  SET(CMAKE_COMPILER_PATH "" CACHE FILEPATH "A path where CMake can find the compiler tools.")
+  SET(CMAKE_EXTRA_TOOLS_PATH "" CACHE FILEPATH "A path where CMake can find it's extra tools.")
+
   # Set the target for the compiler (this is architecture specific and makes sense to Clang)
   SET(CMAKE_ASM_COMPILER_TARGET "${KERNEL_TARGET}")
   SET(CMAKE_C_COMPILER_TARGET "${KERNEL_TARGET}")
@@ -116,6 +121,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     SET(CMAKE_OBJCOPY "llvm-objcopy")
     SET(CMAKE_OBJDUMP "llvm-objdump")
     SET(CMAKE_RANLIB "llvm-ranlib")
+    SET(CMAKE_READELF "llvm-readelf")
     SET(CMAKE_LD_NAME "lld")
   ELSEIF ("${KERNEL_BINUTILS}" STREQUAL "GNU")
     SET(CMAKE_LD "${_KERNEL_TARGET}-ld")
@@ -123,6 +129,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     SET(CMAKE_OBJCOPY "${_KERNEL_TARGET}-objcopy")
     SET(CMAKE_OBJDUMP "${_KERNEL_TARGET}-objdump")
     SET(CMAKE_RANLIB "${_KERNEL_TARGET}-ranlib")
+    SET(CMAKE_READELF "${_KERNEL_TARGET}-readelf")
     SET(CMAKE_LD_NAME "bfd")
   ENDIF ()
   IF (KERNEL_USE_GOLD)
@@ -135,6 +142,33 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   FORCE_TOOL_BY_NAME(OBJCOPY BINUTILS)
   FORCE_TOOL_BY_NAME(OBJDUMP BINUTILS)
   FORCE_TOOL_BY_NAME(RANLIB BINUTILS)
+  FORCE_TOOL_BY_NAME(READELF BINUTILS)
+
+  # CMake supports CCache, therefore we can detect it and use it :)
+  SET(CMAKE_CCACHE "ccache")
+  GUESS_TOOL_BY_NAME(CCACHE BINUTILS)
+  GUESS_TOOL_BY_NAME(CCACHE COMPILER)
+  IF (CMAKE_CCACHE)
+    SET_PROPERTY(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "\"${CMAKE_CCACHE}\"")
+  ENDIF ()
+
+  # Try to find clang-tidy, if available, set the property in the main CMakeLists.txt
+  SET(CMAKE_CLANG_TIDY "clang-tidy")
+  GUESS_TOOL_BY_NAME(CLANG_TIDY BINUTILS)
+  GUESS_TOOL_BY_NAME(CLANG_TIDY COMPILER)
+  GUESS_TOOL_BY_NAME(CLANG_TIDY EXTRA_TOOLS)
+
+  # Try to find cpplint, if available, set the property in the main CMakeLists.txt
+  SET(CMAKE_CPPLINT "cpplint")
+  GUESS_TOOL_BY_NAME(CPPLINT BINUTILS)
+  GUESS_TOOL_BY_NAME(CPPLINT COMPILER)
+  GUESS_TOOL_BY_NAME(CPPLINT EXTRA_TOOLS)
+
+  # Try to find cppcheck, if available, set the property in the main CMakeLists.txt
+  SET(CMAKE_CPPCHECK "cppcheck")
+  GUESS_TOOL_BY_NAME(CPPCHECK BINUTILS)
+  GUESS_TOOL_BY_NAME(CPPCHECK COMPILER)
+  GUESS_TOOL_BY_NAME(CPPCHECK EXTRA_TOOLS)
 
   # Export which linker is being used to the database, so we can use it in the preprocessed linker scripts
   IF (KERNEL_USE_GOLD)
