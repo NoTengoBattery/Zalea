@@ -48,7 +48,7 @@ ENDIF ()
 # Add the custom command which will run the C++ preprocessor to generate a linker script (requires compiler detection)
 IF (KERNEL_COMPILER_GNU)
   ADD_CUSTOM_COMMAND(TARGET "${THIS_EXE_NAME}" PRE_LINK VERBATIM
-                     COMMAND "${CMAKE_CXX_COMPILER}"
+                     COMMAND "${CMAKE_C_COMPILER}"
                      ARGS "-x" "assembler-with-cpp" "-P"
                      "-I" "${TREE_BIN_IMPORTANT_INCLUDE_PATH}"
                      "-I" "${CMAKE_CURRENT_LIST_DIR}"
