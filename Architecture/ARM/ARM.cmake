@@ -30,6 +30,9 @@ CHECK_TOOL_BY_NAME(COMPILER "GNU")
 SET(AVAILABLE_BINUTILS "GNU" "LLVM")
 CHECK_TOOL_BY_NAME(BINUTILS "GNU")
 
+# Change the CMake output format to ELF
+SET(CMAKE_EXECUTABLE_FORMAT "ELF" CACHE INTERNAL "Executable file format")
+
 # This is the default target for the compiler and binutils
 SET_AND_EXPORT(KERNEL_TARGET "arm-none-eabi" STRING "arm-none-eabi"
                "This variable is the machine target for the compiler and binutils to generate code and executables.")
