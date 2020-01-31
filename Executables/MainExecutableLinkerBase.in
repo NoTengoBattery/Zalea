@@ -37,13 +37,12 @@ PHDRS {
     code PT_LOAD FLAGS (PF_RX) ;
     data PT_LOAD FLAGS (PF_RW) ;
     rodata PT_LOAD FLAGS (PF_R) ;
-    stack PT_STACK FLAGS (PF_RW) ;
 }
 
 SECTIONS {
     SEGMENTSTART("start-segment")
     .start ALIGN_COMMONPAGE : AT ( MACHINE_LOAD_ADDRESS ) {
-        imageStart = .;
+        PROVIDE ( imageStart = . );
         *(.start);
     } :start
     ALIGNED_CPS_SEGMENTSTART("multiboot-segment")
@@ -84,27 +83,33 @@ SECTIONS {
     // The stack and bss section, those sections are at the very end of the executable and extends to the image end
     ALIGNED_CPS_SEGMENTSTART("bss-segment")
     .bss ALIGN_MINI (NOLOAD) : ALIGN_MINI {
-        bssStart = .;
+        PROVIDE ( bssStart = . );
         *(.bss);
         *(COMMON);
-        // Adjust bss to the next page, so we have that RW page between 2 RO pages (just like .data)
-        . = ALIGN_COMMONPAGE;
-        bssEnd = .;
-        // Leave 1 pages between bss and stack (it's a RO page which will rise exception upon stack overflow)
-        . += MINI_ALIGN; . = ALIGN_COMMONPAGE;
+        PROVIDE ( bssEnd = . );
+     }
+     // Adjust bss to the next page, so we have that RW page between 2 RO pages (just like .data)
+     . = ALIGN_COMMONPAGE;
+     // Leave 1 pages between bss and stack (it's a RO page which will rise exception upon stack overflow)
+     . += MINI_ALIGN; . = ALIGN_COMMONPAGE;
+     .stack ALIGN_MINI (NOLOAD) : ALIGN_MINI {
 #ifndef MACHINE_STACK_DOWNWARDS
-        stackStart = .; stackLowermost = .;
+        PROVIDE ( stackStart = . );
+        PROVIDE ( stackLowermost = . );
 #else
-        stackEnd = .; stackLowermost = .;
+        PROVIDE ( stackEnd = . );
+        PROVIDE ( stackLowermost = . );
 #endif
         *(.stack);
         . = stackLowermost + MACHINE_STACK_SIZE;
 #ifdef MACHINE_STACK_DOWNWARDS
-        stackStart = .; imageEnd = .;
+        PROVIDE ( stackStart = . );
+        PROVIDE ( imageEnd = . );
 #else
-        stackEnd = .; imageEnd = .;
+        PROVIDE ( stackEnd = . );
+        PROVIDE ( imageEnd = . );
 #endif
-    } :stack
+    }
 
 
     // Sections emitted by the compiler (they are stripped in the final binary)
