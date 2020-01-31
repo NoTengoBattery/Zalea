@@ -3,22 +3,22 @@
   <component name="ExportableFileTemplateSettings">
     <default_templates>
       <template name="Project Assembly Source File.sx" reformat="true" live-template-enabled="true" />
+      <template name="Project C Header File.h" reformat="true" live-template-enabled="true" />
+      <template name="Project C Source File.c" reformat="true" live-template-enabled="true" />
+      <template name="Project C++ Class.cc" reformat="true" live-template-enabled="true" />
+      <template name="Project C++ Class Header.h" reformat="true" live-template-enabled="true" />
       <template name="Project CMake File.cmake" reformat="true" live-template-enabled="true" />
-      <template name="Project C Header File.h" reformat="true" live-template-enabled="true" enabled="true" />
-      <template name="Project C Source File.c" reformat="true" live-template-enabled="true" enabled="true" />
-      <template name="Project C++ Class Header.h" reformat="true" live-template-enabled="true" enabled="true" />
-      <template name="Project C++ Class.cc" reformat="true" live-template-enabled="true" enabled="true" />
-      <template name="Project CMakeLists.txt.cmake" reformat="true" live-template-enabled="true" enabled="true" />
-      <template name="Project Python Script.py" reformat="true" live-template-enabled="true" enabled="true" />
-      <template name="Project Python Unit Test.py" reformat="true" live-template-enabled="true" enabled="true" />
-      <template name="Project Python Setup Script.py" reformat="true" live-template-enabled="true" enabled="true" />
+      <template name="Project CMakeLists.txt.cmake" reformat="true" live-template-enabled="true" />
+      <template name="Project Python Script.py" reformat="true" live-template-enabled="true" />
+      <template name="Project Python Setup Script.py" reformat="true" live-template-enabled="true" />
+      <template name="Project Python Unit Test.py" reformat="true" live-template-enabled="true" />
     </default_templates>
     <includes_templates>
-      <template name="Notice For Assembly.sx" reformat="true" live-template-enabled="true" />
-      <template name="Notice For C.h" reformat="true" live-template-enabled="true" />
-      <template name="Notice For C++.hxx" reformat="true" live-template-enabled="true" />
-      <template name="Notice For CMake.cmake" reformat="true" live-template-enabled="true" />
-      <template name="Notice For Python.py" reformat="true" live-template-enabled="true" />
+      <template name="Notice For Assembly.sx" reformat="true" live-template-enabled="true" enabled="true" />
+      <template name="Notice For C.h" reformat="true" live-template-enabled="true" enabled="true" />
+      <template name="Notice For C++.hxx" reformat="true" live-template-enabled="true" enabled="true" />
+      <template name="Notice For CMake.cmake" reformat="true" live-template-enabled="true" enabled="true" />
+      <template name="Notice For Python.py" reformat="true" live-template-enabled="true" enabled="true" />
     </includes_templates>
   </component>
 </project>

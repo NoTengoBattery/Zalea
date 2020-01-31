@@ -5,6 +5,7 @@
     <option name="CUSTOM_SCOPE_NAME" value="Project Files" />
   </component>
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated />
   </component>
   <component name="CMakeSettings" AUTO_RELOAD="true">
     <configurations>
@@ -12,14 +13,22 @@
       <configuration PROFILE_NAME="Release" CONFIG_NAME="Release" />
       <configuration PROFILE_NAME="RelWithDebInfo" CONFIG_NAME="Release With Debug Information" />
       <configuration PROFILE_NAME="MinSizeRel" CONFIG_NAME="Minimal Size Release" />
-      <configuration PROFILE_NAME="Default" CONFIG_NAME="Default" />
+      <configuration PROFILE_NAME="Default" />
     </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="71605df8-410f-44f1-8e46-a5813ccdbfca" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/file.template.settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/file.template.settings.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
     <option name="clangWarnings" value="-pedantic,-Wall,-Werror,-Wextra,-Wformat=2,-Wpedantic,-Wundef" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="FileColors">
     <fileColor scope="Test Files" color="Rose" />
     <fileColor scope="Problems" color="Orange" />
@@ -45,7 +54,6 @@
     <scope name="Documentation Files" pattern="(file[Colorize]:*.md||file[Colorize]:*.rst||file[Colorize]:*.tex)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
     <scope name="GNU LD Scripts" pattern="file[Colorize]:*.ld&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
     <scope name="Python Scripts" pattern="(file[Colorize]:*.py||file[Colorize]:Scripts/Python/Sources//*||file[Colorize]:Scripts/Python/Tests//*)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
-
     <scope name="Configuration Files" pattern="(file[Colorize]:*.cfg.*||file[Colorize]:*.cfg)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
     <scope name="Ignored Files" pattern="(file[Colorize]:*.ignore.*||file[Colorize]:*.ignore)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
     <scope name="Temp Files" pattern="(file[Colorize]:*.tmp.*||file[Colorize]:*.tmp)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
@@ -66,12 +74,28 @@
   <component name="PyDebuggerOptionsProvider">
     <option name="doSaveCallSignatures" value="true" />
   </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="71605df8-410f-44f1-8e46-a5813ccdbfca" name="Default Changelist" comment="" />
+      <created>1580456695266</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1580456695266</updated>
+    </task>
+    <servers />
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="348" y="224" key="#com.intellij.ide.fileTemplates.ui.ConfigureTemplatesDialog" timestamp="1580456763330">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="348" y="224" key="#com.intellij.ide.fileTemplates.ui.ConfigureTemplatesDialog/0.0.1440.900@0.0.1440.900" timestamp="1580456763330" />
   </component>
   <component name="projectDetails">
     <states>
@@ -91,7 +115,6 @@
             <scope name="Documentation Files" />
             <scope name="GNU LD Scripts" />
             <scope name="Python Scripts" />
-
             <scope name="Configuration Files" />
             <scope name="Ignored Files" />
             <scope name="Temp Files" />
