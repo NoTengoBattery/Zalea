@@ -33,23 +33,27 @@ start:
 # Those are placeholders (needed because LLD will not identify the sections correctly when no data is in the sections)
 # but they are only needed when no data is in the section. Most likely to not happen ever but anyway...
 
-.section .text, "ax"
-.type start, #function
-.globl textPlaceholder
+.section .text, "ax", %progbits
+.global textPlaceholder
 textPlaceholder:
   BL textPlaceholder
 
-.section .data, "aw"
-.globl dataPlaceholder
+.section .data, "aw", %progbits
+.global dataPlaceholder
 dataPlaceholder:
   .asciz "dataPlaceholder"
 
-.section .rodata, "a"
-.globl rodataPlaceholder
+.section .rodata, "a", %progbits
+.global rodataPlaceholder
 rodataPlaceholder:
   .asciz "rodataPlaceholder"
 
-.section .bss, "aw"
-.globl bssPlaceholder
+.section .bss, "aw", %nobits
+.global bssPlaceholder
 bssPlaceholder:
+  .byte 0x00
+
+.section .stack, "aw", %nobits
+.global stackPlaceholder
+stackPlaceholder:
   .byte 0x00

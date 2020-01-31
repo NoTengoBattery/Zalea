@@ -48,7 +48,12 @@ dataPlaceholder:
 rodataPlaceholder:
   .asciz "rodataPlaceholder"
 
-.section .bss, "aw", @progbits
+.section .bss, "aw", @nobits
 .global bssPlaceholder
 bssPlaceholder:
+  .byte 0x00
+
+.section .stack, "aw", @nobits
+.global stackPlaceholder
+stackPlaceholder:
   .byte 0x00
