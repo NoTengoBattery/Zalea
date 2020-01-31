@@ -48,3 +48,8 @@ dataPlaceholder:
 .globl rodataPlaceholder
 rodataPlaceholder:
   .asciz "rodataPlaceholder"
+
+.section .bss, "aw"
+.globl bssPlaceholder
+bssPlaceholder:
+  .byte 0x00

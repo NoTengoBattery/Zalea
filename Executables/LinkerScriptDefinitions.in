@@ -51,6 +51,8 @@ ASSERT ( x ==  y, \
 #define PF_X 0x1
 #define PF_W 0x2
 #define PF_R 0x4
+#define PF_RX 0x5
+#define PF_RW 0x6
 #else
 #error "Not a valid linker."
 #endif

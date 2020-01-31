@@ -32,13 +32,12 @@
 #ifdef KERNEL_LINKER_GNU
 
 PHDRS {
-    start PT_LOAD FLAGS (PF_X | PF_R) ;
+    start PT_LOAD FLAGS (PF_RX) ;
     multiboot PT_LOAD FLAGS (PF_R) ;
-    code PT_LOAD FLAGS (PF_X | PF_R) ;
-    data PT_LOAD FLAGS (PF_W | PF_R) ;
+    code PT_LOAD FLAGS (PF_RX) ;
+    data PT_LOAD FLAGS (PF_RW) ;
     rodata PT_LOAD FLAGS (PF_R) ;
-    bss PT_LOAD FLAGS (PF_W | PF_R) ;
-    stack PT_STACK FLAGS (PF_W | PF_R) ;
+    stack PT_STACK FLAGS (PF_RW) ;
 }
 
 SECTIONS {
@@ -88,13 +87,11 @@ SECTIONS {
         bssStart = .;
         *(.bss);
         *(COMMON);
+        // Adjust bss to the next page, so we have that RW page between 2 RO pages (just like .data)
+        . = ALIGN_COMMONPAGE;
         bssEnd = .;
-    } :bss
-    . += MINI_ALIGN; . = ALIGN_COMMONPAGE;
-    // Leave 2 pages between bss and stack (it's a RO page which will rise exception upon stack overflow)
-    . += MINI_ALIGN; . = ALIGN_COMMONPAGE;
-    . += MINI_ALIGN; . = ALIGN_COMMONPAGE;
-    .stack ALIGN_MINI (NOLOAD) : ALIGN_MINI {
+        // Leave 1 pages between bss and stack (it's a RO page which will rise exception upon stack overflow)
+        . += MINI_ALIGN; . = ALIGN_COMMONPAGE;
 #ifndef MACHINE_STACK_DOWNWARDS
         stackStart = .; stackLowermost = .;
 #else
@@ -107,7 +104,7 @@ SECTIONS {
 #else
         stackEnd = .; imageEnd = .;
 #endif
-    } :bss :stack
+    } :stack
 
 
     // Sections emitted by the compiler (they are stripped in the final binary)
