@@ -119,7 +119,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     SET(CMAKE_LD_NAME "lld")
   ELSEIF ("${KERNEL_BINUTILS}" STREQUAL "GNU")
     SET(CMAKE_LD "${_KERNEL_TARGET}-ld")
-    SET(CMAKE_LD "${_KERNEL_TARGET}-nm")
+    SET(CMAKE_NM "${_KERNEL_TARGET}-nm")
     SET(CMAKE_OBJCOPY "${_KERNEL_TARGET}-objcopy")
     SET(CMAKE_OBJDUMP "${_KERNEL_TARGET}-objdump")
     SET(CMAKE_RANLIB "${_KERNEL_TARGET}-ranlib")
