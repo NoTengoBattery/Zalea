@@ -43,7 +43,7 @@ ENDIF ()
 IF (KERNEL_COMPILER_GNU)
   ADD_CUSTOM_COMMAND(TARGET "${THIS_EXE_NAME}" PRE_LINK VERBATIM
                      COMMAND "${CMAKE_C_COMPILER}"
-                     ARGS "-E" "-CC" "-D__LD__" "-P" "-Wall" "-Werror" "-x" "c"
+                     ARGS "-E" "-C" "-CC" "-D__LD__" "-P" "-Wall" "-Werror" "-x" "c"
                      "-I" "${TREE_BIN_IMPORTANT_INCLUDE_PATH}"
                      "-I" "${CMAKE_CURRENT_LIST_DIR}"
                      "-o" "${TREE_BIN_IMPORTANT_PATH}/${THIS_EXE_NAME}.ld"
