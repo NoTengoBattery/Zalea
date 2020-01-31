@@ -32,7 +32,8 @@
 #endif
 
 #ifdef KERNEL_x86 // All of the x86 specific macros for the GNU assembler
-.intel_syntax noprefix // All x86 code should be in the x86 Intel Syntax without prefix
+.
+intel_syntax noprefix // All x86 code should be in the x86 Intel Syntax without prefix
 #endif
 
 #else

@@ -31,4 +31,4 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 
 # Add all subdirectories that will be ever used, one by one
-ADD_SUBDIRECTORY("${TREE_LIBRARY_COMPILER_PATH}")
+ADD_SUBDIRECTORY("${TREE_LIBRARY_COMPILERSUPPORT_PATH}")

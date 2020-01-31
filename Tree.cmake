@@ -64,7 +64,7 @@ SET(TREE_LIBRARY_PATH "${TREE_SRC_ROOT_PATH}/Library")                          
 IF (NOT TREE_SELF_PATH)
   MESSAGE(STATUS "Library root path: '${TREE_LIBRARY_PATH}'")
 ENDIF ()
-SET(TREE_LIBRARY_COMPILER_PATH "${TREE_LIBRARY_PATH}/Compiler")
+SET(TREE_LIBRARY_COMPILERSUPPORT_PATH "${TREE_LIBRARY_PATH}/CompilerSupport")
 SET(TREE_SCRIPTS_PATH "${TREE_SRC_ROOT_PATH}/Scripts")                                                       # <- Parent
 IF (NOT TREE_SELF_PATH)
   MESSAGE(STATUS "Scripts root path: '${TREE_SCRIPTS_PATH}'")

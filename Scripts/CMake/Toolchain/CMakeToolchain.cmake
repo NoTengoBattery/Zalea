@@ -152,10 +152,10 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
 
   # When using a GNU compatible driver, this will tell the compiler where to find it's binutils (mainly the linker)
   IF ("${KERNEL_COMPILER}" STREQUAL "Clang"
-          OR "${KERNEL_COMPILER}" STREQUAL "Intel"
-          OR "${KERNEL_COMPILER}" STREQUAL "GNU")
-  GET_FILENAME_COMPONENT(CMAKE_BINUTILS_BIN_PATH "${CMAKE_LD}" DIRECTORY)
-  SET(CMAKE_BINUTILS_BIN_PATH "${CMAKE_BINUTILS_BIN_PATH}" CACHE INTERNAL "Absolute path to the binutils.")
-  ENDIF()
+      OR "${KERNEL_COMPILER}" STREQUAL "Intel"
+      OR "${KERNEL_COMPILER}" STREQUAL "GNU")
+    GET_FILENAME_COMPONENT(CMAKE_BINUTILS_BIN_PATH "${CMAKE_LD}" DIRECTORY)
+    SET(CMAKE_BINUTILS_BIN_PATH "${CMAKE_BINUTILS_BIN_PATH}" CACHE INTERNAL "Absolute path to the binutils.")
+  ENDIF ()
 
 ENDIF ()
