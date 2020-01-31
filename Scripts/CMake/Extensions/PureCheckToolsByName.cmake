@@ -80,8 +80,6 @@ MACRO(GUESS_TOOL_BY_NAME TYPE TOOL)
           "${CMAKE_${TYPE}_EXE}" CACHE FILEPATH "A path to a tool used by the CMake build system.")
       MARK_AS_ADVANCED("CMAKE_${TYPE}")
     ELSE ()
-      MESSAGE(STATUS "Note: The CMAKE_${TYPE} ('${CMAKE_${TYPE}_O}') tool was not found in the system PATH or in the "
-              "provided CMAKE_${TOOL}_PATH")
       UNSET("CMAKE_${TYPE}")
       UNSET("CMAKE_${TYPE}" CACHE)
     ENDIF ()
