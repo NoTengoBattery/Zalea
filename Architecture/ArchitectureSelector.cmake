@@ -48,5 +48,4 @@ SET_AND_EXPORT_FORCE(KERNEL_ARCH "${KERNEL_ARCH}" STRING "${KERNEL_ARCH}"
                      "This variable is the architecture to build, which is the CPU architecture that the machine runs.")
 
 # This will export a variable to the config.h file which can be used by C/C++ to enable architecture specific code
-SET_AND_EXPORT_FORCE("KERNEL_${KERNEL_ARCH}" ON BOOL ON "-")
-MARK_AS_ADVANCED("KERNEL_${KERNEL_ARCH}")
+SET_AND_EXPORT("KERNEL_${KERNEL_ARCH}" ON INTERNAL ON "-")

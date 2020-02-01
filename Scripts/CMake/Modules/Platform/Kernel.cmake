@@ -24,22 +24,6 @@
 
 IF (TREE_SELF_PATH) # This will define if we have access to the scope variables and cache
 
-  # Reset these variables... just in case something nasty happen to the cache.
-  UNSET(KERNEL_COMPILER_GNU CACHE)
-  MARK_AS_ADVANCED(KERNEL_COMPILER_GNU)
-  UNSET(KERNEL_COMPILER_GCC CACHE)
-  MARK_AS_ADVANCED(KERNEL_COMPILER_GCC)
-  UNSET(KERNEL_COMPILER_CLANG CACHE)
-  MARK_AS_ADVANCED(KERNEL_COMPILER_CLANG)
-  UNSET(KERNEL_COMPILER_APPLECLANG CACHE)
-  MARK_AS_ADVANCED(KERNEL_COMPILER_APPLECLANG)
-  UNSET(KERNEL_BINUTILS_GNU CACHE)
-  MARK_AS_ADVANCED(KERNEL_BINUTILS_GNU)
-  UNSET(KERNEL_BINUTILS_GNU_GNU CACHE)
-  MARK_AS_ADVANCED(KERNEL_BINUTILS_GNU_GNU)
-  UNSET(KERNEL_BINUTILS_LLVM CACHE)
-  MARK_AS_ADVANCED(KERNEL_BINUTILS_LLVM)
-
   # Check some special cases for compiler IDs
   IF (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "${KERNEL_COMPILER}")
     # Let AppleClang go on! We support AppleClang as long as we can find the LLVM toolchain (mainly LLD)
@@ -66,8 +50,8 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     IF (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
       MESSAGE(FATAL_ERROR "When using the Clang compiler, Clang's version must have to be 9.0 or greater.")
     ENDIF ()
-    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_GNU ON BOOL ON "-")
-    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_CLANG ON BOOL ON "-")
+    SET_AND_EXPORT(KERNEL_COMPILER_GNU ON INTERNAL ON "-")
+    SET_AND_EXPORT(KERNEL_COMPILER_CLANG ON INTERNAL ON "-")
   ENDIF ()
 
   # When using AppleClang, version must have to be 11.0.0 or greater
@@ -75,9 +59,9 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     IF (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 11.0.0)
       MESSAGE(FATAL_ERROR "When using the Apple's Clang compiler, Clang's version must have to be 11.0.0 or greater.")
     ENDIF ()
-    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_GNU ON BOOL ON "-")
-    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_CLANG ON BOOL ON "-")
-    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_APPLECLANG ON BOOL ON "-")
+    SET_AND_EXPORT(KERNEL_COMPILER_GNU ON INTERNAL ON "-")
+    SET_AND_EXPORT(KERNEL_COMPILER_CLANG ON INTERNAL ON "-")
+    SET_AND_EXPORT(KERNEL_COMPILER_APPLECLANG INTERNAL BOOL ON "-")
   ENDIF ()
 
   # When using LLVM binutils, version must have to be 9.0 or greater
@@ -87,8 +71,8 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     IF (OBJCOPY_VERSION VERSION_LESS 9.0)
       MESSAGE(FATAL_ERROR "When using the LLVM binutils, LLVM's version must have to be 9.0 or greater.")
     ENDIF ()
-    SET_AND_EXPORT_FORCE(KERNEL_BINUTILS_GNU ON BOOL ON "-")
-    SET_AND_EXPORT_FORCE(KERNEL_BINUTILS_LLVM ON BOOL ON "-")
+    SET_AND_EXPORT(KERNEL_BINUTILS_GNU ON INTERNAL ON "-")
+    SET_AND_EXPORT(KERNEL_BINUTILS_LLVM ON INTERNAL ON "-")
   ENDIF ()
 
   # When using GCC, version must have to be 9.0 or greater
@@ -96,8 +80,8 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     IF (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
       MESSAGE(FATAL_ERROR "When using the GCC compiler, GCC's version must have to be 9.0 or greater.")
     ENDIF ()
-    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_GNU ON BOOL ON "-")
-    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_GCC ON BOOL ON "-")
+    SET_AND_EXPORT(KERNEL_COMPILER_GNU ON INTERNAL ON "-")
+    SET_AND_EXPORT(KERNEL_COMPILER_GCC ON INTERNAL ON "-")
   ENDIF ()
 
   # When using ICC, version must have to be 19.0 or greater
@@ -105,8 +89,8 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     IF (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 19.0)
       MESSAGE(FATAL_ERROR "When using the ICC compiler, ICC's version must have to be 19.0 or greater.")
     ENDIF ()
-    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_GNU ON BOOL ON "-")
-    SET_AND_EXPORT_FORCE(KERNEL_COMPILER_ICC ON BOOL ON "-")
+    SET_AND_EXPORT(KERNEL_COMPILER_GNU ON INTERNAL ON "-")
+    SET_AND_EXPORT(KERNEL_COMPILER_ICC ON INTERNAL ON "-")
   ENDIF ()
 
   # When using GNU binutils, version must have to be 2.33 or greater
@@ -116,8 +100,8 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
     IF (OBJCOPY_VERSION VERSION_LESS 2.33)
       MESSAGE(FATAL_ERROR "When using the GNU binutils, binutils's version must have to be 2.33 or greater.")
     ENDIF ()
-    SET_AND_EXPORT_FORCE(KERNEL_BINUTILS_GNU ON BOOL ON "-")
-    SET_AND_EXPORT_FORCE(KERNEL_BINUTILS_GNU_GNU ON BOOL ON "-")
+    SET_AND_EXPORT(KERNEL_BINUTILS_GNU ON INTERNAL ON "-")
+    SET_AND_EXPORT(KERNEL_BINUTILS_GNU_GNU ON INTERNAL ON "-")
   ENDIF ()
 
   # Enable LTO only when using [GNU+GNU] or [LLVM+CLANG (not working in Windows)]
@@ -131,8 +115,9 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
 
   # Export the CMake build type to the config.h CMake Header
   IF (CMAKE_BUILD_TYPE)
-    SET_AND_EXPORT_FORCE("KERNEL_BUILD_${CMAKE_BUILD_TYPE}" ON BOOL ON "-")
-    MARK_AS_ADVANCED("KERNEL_BUILD_${CMAKE_BUILD_TYPE}")
+    SET_AND_EXPORT("KERNEL_BUILD_${CMAKE_BUILD_TYPE}" ON INTERNAL ON "-")
+  ELSE ()
+    SET_AND_EXPORT("KERNEL_BUILD_Default" ON INTERNAL ON "-")
   ENDIF ()
 
 ENDIF ()

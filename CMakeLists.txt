@@ -115,10 +115,7 @@ SET(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Enable clang-tidy if found by the toolchain file. Try to keep them in sync with CLion.
-IF (CMAKE_CLANG_TIDY
-    AND KERNEL_COMPILER_CLANG) # clang-tidy will use the default target, and generate false diagnostic errors, unless
-  # the compiler has a -target or --target= flag, which only makes sense to Clang. This way, clang-tidy is only useful
-  # to Clang
+IF (CMAKE_CLANG_TIDY)
   SET(TIDY_CHECKS -checks=*,-llvm-header-guard,-hicpp-signed-bitwise)
   SET(CMAKE_ASM_CLANG_TIDY "${CMAKE_CLANG_TIDY}" "${TIDY_CHECKS}")
   SET(CMAKE_C_CLANG_TIDY "${CMAKE_CLANG_TIDY}" "${TIDY_CHECKS}")
