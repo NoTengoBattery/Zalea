@@ -24,7 +24,23 @@
 #ifndef ZALEA_BITWISEMACROS_H
 #define ZALEA_BITWISEMACROS_H
 
+#ifdef __cplusplus // C++
+
+template<typename T1, typename T2>
+constexpr auto clearNthBit(T1 x, T2 y) { return x & ~(1U << y); }
+
+template<typename T1, typename T2>
+constexpr auto setNthBit(T1 x, T2 y) { return x | (1U << y); }
+
+#elif defined(__ASSEMBLER__) // ASM
+
+
+
+#else // C
+
 #define CLEAR_NTH_BIT(x, y) ((x) & ~(1U << y ## U))
 #define SET_NTH_BIT(x, y) ((x) | (1U << y ## U))
+
+#endif
 
 #endif //ZALEA_BITWISEMACROS_H

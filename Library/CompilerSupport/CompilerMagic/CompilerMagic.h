@@ -28,9 +28,15 @@
 
 #ifdef KERNEL_COMPILER_GNU
 
-#define ATTR_SECTION(x) __attribute__ ((section (x)))
-#define ATTR_ALIGNED(x) __attribute__ ((aligned (x)))
-#define ATTR_USED __attribute__ ((used))
+#ifdef __ASSEMBLER__
+#error "This file should not be included in Assembler."
+#else
+
+#define ATTR_SECTION(x) __attribute__ ((section (x))) // NOLINT
+#define ATTR_ALIGNED(x) __attribute__ ((aligned (x))) // NOLINT
+#define ATTR_USED __attribute__ ((used)) // NOLINT
+
+#endif
 
 #else
 #error "What compiler are you using?"
