@@ -68,6 +68,7 @@ SECTIONS {
     ALIGNED_CPS_SEGMENT_START("rodata-segment")
     .rodata ALIGN_MINI : ALIGN_MINI {
         *(.rodata);
+        *(.rodata.*);
     } :rodata
     .note.gnu.build-id ALIGN_MICRO : ALIGN_MICRO {
         *(.note.gnu.build-id);

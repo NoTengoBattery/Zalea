@@ -29,12 +29,58 @@
 #include <config.h>
 
 #ifdef KERNEL_BINUTILS_GNU
+
 #ifndef __ASSEMBLER__
 #error "You should include this file exclusively inside preprocessed assembler files."
 #endif
 
+#ifndef ASM_NL
+#define ASM_NL ;
+#endif
+
+    .file __FILENAME__
+
 #ifdef KERNEL_x86 // All of the x86 specific macros for the GNU assembler
-.intel_syntax noprefix // All x86 code should be in the x86 Intel Syntax without prefix
+
+    .intel_syntax noprefix // All x86 code should be in the x86 Intel Syntax without prefix
+
+#define NAKED_GLOBAL_FUNCTION(s, n) \
+    .text ASM_NL \
+    .section s, "ax", @progbits ASM_NL \
+    .align 0x10 ASM_NL \
+    .global n ASM_NL \
+    .type n, @function ASM_NL \
+    n:
+
+#define GENERIC_EPILOG(n) \
+    .size n, . - n ASM_NL
+
+#define NAKED_GLOBAL_FUNCTION_EPILOG(n) GENERIC_EPILOG(n)
+
+#define GLOBAL_DATA_2(n, s, f, b) \
+    .global n ASM_NL \
+    .section s, f, b ASM_NL \
+    n:
+
+#define GLOBAL_DATA(n) GLOBAL_DATA_2(n, .data, "aw", @progbits)
+#define GLOBAL_RODATA(n) GLOBAL_DATA_2(n, .rodata, "a", @progbits)
+
+#define GLOBAL_DATA_2_EPILOG(n) \
+    .type n, @object ASM_NL \
+    .size n, . - n
+
+#define GLOBAL_DATA_EPILOG(n) GLOBAL_DATA_2_EPILOG(n)
+#define GLOBAL_RODATA_EPILOG(n) GLOBAL_DATA_2_EPILOG(n)
+
+#define GLOBAL_BSS_DATA(n, s) GLOBAL_DATA_2(n, .bss, "aw", @nobits) ASM_NL \
+    .skip s, 0x00 ASM_NL \
+    GLOBAL_DATA_2_EPILOG(n)
+#define GLOBAL_STACK_DATA(n, s) GLOBAL_DATA_2(n, .stack, "aw", @nobits) ASM_NL \
+    .skip s, 0x00 ASM_NL \
+    GLOBAL_DATA_2_EPILOG(n)
+
+    .ident "x86 AssemblerMagic for GNU Assemblers"
+
 #endif
 
 #else

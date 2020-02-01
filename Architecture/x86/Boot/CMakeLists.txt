@@ -26,5 +26,6 @@
 
 SET(THIS_LIB_NAME "EntryPoint")
 ADD_LIBRARY("${THIS_LIB_NAME}" OBJECT
+            "EntryPoint.c"
             "EntryPoint.sx")
 TARGET_LINK_LIBRARIES("${THIS_LIB_NAME}" "${GLOBAL_INTERFACES}")
