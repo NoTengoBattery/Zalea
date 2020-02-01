@@ -26,7 +26,7 @@
 
 #include <BitwiseMacros.h>
 #include <CompilerMagic.h>
-#include <stdint.h>
+#include <cstdint>
 
 /* This is the C attributes needed to build the table in the final image */
 #define MULTIBOOT_ATTR ATTR_SECTION(".multiboot2") ATTR_ALIGNED(8) ATTR_USED
@@ -50,10 +50,10 @@
 (MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_ARCHITECTURE + MULIBOOT_HEADER_SIZEOF))
 
 struct multibootHeaderTag {
-    const uint32_t magic;
-    const uint32_t architecture;
-    const uint32_t size;
-    const uint32_t checksum;
+    const std::uint32_t magic;
+    const std::uint32_t architecture;
+    const std::uint32_t size;
+    const std::uint32_t checksum;
 };
 
 /* These two macros define the "optional" bit flag, which is the bit 0 of the FLAGS field */
@@ -94,10 +94,10 @@ enum {
 }; /* Because standard C does not support static flexible array initialization */
 
 struct multibootInformationRequestTag {
-    const uint16_t type;
-    const uint16_t flags;
-    const uint32_t size;
-    const uint32_t requests[RequestNumber]; /* We use the (current) maximum amount of requests as the size of the array */
+    const std::uint16_t type;
+    const std::uint16_t flags;
+    const std::uint32_t size;
+    const std::uint32_t requests[RequestNumber]; /* We use the (current) maximum amount of requests as the size of the array */
 };
 
 /* These macros and structs are the address tag, which is used to synchronize the physical address */
@@ -113,13 +113,13 @@ extern const void *imageEnd;
 #define  MULTIBOOT_HEADER_TAG_ADDRESS_BSS_END_ADDRESS &imageEnd
 
 struct multibootAddressTag {
-    const uint16_t type;
-    const uint16_t flags;
-    const uint32_t size;
-    const uint32_t headerAddress;
-    const uint32_t loadAddress;
-    const uint32_t loadEndAddress;
-    const uint32_t bssEndAddress;
+    const std::uint16_t type;
+    const std::uint16_t flags;
+    const std::uint32_t size;
+    const std::uint32_t headerAddress;
+    const std::uint32_t loadAddress;
+    const std::uint32_t loadEndAddress;
+    const std::uint32_t bssEndAddress;
 };
 
 /* These macros and structs are the entry tag, which tells the bootloader the physical address of the entry point */
@@ -129,10 +129,10 @@ struct multibootAddressTag {
 #define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_ENTRY_ADDRESS &imageStart
 
 struct multibootEntryAddressTag {
-    const uint16_t type;
-    const uint16_t flags;
-    const uint32_t size;
-    const uint32_t entryAddress;
+    const std::uint16_t type;
+    const std::uint16_t flags;
+    const std::uint32_t size;
+    const std::uint32_t entryAddress;
 };
 
 #define MULTIBOOT_HEADER_TAG_CONSOLE_FLAGS 0x0004
@@ -145,10 +145,10 @@ struct multibootEntryAddressTag {
 #define MULTIBOOT_HEADER_CONSOLE_FLAG_HAS_NO_EGA(x) CLEAR_NTH_BIT(x, 1)
 
 struct multibootConsoleFlagsTag {
-    const uint16_t type;
-    const uint16_t flags;
-    const uint32_t size;
-    const uint32_t consoleFlags;
+    const std::uint16_t type;
+    const std::uint16_t flags;
+    const std::uint32_t size;
+    const std::uint32_t consoleFlags;
 };
 
 #endif //ZALEA_MULTIBOOT2_H

@@ -1,4 +1,4 @@
-#===-- CMakeLists.txt - Root of the Library Subtree ---------------------------------------------------*- CMake -*-===#
+#===-- CMakeLists.txt - Non Standar C++ Library --------------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -16,20 +16,12 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
-#/ Contains several libraries for the runtime support for the compiler, C and C++. These are not low-level libraries but
-#/ rather support libraries. In theory, any low level support must have to be implemented in the machine or platform.
-#/
-#/ However, these libraries will support the runtime, the compiler, the data structures and the standard library.
-#/
-#/ This module includes
-#/ -> AssemblyLibrary
-#/ -> NonStdC++Library
-#/ -> NonStdCLibrary
-#/ -> CompilerSupport
-#/ -> DataStructures
+#/ This is the Non Standard C++ Library, which gives support to the C++ dialect used by this project.
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
-# Add all subdirectories that will be ever used, one by one
-ADD_SUBDIRECTORY("${TREE_LIBRARY_COMPILERSUPPORT_PATH}")
-ADD_SUBDIRECTORY("${TREE_LIBRARY_NONSTDCXXLIBRART_PATH}")
+SET(THIS_LIB_NAME NonStdC++Library)
+ADD_LIBRARY("${THIS_LIB_NAME}" STATIC
+            "cstdint")
+SET_TARGET_PROPERTIES("${THIS_LIB_NAME}" PROPERTIES LINKER_LANGUAGE CXX)
+TARGET_INCLUDE_DIRECTORIES("${THIS_LIB_NAME}" INTERFACE ".")

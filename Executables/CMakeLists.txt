@@ -23,12 +23,12 @@
 
 SET(THIS_EXE_NAME LinkedImage)
 ADD_EXECUTABLE("${THIS_EXE_NAME}"
-               "CPlusPlusMainExecutable.cxx"
-               "Multiboot2.c"
-               "Multiboot2.h")
+               "Multiboot2.cxx"
+               "Multiboot2.hxx")
 TARGET_LINK_LIBRARIES("${THIS_EXE_NAME}"
                       "${GLOBAL_INTERFACES}"
-                      "EntryPoint")
+                      "EntryPoint"
+                      "NonStdC++Library")
 
 # Add the linker script to the linker command line (requires linker and compiler detection)
 IF (KERNEL_COMPILER_GNU AND KERNEL_LINKER_GNU)

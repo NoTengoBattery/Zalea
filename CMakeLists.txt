@@ -115,16 +115,18 @@ SET(CMAKE_CXX_STANDARD 17)
 SET(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Enable clang-tidy if found by the toolchain file. Try to keep them in sync with CLion.
-IF (CMAKE_CLANG_TIDY)
+IF (CMAKE_CLANG_TIDY AND KERNEL_COMPILER_CLANG)
   SET(TIDY_CHECKS -checks=*,-llvm-header-guard,-hicpp-signed-bitwise)
   SET(CMAKE_ASM_CLANG_TIDY "${CMAKE_CLANG_TIDY}" "${TIDY_CHECKS}")
   SET(CMAKE_C_CLANG_TIDY "${CMAKE_CLANG_TIDY}" "${TIDY_CHECKS}")
   SET(CMAKE_CXX_CLANG_TIDY "${CMAKE_CLANG_TIDY}" "${TIDY_CHECKS}")
+ELSEIF (NOT KERNEL_COMPILER_CLANG)
+  MESSAGE(STATUS "clang-tidy was found, but it won't be used because the compiler is not Clang")
 ENDIF ()
 
 # Enable cpplint if found the toolchain file.
 IF (CMAKE_CPPLINT)
-  SET(CPPLINT_CHECKS --linelength=120)
+  SET(CPPLINT_CHECKS --linelength=120 --recursive)
   SET(CMAKE_ASM_CPPLINT "${CMAKE_CPPLINT}" "${CPPLINT_CHECKS}")
   SET(CMAKE_C_CPPLINT "${CMAKE_CPPLINT}" "${CPPLINT_CHECKS}")
   SET(CMAKE_CXX_CPPLINT "${CMAKE_CPPLINT}" "${CPPLINT_CHECKS}")

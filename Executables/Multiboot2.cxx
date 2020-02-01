@@ -21,13 +21,13 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#include "Multiboot2.h"
+#include "Multiboot2.hxx"
 
 const struct multibootHeaderTag multibootHeader MULTIBOOT_ATTR = {
         MULTIBOOT_HEADER_MAGIC,
         MULTIBOOT_HEADER_ARCHITECTURE,
         MULIBOOT_HEADER_SIZEOF,
-        (uint32_t)MULTIBOOT_HEADER_CHECKSUM
+        MULTIBOOT_HEADER_CHECKSUM
 };
 
 const struct multibootInformationRequestTag multibootInformation MULTIBOOT_ATTR = {
@@ -59,21 +59,23 @@ const struct multibootInformationRequestTag multibootInformation MULTIBOOT_ATTR 
          MULTIBOOT_TAG_TYPE_END}
 };
 
+// NOLINTNEXTLINE
 const struct multibootAddressTag multibootAddress MULTIBOOT_ATTR = {
         MULTIBOOT_HEADER_TAG_ADDRESS,
         MULTIBOOT_REQUIRED_FLAG(MULTIBOOT_HEADER_TAG_ADDRESS_FLAGS),
         MULTIBOOT_HEADER_TAG_ADDRESS_SIZEOF,
-        (uint32_t) MULTIBOOT_HEADER_TAG_ADDRESS_HEADER_ADDRESS,
-        (uint32_t) MULTIBOOT_HEADER_TAG_ADDRESS_LOAD_ADDRESS,
-        (uint32_t) MULTIBOOT_HEADER_TAG_ADDRESS_LOAD_END_ADDRESS,
-        (uint32_t) MULTIBOOT_HEADER_TAG_ADDRESS_BSS_END_ADDRESS
+        reinterpret_cast<std::uint32_t>(MULTIBOOT_HEADER_TAG_ADDRESS_HEADER_ADDRESS), // NOLINT
+        reinterpret_cast<std::uint32_t>(MULTIBOOT_HEADER_TAG_ADDRESS_LOAD_ADDRESS), // NOLINT
+        reinterpret_cast<std::uint32_t>(MULTIBOOT_HEADER_TAG_ADDRESS_LOAD_END_ADDRESS), // NOLINT
+        reinterpret_cast<std::uint32_t>(MULTIBOOT_HEADER_TAG_ADDRESS_BSS_END_ADDRESS) // NOLINT
 };
 
+// NOLINTNEXTLINE
 const struct multibootEntryAddressTag multibootEntryAddress MULTIBOOT_ATTR = {
         MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS,
         MULTIBOOT_REQUIRED_FLAG(MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_FLAGS),
         MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_SIZEOF,
-        (uint32_t) MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_ENTRY_ADDRESS
+        reinterpret_cast<std::uint32_t>(MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_ENTRY_ADDRESS) // NOLINT
 };
 
 const struct multibootConsoleFlagsTag multibootConsoleFlags MULTIBOOT_ATTR = {
