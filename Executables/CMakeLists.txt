@@ -65,13 +65,11 @@ IF (KERNEL_BINUTILS_GNU)
                      ARGS "--special-syms" "-C" "-S" "-f" "sysv" "-n"
                      "$<TARGET_FILE:${THIS_EXE_NAME}>" ">" "$<TARGET_FILE:${THIS_EXE_NAME}>.nm"
                      COMMENT "Generating the symbol dump (nm) for ${THIS_EXE_NAME}...")
-  IF (CMAKE_READELF)
-    ADD_CUSTOM_COMMAND(TARGET "${THIS_EXE_NAME}" POST_BUILD VERBATIM
-                       COMMAND "${CMAKE_READELF}"
-                       ARGS "-a" "-e" "-g" "-n" "-u"
-                       "$<TARGET_FILE:${THIS_EXE_NAME}>" ">" "$<TARGET_FILE:${THIS_EXE_NAME}>.readelf"
-                       COMMENT "Generating the ELF dump (readelf) for ${THIS_EXE_NAME}...")
-  ENDIF ()
+  ADD_CUSTOM_COMMAND(TARGET "${THIS_EXE_NAME}" POST_BUILD VERBATIM
+                     COMMAND "${CMAKE_READELF}"
+                     ARGS "-a" "-e" "-g" "-n" "-u"
+                     "$<TARGET_FILE:${THIS_EXE_NAME}>" ">" "$<TARGET_FILE:${THIS_EXE_NAME}>.readelf"
+                     COMMENT "Generating the ELF dump (readelf) for ${THIS_EXE_NAME}...")
 ELSE ()
   MESSAGE(AUTHOR_WARNING
           "Could not setup the object dump rule. This means that you are using incompatible binutils.")
