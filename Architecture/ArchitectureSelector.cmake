@@ -27,7 +27,7 @@ IF (NOT AVAILABLE_ARCHITECTURES)
   MESSAGE(FATAL_ERROR
           "No architectures to build! You shouldn't have to read this message ever!")
 ELSE ()
-  CLIST_TO_HLIST(AVAILABLE_ARCHITECTURES H_VALID_ARCH)
+  CMAKE_LIST_TO_HUMAN_LIST(AVAILABLE_ARCHITECTURES H_VALID_ARCH)
   MESSAGE(STATUS "Found the following architectures: ${H_VALID_ARCH}.")
 ENDIF ()
 

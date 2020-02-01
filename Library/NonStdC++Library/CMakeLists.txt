@@ -1,4 +1,4 @@
-#===-- CMakeLists.txt - Non Standar C++ Library --------------------------------------------------------*- CMake -*-===#
+#===-- CMakeLists.txt - Non Standard C++ Library -------------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #

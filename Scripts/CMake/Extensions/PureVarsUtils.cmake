@@ -20,7 +20,7 @@
 #/
 #/ This extension provides:
 #/ -> CHECK_WITH_STRINGS
-#/ -> CLIST_TO_HLIST
+#/ -> CMAKE_LIST_TO_HUMAN_LIST
 #/ -> SET_WITH_STRINGS
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
@@ -46,7 +46,7 @@ FUNCTION(CHECK_WITH_STRINGS VARIABLE RESULT)
 ENDFUNCTION()
 
 # Converts a CMake list to a comma separated human list
-MACRO(CLIST_TO_HLIST VARIABLE RESULT)
+MACRO(CMAKE_LIST_TO_HUMAN_LIST VARIABLE RESULT)
   STRING(REPLACE ";" ", " ${RESULT} "${${VARIABLE}}")
 ENDMACRO()
 

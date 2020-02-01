@@ -36,7 +36,7 @@ MACRO(CHECK_TOOL_BY_NAME TOOL DEFAULT)
                    "AVAILABLE_${TOOL}")
   CHECK_WITH_STRINGS("KERNEL_${TOOL}" "VALID_${TOOL}")
   IF (NOT "${VALID_${TOOL}}")
-    CLIST_TO_HLIST("AVAILABLE_${TOOL}" "H_AVAILABLE_${TOOL}")
+    CMAKE_LIST_TO_HUMAN_LIST("AVAILABLE_${TOOL}" "H_AVAILABLE_${TOOL}")
     MESSAGE(FATAL_ERROR "Please set a valid ${TOOL} in the KERNEL_${TOOL} variable. Available options for ${TOOL}: "
             "${H_AVAILABLE_${TOOL}}")
   ENDIF ()

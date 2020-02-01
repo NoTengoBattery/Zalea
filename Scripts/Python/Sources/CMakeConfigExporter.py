@@ -97,7 +97,8 @@ def parse_args(args):
     parser.add_argument('-x', '--header',
                         action='store_true',
                         help='When using this option, this script will generate a CMake Header file, which CMake then'
-                             'will configure to create a valid include file for C/C++ with all options in the database.')
+                             'will configure to create a valid include file for C/C++ with all options in the '
+                             'database.')
     parser.add_argument('-r', '--force',
                         action='store_true',
                         help='Using this flag with a new entry causes it to use the SET_AND_EXPORT_FORCE command. '
@@ -204,10 +205,10 @@ def dump_table(table: str, file, header, default):
                 file.write('/* {}: {} {} */\n'
                            .format(key, msg, doc['type']))
                 if doc['type'] == 'BOOL':
-                    file.write('#cmakedefine\t{}\n'
+                    file.write('#cmakedefine\t{} // NOLINT\n'
                                .format(key))
                 else:
-                    file.write('#cmakedefine\t{}\t@{}@\n'
+                    file.write('#cmakedefine\t{}\t@{}@ // NOLINT\n'
                                .format(key, key))
                 this_logger.debug("Dumped CMake entry for variable '%s'" % key)
     else:

@@ -19,8 +19,8 @@
 /// This file gives support to the cstdint system header, which is just a plain wrapper to stdint.h
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
-#ifndef ZALEA_CSTDINT_H
-#define ZALEA_CSTDINT_H
+#ifndef ZALEA_CSTDINT_
+#define ZALEA_CSTDINT_
 
 extern "C" {
 #include<stdint.h>
@@ -58,4 +58,4 @@ namespace std {
     using ::uintmax_t;
 }
 
-#endif //ZALEA_CSTDINT_H
+#endif //ZALEA_CSTDINT_

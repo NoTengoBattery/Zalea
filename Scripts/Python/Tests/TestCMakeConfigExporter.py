@@ -472,7 +472,7 @@ def test_dumped_format_header(db_file, template_header, cmake_header):
     args = ['SAE',
             '--variable', 'EL',
             '--value', 'EU',
-            '--type', 'BOOL',
+            '--type', 'INTERNAL',
             '--docstring', 'GN',
             '--force',
             '--dbfile', db_file]
@@ -481,7 +481,7 @@ def test_dumped_format_header(db_file, template_header, cmake_header):
     args = ['SAE',
             '--variable', 'VA',
             '--value', 'AL',
-            '--type', 'BOOL',
+            '--type', 'STRING',
             '--docstring', 'DO',
             '--force',
             '--dbfile', db_file]
@@ -497,13 +497,13 @@ def test_dumped_format_header(db_file, template_header, cmake_header):
     with open(cmake_header) as f:
         assert str(f.read()) == '//////\n' \
                                 '/* E: SET_AND_EXPORT BOOL */\n' \
-                                '#cmakedefine\tE\n' \
+                                '#cmakedefine\tE // NOLINT\n' \
                                 '/* V: SET_AND_EXPORT BOOL */\n' \
-                                '#cmakedefine\tV\n' \
-                                '/* EL: SET_AND_EXPORT_FORCE BOOL */\n' \
-                                '#cmakedefine\tEL\n' \
-                                '/* VA: SET_AND_EXPORT_FORCE BOOL */\n' \
-                                '#cmakedefine\tVA\n'
+                                '#cmakedefine\tV // NOLINT\n' \
+                                '/* EL: SET_AND_EXPORT_FORCE INTERNAL */\n' \
+                                '#cmakedefine\tEL\t@EL@ // NOLINT\n' \
+                                '/* VA: SET_AND_EXPORT_FORCE STRING */\n' \
+                                '#cmakedefine\tVA\t@VA@ // NOLINT\n'
 
 
 def test_large_loop(db_file, template_file, cmake_file):

@@ -30,7 +30,7 @@
 
 #ifdef KERNEL_BINUTILS_GNU
 #ifndef __ASSEMBLER__
-#error "You should include this file only inside preprocessed assembler files."
+#error "You should include this file exclusively inside preprocessed assembler files."
 #endif
 
 #ifdef KERNEL_x86 // All of the x86 specific macros for the GNU assembler

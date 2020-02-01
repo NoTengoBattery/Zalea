@@ -78,8 +78,7 @@ SET(CMAKE_CROSSCOMPILING ON)
 
 # Identify the "project name" with the name of the root folder of the source code
 GET_FILENAME_COMPONENT(KERNEL_SOURCE_DIR_NAME "${CMAKE_SOURCE_DIR}" NAME_WE)
-MESSAGE(STATUS "Using the directory name as the project identifier: \"${KERNEL_SOURCE_DIR_NAME}\"")
-SET(PROJECT_NAME "Zalea ${CMAKE_SYSTEM_NAME} (${KERNEL_SOURCE_DIR_NAME})")
+SET(PROJECT_NAME "Zalea")
 
 # Include "Language Extensions" (need Python), this file includes all available extensions
 INCLUDE("${TREE_SCRIPTS_CMAKE_PATH}/CMakeExtensions.cmake")
