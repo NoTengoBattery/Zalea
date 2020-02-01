@@ -23,16 +23,23 @@
 
 #include "Multiboot2.hxx"
 
+extern "C" {
+extern const void *imageStart;
+extern const void *bssStart;
+extern const void *imageEnd;
+}
+
 const struct multibootHeaderTag multibootHeader MULTIBOOT_ATTR = {
         MULTIBOOT_HEADER_MAGIC,
         MULTIBOOT_HEADER_ARCHITECTURE,
-        MULIBOOT_HEADER_SIZEOF,
-        MULTIBOOT_HEADER_CHECKSUM
+        MULTIBOOT_HEADER_SIZEOF,
+        static_cast<std::uint32_t>(MULTIBOOT_HEADER_CHECKSUM)
 };
 
+// NOLINTNEXTLINE
 const struct multibootInformationRequestTag multibootInformation MULTIBOOT_ATTR = {
         MULTIBOOT_TAG_INFORMATION_REQUEST,
-        MULTIBOOT_REQUIRED_FLAG(MULTIBOOT_TAG_INFORMATION_REQUEST_FLAGS),
+        MULTIBOOT_REQUIRED(MULTIBOOT_TAG_INFORMATION_REQUEST_FLAGS),
         MULTIBOOT_TAG_INFORMATION_REQUEST_SIZEOF,
         {MULTIBOOT_TAG_TYPE_CMDLINE,
          MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME,
@@ -62,26 +69,46 @@ const struct multibootInformationRequestTag multibootInformation MULTIBOOT_ATTR 
 // NOLINTNEXTLINE
 const struct multibootAddressTag multibootAddress MULTIBOOT_ATTR = {
         MULTIBOOT_HEADER_TAG_ADDRESS,
-        MULTIBOOT_REQUIRED_FLAG(MULTIBOOT_HEADER_TAG_ADDRESS_FLAGS),
+        MULTIBOOT_REQUIRED(MULTIBOOT_HEADER_TAG_ADDRESS_FLAGS),
         MULTIBOOT_HEADER_TAG_ADDRESS_SIZEOF,
-        reinterpret_cast<std::uint32_t>(MULTIBOOT_HEADER_TAG_ADDRESS_HEADER_ADDRESS), // NOLINT
-        reinterpret_cast<std::uint32_t>(MULTIBOOT_HEADER_TAG_ADDRESS_LOAD_ADDRESS), // NOLINT
-        reinterpret_cast<std::uint32_t>(MULTIBOOT_HEADER_TAG_ADDRESS_LOAD_END_ADDRESS), // NOLINT
-        reinterpret_cast<std::uint32_t>(MULTIBOOT_HEADER_TAG_ADDRESS_BSS_END_ADDRESS) // NOLINT
+        reinterpret_cast<std::uint32_t>(&multibootHeader), // NOLINT
+        reinterpret_cast<std::uint32_t>(&imageStart), // NOLINT
+        reinterpret_cast<std::uint32_t>(&bssStart), // NOLINT
+        reinterpret_cast<std::uint32_t>(&imageEnd) // NOLINT
 };
 
 // NOLINTNEXTLINE
 const struct multibootEntryAddressTag multibootEntryAddress MULTIBOOT_ATTR = {
         MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS,
-        MULTIBOOT_REQUIRED_FLAG(MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_FLAGS),
+        MULTIBOOT_REQUIRED(MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_FLAGS),
         MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_SIZEOF,
-        reinterpret_cast<std::uint32_t>(MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_ENTRY_ADDRESS) // NOLINT
+        reinterpret_cast<std::uint32_t>(&imageStart) // NOLINT
 };
 
+// NOLINTNEXTLINE
 const struct multibootConsoleFlagsTag multibootConsoleFlags MULTIBOOT_ATTR = {
         MULTIBOOT_HEADER_TAG_CONSOLE_FLAGS,
-        MULTIBOOT_REQUIRED_FLAG(MULTIBOOT_HEADER_TAG_CONSOLE_FLAGS_FLAGS),
+        MULTIBOOT_REQUIRED(MULTIBOOT_HEADER_TAG_CONSOLE_FLAGS_FLAGS),
         MULTIBOOT_HEADER_TAG_CONSOLE_FLAGS_SIZEOF,
         MULTIBOOT_HEADER_CONSOLE_FLAG_REQUIRED(
                 MULTIBOOT_HEADER_CONSOLE_FLAG_HAS_EGA(MULTIBOOT_HEADER_CONSOLE_FLAGS))
 };
+
+// NOLINTNEXTLINE
+const struct multibootFramebufferTag multibootFramebuffer MULTIBOOT_ATTR = {
+        MULTIBOOT_HEADER_TAG_FRAMEBUFFER,
+        MULTIBOOT_REQUIRED(MULTIBOOT_HEADER_TAG_FRAMEBUFFER_FLAGS),
+        MULTIBOOT_HEADER_TAG_FRAMEBUFFER_SIZEOF,
+        MULTIBOOT_HEADER_TAG_FRAMEBUFFER_WIDTH,
+        MULTIBOOT_HEADER_TAG_FRAMEBUFFER_HEIGHT,
+        MULTIBOOT_HEADER_TAG_FRAMEBUFFER_DEPTH
+};
+
+// NOLINTNEXTLINE
+const struct multibootModuleAlignmentTag multibootModuleAlignment MULTIBOOT_ATTR = {
+        MULTIBOOT_HEADER_TAG_MODULE_ALIGN,
+        MULTIBOOT_REQUIRED(MULTIBOOT_HEADER_TAG_MODULE_ALIGN_FLAGS),
+        MULTIBOOT_HEADER_TAG_MODULE_ALIGN_SIZEOF,
+};
+
+

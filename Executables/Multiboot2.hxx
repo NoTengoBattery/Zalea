@@ -21,47 +21,47 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#ifndef ZALEA_MULTIBOOT2_H
-#define ZALEA_MULTIBOOT2_H
+#ifndef ZALEA_MULTIBOOT2_HXX
+#define ZALEA_MULTIBOOT2_HXX
 
 #include <BitwiseMacros.h>
 #include <CompilerMagic.h>
 #include <cstdint>
 
-/* This is the C attributes needed to build the table in the final image */
-#define MULTIBOOT_ATTR ATTR_SECTION(".multiboot2") ATTR_ALIGNED(8) ATTR_USED
+/* This is the attributes needed to assemble the Multiboot2 Header in the final image */
+#define MULTIBOOT_ATTR ATTR_SECTION(".multiboot2") ATTR_USED
+#define MULTIBOOT_ALIGNMENT 0x08
 
-/* This is the magic number that the OS will try to look when loaded by a Multiboot2 bootloader */
+/* These two macros define the "optional" bit flag, which is the bit 0 of the FLAGS field */
+#define MULTIBOOT_OPTIONAL(x) setNthBit(x, 0)
+#define MULTIBOOT_REQUIRED(x) clearNthBit(x, 0)
+
+/* This is the magic number that the OS will try to look when loaded by a Multiboot2 Bootloader */
 #define MULTIBOOT_2_BOOTLOADER_MAGIC 0x36D76289
 
 /* These macros define the "architecture" to be requested to the bootloader */
 #define MULTIBOOT_PROTECTED_MODE 0x00000000
 #define MULTIBOOT_MIPS_32 0x00000004
 
-/* These macros, enums and structs are the basic Multiboot2 header, which is used to recognize a bootable image */
+/* These macros, enums and structs are the Multiboot2 Header, which is used to recognize a bootable image */
 #define MULTIBOOT_HEADER_MAGIC 0xE85250D6
 #ifdef KERNEL_x86
 #define MULTIBOOT_HEADER_ARCHITECTURE MULTIBOOT_PROTECTED_MODE
 #else
 #define MULTIBOOT_HEADER_ARCHITECTURE 0xffffffff
 #endif
-#define MULIBOOT_HEADER_SIZEOF sizeof(struct multibootHeaderTag)
+#define MULTIBOOT_HEADER_SIZEOF sizeof(struct multibootHeaderTag)
 #define MULTIBOOT_HEADER_CHECKSUM (0x100000000 - \
-(MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_ARCHITECTURE + MULIBOOT_HEADER_SIZEOF))
+    (MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_ARCHITECTURE + MULTIBOOT_HEADER_SIZEOF))
 
-struct multibootHeaderTag {
+struct alignas(MULTIBOOT_ALIGNMENT) multibootHeaderTag {
     const std::uint32_t magic;
     const std::uint32_t architecture;
     const std::uint32_t size;
     const std::uint32_t checksum;
 };
 
-/* These two macros define the "optional" bit flag, which is the bit 0 of the FLAGS field */
-#define MULTIBOOT_OPTIONAL_FLAG(x) SET_NTH_BIT(x, 0)
-#define MULTIBOOT_REQUIRED_FLAG(x) CLEAR_NTH_BIT(x, 0)
-
-/* The following macros, enums and structs are the information request tag and responses, along with their magic types,
- * and their structure. */
+/* The following macros and structs are the Information Request header tag, which request a bunch of information */
 #define MULTIBOOT_TAG_INFORMATION_REQUEST 0x0001
 #define MULTIBOOT_TAG_INFORMATION_REQUEST_FLAGS 0x0000
 #define MULTIBOOT_TAG_INFORMATION_REQUEST_SIZEOF sizeof(struct multibootInformationRequestTag)
@@ -88,31 +88,21 @@ struct multibootHeaderTag {
 #define MULTIBOOT_TAG_TYPE_EFI_32_IH 0x00000013
 #define MULTIBOOT_TAG_TYPE_EFI_64_IH 0x00000014
 #define MULTIBOOT_TAG_TYPE_LOAD_BASE_ADDR 0x00000015
+const unsigned int requestNumber = 22;
 
-enum {
-    RequestNumber = 22
-}; /* Because standard C does not support static flexible array initialization */
-
-struct multibootInformationRequestTag {
+struct alignas(MULTIBOOT_ALIGNMENT) multibootInformationRequestTag {
     const std::uint16_t type;
     const std::uint16_t flags;
     const std::uint32_t size;
-    const std::uint32_t requests[RequestNumber]; /* We use the (current) maximum amount of requests as the size of the array */
+    const std::uint32_t requests[requestNumber]; // NOLINT because we don't want a std::array here.
 };
 
-/* These macros and structs are the address tag, which is used to synchronize the physical address */
-extern const void *imageStart;
-extern const void *bssStart;
-extern const void *imageEnd;
+/* These macros and structs are the Address tag, which will synchronize the physical address with the bootloader */
 #define MULTIBOOT_HEADER_TAG_ADDRESS 0x0002
 #define MULTIBOOT_HEADER_TAG_ADDRESS_FLAGS 0x0000
 #define  MULTIBOOT_HEADER_TAG_ADDRESS_SIZEOF sizeof(struct multibootAddressTag)
-#define  MULTIBOOT_HEADER_TAG_ADDRESS_HEADER_ADDRESS &multibootHeader
-#define  MULTIBOOT_HEADER_TAG_ADDRESS_LOAD_ADDRESS &imageStart
-#define  MULTIBOOT_HEADER_TAG_ADDRESS_LOAD_END_ADDRESS &bssStart
-#define  MULTIBOOT_HEADER_TAG_ADDRESS_BSS_END_ADDRESS &imageEnd
 
-struct multibootAddressTag {
+struct alignas(MULTIBOOT_ALIGNMENT) multibootAddressTag {
     const std::uint16_t type;
     const std::uint16_t flags;
     const std::uint32_t size;
@@ -122,33 +112,114 @@ struct multibootAddressTag {
     const std::uint32_t bssEndAddress;
 };
 
-/* These macros and structs are the entry tag, which tells the bootloader the physical address of the entry point */
+/* These macros and structs are the Entry Address tag, which will tell the bootloader where to jump after loading */
 #define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS 0x0003
 #define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_FLAGS 0x0000
 #define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_SIZEOF sizeof(struct multibootEntryAddressTag)
-#define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_ENTRY_ADDRESS &imageStart
 
-struct multibootEntryAddressTag {
+struct alignas(MULTIBOOT_ALIGNMENT) multibootEntryAddressTag {
     const std::uint16_t type;
     const std::uint16_t flags;
     const std::uint32_t size;
     const std::uint32_t entryAddress;
 };
 
+/* These macros and structs are the Console Flags tag, which will tell the bootloader where to jump after loading */
 #define MULTIBOOT_HEADER_TAG_CONSOLE_FLAGS 0x0004
 #define MULTIBOOT_HEADER_TAG_CONSOLE_FLAGS_FLAGS 0x0000
 #define MULTIBOOT_HEADER_TAG_CONSOLE_FLAGS_SIZEOF sizeof(struct multibootConsoleFlagsTag)
 #define MULTIBOOT_HEADER_CONSOLE_FLAGS 0x0000
-#define MULTIBOOT_HEADER_CONSOLE_FLAG_REQUIRED(x) SET_NTH_BIT(x, 0)
-#define MULTIBOOT_HEADER_CONSOLE_FLAG_OPTIONAL(x) CLEAR_NTH_BIT(x, 0)
-#define MULTIBOOT_HEADER_CONSOLE_FLAG_HAS_EGA(x) SET_NTH_BIT(x, 1)
-#define MULTIBOOT_HEADER_CONSOLE_FLAG_HAS_NO_EGA(x) CLEAR_NTH_BIT(x, 1)
+#define MULTIBOOT_HEADER_CONSOLE_FLAG_REQUIRED(x) setNthBit(x, 0)
+#define MULTIBOOT_HEADER_CONSOLE_FLAG_OPTIONAL(x) clearNthBit(x, 0)
+#define MULTIBOOT_HEADER_CONSOLE_FLAG_HAS_EGA(x) setNthBit(x, 1)
+#define MULTIBOOT_HEADER_CONSOLE_FLAG_HAS_NO_EGA(x) clearNthBit(x, 1)
 
-struct multibootConsoleFlagsTag {
+struct alignas(MULTIBOOT_ALIGNMENT) multibootConsoleFlagsTag {
     const std::uint16_t type;
     const std::uint16_t flags;
     const std::uint32_t size;
     const std::uint32_t consoleFlags;
 };
 
-#endif //ZALEA_MULTIBOOT2_H
+/* These macros and structs are the Framebuffer tag, which will tell the bootloader to initialize a framebuffer */
+#define MULTIBOOT_HEADER_TAG_FRAMEBUFFER 0x0005
+#define MULTIBOOT_HEADER_TAG_FRAMEBUFFER_FLAGS 0x0000
+#define MULTIBOOT_HEADER_TAG_FRAMEBUFFER_SIZEOF sizeof(struct multibootFramebufferTag)
+#define MULTIBOOT_HEADER_TAG_FRAMEBUFFER_WIDTH 0x0000
+#define MULTIBOOT_HEADER_TAG_FRAMEBUFFER_HEIGHT 0x0000
+#define MULTIBOOT_HEADER_TAG_FRAMEBUFFER_DEPTH 0x0000
+
+struct alignas(MULTIBOOT_ALIGNMENT) multibootFramebufferTag {
+    const std::uint16_t type;
+    const std::uint16_t flags;
+    const std::uint32_t size;
+    const std::uint32_t width;
+    const std::uint32_t height;
+    const std::uint32_t depth;
+};
+
+/* These macros and structs are the Module Alignment tag, which will tell the bootloader to page-align the modules */
+#define MULTIBOOT_HEADER_TAG_MODULE_ALIGN 0x0006
+#define MULTIBOOT_HEADER_TAG_MODULE_ALIGN_FLAGS 0x0000
+#define MULTIBOOT_HEADER_TAG_MODULE_ALIGN_SIZEOF sizeof(struct multibootModuleAlignmentTag)
+
+struct alignas(MULTIBOOT_ALIGNMENT) multibootModuleAlignmentTag {
+    const std::uint16_t type;
+    const std::uint16_t flags;
+    const std::uint32_t size;
+};
+
+/* These macros and structs are the EFI Boot Services tag, which will tell the bootloader to boot as in EFI mode */
+#define MULTIBOOT_HEADER_TAG_EFI_BOOT_SERVICES 0x0007
+#define MULTIBOOT_HEADER_TAG_EFI_BOOT_SERVICES_FLAGS 0x0000
+#define MULTIBOOT_HEADER_TAG_EFI_BOOT_SERVICES_SIZEOF sizeof(struct multibootEfiBootServicesTag)
+
+struct alignas(MULTIBOOT_ALIGNMENT) multibootEfiBootServicesTag {
+    const std::uint16_t type;
+    const std::uint16_t flags;
+    const std::uint32_t size;
+};
+
+/* These macros and structs are the EFI32 Entry Address tag, which will tell the bootloader to jump into EFI32 code */
+#define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_EFI_32 0x0008
+#define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_EFI_32_FLAGS 0x0000
+#define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_EFI_32_SIZEOF sizeof(struct multibootEfi32EntryAddressTag)
+
+struct alignas(MULTIBOOT_ALIGNMENT) multibootEfi32EntryAddressTag {
+    const std::uint16_t type;
+    const std::uint16_t flags;
+    const std::uint32_t size;
+    const std::uint32_t entryAddress;
+};
+
+/* These macros and structs are the EFI64 Entry Address tag, which will tell the bootloader to jump into EFI64 code */
+#define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_EFI_64 0x0009
+#define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_EFI_64_FLAGS 0x0000
+#define MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_EFI_64_SIZEOF sizeof(struct multibootEfi64EntryAddressTag)
+
+struct alignas(MULTIBOOT_ALIGNMENT) multibootEfi64EntryAddressTag {
+    const std::uint16_t type;
+    const std::uint16_t flags;
+    const std::uint32_t size;
+    const std::uint32_t entryAddress;
+};
+
+/* These macros and structs are the Relocatable tag, which will tell the bootloader that this image is relocatable */
+#define MULTIBOOT_HEADER_TAG_RELOCATABLE 0x000A
+#define MULTIBOOT_HEADER_TAG_RELOCATABLE_FLAGS 0x0000
+#define MULTIBOOT_HEADER_TAG_RELOCATABLE_SIZEOF sizeof(struct multibootRelocatableTag)
+#define MULTIBOOT_HEADER_TAG_RELOCATABLE_PREFERENCE_NONE 0x0000
+#define MULTIBOOT_HEADER_TAG_RELOCATABLE_PREFERENCE_LOWEST 0x0001
+#define MULTIBOOT_HEADER_TAG_RELOCATABLE_PREFERENCE_HIGHEST 0x0002
+
+struct alignas(MULTIBOOT_ALIGNMENT) multibootRelocatableTag {
+    const std::uint16_t type;
+    const std::uint16_t flags;
+    const std::uint32_t size;
+    const std::uint32_t minimumAddress;
+    const std::uint32_t maximumAddress;
+    const std::uint32_t alignment;
+    const std::uint32_t preference;
+};
+
+#endif //ZALEA_MULTIBOOT2_HXX
