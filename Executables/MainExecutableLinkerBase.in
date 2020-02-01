@@ -73,6 +73,14 @@ SECTIONS {
     .note.gnu.build-id ALIGN_MICRO : ALIGN_MICRO {
         *(.note.gnu.build-id);
     }
+#ifdef KERNEL_ARM
+    .ARM.exidx ALIGN_MINI : ALIGN_MINI {
+        PROVIDE_HIDDEN (exidxStart = .);
+        *(.ARM.exidx*);
+        *(.gnu.linkonce.armexidx.*);
+        PROVIDE_HIDDEN (exidxEnd = .);
+    }
+#endif
     .eh_frame_hdr ALIGN_MINI : ALIGN_MINI {
         *(.eh_frame_hdr);
         *(.eh_frame_entry .eh_frame_entry.*);

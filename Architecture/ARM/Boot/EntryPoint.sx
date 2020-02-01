@@ -22,38 +22,27 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 
 #include <config.h>
+#define __FILENAME__ "EntryPoint.sx"
 #include <AssemblerMagic.h>
 
-.section .start, "ax"
-.type start, #function
-.globl start
-start:
+NAKED_GLOBAL_ARM_FUNCTION(.start, start)
   BL start
+NAKED_GLOBAL_ARM_FUNCTION_EPILOG(start)
 
 # Those are placeholders (needed because LLD will not identify the sections correctly when no data is in the sections)
 # but they are only needed when no data is in the section. Most likely to not happen ever but anyway...
 
-.section .text, "ax", %progbits
-.global textPlaceholder
-textPlaceholder:
+NAKED_GLOBAL_ARM_FUNCTION(.text, textPlaceholder)
   BL textPlaceholder
+NAKED_GLOBAL_ARM_FUNCTION_EPILOG(textPlaceholder)
 
-.section .data, "aw", %progbits
-.global dataPlaceholder
-dataPlaceholder:
-  .asciz "dataPlaceholder"
+GLOBAL_DATA(dataPlaceholder)
+  .string "dataPlaceholder"
+GLOBAL_DATA_EPILOG(dataPlaceholder)
 
-.section .rodata, "a", %progbits
-.global rodataPlaceholder
-rodataPlaceholder:
-  .asciz "rodataPlaceholder"
+GLOBAL_RODATA(rodataPlaceholder)
+  .string "rodataPlaceholder"
+GLOBAL_DATA_EPILOG(rodataPlaceholder)
 
-.section .bss, "aw", %nobits
-.global bssPlaceholder
-bssPlaceholder:
-  .byte 0x00
-
-.section .stack, "aw", %nobits
-.global stackPlaceholder
-stackPlaceholder:
-  .byte 0x00
+GLOBAL_BSS_DATA(bssPlaceholder, 1)
+GLOBAL_STACK_DATA(stackPlaceholder, 1)

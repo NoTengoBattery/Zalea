@@ -46,5 +46,4 @@ GLOBAL_RODATA(rodataPlaceholder)
 GLOBAL_DATA_EPILOG(rodataPlaceholder)
 
 GLOBAL_BSS_DATA(bssPlaceholder, 1)
-
 GLOBAL_STACK_DATA(stackPlaceholder, 1)
