@@ -24,9 +24,7 @@
 #include "Multiboot2.hxx"
 
 extern "C" {
-extern const void *imageStart;
-extern const void *bssStart;
-extern const void *imageEnd;
+#include <ImageConstants.h>
 }
 
 const struct multibootHeaderTag multibootHeader MULTIBOOT_ATTR = {
@@ -71,10 +69,10 @@ const struct multibootAddressTag multibootAddress MULTIBOOT_ATTR = {
         MULTIBOOT_HEADER_TAG_ADDRESS,
         MULTIBOOT_REQUIRED(MULTIBOOT_HEADER_TAG_ADDRESS_FLAGS),
         MULTIBOOT_HEADER_TAG_ADDRESS_SIZEOF,
-        reinterpret_cast<std::uint32_t>(&multibootHeader), // NOLINT
-        reinterpret_cast<std::uint32_t>(&imageStart), // NOLINT
-        reinterpret_cast<std::uint32_t>(&bssStart), // NOLINT
-        reinterpret_cast<std::uint32_t>(&imageEnd) // NOLINT
+        reinterpret_cast<std::uint32_t>(&multibootHeader),  // NOLINT
+        reinterpret_cast<std::uint32_t>(&imageStart),  // NOLINT
+        reinterpret_cast<std::uint32_t>(&bssStart),  // NOLINT
+        reinterpret_cast<std::uint32_t>(&imageEnd)  // NOLINT
 };
 
 // NOLINTNEXTLINE
@@ -82,7 +80,7 @@ const struct multibootEntryAddressTag multibootEntryAddress MULTIBOOT_ATTR = {
         MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS,
         MULTIBOOT_REQUIRED(MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_FLAGS),
         MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_SIZEOF,
-        reinterpret_cast<std::uint32_t>(&imageStart) // NOLINT
+        reinterpret_cast<std::uint32_t>(&imageStart)  // NOLINT
 };
 
 // NOLINTNEXTLINE

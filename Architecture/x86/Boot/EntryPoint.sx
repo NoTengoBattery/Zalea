@@ -23,12 +23,29 @@
 
 #include <config.h>
 #define __FILENAME__ "EntryPoint.sx"
-#include <AssemblerMagic.h>
+#include <CompilerMagic/AssemblerMagic.h>
 
+/// start is the real entry point. It is the first thing that is found in the binary image, and it's the very first
+/// thing to be executed when we have full control over the CPU. For x86, this will save the Multiboot2 registers, setup
+/// the main stack and finally perform a long call to the C entry point.
 NAKED_GLOBAL_FUNCTION(.start, start)
   XCHG bx, bx # BOCHS magic breakpoint
-  JMP start
+  MOV iEAX, eax  # Temporary save EAX, which contains the Multiboot2 magic number
+  MOV iEBX, ebx  # Temporary save EAX, which contains the address of the Multiboot2 data structure
+  MOV esp, stackStart  # Setup the stack
+  MOV eax, iEAX
+  MOV edx, iEBX
+  LCALL secondEntryPoint
 NAKED_GLOBAL_FUNCTION_EPILOG(start)
+LOCAL_BSS_DATA(iEAX, 4)  # 4: sizeof (eax): 32 bit
+LOCAL_BSS_DATA(iEBX, 4)  # 4: sizeof (ebx): 32 bit
+
+/// miserableFail is a global function that will fail miserably when an irrecuperable error is detected. This is only
+/// true for the very early boot process.
+NAKED_GLOBAL_FUNCTION(.start, miserableFail)
+  HLT
+  JMP miserableFail
+NAKED_GLOBAL_FUNCTION_EPILOG(miserableFail)
 
 # Those are placeholders (needed because LLD will not identify the sections correctly when no data is in the sections)
 # but they are only needed when no data is in the section. Most likely to not happen ever but anyway...

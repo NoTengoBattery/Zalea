@@ -78,6 +78,16 @@
     .skip s, 0x00 ASM_NL \
     GLOBAL_DATA_2_EPILOG(n)
 
+#define LOCAL_DATA_2(n, s, f, b) \
+    .section s, f, b ASM_NL \
+    n:
+
+#define LOCAL_DATA_EPILOG(n) GLOBAL_DATA_2_EPILOG(n)
+
+#define LOCAL_BSS_DATA(n, s) LOCAL_DATA_2(n, .bss, "aw", @nobits) ASM_NL \
+    .skip s, 0x00 ASM_NL \
+    LOCAL_DATA_EPILOG(n)
+
     .ident "x86 AssemblerMagic for GNU Assemblers"
 
 #elif defined(KERNEL_ARM)

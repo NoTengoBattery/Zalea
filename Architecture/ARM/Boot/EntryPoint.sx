@@ -23,7 +23,7 @@
 
 #include <config.h>
 #define __FILENAME__ "EntryPoint.sx"
-#include <AssemblerMagic.h>
+#include <CompilerMagic/AssemblerMagic.h>
 
 NAKED_GLOBAL_ARM_FUNCTION(.start, start)
   BL start
