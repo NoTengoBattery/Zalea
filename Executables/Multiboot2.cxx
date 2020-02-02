@@ -47,20 +47,10 @@ const struct multibootInformationRequestTag multibootInformation MULTIBOOT_ATTR 
          MULTIBOOT_TAG_TYPE_VBE,
          MULTIBOOT_TAG_TYPE_FRAMEBUFFER,
          MULTIBOOT_TAG_TYPE_APM,
-         MULTIBOOT_TAG_TYPE_SMBIOS,
          MULTIBOOT_TAG_TYPE_ACPI_OLD,
          MULTIBOOT_TAG_TYPE_ACPI_NEW,
          MULTIBOOT_TAG_TYPE_NETWORK,
-#ifdef PLATFORM_EFI
-        MULTIBOOT_TAG_TYPE_EFI_MMAP,
-        MULTIBOOT_TAG_TYPE_EFI_BS,
-#endif
-#ifdef KERNEL_x86_EFI
-                MULTIBOOT_TAG_TYPE_EFI_32_IH,
-#endif
-#ifdef KERNEL_AMD64_EFI
-                MULTIBOOT_TAG_TYPE_EFI_64_IH,
-#endif
+         MULTIBOOT_TAG_TYPE_LOAD_BASE_ADDR,
          MULTIBOOT_TAG_TYPE_END}
 };
 
@@ -72,7 +62,7 @@ const struct multibootAddressTag multibootAddress MULTIBOOT_ATTR = {
         reinterpret_cast<std::uint32_t>(&multibootHeader),  // NOLINT
         reinterpret_cast<std::uint32_t>(&imageStart),  // NOLINT
         reinterpret_cast<std::uint32_t>(&bssStart),  // NOLINT
-        reinterpret_cast<std::uint32_t>(&imageEnd)  // NOLINT
+        reinterpret_cast<std::uint32_t>(&imageEnd + 0x01)  // NOLINT
 };
 
 // NOLINTNEXTLINE

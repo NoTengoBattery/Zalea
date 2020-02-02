@@ -84,6 +84,7 @@ ATTR_NORETURN void secondEntryPoint(unsigned int eax, unsigned int ebx) {  // NO
         // Because the pointer is stored in bss, we store it after we clear the bss and stack
         memoryClear464(&bssStart, &imageEnd);
         multibootStructPointer = (void *) ebx;  // NOLINT
+        BUILTIN_UNREACHABLE;
     }
     BUILTIN_UNREACHABLE;
 }

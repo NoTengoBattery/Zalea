@@ -30,12 +30,18 @@
 /// the main stack and finally perform a long call to the C entry point.
 NAKED_GLOBAL_FUNCTION(.start, start)
   XCHG bx, bx # BOCHS magic breakpoint
-  MOV iEAX, eax  # Temporary save EAX, which contains the Multiboot2 magic number
-  MOV iEBX, ebx  # Temporary save EAX, which contains the address of the Multiboot2 data structure
-  MOV esp, stackStart  # Setup the stack
-  MOV eax, iEAX
-  MOV edx, iEBX
-  LCALL secondEntryPoint
+  LEA esi, iEAX
+  LEA edi, iEBX
+  MOV [esi], eax  # Temporary save EAX, which contains the Multiboot2 magic number
+  MOV [edi], ebx  # Temporary save EAX, which contains the address of the Multiboot2 data structure
+  LEA esp, stackStart  # Setup the stack
+  MOV ebp, esp
+  MOV eax, [edi]  # Restore and push EBX
+  PUSH eax
+  MOV eax, [esi]  # Restore and push EAX
+  PUSH eax
+  CALL secondEntryPoint
+  CALL miserableFail
 NAKED_GLOBAL_FUNCTION_EPILOG(start)
 LOCAL_BSS_DATA(iEAX, 4)  # 4: sizeof (eax): 32 bit
 LOCAL_BSS_DATA(iEBX, 4)  # 4: sizeof (ebx): 32 bit
