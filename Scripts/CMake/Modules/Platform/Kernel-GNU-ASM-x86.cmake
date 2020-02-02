@@ -33,7 +33,9 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
 
   # Those are special base flags which will setup the ABI for the compiler
   STRING(APPEND CMAKE_ASM_FLAGS_INIT "-m32 ")
-  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-msoft-float ")
+  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-mabi=sysv ")
+  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-mfpmath=sse ")
+  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-msse2 ")
 
   # These flags are based on which kind of build we are doing
   STRING(APPEND CMAKE_ASM_FLAGS_DEBUG_INIT " ")
