@@ -36,12 +36,26 @@ NAKED_GLOBAL_FUNCTION(.start, start)
   MOV [edi], ebx  # Temporary save EAX, which contains the address of the Multiboot2 data structure
   LEA esp, stackStart  # Setup the stack
   MOV ebp, esp
+# --- Check for SSE2 ---
+  MOV eax, 0x01
+  CPUID
+  TEST edx, 0x2000000
+  JZ miserableFail
+# --- Enable SSE2 ---
+  MOV eax, cr0  # -- CR0
+  AND ax, 0xFFFB
+  OR ax, 0x02
+  MOV cr0, eax
+  MOV eax, cr4  # -- CR4
+  OR ax, 0x600
+  MOV cr4, eax
+# --- Done with SSE2 ---
   MOV eax, [edi]  # Restore and push EBX
   PUSH eax
   MOV eax, [esi]  # Restore and push EAX
   PUSH eax
   CALL secondEntryPoint
-  CALL miserableFail
+  JMP miserableFail
 NAKED_GLOBAL_FUNCTION_EPILOG(start)
 LOCAL_BSS_DATA(iEAX, 4)  # 4: sizeof (eax): 32 bit
 LOCAL_BSS_DATA(iEBX, 4)  # 4: sizeof (ebx): 32 bit
@@ -52,6 +66,11 @@ NAKED_GLOBAL_FUNCTION(.start, miserableFail)
   HLT
   JMP miserableFail
 NAKED_GLOBAL_FUNCTION_EPILOG(miserableFail)
+
+// This is an address in the .data section for the multiboot pointer
+GLOBAL_DATA(multibootStructPointer)
+  .long 0x00
+GLOBAL_DATA_EPILOG(multibootStructPointer)
 
 # Those are placeholders (needed because LLD will not identify the sections correctly when no data is in the sections)
 # but they are only needed when no data is in the section. Most likely to not happen ever but anyway...
