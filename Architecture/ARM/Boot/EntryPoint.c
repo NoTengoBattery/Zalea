@@ -21,8 +21,8 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#include <CompilerMagic/CompilerMagic.h>
-#include <ImageConstants.h>
+#include <CompilerMagic/CompilerMagic/CompilerMagic.h>
+#include <ExecutableLibrary/ImageConstants.h>
 
 /// This function will clear the allocated `.bss` section.
 /// \param origin the origin of the memory buffer to set

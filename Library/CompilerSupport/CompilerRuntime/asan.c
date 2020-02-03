@@ -20,3 +20,10 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
+#include <CompilerMagic/CompilerMagic/CompilerMagic.h>
+
+ATTR_USED void __asan_store1(unsigned long store) {
+    if (store != 0) {
+        return;
+    }
+}

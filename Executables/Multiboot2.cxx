@@ -24,7 +24,7 @@
 #include "Multiboot2.hxx"
 
 extern "C" {
-#include <ImageConstants.h>
+#include <ExecutableLibrary/ImageConstants.h>
 }
 
 const struct multibootHeaderTag multibootHeader MULTIBOOT_ATTR = {

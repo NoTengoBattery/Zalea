@@ -39,8 +39,10 @@
 #define ATTR_REGPARM(x) __attribute__ ((regparm (x)))
 #define ATTR_SECTION(x) __attribute__ ((section (x)))
 #define ATTR_USED __attribute__ ((used))
+#define ATTR_VISIBILITY(x) __attribute__ ((visibility(x)))
 #define BUILTIN_UNREACHABLE __builtin_unreachable()
 #define REORDERING_BARRIER __asm__ __volatile__("":::"memory")
+#define VISIBILITY_EXPORT ATTR_VISIBILITY("default")
 
 #endif
 

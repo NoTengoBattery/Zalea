@@ -28,12 +28,5 @@
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
-SET(THIS_INTERFACE_NAME CompilerMagic)
-ADD_LIBRARY("${THIS_INTERFACE_NAME}" INTERFACE)
-TARGET_INCLUDE_DIRECTORIES("${THIS_INTERFACE_NAME}" INTERFACE "${CMAKE_CURRENT_LIST_DIR}")
-TARGET_LINK_LIBRARIES("${THIS_INTERFACE_NAME}" INTERFACE "ImportantOutputDirectory")
-TARGET_SOURCES("${THIS_INTERFACE_NAME}" INTERFACE "CompilerMagic/AssemblerMagic.h"
-               INTERFACE "CompilerMagic/BitwiseMacros.h"
-               INTERFACE "CompilerMagic/CompilerMagic.h")
-
+ADD_SUBDIRECTORY("${TREE_LIBRARY_COMPILERSUPPORT_COMPILERMAGIC_PATH}")
 ADD_SUBDIRECTORY("${TREE_LIBRARY_COMPILERSUPPORT_COMPILERRUNTIME_PATH}")

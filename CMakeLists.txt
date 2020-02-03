@@ -143,7 +143,6 @@ ENDIF ()
 ADD_LIBRARY(ImportantOutputDirectory INTERFACE)
 TARGET_INCLUDE_DIRECTORIES(ImportantOutputDirectory INTERFACE "${TREE_BIN_IMPORTANT_INCLUDE_PATH}")
 TARGET_SOURCES(ImportantOutputDirectory INTERFACE "${CONFIGURATION_HEADER}")
-SET(GLOBAL_INTERFACES "CompilerMagic" "ImportantOutputDirectory" "CompilerRuntime")
 
 # Add all subdirectories (the root subdirectories) that will be ever used
 ADD_SUBDIRECTORY("${TREE_ARCHITECTURE_PATH}")

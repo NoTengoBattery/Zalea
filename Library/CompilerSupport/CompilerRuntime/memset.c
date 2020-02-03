@@ -22,7 +22,7 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#include <CompilerMagic/CompilerMagic.h>
+#include <CompilerMagic/CompilerMagic/CompilerMagic.h>
 #include <stddef.h>
 #include <stdint.h>
 

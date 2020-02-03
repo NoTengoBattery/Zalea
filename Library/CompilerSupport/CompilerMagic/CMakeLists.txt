@@ -1,4 +1,4 @@
-#===-- CMakeLists.txt - Compiler Runtime Library -------------------------------------------------------*- CMake -*-===#
+#===-- CMakeLists.txt - Compiler Magic Library ---------------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -16,30 +16,16 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
-#/ This contains the basic compiler support. This contains a series of headers, imported by the CompilerMagic, which
-#/ defines some macros to deal with compiler peculiarities.
-#/
-#/ This module include:
-#/ -> CompilerMagic
-#/ -> CompilerRuntime
-#/ -> ExceptionHandler
-#/ -> RuntimeTypeInformation
-#/ -> StackUnwinder
+#/ This is the CompilerMagic library, an interface library to support, detect and react to different compilers.
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
-ADD_LIBRARY("CompilerRuntime" STATIC
-            "asan.c"
-            "memset.c")
+ADD_LIBRARY("CompilerMagic" INTERFACE)
 
-IF (KERNEL_ARM)
-  TARGET_SOURCES("CompilerRuntime" PRIVATE
-                 "ARM/ArmUtils.h")
-ELSEIF (KERNEL_x86)
-  TARGET_SOURCES("CompilerRuntime" PRIVATE
-                 "x86/x86Utils.h")
-ENDIF ()
+TARGET_SOURCES("CompilerMagic" INTERFACE "CompilerMagic/AssemblerMagic.h"
+               INTERFACE "CompilerMagic/BitwiseMacros.h"
+               INTERFACE "CompilerMagic/CompilerMagic.h")
 
-#TARGET_INCLUDE_DIRECTORIES("CompilerRuntime" PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
+TARGET_INCLUDE_DIRECTORIES("CompilerMagic" INTERFACE "${CMAKE_CURRENT_LIST_DIR}")
 
-TARGET_LINK_LIBRARIES("CompilerRuntime" "CompilerMagic")
+TARGET_LINK_LIBRARIES("CompilerMagic" INTERFACE "ImportantOutputDirectory")

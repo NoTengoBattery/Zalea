@@ -24,11 +24,12 @@
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
-SET(THIS_LIB_NAME "EntryPoint")
-ADD_LIBRARY("${THIS_LIB_NAME}" OBJECT
-            "${TREE_ARCHITECTURE_INCLUDE_PATH}/ImageConstants.h"
+ADD_LIBRARY("EntryPoint" OBJECT
             "EntryPoint.c"
             "EntryPoint.sx")
-TARGET_INCLUDE_DIRECTORIES("${THIS_LIB_NAME}" INTERFACE "${TREE_ARCHITECTURE_INCLUDE_PATH}"
-                           PRIVATE "${TREE_ARCHITECTURE_INCLUDE_PATH}")
-TARGET_LINK_LIBRARIES("${THIS_LIB_NAME}" "${GLOBAL_INTERFACES}")
+
+TARGET_LINK_LIBRARIES("EntryPoint"
+                      "ImportantOutputDirectory"
+                      "CompilerMagic"
+                      "ExecutableLibrary"
+                      "CompilerRuntime")
