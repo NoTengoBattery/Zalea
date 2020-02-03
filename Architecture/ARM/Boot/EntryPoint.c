@@ -21,7 +21,7 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#include <CompilerMagic/CompilerMagic/CompilerMagic.h>
+#include <CompilerMagic/CompilerMagic.h>
 #include <ExecutableLibrary/ImageConstants.h>
 
 /// This function will clear the allocated `.bss` section.

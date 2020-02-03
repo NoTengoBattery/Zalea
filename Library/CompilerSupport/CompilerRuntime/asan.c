@@ -16,13 +16,13 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 ///
 /// \file
-/// Contains the code to support the GCC's Address Sanitizer.
+/// Contains the code to support the Address Sanitizer, which can be useful for instrumenting memory access.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#include <CompilerMagic/CompilerMagic/CompilerMagic.h>
+#include <CompilerMagic/CompilerMagic.h>
 
-ATTR_USED void __asan_store1(unsigned long store) {
+ATTR_USED void __asan_store1_noabort(unsigned long store) {
     if (store != 0) {
         return;
     }

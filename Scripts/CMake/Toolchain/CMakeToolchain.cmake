@@ -114,7 +114,7 @@ IF (TREE_SELF_PATH AND NOT TOOLCHAIN_DONE) # This will define if we have access 
   ELSEIF ("${KERNEL_BINUTILS}" STREQUAL "GNU")
     SET(CMAKE_LD "${_KERNEL_TARGET}-ld;${_KERNEL_TARGET}-ld.bfd;ld")
     SET(CMAKE_LINKER "${CMAKE_LD}")
-    SET(CMAKE_NM "${_KERNEL_TARGET}-nm;nm")
+    SET(CMAKE_NM "${_KERNEL_TARGET}-gcc-nm;${_KERNEL_TARGET}-nm;nm")
     SET(CMAKE_OBJCOPY "${_KERNEL_TARGET}-objcopy;objcopy")
     SET(CMAKE_OBJDUMP "${_KERNEL_TARGET}-objdump;objdump")
     SET(CMAKE_READELF "${_KERNEL_TARGET}-readelf;readelf")

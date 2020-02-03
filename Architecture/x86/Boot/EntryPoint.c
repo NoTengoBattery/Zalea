@@ -21,7 +21,7 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#include <CompilerMagic/CompilerMagic/CompilerMagic.h>
+#include <CompilerMagic/CompilerMagic.h>
 #include <ExecutableLibrary/ImageConstants.h>
 
 /* We reject this value here, but we do the actual verification of everything in C++ */
