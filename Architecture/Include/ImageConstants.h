@@ -23,6 +23,7 @@
 #ifndef ZALEA_IMAGECONSTANTS_H
 #define ZALEA_IMAGECONSTANTS_H
 
+extern volatile void *bssEnd;
 extern volatile void *bssStart;
 extern volatile void *imageEnd;
 extern volatile void *imageStart;

@@ -1,4 +1,4 @@
-#===-- CMakeLists.txt - Compiler Library ---------------------------------------------------------------*- CMake -*-===#
+#===-- CMakeLists.txt - Compiler Runtime Library -------------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -28,12 +28,7 @@
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
-SET(THIS_INTERFACE_NAME CompilerMagic)
-ADD_LIBRARY("${THIS_INTERFACE_NAME}" INTERFACE)
-TARGET_INCLUDE_DIRECTORIES("${THIS_INTERFACE_NAME}" INTERFACE ".")
-TARGET_LINK_LIBRARIES("${THIS_INTERFACE_NAME}" INTERFACE "ImportantOutputDirectory")
-TARGET_SOURCES("${THIS_INTERFACE_NAME}" INTERFACE "CompilerMagic/AssemblerMagic.h"
-               INTERFACE "CompilerMagic/BitwiseMacros.h"
-               INTERFACE "CompilerMagic/CompilerMagic.h")
-
-ADD_SUBDIRECTORY("${TREE_LIBRARY_COMPILERSUPPORT_COMPILERRUNTIME_PATH}")
+SET(THIS_LIBRARY_NAME CompilerRuntime)
+ADD_LIBRARY("${THIS_LIBRARY_NAME}" STATIC
+            "memset.c")
+TARGET_INCLUDE_DIRECTORIES("${THIS_LIBRARY_NAME}" PRIVATE ".")

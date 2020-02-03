@@ -32,15 +32,15 @@
 #error "This file should not be included in Assembler."
 #else
 
-#define ATTR_ALIGNED(x) __attribute__ ((aligned (x)))  // NOLINT
-#define ATTR_FASTCALL __attribute__ ((fastcall))  // NOLINT
-#define ATTR_NAKED __attribute__ ((naked))  // NOLINT
-#define ATTR_NORETURN __attribute__ ((noreturn))  // NOLINT
-#define ATTR_REGPARM(x) __attribute__ ((regparm (x)))  // NOLINT
-#define ATTR_SECTION(x) __attribute__ ((section (x)))  // NOLINT
-#define ATTR_USED __attribute__ ((used))  // NOLINT
-#define BUILTIN_UNREACHABLE __builtin_unreachable()  // NOLINT
-#define REORDERING_BARRIER __asm__ __volatile__("":::"memory")  // NOLINT
+#define ATTR_ALIGNED(x) __attribute__ ((aligned (x)))
+#define ATTR_FASTCALL __attribute__ ((fastcall))
+#define ATTR_NAKED __attribute__ ((naked))
+#define ATTR_NORETURN __attribute__ ((noreturn))
+#define ATTR_REGPARM(x) __attribute__ ((regparm (x)))
+#define ATTR_SECTION(x) __attribute__ ((section (x)))
+#define ATTR_USED __attribute__ ((used))
+#define BUILTIN_UNREACHABLE __builtin_unreachable()
+#define REORDERING_BARRIER __asm__ __volatile__("":::"memory")
 
 #endif
 
