@@ -534,8 +534,6 @@ mono_crash.*
 [Rr]elease/
 [Rr]eleases/
 x64/
-x86/
-[Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
 [Bb]in/
@@ -858,6 +856,7 @@ MigrationBackup/
 # Files ignored and not ignored by the project
 !Architecture/*
 !Executables/*
+!Library/*
 !Scripts/*
 Scripts/Python/Environments/3
 Scripts/Python/Tests/config.i.json
