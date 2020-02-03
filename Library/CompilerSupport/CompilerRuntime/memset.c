@@ -22,6 +22,7 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
+#include <CompilerMagic/CompilerMagic.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -59,7 +60,7 @@ static inline size_t unalignedLoop(void *buffer, unsigned char fill, size_t size
 /// \param fill this is the fill which will fill the buffer
 /// \param size this is the size of the buffer to fill
 /// \return the same address as provided in the buffer address
-void *memset(void *buffer, int fill, size_t size) {
+ATTR_USED void *memset(void *buffer, int fill, size_t size) {
     // We define a "cost". The cost is the size of the unrolled loop, which in theory should avoid branching...
     static const size_t cost = 4;
     static const size_t cellSize = sizeof(uint_fast32_t);
