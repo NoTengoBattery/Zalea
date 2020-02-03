@@ -70,7 +70,7 @@ SECTIONS {
         *(.rodata);
         *(.rodata.*);
     } :rodata
-    .note.gnu.build-id ALIGN_MICRO : ALIGN_MICRO {
+    .note.gnu.build-id : {
         *(.note.gnu.build-id);
     }
 #ifdef KERNEL_ARM
