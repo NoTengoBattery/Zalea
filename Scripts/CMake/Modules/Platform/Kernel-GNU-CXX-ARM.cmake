@@ -39,6 +39,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   ELSE ()
     STRING(APPEND CMAKE_CXX_FLAGS_INIT "-mfloat-abi=hard ")
     STRING(APPEND CMAKE_CXX_FLAGS_INIT "-mfpu=${MACHINE_MFPU} ")
+  ENDIF ()
 
   # These flags are based on which kind of build we are doing
   STRING(APPEND CMAKE_CXX_FLAGS_DEBUG_INIT " ")

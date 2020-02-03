@@ -24,7 +24,7 @@
 # MACHINE_LOADABLE_IMAGE_NAME: SET_AND_EXPORT STRING
 SET(MACHINE_LOADABLE_IMAGE_NAME "kernel.img"
     CACHE STRING
-    "This will set the name of the binary that the machine can run. Some machines require a specific file name.")
+    "This will set the name of the binary that the machine can run. Some machines require a specific file ")
 # MACHINE_LOAD_ADDRESS: SET_AND_EXPORT STRING
 SET(MACHINE_LOAD_ADDRESS "0x8000"
     CACHE STRING
@@ -32,11 +32,15 @@ SET(MACHINE_LOAD_ADDRESS "0x8000"
 # MACHINE_MARCH: SET_AND_EXPORT STRING
 SET(MACHINE_MARCH "armv7-a"
     CACHE STRING
-    "This variable is the machine minimum iteration of the ISA for the compiler and binutils.")
+    "This variable is the machine minimum iteration of the ISA for the compiler and assembler to emit code.")
+# MACHINE_MFPU: SET_AND_EXPORT STRING
+SET(MACHINE_MFPU "neon-vfpv4"
+    CACHE STRING
+    "This variable is the machine FPU that the compiler can use to generate floating point instructions.")
 # MACHINE_MTUNE: SET_AND_EXPORT STRING
 SET(MACHINE_MTUNE "cortex-a15"
     CACHE STRING
-    "This variable is the default CPU for the compiler and binutils to tune the performance.")
+    "This variable is the default CPU for the compiler and binutils to optimize and tune the performance.")
 # MACHINE_NAME: SET_AND_EXPORT STRING
 SET(MACHINE_NAME "ARM Versatile Express for Cortex-A15"
     CACHE STRING
