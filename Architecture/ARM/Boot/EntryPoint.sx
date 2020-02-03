@@ -26,14 +26,21 @@
 #include <CompilerMagic/AssemblerMagic.h>
 
 NAKED_GLOBAL_ARM_FUNCTION(.start, start)
-  BL start
+  B start
 NAKED_GLOBAL_ARM_FUNCTION_EPILOG(start)
+
+/// miserableFail is a global function that will fail miserably when an irrecuperable error is detected. This is only
+/// true for the very early boot process.
+NAKED_GLOBAL_ARM_FUNCTION(.start, miserableFail)
+  WFI
+  B miserableFail
+NAKED_GLOBAL_ARM_FUNCTION_EPILOG(miserableFail)
 
 # Those are placeholders (needed because LLD will not identify the sections correctly when no data is in the sections)
 # but they are only needed when no data is in the section. Most likely to not happen ever but anyway...
 
 NAKED_GLOBAL_ARM_FUNCTION(.text, textPlaceholder)
-  BL textPlaceholder
+  B textPlaceholder
 NAKED_GLOBAL_ARM_FUNCTION_EPILOG(textPlaceholder)
 
 GLOBAL_DATA(dataPlaceholder)
