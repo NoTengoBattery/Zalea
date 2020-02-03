@@ -36,7 +36,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_C_FLAGS_INIT "-pipe ")
   # Those flags define part of the ABI that is common to all architectures
   STRING(APPEND CMAKE_C_FLAGS_INIT "-fno-delete-null-pointer-checks ")
-  STRING(APPEND CMAKE_C_FLAGS_INIT "-fstack-protector-strong -fstack-check ")
+  STRING(APPEND CMAKE_C_FLAGS_INIT "-fstack-protector-strong ")
   # Those flags define the diagnostics to be issued (or not) by the compiler
   STRING(APPEND CMAKE_C_FLAGS_INIT "-Wall ")
   STRING(APPEND CMAKE_C_FLAGS_INIT "-Werror ")
