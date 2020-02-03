@@ -63,5 +63,4 @@ ATTR_NORETURN void secondEntryPoint(unsigned int eax, unsigned int ebx) {
         memoryClear(&bssStart, &bssEnd);
         BUILTIN_UNREACHABLE;
     }
-    BUILTIN_UNREACHABLE;
 }
