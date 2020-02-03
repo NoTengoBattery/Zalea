@@ -40,10 +40,18 @@ ELSE ()
 ENDIF ()
 
 # Add the custom command which will run the C preprocessor to generate a linker script (requires compiler detection)
-IF (KERNEL_COMPILER_GNU)
+IF (KERNEL_COMPILER_GNU AND NOT KERNEL_COMPILER_ICC)
   ADD_CUSTOM_COMMAND(TARGET "${THIS_EXE_NAME}" PRE_LINK VERBATIM
                      COMMAND "${CMAKE_C_COMPILER}"
                      ARGS "-E" "-C" "-CC" "-D__LD__" "-P" "-Wall" "-Werror" "-x" "c"
+                     "-I" "${TREE_BIN_IMPORTANT_INCLUDE_PATH}"
+                     "-I" "${CMAKE_CURRENT_LIST_DIR}"
+                     "-o" "${TREE_BIN_IMPORTANT_PATH}/${THIS_EXE_NAME}.ld"
+                     "${TREE_EXECUTABLES_PATH}/${KERNEL_ARCH}/MainExecutable.in.ld")
+ELSEIF (KERNEL_COMPILER_ICC)
+  ADD_CUSTOM_COMMAND(TARGET "${THIS_EXE_NAME}" PRE_LINK VERBATIM
+                     COMMAND "${CMAKE_C_COMPILER}"
+                     ARGS "-E" "-C" "-D__LD__" "-P" "-Wall" "-Werror" "-x" "c"
                      "-I" "${TREE_BIN_IMPORTANT_INCLUDE_PATH}"
                      "-I" "${CMAKE_CURRENT_LIST_DIR}"
                      "-o" "${TREE_BIN_IMPORTANT_PATH}/${THIS_EXE_NAME}.ld"
