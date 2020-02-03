@@ -49,6 +49,10 @@ SET_AND_EXPORT(KERNEL_SECOND_TARGET "arm-linux-elf" STRING "arm-linux-elf"
 SET_AND_EXPORT(MACHINE_MARCH "armv7" STRING "armv7"
                "This variable is the machine minimum iteration of the ISA for the compiler and assembler to emit code.")
 
+# This is the default FPU used by the compiler to generate hardware floating point instructions
+SET_AND_EXPORT(MACHINE_MFPU "none" STRING "none"
+               "This variable is the machine FPU that the compiler can use to generate floating point instructions.")
+
 # This is the default CPU for the compiler and binutils to tune the performance
 SET_AND_EXPORT(MACHINE_MTUNE "generic" STRING "generic"
                "This variable is the default CPU for the compiler and binutils to optimize and tune the performance.")

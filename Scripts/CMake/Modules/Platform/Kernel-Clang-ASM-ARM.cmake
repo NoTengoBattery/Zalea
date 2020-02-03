@@ -33,7 +33,13 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
 
   # Those are special base flags which will setup the ABI for the compiler
   STRING(APPEND CMAKE_ASM_FLAGS_INIT "-mabi=aapcs ")
-  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-mfloat-abi=hard ")
+  IF ("${MACHINE_MFPU}" STREQUAL "none")
+    STRING(APPEND CMAKE_ASM_FLAGS_INIT "-mfloat-abi=soft ")
+    STRING(APPEND CMAKE_ASM_FLAGS_INIT "-mfpu=none ")
+  ELSE ()
+    STRING(APPEND CMAKE_ASM_FLAGS_INIT "-mfloat-abi=hard ")
+    STRING(APPEND CMAKE_ASM_FLAGS_INIT "-mfpu=${MACHINE_MFPU} ")
+  ENDIF ()
 
   # These flags are based on which kind of build we are doing
   STRING(APPEND CMAKE_ASM_FLAGS_DEBUG_INIT " ")
