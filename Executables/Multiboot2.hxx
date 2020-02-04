@@ -24,8 +24,11 @@
 #ifndef ZALEA_MULTIBOOT2_HXX
 #define ZALEA_MULTIBOOT2_HXX
 
-#include <CompilerMagic/BitwiseMacros.h>
+extern "C" {
 #include <CompilerMagic/CompilerMagic.h>
+}
+
+#include <CompilerMagic/BitwiseMacros.h>
 #include <cstdint>
 
 /* This is the attributes needed to assemble the Multiboot2 Header in the final image */

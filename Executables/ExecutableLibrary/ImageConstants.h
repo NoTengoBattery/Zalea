@@ -23,6 +23,9 @@
 #ifndef ZALEA_IMAGECONSTANTS_H
 #define ZALEA_IMAGECONSTANTS_H
 
+/* Since the header that contains this magic value is in C++, and we might need it in C, include it here */
+#define MULTIBOOT_2_BOOTLOADER_MAGIC 0x36D76289
+
 extern volatile void *bssEnd;
 extern volatile void *bssStart;
 extern volatile void *imageEnd;

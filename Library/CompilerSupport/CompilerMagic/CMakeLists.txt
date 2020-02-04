@@ -21,11 +21,11 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 
 ADD_LIBRARY("CompilerMagic" INTERFACE)
-
-TARGET_SOURCES("CompilerMagic" INTERFACE "CompilerMagic/AssemblerMagic.h"
+TARGET_SOURCES("CompilerMagic"
+               INTERFACE "AssemblerMagic/AssemblerMagic.h"
+               INTERFACE "AssemblerMagic/${KERNEL_ARCH}/GnuAssemblerMagic.h"
                INTERFACE "CompilerMagic/BitwiseMacros.h"
-               INTERFACE "CompilerMagic/CompilerMagic.h")
-
+               INTERFACE "CompilerMagic/CompilerMagic.h"
+               INTERFACE "InlineMagic/MemoryClear.h")
 TARGET_INCLUDE_DIRECTORIES("CompilerMagic" INTERFACE "${CMAKE_CURRENT_LIST_DIR}")
-
-TARGET_LINK_LIBRARIES("CompilerMagic" INTERFACE "ImportantOutputDirectory")
+TARGET_LINK_LIBRARIES("CompilerMagic" INTERFACE "CoreLibraries")

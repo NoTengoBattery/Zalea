@@ -23,32 +23,13 @@
 
 #include <CompilerMagic/CompilerMagic.h>
 #include <ExecutableLibrary/ImageConstants.h>
-
-/* We reject this value here, but we do the actual verification of everything in C++ */
-#define MULTIBOOT_2_BOOTLOADER_MAGIC 0x36D76289
-
-/// This function will clear the allocated `.bss` section.
-/// \param origin the origin of the memory buffer to set
-/// \param final the target of the memory buffer to set
-static inline void memoryClear(void *origin, void *final) ATTR_SECTION(".start");
+#include <InlineMagic/MemoryClear.h>
 
 /// This entry point is the secondary entry point for x86. As x86 implements (exclusively) the Multiboot2 protocol, this
 /// function will perform some basic checking for the Multiboot2 i386 status as documented in the GNU GRUB user manual.
-/// \param eax this is the value of the `EAX` register obtained from the bootloader
-/// \param ebx this is the value of the `EBX` register obtained from the bootloader
+/// \param eax this is the value of the EAX register obtained from the bootloader
+/// \param ebx this is the value of the EBX register obtained from the bootloader
 void secondEntryPoint(unsigned int eax, unsigned int ebx) ATTR_SECTION(".start");
-
-static inline void memoryClear(void *origin, void *final) {
-    void *greater = ((origin > final) ? origin : final);
-    void *smaller = ((origin < final) ? origin : final);
-    if (greater != smaller) {
-        unsigned char *buffer = smaller;
-        while (buffer != greater) {
-            *buffer = 0x00;
-            buffer++;
-        }
-    }
-}
 
 ATTR_NORETURN void secondEntryPoint(unsigned int eax, unsigned int ebx) {
     if (eax != MULTIBOOT_2_BOOTLOADER_MAGIC  // If the magic value is not correct...

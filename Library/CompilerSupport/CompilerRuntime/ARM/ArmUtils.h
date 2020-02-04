@@ -16,10 +16,11 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 ///
 /// \file
-/// This file cotains macros, variables, definitions, alias, typedefs and other structures needed to compile the
+/// This file contains macros, variables, definitions, alias, typedefs and other structures needed to compile the
 /// CompilerRuntime runtime, which are specific to ARM.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
+
 #ifndef ZALEA_ARMUTILS_H
 #define ZALEA_ARMUTILS_H
 

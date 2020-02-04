@@ -24,10 +24,9 @@
  *===--------------------------------------------------------------------------------------------------------------===*/
 
 #include <config.h>
-#include <LinkerScriptDefinitions.in>
-#undef i386
+#include <LinkerLibrary/LinkerScriptDefinitions.in>
 
-OUTPUT_FORMAT( "elf32-i386", "elf32-i386", "elf32-i386" )
-OUTPUT_ARCH( i386 )
+OUTPUT_FORMAT( "elf32-littlearm", "elf32-bigarm", "elf32-littlearm" )
+OUTPUT_ARCH( arm )
 ENTRY
-#include <MainExecutableLinkerBase.in>
+#include <LinkerLibrary/MainExecutableLinkerBase.in>

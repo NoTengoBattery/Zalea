@@ -30,25 +30,23 @@ CHECK_TOOL_BY_NAME(COMPILER "GNU")
 SET(AVAILABLE_BINUTILS "GNU" "LLVM")
 CHECK_TOOL_BY_NAME(BINUTILS "GNU")
 
+# A list of common names for this architecture
+SET(ARCHITECTURE_NAMES 8086 i386 i686 ia32 x32 x86 x86-32 CACHE INTERNAL "-")
+
 # Change the CMake output format to ELF
 SET(CMAKE_EXECUTABLE_FORMAT "ELF" CACHE INTERNAL "Executable file format")
-
 # This is the default target for the compiler and binutils
 SET_AND_EXPORT(KERNEL_TARGET "i686-elf" STRING "i686-elf"
                "This variable is the machine target for the compiler and binutils to generate code and executables.")
-
-# This is the alternative target for the compiler and binutils
-SET_AND_EXPORT(KERNEL_ALTERNATIVE_TARGET "i386-elf" STRING "i386-elf"
+# This is the alternative target for the compiler and binutils (the host compiler in Linux distros)
+SET_AND_EXPORT(KERNEL_ALTERNATIVE_TARGET "x86_64-linux-gnu" STRING "x86_64-linux-gnu"
                "This variable is the alternative machine target for the compiler and binutils to generate code.")
-
 # This is the secondary target (LLVM needs this to correctly run the linker)
 SET_AND_EXPORT(KERNEL_SECOND_TARGET "i686-linux-elf" STRING "i686-linux-elf"
                "This variable is the second machine target for the LLVM toolchain to generate code and executables.")
-
 # This is the default ISA for the compiler and binutils (the minimum instruction set)
 SET_AND_EXPORT(MACHINE_MARCH "pentium4" STRING "pentium4"
                "This variable is the machine minimum iteration of the ISA for the compiler and assembler to emit code.")
-
 # This is the default CPU for the compiler and binutils to tune the performance
 SET_AND_EXPORT(MACHINE_MTUNE "generic" STRING "generic"
                "This variable is the default CPU for the compiler and binutils to optimize and tune the performance.")

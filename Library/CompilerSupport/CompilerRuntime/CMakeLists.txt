@@ -31,15 +31,12 @@
 ADD_LIBRARY("CompilerRuntime" STATIC
             "asan.c"
             "memset.c")
-
 IF (KERNEL_ARM)
   TARGET_SOURCES("CompilerRuntime" PRIVATE
-                 "ARM/ArmUtils.h")
+                 "${KERNEL_ARCH}/${KERNEL_ARCH}Utils.h")
 ELSEIF (KERNEL_x86)
   TARGET_SOURCES("CompilerRuntime" PRIVATE
-                 "x86/x86Utils.h")
+                 "${KERNEL_ARCH}/${KERNEL_ARCH}Utils.h")
 ENDIF ()
-
-#TARGET_INCLUDE_DIRECTORIES("CompilerRuntime" PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
-
-TARGET_LINK_LIBRARIES("CompilerRuntime" "CompilerMagic")
+TARGET_INCLUDE_DIRECTORIES("CompilerRuntime" PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
+TARGET_LINK_LIBRARIES("CompilerRuntime" "CoreLibraries")

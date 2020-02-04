@@ -20,12 +20,8 @@
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
-ADD_LIBRARY("NonStdC++Library" STATIC
+ADD_LIBRARY("NonStdC++Library" OBJECT
             "cstdint")
-
 TARGET_INCLUDE_DIRECTORIES("NonStdC++Library" INTERFACE "${CMAKE_CURRENT_LIST_DIR}")
-
-TARGET_LINK_LIBRARIES("NonStdC++Library"
-                      "CompilerRuntime")
-
+TARGET_LINK_LIBRARIES("NonStdC++Library" "CoreLibraries")
 SET_TARGET_PROPERTIES("NonStdC++Library" PROPERTIES LINKER_LANGUAGE CXX)  # TODO: remove this when adding C++ files

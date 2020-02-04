@@ -24,12 +24,8 @@
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
-ADD_LIBRARY("EntryPoint" OBJECT
+ADD_LIBRARY("EntryPoint" STATIC
             "EntryPoint.c"
             "EntryPoint.sx")
 
-TARGET_LINK_LIBRARIES("EntryPoint"
-                      "ImportantOutputDirectory"
-                      "CompilerMagic"
-                      "ExecutableLibrary"
-                      "CompilerRuntime")
+TARGET_LINK_LIBRARIES("EntryPoint" "CoreLibraries")

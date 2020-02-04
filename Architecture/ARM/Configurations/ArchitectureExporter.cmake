@@ -18,7 +18,7 @@
 #/ \file
 #/ This file will export some variables to the auto-generated files to make them accessible to C/C++/ASM/Linker Scripts
 #/ and to the CMake default configuration. All of these variables are "MACHINE" variables, they only exist here to be
-#/ exported, to not overload the rest of the files.
+#/ exported, to not overload the other files with machine-specific SET_AND_EXPORT.
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 

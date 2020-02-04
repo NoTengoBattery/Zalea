@@ -16,11 +16,12 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 ///
 /// \file
-/// This file cotains macros, variables, definitions, alias, typedefs and other structures needed to compile the
+/// This file contains macros, variables, definitions, alias, typedefs and other structures needed to compile the
 /// CompilerRuntime runtime, which are specific to x86.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
-#ifndef ZALEA_X_86_UTILS_H
-#define ZALEA_X_86_UTILS_H
 
-#endif //ZALEA_X_86_UTILS_H
+#ifndef ZALEA_X86UTILS_H
+#define ZALEA_X86UTILS_H
+
+#endif //ZALEA_X86UTILS_H

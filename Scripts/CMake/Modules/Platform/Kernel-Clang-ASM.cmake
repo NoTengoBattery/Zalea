@@ -59,8 +59,8 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_ASM_FLAGS_RELEASE_INIT "-O3 -DRELEASE ")
   STRING(APPEND CMAKE_ASM_FLAGS_RELWITHDEBINFO_INIT "-O2 -g -DRELWITHDEBINFO ")
 
-  # Options for the CMake compiler
-  SET(CMAKE_ASM_SOURCE_FILE_EXTENSIONS "sx")
+  # Use the following file extensions as ASM source files
+  SET(CMAKE_ASM_SOURCE_FILE_EXTENSIONS "sx;s")
   STRING(APPEND CMAKE_ASM_FLAGS_INIT "-x assembler-with-cpp ")
 
 ENDIF ()

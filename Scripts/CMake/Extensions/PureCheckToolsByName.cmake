@@ -47,7 +47,9 @@ ENDMACRO()
 MACRO(FORCE_TOOL_BY_NAME TYPE TOOLS)
   SET(_TOOL "NONE")
   FOREACH (TOOL ${TOOLS})
-    FIND_PROGRAM("CMAKE_${TYPE}_EXE" NAMES ${CMAKE_${TYPE}} HINTS "${CMAKE_${TOOL}_PATH}" PATH_SUFFIXES "bin"
+    FIND_PROGRAM("CMAKE_${TYPE}_EXE" NAMES ${CMAKE_${TYPE}}
+                 HINTS "${CMAKE_${TOOL}_PATH}" "${TREE_SCRIPTS_PYTHON3_ENV_PATH}"
+                 PATH_SUFFIXES "Scripts" "bin"
                  DOC "This is a guess forced by the build system for a tool. Please ignore this variable.")
     IF (EXISTS "${CMAKE_${TYPE}_EXE}")
       MESSAGE(STATUS "Checking for the 'CMAKE_${TYPE}' tool... Found!")
@@ -81,7 +83,9 @@ MACRO(GUESS_TOOL_BY_NAME TYPE TOOLS)
     ENDIF ()
     UNSET("CMAKE_${TYPE}_EXE" CACHE)
     FOREACH (TOOL ${TOOLS})
-      FIND_PROGRAM("CMAKE_${TYPE}_EXE" NAMES ${CMAKE_${TYPE}_ORIGINAL} HINTS "${CMAKE_${TOOL}_PATH}" PATH_SUFFIXES "bin"
+      FIND_PROGRAM("CMAKE_${TYPE}_EXE" NAMES ${CMAKE_${TYPE}_ORIGINAL}
+                   HINTS "${CMAKE_${TOOL}_PATH}" "${TREE_SCRIPTS_PYTHON3_ENV_PATH}"
+                   PATH_SUFFIXES "Scripts" "bin"
                    DOC "This is a guess made by the build system for a tool. Please ignore this variable.")
       IF (EXISTS "${CMAKE_${TYPE}_EXE}")
         MESSAGE(STATUS "Checking for the 'CMAKE_${TYPE}' tool... Found!")

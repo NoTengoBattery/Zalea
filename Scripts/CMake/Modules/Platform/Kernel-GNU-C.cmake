@@ -36,8 +36,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_C_FLAGS_INIT "-pipe ")
   # Those flags define part of the ABI that is common to all architectures
   STRING(APPEND CMAKE_C_FLAGS_INIT "-fno-delete-null-pointer-checks ")
-  STRING(APPEND CMAKE_C_FLAGS_INIT "-fsanitize=kernel-address ")
-  STRING(APPEND CMAKE_C_FLAGS_INIT "-fstack-protector-strong -fstack-clash-protection ")
+  STRING(APPEND CMAKE_C_FLAGS_INIT "-fstack-protector-strong ")
   # Those flags define the diagnostics to be issued (or not) by the compiler
   STRING(APPEND CMAKE_C_FLAGS_INIT "-Wall ")
   STRING(APPEND CMAKE_C_FLAGS_INIT "-Werror ")
@@ -55,5 +54,8 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_C_FLAGS_MINSIZEREL_INIT "-Os -DMINSIZEREL ")
   STRING(APPEND CMAKE_C_FLAGS_RELEASE_INIT "-O3 -DRELEASE ")
   STRING(APPEND CMAKE_C_FLAGS_RELWITHDEBINFO_INIT "-O2 -g -DRELWITHDEBINFO ")
+
+  # Use the following file extensions as C source files
+  SET(CMAKE_C_SOURCE_FILE_EXTENSIONS "c")
 
 ENDIF ()

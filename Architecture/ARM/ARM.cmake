@@ -30,29 +30,26 @@ CHECK_TOOL_BY_NAME(COMPILER "GNU")
 SET(AVAILABLE_BINUTILS "GNU" "LLVM")
 CHECK_TOOL_BY_NAME(BINUTILS "GNU")
 
+# A list of common names for this architecture
+SET(ARCHITECTURE_NAMES ARM arm armeb armel armhf CACHE INTERNAL "-")
+
 # Change the CMake output format to ELF
 SET(CMAKE_EXECUTABLE_FORMAT "ELF" CACHE INTERNAL "Executable file format")
-
 # This is the default target for the compiler and binutils
 SET_AND_EXPORT(KERNEL_TARGET "arm-none-eabi" STRING "arm-none-eabi"
                "This variable is the machine target for the compiler and binutils to generate code and executables.")
-
-# This is the alternative target for the compiler and binutils
-SET_AND_EXPORT(KERNEL_ALTERNATIVE_TARGET "arm-eabi" STRING "arm-eabi"
+# This is the alternative target for the compiler and binutils (the host compiler in Linux distros)
+SET_AND_EXPORT(KERNEL_ALTERNATIVE_TARGET "arm-linux-gnueabi" STRING "arm-linux-gnueabi"
                "This variable is the alternative machine target for the compiler and binutils to generate code.")
-
 # This is the secondary target (LLVM needs this to correctly run the linker)
 SET_AND_EXPORT(KERNEL_SECOND_TARGET "arm-linux-elf" STRING "arm-linux-elf"
                "This variable is the second machine target for the LLVM toolchain to generate code and executables.")
-
 # This is the default ISA for the compiler and binutils (the minimum instruction set)
 SET_AND_EXPORT(MACHINE_MARCH "armv7" STRING "armv7"
                "This variable is the machine minimum iteration of the ISA for the compiler and assembler to emit code.")
-
 # This is the default FPU used by the compiler to generate hardware floating point instructions
 SET_AND_EXPORT(MACHINE_MFPU "none" STRING "none"
                "This variable is the machine FPU that the compiler can use to generate floating point instructions.")
-
 # This is the default CPU for the compiler and binutils to tune the performance
 SET_AND_EXPORT(MACHINE_MTUNE "generic" STRING "generic"
                "This variable is the default CPU for the compiler and binutils to optimize and tune the performance.")

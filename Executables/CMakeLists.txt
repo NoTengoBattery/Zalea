@@ -21,24 +21,21 @@
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
+# This library defines some headers useful to determine the layout and the structure of the final image
 ADD_LIBRARY("ExecutableLibrary" INTERFACE)
-
 TARGET_SOURCES("ExecutableLibrary" INTERFACE
                "ExecutableLibrary/ImageConstants.h")
+TARGET_INCLUDE_DIRECTORIES("ExecutableLibrary" INTERFACE "${CMAKE_CURRENT_LIST_DIR}")
 
-TARGET_INCLUDE_DIRECTORIES("CompilerMagic" INTERFACE "${CMAKE_CURRENT_LIST_DIR}")
-
+# This is the final target, the monolithic main executable.
 SET(THIS_EXE_NAME LinkedImage)
 ADD_EXECUTABLE("${THIS_EXE_NAME}"
                "Multiboot2.cxx"
                "Multiboot2.hxx")
-
 TARGET_LINK_LIBRARIES("${THIS_EXE_NAME}"
-                      "CompilerMagic"
-                      "NonStdC++Library"
-                      "ExecutableLibrary"
+                      "CoreLibraries"
                       "EntryPoint"
-                      "CompilerRuntime")
+                      "NonStdC++Library")
 
 # Add the linker script to the linker command line (requires linker and compiler detection)
 IF (KERNEL_COMPILER_GNU AND KERNEL_LINKER_GNU)
@@ -57,7 +54,7 @@ IF (KERNEL_COMPILER_GNU AND NOT KERNEL_COMPILER_ICC)
                      "-I" "${TREE_BIN_IMPORTANT_INCLUDE_PATH}"
                      "-I" "${CMAKE_CURRENT_LIST_DIR}"
                      "-o" "${TREE_BIN_IMPORTANT_PATH}/${THIS_EXE_NAME}.ld"
-                     "${TREE_EXECUTABLES_PATH}/${KERNEL_ARCH}/MainExecutable.in.ld")
+                     "${TREE_EXECUTABLES_PATH}/LinkerLibrary/${KERNEL_ARCH}/MainExecutable.in.ld")
 ELSEIF (KERNEL_COMPILER_ICC)
   ADD_CUSTOM_COMMAND(TARGET "${THIS_EXE_NAME}" PRE_LINK VERBATIM
                      COMMAND "${CMAKE_C_COMPILER}"
@@ -65,7 +62,7 @@ ELSEIF (KERNEL_COMPILER_ICC)
                      "-I" "${TREE_BIN_IMPORTANT_INCLUDE_PATH}"
                      "-I" "${CMAKE_CURRENT_LIST_DIR}"
                      "-o" "${TREE_BIN_IMPORTANT_PATH}/${THIS_EXE_NAME}.ld"
-                     "${TREE_EXECUTABLES_PATH}/${KERNEL_ARCH}/MainExecutable.in.ld")
+                     "${TREE_EXECUTABLES_PATH}/LinkerLibrary/${KERNEL_ARCH}/MainExecutable.in.ld")
 ELSE ()
   MESSAGE(AUTHOR_WARNING
           "Could not preprocess the linker script. This means that you are using an incompatible compiler.")

@@ -59,4 +59,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_C_FLAGS_RELEASE_INIT "-O3 -DRELEASE ")
   STRING(APPEND CMAKE_C_FLAGS_RELWITHDEBINFO_INIT "-O2 -g -DRELWITHDEBINFO ")
 
+  # Use the following file extensions as C source files
+  SET(CMAKE_C_SOURCE_FILE_EXTENSIONS "c")
+
 ENDIF ()

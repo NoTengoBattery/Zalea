@@ -23,23 +23,7 @@
 
 #include <CompilerMagic/CompilerMagic.h>
 #include <ExecutableLibrary/ImageConstants.h>
-
-/// This function will clear the allocated `.bss` section.
-/// \param origin the origin of the memory buffer to set
-/// \param final the target of the memory buffer to set
-static inline void memoryClear(void *origin, void *final) ATTR_SECTION(".start");
-
-static inline void memoryClear(void *origin, void *final) {
-    void *greater = ((origin > final) ? origin : final);
-    void *smaller = ((origin < final) ? origin : final);
-    if (greater != smaller) {
-        unsigned char *buffer = smaller;
-        while (buffer != greater) {
-            *buffer = 0x00;
-            buffer++;
-        }
-    }
-}
+#include <InlineMagic/MemoryClear.h>
 
 ATTR_NORETURN void secondEntryPoint() {
     memoryClear(&bssStart, &bssEnd);

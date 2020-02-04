@@ -120,7 +120,7 @@ IF (CMAKE_CLANG_TIDY AND KERNEL_COMPILER_CLANG)
   SET(CMAKE_C_CLANG_TIDY "${CMAKE_CLANG_TIDY}" "${TIDY_CHECKS}")
   SET(CMAKE_CXX_CLANG_TIDY "${CMAKE_CLANG_TIDY}" "${TIDY_CHECKS}")
 ELSEIF (CMAKE_CLANG_TIDY AND NOT KERNEL_COMPILER_CLANG)
-  MESSAGE(STATUS "clang-tidy was found, but it won't be used because the compiler is not Clang")
+  MESSAGE(STATUS "Clang's static analyzer found, but it won't be used because the compiler is not Clang")
 ENDIF ()
 
 # Enable cpplint if found the toolchain file.
@@ -140,9 +140,10 @@ IF (CMAKE_CPPCHECK)
 ENDIF ()
 
 # Add an interface library for config.h (and friends)
-ADD_LIBRARY(ImportantOutputDirectory INTERFACE)
-TARGET_INCLUDE_DIRECTORIES(ImportantOutputDirectory INTERFACE "${TREE_BIN_IMPORTANT_INCLUDE_PATH}")
-TARGET_SOURCES(ImportantOutputDirectory INTERFACE "${CONFIGURATION_HEADER}")
+ADD_LIBRARY("CoreLibraries" INTERFACE)
+TARGET_INCLUDE_DIRECTORIES("CoreLibraries" INTERFACE "${TREE_BIN_IMPORTANT_INCLUDE_PATH}")
+TARGET_SOURCES("CoreLibraries" INTERFACE "${CONFIGURATION_HEADER}")
+TARGET_LINK_LIBRARIES("CoreLibraries" INTERFACE "ExecutableLibrary" "CompilerMagic" "CompilerRuntime")
 
 # Add all subdirectories (the root subdirectories) that will be ever used
 ADD_SUBDIRECTORY("${TREE_ARCHITECTURE_PATH}")
