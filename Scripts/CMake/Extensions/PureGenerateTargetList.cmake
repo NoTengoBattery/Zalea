@@ -20,10 +20,12 @@
 #/ by one.
 #/
 #/ This extension provides:
-#/ -> TARGET_LIST
+#/ -> TARGET_TRIPLE_LIST
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
+# Given a name in the RESULT argument, this function will compute a list of all the possible target triples for a given
+# architecture or machine. Then, it will store the list in the parent scope variable which was provided.
 FUNCTION(TARGET_TRIPLE_LIST RESULT)
   SET(TEMP_LIST ${KERNEL_TARGET} ${KERNEL_ALTERNATIVE_TARGET} ${KERNEL_SECOND_TARGET})
   FOREACH (arch ${ARCHS})

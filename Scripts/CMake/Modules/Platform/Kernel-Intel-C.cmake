@@ -42,8 +42,6 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_C_FLAGS_INIT "-Werror ")
   STRING(APPEND CMAKE_C_FLAGS_INIT "-Wextra ")
   STRING(APPEND CMAKE_C_FLAGS_INIT "-Wformat=2 ")
-  # Those flags define the linker to be used (this is needed for all cross compilers)
-  STRING(APPEND CMAKE_EXE_LINKER_FLAGS_INIT "-fuse-ld=\"${CMAKE_LD_NAME}\" ")
   # Add the march and mtune flags
   STRING(APPEND CMAKE_C_FLAGS_INIT "-march=${MACHINE_MARCH} ")
   STRING(APPEND CMAKE_C_FLAGS_INIT "-mtune=${MACHINE_MTUNE} ")
@@ -53,5 +51,13 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_C_FLAGS_MINSIZEREL_INIT "-Os -DMINSIZEREL ")
   STRING(APPEND CMAKE_C_FLAGS_RELEASE_INIT "-O3 -DRELEASE ")
   STRING(APPEND CMAKE_C_FLAGS_RELWITHDEBINFO_INIT "-O2 -g -DRELWITHDEBINFO ")
+
+  # These flags will disable any fancy features (needed to build very early boot code or the compiler runtime)
+  SET(C_NO_RTTI "-fno-rtti")
+  SET(C_NO_EXCEPTIONS "-fno-exceptions")
+  SET(C_NO_STACK_PROTECTOR "-fno-stack-protector")
+
+  # Use the following file extensions as C source files
+  SET(CMAKE_C_SOURCE_FILE_EXTENSIONS "c")
 
 ENDIF ()

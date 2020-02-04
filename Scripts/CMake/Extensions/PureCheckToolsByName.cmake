@@ -46,8 +46,11 @@ ENDMACRO()
 # This macro will force the search of a tool executable by searching the user's provided PATH first.
 MACRO(FORCE_TOOL_BY_NAME TYPE TOOLS)
   SET(_TOOL "NONE")
+  IF (NOT _ORIGINAL)
+    SET("_ORIGINAL" "${CMAKE_${TYPE}}")
+  ENDIF ()
   FOREACH (TOOL ${TOOLS})
-    FIND_PROGRAM("CMAKE_${TYPE}_EXE" NAMES ${CMAKE_${TYPE}}
+    FIND_PROGRAM("CMAKE_${TYPE}_EXE" NAMES ${_ORIGINAL}
                  HINTS "${CMAKE_${TOOL}_PATH}" "${TREE_SCRIPTS_PYTHON3_ENV_PATH}"
                  PATH_SUFFIXES "Scripts" "bin"
                  DOC "This is a guess forced by the build system for a tool. Please ignore this variable.")
@@ -62,6 +65,7 @@ MACRO(FORCE_TOOL_BY_NAME TYPE TOOLS)
     ELSE ()
       UNSET("CMAKE_${TYPE}")
       UNSET("CMAKE_${TYPE}" CACHE)
+      UNSET("CMAKE_${TYPE}_EXE")
       UNSET("CMAKE_${TYPE}_EXE" CACHE)
     ENDIF ()
     SET(_TOOL "${TOOL}")
@@ -72,18 +76,19 @@ MACRO(FORCE_TOOL_BY_NAME TYPE TOOLS)
             "You can give the CMake build system a hint by setting up the cache 'CMAKE_${_TOOL}_PATH' variable to the "
             "path where the tool can be found, or by fixing your 'PATH' environment variable.")
   ENDIF ()
+  UNSET(_ORIGINAL)
 ENDMACRO()
 
 # This macro will try to guess a tool executable by searching the user's provided PATH first, then letting CMake
 # fallback to a default compiler and fail later (if the compiler does not work, most likely anyway).
 MACRO(GUESS_TOOL_BY_NAME TYPE TOOLS)
   IF (NOT EXISTS "${CMAKE_${TYPE}}")
-    IF (NOT CMAKE_${TYPE}_ORIGINAL)
-      SET("CMAKE_${TYPE}_ORIGINAL" "${CMAKE_${TYPE}}")
+    IF (NOT _ORIGINAL)
+      SET("_ORIGINAL" "${CMAKE_${TYPE}}")
     ENDIF ()
     UNSET("CMAKE_${TYPE}_EXE" CACHE)
     FOREACH (TOOL ${TOOLS})
-      FIND_PROGRAM("CMAKE_${TYPE}_EXE" NAMES ${CMAKE_${TYPE}_ORIGINAL}
+      FIND_PROGRAM("CMAKE_${TYPE}_EXE" NAMES ${_ORIGINAL}
                    HINTS "${CMAKE_${TOOL}_PATH}" "${TREE_SCRIPTS_PYTHON3_ENV_PATH}"
                    PATH_SUFFIXES "Scripts" "bin"
                    DOC "This is a guess made by the build system for a tool. Please ignore this variable.")
@@ -100,6 +105,7 @@ MACRO(GUESS_TOOL_BY_NAME TYPE TOOLS)
       ELSE ()
         UNSET("CMAKE_${TYPE}")
         UNSET("CMAKE_${TYPE}" CACHE)
+        UNSET("CMAKE_${TYPE}_EXE")
         UNSET("CMAKE_${TYPE}_EXE" CACHE)
       ENDIF ()
     ENDFOREACH ()
@@ -107,4 +113,5 @@ MACRO(GUESS_TOOL_BY_NAME TYPE TOOLS)
       MESSAGE(STATUS "Checking for the 'CMAKE_${TYPE}' tool... Not Found!")
     ENDIF ()
   ENDIF ()
+  UNSET(_ORIGINAL)
 ENDMACRO()

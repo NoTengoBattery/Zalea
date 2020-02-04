@@ -55,6 +55,14 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_ASM_FLAGS_RELEASE_INIT "-O3 -DRELEASE ")
   STRING(APPEND CMAKE_ASM_FLAGS_RELWITHDEBINFO_INIT "-O2 -g -DRELWITHDEBINFO ")
 
+  # These flags will disable any fancy features (needed to build very early boot code or the compiler runtime)
+  SET(ASM_NO_LTO "-fno-lto")
+  SET(ASM_NO_SANITIZER "-fno-sanitize=all")
+  SET(ASM_NO_RTTI "-fno-rtti")
+  SET(ASM_NO_UNWIND "-fno-unwind-tables")
+  SET(ASM_NO_EXCEPTIONS "-fno-exceptions")
+  SET(ASM_NO_STACK_PROTECTOR "-fno-stack-protector")
+
   # Use the following file extensions as ASM source files
   SET(CMAKE_ASM_SOURCE_FILE_EXTENSIONS "sx;s")
   STRING(APPEND CMAKE_ASM_FLAGS_INIT "-x assembler-with-cpp ")

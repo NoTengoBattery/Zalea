@@ -27,5 +27,5 @@
 ADD_LIBRARY("EntryPoint" STATIC
             "EntryPoint.c"
             "EntryPoint.sx")
-
 TARGET_LINK_LIBRARIES("EntryPoint" "CoreLibraries")
+TARGET_DISABLE_FANCY_FEATURES("EntryPoint" PRIVATE C FANCY_LIST LTO SANITIZER STACK_PROTECTOR)

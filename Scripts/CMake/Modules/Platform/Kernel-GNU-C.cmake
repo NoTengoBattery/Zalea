@@ -55,6 +55,14 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_C_FLAGS_RELEASE_INIT "-O3 -DRELEASE ")
   STRING(APPEND CMAKE_C_FLAGS_RELWITHDEBINFO_INIT "-O2 -g -DRELWITHDEBINFO ")
 
+  # These flags will disable any fancy features (needed to build very early boot code or the compiler runtime)
+  SET(C_NO_LTO "-fno-lto")
+  SET(C_NO_SANITIZER "-fno-sanitize=all")
+  SET(C_NO_RTTI "-fno-rtti")
+  SET(C_NO_UNWIND "-fno-unwind-tables")
+  SET(C_NO_EXCEPTIONS "-fno-exceptions")
+  SET(C_NO_STACK_PROTECTOR "-fno-stack-protector")
+
   # Use the following file extensions as C source files
   SET(CMAKE_C_SOURCE_FILE_EXTENSIONS "c")
 

@@ -16,20 +16,15 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
-#/ This contains the basic compiler support. This contains a series of headers, imported by the CompilerMagic, which
-#/ defines some macros to deal with compiler peculiarities.
-#/
-#/ This module include:
-#/ -> CompilerMagic
-#/ -> CompilerRuntime
-#/ -> ExceptionHandler
-#/ -> RuntimeTypeInformation
-#/ -> StackUnwinder
+#/ This contains the core of the compiler support. It provides the runtime assumptions and library calls made by the
+#/ compiler.
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
+# This is the compiler runtime, but not the "libgcc" (or "compiler-rt") part, it is the assumptions done by the
+# optimizer about the standard library. For example, code that the compiler finds that is a "memcpy" will be optimized
+# to a memcpy call. Therefore, we provide those calls here.
 ADD_LIBRARY("CompilerRuntime" STATIC
-            "asan.c"
             "memset.c")
 IF (KERNEL_ARM)
   TARGET_SOURCES("CompilerRuntime" PRIVATE
@@ -39,4 +34,20 @@ ELSEIF (KERNEL_x86)
                  "${KERNEL_ARCH}/${KERNEL_ARCH}Utils.h")
 ENDIF ()
 TARGET_INCLUDE_DIRECTORIES("CompilerRuntime" PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
-TARGET_LINK_LIBRARIES("CompilerRuntime" "CoreLibraries")
+
+# This accessory library is the "libgcc" part. It does contains calls made by the compiler when the CPU or the platform
+# does not support an operation (such as ARM not supporting integer division). It contains the sanitizers, the stack
+# check protector and so on. It *does* require special compiler flags to disable fancy features (such as sanitizing the
+# sanitizer itself), and the backend support (i.e. the error reporting of the sanitizer) also requires all of these
+# features to be disabled.
+# TODO: This means that the code that supports those features needs to have it's INTERFACE_COMPILE_OPTIONS set, so this
+# TODO: target will compile against those targets with all features disabled. Some features to disable are:
+# TODO: lto, sanitizers, rtti, unwind, exceptions, stack protector
+#
+# TODO: All libraries that need this kind of modifications should be named as their analog but beginning with "Raw"
+# TODO: All "Raw" libraries will be dependencies of their analog, therefore, you only need to link the "non-raw" version
+ADD_LIBRARY("RawCompilerRuntime" STATIC
+            "asan.c")
+
+TARGET_LINK_LIBRARIES("RawCompilerRuntime" "CoreLibraries")
+TARGET_LINK_LIBRARIES("CompilerRuntime" "CoreLibraries" "RawCompilerRuntime")
