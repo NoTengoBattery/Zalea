@@ -30,8 +30,12 @@ CHECK_TOOL_BY_NAME(COMPILER "GNU")
 SET(AVAILABLE_BINUTILS "GNU" "LLVM")
 CHECK_TOOL_BY_NAME(BINUTILS "GNU")
 
-# A list of common names for this architecture
-SET(ARCHITECTURE_NAMES ARM arm armeb armel armhf CACHE INTERNAL "-")
+# These lists will help CMake to build a target triple. The Toolchain script will test one by one until it founds one
+SET(ARCHS arm CACHE INTERNAL "-")
+SET(SUBS - eb el hf CACHE INTERNAL "-")
+SET(VENDORS - none CACHE INTERNAL "-")
+SET(SYSS linux none - CACHE INTERNAL "-")
+SET(ABIS gnueabihf gnueabi eabi elf - CACHE INTERNAL "-")
 
 # Change the CMake output format to ELF
 SET(CMAKE_EXECUTABLE_FORMAT "ELF" CACHE INTERNAL "Executable file format")
@@ -39,10 +43,10 @@ SET(CMAKE_EXECUTABLE_FORMAT "ELF" CACHE INTERNAL "Executable file format")
 SET_AND_EXPORT(KERNEL_TARGET "arm-none-eabi" STRING "arm-none-eabi"
                "This variable is the machine target for the compiler and binutils to generate code and executables.")
 # This is the alternative target for the compiler and binutils (the host compiler in Linux distros)
-SET_AND_EXPORT(KERNEL_ALTERNATIVE_TARGET "arm-linux-gnueabi" STRING "arm-linux-gnueabi"
+SET_AND_EXPORT(KERNEL_ALTERNATIVE_TARGET "arm-linux-gnueabihf" STRING "arm-linux-gnueabihf"
                "This variable is the alternative machine target for the compiler and binutils to generate code.")
 # This is the secondary target (LLVM needs this to correctly run the linker)
-SET_AND_EXPORT(KERNEL_SECOND_TARGET "arm-linux-elf" STRING "arm-linux-elf"
+SET_AND_EXPORT(KERNEL_SECOND_TARGET "arm-linux-eabi" STRING "arm-linux-eabi"
                "This variable is the second machine target for the LLVM toolchain to generate code and executables.")
 # This is the default ISA for the compiler and binutils (the minimum instruction set)
 SET_AND_EXPORT(MACHINE_MARCH "armv7" STRING "armv7"

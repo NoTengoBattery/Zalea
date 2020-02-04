@@ -30,8 +30,12 @@ CHECK_TOOL_BY_NAME(COMPILER "GNU")
 SET(AVAILABLE_BINUTILS "GNU" "LLVM")
 CHECK_TOOL_BY_NAME(BINUTILS "GNU")
 
-# A list of common names for this architecture
-SET(ARCHITECTURE_NAMES 8086 i386 i686 ia32 x32 x86 x86-32 CACHE INTERNAL "-")
+# These lists will help CMake to build a target triple. The Toolchain script will test one by one until it founds one
+SET(ARCHS i386 i686 x86 8086 CACHE INTERNAL "-")
+SET(SUBS - _64 CACHE INTERNAL "-")
+SET(VENDORS - pc none CACHE INTERNAL "-")
+SET(SYSS linux - none CACHE INTERNAL "-")
+SET(ABIS gnu elf - CACHE INTERNAL "-")
 
 # Change the CMake output format to ELF
 SET(CMAKE_EXECUTABLE_FORMAT "ELF" CACHE INTERNAL "Executable file format")
@@ -42,7 +46,7 @@ SET_AND_EXPORT(KERNEL_TARGET "i686-elf" STRING "i686-elf"
 SET_AND_EXPORT(KERNEL_ALTERNATIVE_TARGET "x86_64-linux-gnu" STRING "x86_64-linux-gnu"
                "This variable is the alternative machine target for the compiler and binutils to generate code.")
 # This is the secondary target (LLVM needs this to correctly run the linker)
-SET_AND_EXPORT(KERNEL_SECOND_TARGET "i686-linux-elf" STRING "i686-linux-elf"
+SET_AND_EXPORT(KERNEL_SECOND_TARGET "i686-linux-gnu" STRING "i686-linux-gnu"
                "This variable is the second machine target for the LLVM toolchain to generate code and executables.")
 # This is the default ISA for the compiler and binutils (the minimum instruction set)
 SET_AND_EXPORT(MACHINE_MARCH "pentium4" STRING "pentium4"

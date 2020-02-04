@@ -38,9 +38,9 @@ IF (TREE_SELF_PATH AND NOT TOOLCHAIN_DONE) # This will define if we have access 
 
   # Test the available targets to determine which one is available before giving up...
   SET(_KERNEL_TARGET "${KERNEL_TARGET}")
-  FOREACH (_TEST_TARGET ${KERNEL_TARGET};${KERNEL_ALTERNATIVE_TARGET};${KERNEL_SECOND_TARGET})
+  TARGET_TRIPLE_LIST(ALL_POSSIBLE_TRIPLES)
+  FOREACH (_TEST_TARGET ${ALL_POSSIBLE_TRIPLES})
     SET(CMAKE_TOOLS_FOR_${_TEST_TARGET} "${_TEST_TARGET}-gcc;${_TEST_TARGET}-as")
-    MESSAGE(STATUS "Trying to find the needed tools for the target '${_TEST_TARGET}'...")
     GUESS_TOOL_BY_NAME(TOOLS_FOR_${_TEST_TARGET} "COMPILER;BINUTILS;EXTRA_TOOLS")
     IF (CMAKE_TOOLS_FOR_${_TEST_TARGET})
       UNSET(CMAKE_TOOLS_FOR_${_TEST_TARGET} CACHE)
@@ -134,13 +134,15 @@ IF (TREE_SELF_PATH AND NOT TOOLCHAIN_DONE) # This will define if we have access 
 
   MESSAGE(STATUS "CMake is attempting to auto configure the optional tools...")
 
+  # Try to find GDB or LLDB
   SET(CMAKE_DEBUGGER "${_KERNEL_TARGET}-gdb;gdb;lldb")
+  GUESS_TOOL_BY_NAME(DEBUGGER "COMPILER;BINUTILS;EXTRA_TOOLS")
+
+  # Try to find QEMU system
   SET(CMAKE_QEMU "qemu-system")
   FOREACH (ARCHITECTURE_NAME ${ARCHITECTURE_NAMES})
     LIST(APPEND CMAKE_QEMU "qemu-system-${ARCHITECTURE_NAME}")
   ENDFOREACH ()
-
-  GUESS_TOOL_BY_NAME(DEBUGGER "COMPILER;BINUTILS;EXTRA_TOOLS")
   GUESS_TOOL_BY_NAME(QEMU "COMPILER;BINUTILS;EXTRA_TOOLS")
 
   # CMake supports CCache, therefore we can detect it and use it :)

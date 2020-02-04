@@ -41,7 +41,7 @@ IF (NOT SAE_INITDB)
     MESSAGE(FATAL_ERROR "To use the SET_AND_EXPORT extension you must set these variables: \
 SAE_DBFILE: Path to the database file, \
 SAE_OUTPUT_FILE: Path to generate the CMake config, \
-SAE_TEMPLATE_FILE: Path to a template file to dump at the begining of SAE_OUTPUT_FILE, \
+SAE_TEMPLATE_FILE: Path to a template file to dump at the beginning of SAE_OUTPUT_FILE, \
 SAE_HELPER: Path to the Python helper script")
   ENDIF ()
   SET(SAE_DBFILE "${SAE_DBFILE}" CACHE INTERNAL "Path to the SET_AND_EXPORT database file.")
@@ -106,7 +106,7 @@ FUNCTION(SET_AND_EXPORT VARIABLE VALUE TYPE DEFAULT DOCSTRING)
 ENDFUNCTION()
 
 # Forces a variable in the cache and uses a Python3 Script (helper script) to write the variable, type, value and
-# docstring to a database. The command that updates the database always use the providen value in the function call, no
+# docstring to a database. The command that updates the database always use the provided value in the function call, no
 # matter what value the variable currently have.
 # SET_AND_EXPORT_FORCE is designed to override a user-selectable config that may render the built kernel useless if
 # the user sets the variable in the CMake cache. You should use this directive only in manually modified Default
