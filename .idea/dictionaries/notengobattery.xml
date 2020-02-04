@@ -1,20 +1,45 @@
 <component name="ProjectDictionaryState">
   <dictionary name="notengobattery">
     <words>
+      <w>aapcs</w>
+      <w>acpi</w>
+      <w>binutils</w>
       <w>bootable</w>
       <w>bootloader</w>
       <w>ccmake</w>
+      <w>cmakedefine</w>
+      <w>cpplint</w>
+      <w>cstdint</w>
+      <w>distro</w>
+      <w>distros</w>
       <w>filepath</w>
+      <w>fpmath</w>
+      <w>framebuffer</w>
+      <w>gonzález</w>
+      <w>icpc</w>
       <w>interprocedural</w>
+      <w>march</w>
+      <w>mfpu</w>
+      <w>mtune</w>
       <w>multiboot</w>
+      <w>notengobattery</w>
+      <w>oever</w>
       <w>preprocess</w>
       <w>pytest</w>
+      <w>qemu</w>
       <w>readelf</w>
+      <w>readobj</w>
+      <w>smbios</w>
       <w>spdx</w>
+      <w>stdint</w>
+      <w>subfolder</w>
+      <w>subfolders</w>
       <w>sysv</w>
       <w>tinydb</w>
       <w>unwinder</w>
+      <w>venv</w>
       <w>zalea</w>
+      <w>zerrin</w>
     </words>
   </dictionary>
 </component>
