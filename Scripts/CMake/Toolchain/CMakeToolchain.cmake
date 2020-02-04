@@ -37,19 +37,28 @@ IF (TREE_SELF_PATH AND NOT TOOLCHAIN_DONE) # This will define if we have access 
   SET(CMAKE_CXX_COMPILER_TARGET "${KERNEL_SECOND_TARGET}")
 
   # Test the available targets to determine which one is available before giving up...
-  SET(_KERNEL_TARGET "${KERNEL_SECOND_TARGET}")
-  TARGET_TRIPLE_LIST(ALL_POSSIBLE_TRIPLES)
-  FOREACH (_TEST_TARGET ${ALL_POSSIBLE_TRIPLES})
-    SET(CMAKE_TOOLS_FOR_${_TEST_TARGET} "${_TEST_TARGET}-objcopy;${_TEST_TARGET}-g++")
-    GUESS_TOOL_BY_NAME(TOOLS_FOR_${_TEST_TARGET} "COMPILER;BINUTILS;EXTRA_TOOLS")
-    IF (CMAKE_TOOLS_FOR_${_TEST_TARGET})
+  IF ("${KERNEL_COMPILER}" STREQUAL "GNU"
+      OR "${KERNEL_COMPILER}" STREQUAL "Intel"
+      OR "${KERNEL_BINUTILS}" STREQUAL "GNU")
+    SET(_KERNEL_TARGET "${KERNEL_SECOND_TARGET}")
+    TARGET_TRIPLE_LIST(ALL_POSSIBLE_TRIPLES)
+    FOREACH (_TEST_TARGET ${ALL_POSSIBLE_TRIPLES})
+      SET(CMAKE_TOOLS_FOR_${_TEST_TARGET} "${_TEST_TARGET}-objcopy;${_TEST_TARGET}-g++")
+      GUESS_TOOL_BY_NAME(TOOLS_FOR_${_TEST_TARGET} "COMPILER;BINUTILS;EXTRA_TOOLS")
+      IF (CMAKE_TOOLS_FOR_${_TEST_TARGET})
+        UNSET(CMAKE_TOOLS_FOR_${_TEST_TARGET} CACHE)
+        SET(_KERNEL_TARGET "${_TEST_TARGET}")
+        SET(_KERNEL_TOOLS_OK ON)
+        MESSAGE(STATUS "Found CMake tools for the following target: '${_TEST_TARGET}'")
+        BREAK()
+      ENDIF ()
       UNSET(CMAKE_TOOLS_FOR_${_TEST_TARGET} CACHE)
-      SET(_KERNEL_TARGET "${_TEST_TARGET}")
-      MESSAGE(STATUS "Found CMake tools for the following target: '${_TEST_TARGET}'")
-      BREAK()
+    ENDFOREACH ()
+    IF (NOT _KERNEL_TOOLS_OK)
+      MESSAGE(AUTHOR_WARNING "If you don't want to see that long list of tests again, please install the recommended "
+              "tools and either point to them by using the CMake variables or make them available in the PATH.")
     ENDIF ()
-    UNSET(CMAKE_TOOLS_FOR_${_TEST_TARGET} CACHE)
-  ENDFOREACH ()
+  ENDIF ()
 
   # Compiler selection logic...
   MESSAGE(STATUS "CMake is attempting to auto configure the '${KERNEL_COMPILER}' compiler for the target "
