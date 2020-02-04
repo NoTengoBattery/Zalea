@@ -98,6 +98,34 @@
   <component name="PyDebuggerOptionsProvider">
     <option name="doSaveCallSignatures" value="true" />
   </component>
+  <component name="RunManager" selected="CMake Application.LinkedImage">
+    <configuration name="CompilerRuntime" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Zalea" TARGET_NAME="CompilerRuntime" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="EntryPoint" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Zalea" TARGET_NAME="EntryPoint" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LinkedImage" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Zalea" TARGET_NAME="LinkedImage" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Zalea" RUN_TARGET_NAME="LinkedImage">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="NonStdC++Library" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Zalea" TARGET_NAME="NonStdC++Library" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.EntryPoint" />
+      <item itemvalue="CMake Application.LinkedImage" />
+      <item itemvalue="CMake Application.CompilerRuntime" />
+      <item itemvalue="CMake Application.NonStdC++Library" />
+    </list>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="71605df8-410f-44f1-8e46-a5813ccdbfca" name="Default Changelist" comment="" />

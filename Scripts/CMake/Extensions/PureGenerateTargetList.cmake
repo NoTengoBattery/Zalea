@@ -25,7 +25,7 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 
 FUNCTION(TARGET_TRIPLE_LIST RESULT)
-  #SET(TEMP_LIST ${KERNEL_TARGET} ${KERNEL_ALTERNATIVE_TARGET} ${KERNEL_SECOND_TARGET})
+  SET(TEMP_LIST ${KERNEL_TARGET} ${KERNEL_ALTERNATIVE_TARGET} ${KERNEL_SECOND_TARGET})
   FOREACH (arch ${ARCHS})
     FOREACH (sub ${SUBS})
       IF (NOT sub STREQUAL -)
