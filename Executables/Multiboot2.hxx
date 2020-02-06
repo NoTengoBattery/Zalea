@@ -97,7 +97,7 @@ struct alignas(MULTIBOOT_ALIGNMENT) multibootInformationRequestTag {
     const std::uint16_t type;
     const std::uint16_t flags;
     const std::uint32_t size;
-    const std::uint32_t requests[requestNumber];  // NOLINT because we don't have a std::array here.
+    const std::uint32_t requests[requestNumber];
 };
 
 /* These macros and structs are the Address tag, which will synchronize the physical address with the bootloader */

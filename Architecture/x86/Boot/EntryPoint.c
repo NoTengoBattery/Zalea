@@ -40,7 +40,7 @@ ATTR_NORETURN void secondEntryPoint(unsigned int eax, unsigned int ebx) {
     } else {
         // Note that clearing the .bss section will clear the stack, making all the frame pointers invalid.
         // Doesn't matter since these functions should never return, we only waste a couple of bytes of the stack.
-        multibootStructPointer = (void *) ebx;  // NOLINT
+        multibootStructPointer = (void *) ebx;
         memoryClear(&bssStart, &bssEnd);
         BUILTIN_UNREACHABLE;
     }

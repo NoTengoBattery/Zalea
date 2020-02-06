@@ -126,17 +126,14 @@ ENDIF ()
 # Enable cpplint if found the toolchain file.
 IF (CMAKE_CPPLINT)
   SET(CPPLINT_CHECKS --linelength=120 --recursive)
-  SET(CMAKE_ASM_CPPLINT "${CMAKE_CPPLINT}" "${CPPLINT_CHECKS}")
-  SET(CMAKE_C_CPPLINT "${CMAKE_CPPLINT}" "${CPPLINT_CHECKS}")
   SET(CMAKE_CXX_CPPLINT "${CMAKE_CPPLINT}" "${CPPLINT_CHECKS}")
 ENDIF ()
 
 # Enable cppcheck if found the toolchain file.
 IF (CMAKE_CPPCHECK)
   SET(CPPCHECK_CHECKS --enable=all)
-  SET(CMAKE_ASM_CPPCHECK "${CMAKE_CPPCHECK}" "${CPPCHECK_CHECKS}")
-  SET(CMAKE_C_CPPCHECK "${CMAKE_CPPCHECK}" "${CPPCHECK_CHECKS}")
-  SET(CMAKE_CXX_CPPCHECK "${CMAKE_CPPCHECK}" "${CPPCHECK_CHECKS}")
+  SET(CMAKE_C_CPPCHECK "${CMAKE_CPPCHECK}" "${CPPCHECK_CHECKS}" --language=c)
+  SET(CMAKE_CXX_CPPCHECK "${CMAKE_CPPCHECK}" "${CPPCHECK_CHECKS}" --language=c++)
 ENDIF ()
 
 # Add an interface library for config.h (and friends)
