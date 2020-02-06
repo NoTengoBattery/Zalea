@@ -1,4 +1,4 @@
-//===-- MemoryClear.c - Static Inline Function to Clear Memory --------------------------------------------*- C -*-===//
+//===-- MemoryClear.h - Static Inline Function to Clear Memory --------------------------------------------*- C -*-===//
 //
 // Copyright (c) 2020 Oever González
 //
@@ -23,19 +23,24 @@
 #ifndef ZALEA_MEMORYCLEAR_H
 #define ZALEA_MEMORYCLEAR_H
 
+#include <stddef.h>
+#include <stdint.h>
+
 /// This function will clear memory region between two pointers.
 /// \param origin the origin of the memory buffer to set
 /// \param final the target of the memory buffer to set
-static inline void memoryClear(void *origin, void *final) ATTR_SECTION(".start");
+extern inline void memoryClear(void *origin, void *final) ATTR_SECTION(".start");
 
-ATTR_USED static inline void memoryClear(void *origin, void *final) {
+inline void memoryClear(void *origin, void *final) {
     void *greater = ((origin > final) ? origin : final);
     void *smaller = ((origin < final) ? origin : final);
     if (greater != smaller) {
         unsigned char *buffer = smaller;
-        while (buffer != greater) {
-            *buffer = 0x00;
-            buffer++;
+        size_t size = (uintptr_t) greater - (uintptr_t) smaller;
+        while (size != 0) {
+            buffer[0] = 0x00;
+            buffer += 1;
+            size -= 1;
         }
     }
 }

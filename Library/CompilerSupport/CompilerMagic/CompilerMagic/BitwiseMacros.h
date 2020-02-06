@@ -35,11 +35,11 @@ constexpr auto setNthBit(T1 x, T2 y) { return x | (1U << y); }
 #elif defined(__ASSEMBLER__) // ASM
 
 
-
 #else // C
 
-#define CLEAR_NTH_BIT(x, y) ((x) & ~(1U << y ## U))
-#define SET_NTH_BIT(x, y) ((x) | (1U << y ## U))
+#define CLEAR_NTH_BIT(x, y) ((x) & ~(1U << y))
+#define SET_NTH_BIT(x, y) ((x) | (1U << y))
+#define TEST_NTH_BIT(x, y) (((x) >> y) & 1U)
 
 #endif
 

@@ -26,6 +26,7 @@
 #include <AssemblerMagic/AssemblerMagic.h>
 
 NAKED_GLOBAL_ARM_FUNCTION(.start, start)
+  LDR   sp,         =stackStart  // Setup the stack
   BL    secondEntryPoint
   B     miserableFail
 NAKED_GLOBAL_ARM_FUNCTION_EPILOG(start)

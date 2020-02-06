@@ -33,6 +33,7 @@
 #else
 
 #define ATTR_ALIGNED(x) __attribute__ ((aligned (x)))
+#define ATTR_ALWAYS_INLINE __attribute__ ((always_inline))
 #define ATTR_FASTCALL __attribute__ ((fastcall))
 #define ATTR_NAKED __attribute__ ((naked))
 #define ATTR_NORETURN __attribute__ ((noreturn))

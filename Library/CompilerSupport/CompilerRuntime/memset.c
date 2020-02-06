@@ -22,7 +22,6 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#include <CompilerMagic/CompilerMagic.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -39,7 +38,7 @@ static inline size_t unalignedLoop(void *buffer, unsigned char fill, size_t size
     // ... fill by char until either the size is depleted...
     while (size > 0) {
         // ... or until the alignment is fulfilled...
-        if ((size_t) byteAddressing % alignment == 0) {
+        if ((uintptr_t) byteAddressing % alignment == 0) {
             // ... and the rest can be done in the unrolled loop
             if (size >= alignment) {
                 break;
@@ -60,17 +59,19 @@ static inline size_t unalignedLoop(void *buffer, unsigned char fill, size_t size
 /// \param fill this is the fill which will fill the buffer
 /// \param size this is the size of the buffer to fill
 /// \return the same address as provided in the buffer address
-ATTR_USED void *memset(void *buffer, int fill, size_t size) {
+void *memset(void *buffer, int fill, size_t size) {
+    // If the size is 0, return immediately
+    if (size == 0) { return buffer; }
     // We define a "cost". The cost is the size of the unrolled loop, which in theory should avoid branching...
     static const size_t cost = 4;
-    static const size_t cellSize = sizeof(uint_fast32_t);
+    static const size_t cellSize = sizeof(uint_fast64_t);
     static const size_t alignment = cost * cellSize;
     size_t remainingSize = unalignedLoop(buffer, fill, size, alignment);
-    uint_fast32_t *wordAddressing = (uint_fast32_t *) ((char *) buffer + size - remainingSize);  // NOLINT
+    uint_fast64_t *wordAddressing = (uint_fast64_t *) ((uintptr_t) buffer + size - remainingSize);
     if (remainingSize >= alignment) {
         // Create a variable of the appropriate size filled with the same value every byte
-        uint_fast32_t actualFill = fill;
-        for (size_t i = 0x00; i < cellSize; ++i) {
+        uint_fast64_t actualFill = fill;
+        for (unsigned int i = 0x00; i < cellSize; ++i) {
             ((unsigned char *) &actualFill)[i] = fill;
         }
         // The compiler will probably vectorize this loop :)
@@ -85,7 +86,7 @@ ATTR_USED void *memset(void *buffer, int fill, size_t size) {
     }
     size_t shouldBeZero = unalignedLoop(wordAddressing, fill, remainingSize, alignment);
     if (shouldBeZero != 0) {
-        return (void *) SIZE_MAX;  // NOLINT
+        return (void *) UINTPTR_MAX;
     }
     return buffer;
 }
