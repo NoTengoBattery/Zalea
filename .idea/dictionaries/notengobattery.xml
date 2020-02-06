@@ -4,6 +4,7 @@
       <w>aapcs</w>
       <w>acpi</w>
       <w>binutils</w>
+      <w>bldata</w>
       <w>bootable</w>
       <w>bootloader</w>
       <w>ccmake</w>

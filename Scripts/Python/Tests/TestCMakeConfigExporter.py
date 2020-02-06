@@ -497,13 +497,13 @@ def test_dumped_format_header(db_file, template_header, cmake_header):
     with open(cmake_header) as f:
         assert str(f.read()) == '//////\n' \
                                 '/* E: SET_AND_EXPORT BOOL */\n' \
-                                '#cmakedefine\tE  // NOLINT\n' \
+                                '#cmakedefine\tE  // NOLINT \n' \
                                 '/* V: SET_AND_EXPORT BOOL */\n' \
-                                '#cmakedefine\tV  // NOLINT\n' \
+                                '#cmakedefine\tV  // NOLINT \n' \
                                 '/* EL: SET_AND_EXPORT_FORCE INTERNAL */\n' \
-                                '#cmakedefine\tEL\t@EL@  // NOLINT\n' \
+                                '#cmakedefine\tEL\t@EL@  // NOLINT \n' \
                                 '/* VA: SET_AND_EXPORT_FORCE STRING */\n' \
-                                '#cmakedefine\tVA\t@VA@  // NOLINT\n'
+                                '#cmakedefine\tVA\t@VA@  // NOLINT \n'
 
 
 def test_large_loop(db_file, template_file, cmake_file):

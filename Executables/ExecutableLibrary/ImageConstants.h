@@ -35,4 +35,6 @@ extern volatile void *multibootStructPointer;
 
 extern void miserableFail(void);
 
+extern void start(void);
+
 #endif //ZALEA_IMAGECONSTANTS_H

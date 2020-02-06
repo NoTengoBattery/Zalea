@@ -23,11 +23,11 @@
 #define ZALEA_CSTDINT_
 
 extern "C" {
-#include<stdint.h>
+#include<stdint.h>  // NOLINT
 }
 
 
-namespace std {
+namespace std {  // NOLINT (clang-tidy: we are building a dialect of C++, don't be annoying)
     using ::int8_t;
     using ::int16_t;
     using ::int32_t;

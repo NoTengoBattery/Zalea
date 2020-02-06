@@ -40,12 +40,14 @@ TARGET_INCLUDE_DIRECTORIES("CompilerRuntime" PRIVATE "${CMAKE_CURRENT_LIST_DIR}"
 # check protector and so on. It *does* require special compiler flags to disable fancy features (such as sanitizing the
 # sanitizer itself), and the backend support (i.e. the error reporting of the sanitizer) also requires all of these
 # features to be disabled.
+#
 # TODO: This means that the code that supports those features needs to have it's PRIVATE_COMPILE_OPTIONS set, so this
 # TODO: target will compile against those targets with all features disabled. Some features to disable are:
 # TODO: lto, sanitizers, rtti, unwind, exceptions, stack protector
 #
 # TODO: All libraries that need this kind of modifications should be named as their analog but beginning with "Raw"
-# TODO: All "Raw" libraries will be dependencies of their analog, therefore, you only need to link the "non-raw" version
+# TODO: All "Raw" libraries will be dependencies of their analog, therefore, you only need to link the "non-raw"
+# TODO: version.
 ADD_LIBRARY("RawCompilerRuntime" STATIC
             "asan.c"
             "division.c")

@@ -205,10 +205,10 @@ def dump_table(table: str, file, header, default):
                 file.write('/* {}: {} {} */\n'
                            .format(key, msg, doc['type']))
                 if doc['type'] == 'BOOL':
-                    file.write('#cmakedefine\t{}  // NOLINT\n'
+                    file.write('#cmakedefine\t{}  // NOLINT \n'
                                .format(key))
                 else:
-                    file.write('#cmakedefine\t{}\t@{}@  // NOLINT\n'
+                    file.write('#cmakedefine\t{}\t@{}@  // NOLINT \n'
                                .format(key, key))
                 this_logger.debug("Dumped CMake entry for variable '%s'" % key)
     else:
