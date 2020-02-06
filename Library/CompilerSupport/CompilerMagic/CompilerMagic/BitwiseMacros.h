@@ -40,6 +40,7 @@ constexpr auto setNthBit(T1 x, T2 y) { return x | (1U << y); }
 #define CLEAR_NTH_BIT(x, y) ((x) & ~(1U << y))
 #define SET_NTH_BIT(x, y) ((x) | (1U << y))
 #define TEST_NTH_BIT(x, y) (((x) >> y) & 1U)
+#define XNOR_NTH_BITS(x, y, z) (TEST_NTH_BIT(x, z) == TEST_NTH_BIT(y, z) ? 0x01U : 0x00U)
 
 #endif
 

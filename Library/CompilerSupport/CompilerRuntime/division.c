@@ -25,14 +25,10 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 
 #include <CompilerMagic/BitwiseMacros.h>
-#include <CompilerMagic/CompilerMagic.h>
-#include <config.h>
 #include <limits.h>
 
-/// If the sign flag is enabled, the number is positive
-#define SIGN_FLAG 0x00U
-/// If the div0 flag is enabled, a division by zero has occurred
-#define DIV0_FLAG 0x01U
+#define SIGN_FLAG 0x00U /// If the sign flag is enabled, the number is positive
+#define DIV0_FLAG 0x01U /// If the div0 flag is enabled, a division by zero has occurred
 
 struct signedT {
     unsigned char flags;
@@ -49,20 +45,14 @@ struct resultT {
     struct signedT quotient; // Use the struct to recycle the signed division for unsigned values discarding the sign
 };
 
-static inline unsigned char xnorBits(unsigned char val1, unsigned char val2, unsigned char bit) {
-    unsigned char val1Bit = TEST_NTH_BIT(val1, bit);
-    unsigned char val2Bit = TEST_NTH_BIT(val2, bit);
-    return (val1Bit == val2Bit ? 0x01U : 0x00U);
-}
-
-ATTR_USED static inline void longDivision(struct divisionT *operands, struct resultT *result) {
+void longDivision(struct divisionT *operands, struct resultT *result) {
     // Unpack the structs for better readability
     unsigned long denominator = operands->denominator.value;
     unsigned char denominatorFlags = operands->denominator.flags;
     unsigned long numerator = operands->numerator.value;
     unsigned char numeratorFlags = operands->numerator.flags;
     // Handle special cases ...
-    //  1. Division by zero: return q = ULONG_MAX, r = 0 and set the DIV0 flag of the quotient
+    //  1. Division by zero: quotient is ULONG_MAX, remainder is zero and set the DIV0 flag of the quotient
     if (denominator == 0x00U) {
         result->quotient.value = ULONG_MAX;
         result->quotient.flags = SET_NTH_BIT(0x00U, DIV0_FLAG);
@@ -72,7 +62,7 @@ ATTR_USED static inline void longDivision(struct divisionT *operands, struct res
     //  2. Division by one: the quotient is the number and the remainder is zero
     if (denominator == 0x01U) {
         result->quotient.value = numerator;
-        result->quotient.flags = xnorBits(numeratorFlags, denominatorFlags, SIGN_FLAG);
+        result->quotient.flags = XNOR_NTH_BITS(numeratorFlags, denominatorFlags, SIGN_FLAG);
         result->remainder = 0x00UL;
         return;
     }
@@ -83,31 +73,25 @@ ATTR_USED static inline void longDivision(struct divisionT *operands, struct res
         result->remainder = 0x00UL;
         return;
     }
-    //  3. Division by a larger denominator: the quotient is zero and the remainder is the numerator
+    //  4. Division by a larger denominator: the quotient is zero and the remainder is the numerator
     if (denominator > numerator) {
         result->quotient.value = 0x00U;
-        result->quotient.flags = xnorBits(numeratorFlags, denominatorFlags, SIGN_FLAG);
+        result->quotient.flags = XNOR_NTH_BITS(numeratorFlags, denominatorFlags, SIGN_FLAG);
         result->remainder = numerator;
         return;
     }
-    // Find the numerator most significant bit (it will help us to align the denominator)
-    unsigned long shiftedNumerator = numerator;
-    unsigned int numeratorMostSignificantBit = 0x00;
-    while (shiftedNumerator >> 0x01U != 0) {
-        shiftedNumerator = shiftedNumerator >> 0x01U;
-        numeratorMostSignificantBit += 1;
-    }
-    // Align the denominator to the most significant bit
+    // Shift the denominator until it's bigger or equal than the numerator
     unsigned long shiftedDenominator = denominator;
-    unsigned int steps = 0x01U;
-    while (((shiftedDenominator >> numeratorMostSignificantBit) & 0x01U) == 0) {
+    unsigned int steps = 0x00U;
+    while (shiftedDenominator <= numerator) {
         shiftedDenominator = shiftedDenominator << 0x01U;
         steps += 1;
     }
-    // Do the long division based on the steps calculated before
-    unsigned long quotient = 0x00;
+    shiftedDenominator = shiftedDenominator >> 0x01U;
+    // Do the long division based on the shifted denominator calculated above
+    unsigned long quotient = 0x00U;
     unsigned long remainder = numerator;
-    for (unsigned int i = 0; i < steps; ++i) {
+    for (unsigned int i = 0x00; i < steps; ++i) {
         if (remainder >= shiftedDenominator) {
             remainder -= shiftedDenominator;
             quotient = quotient << 0x01U;
@@ -119,12 +103,19 @@ ATTR_USED static inline void longDivision(struct divisionT *operands, struct res
     }
     // Set the struct values and return
     result->quotient.value = quotient;
-    result->quotient.flags = xnorBits(numeratorFlags, denominatorFlags, SIGN_FLAG);
+    result->quotient.flags = XNOR_NTH_BITS(numeratorFlags, denominatorFlags, SIGN_FLAG);
     result->remainder = remainder;
 }
 
 #if defined(KERNEL_ARM) && defined(KERNEL_COMPILER_GNU)
 
+/// This is the EABI call for unsigned integer division with quotient. In theory, the return quotient will go on R0 and
+/// the remainder in R1, but we can't control that (directly) from C. But the ABI says that a 64 bit value will, indeed,
+/// be returned that way, so we return a 64 bit value which is the composition of both the remainder and quotient. This
+/// should work as long as EABI is used (and this function won't be called if you don't use EABI).
+/// \param numerator (parameter introduced by the compiler)
+/// \param denominator (parameter introduced by the compiler)
+/// \return a composite value of the results which conforms with the EABI call
 unsigned long long __aeabi_uidivmod(unsigned long numerator, unsigned long denominator) {
     struct divisionT division = {
             .denominator.flags = 0x01U,
