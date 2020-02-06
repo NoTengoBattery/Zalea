@@ -6,11 +6,7 @@
   </component>
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated>
-      <config projectName="Project" targetName="RawCompilerRuntime" />
-      <config projectName="Project" targetName="LinkedImage" />
-      <config projectName="Project" targetName="CompilerRuntime" />
-      <config projectName="Project" targetName="NonStdC++Library" />
-      <config projectName="Project" targetName="EntryPoint" />
+      <config projectName="Zalea" targetName="LinkedImage" />
     </generated>
   </component>
   <component name="CMakeSettings" AUTO_RELOAD="true">
@@ -18,43 +14,33 @@
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug">
         <ADDITIONAL_GENERATION_ENVIRONMENT>
           <envs>
-            <env name="PATH" value="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin" />
+            <env name="PATH" value="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin:/opt/local/sbin" />
           </envs>
         </ADDITIONAL_GENERATION_ENVIRONMENT>
       </configuration>
       <configuration PROFILE_NAME="Release" CONFIG_NAME="Release">
         <ADDITIONAL_GENERATION_ENVIRONMENT>
           <envs>
-            <env name="PATH" value="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin" />
+            <env name="PATH" value="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin:/opt/local/sbin" />
           </envs>
         </ADDITIONAL_GENERATION_ENVIRONMENT>
       </configuration>
       <configuration PROFILE_NAME="RelWithDebInfo" CONFIG_NAME="Release With Debug Information">
         <ADDITIONAL_GENERATION_ENVIRONMENT>
           <envs>
-            <env name="PATH" value="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin" />
+            <env name="PATH" value="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin:/opt/local/sbin" />
           </envs>
         </ADDITIONAL_GENERATION_ENVIRONMENT>
       </configuration>
       <configuration PROFILE_NAME="MinSizeRel" CONFIG_NAME="Minimal Size Release">
         <ADDITIONAL_GENERATION_ENVIRONMENT>
           <envs>
-            <env name="PATH" value="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin" />
+            <env name="PATH" value="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin:/opt/local/sbin" />
           </envs>
         </ADDITIONAL_GENERATION_ENVIRONMENT>
       </configuration>
       <configuration PROFILE_NAME="Default" />
     </configurations>
-  </component>
-  <component name="ChangeListManager">
-    <list default="true" id="71605df8-410f-44f1-8e46-a5813ccdbfca" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scripts/CMake/Toolchain/CMakeToolchain.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/CMake/Toolchain/CMakeToolchain.cmake" afterDir="false" />
-    </list>
-    <option name="SHOW_DIALOG" value="false" />
-    <option name="HIGHLIGHT_CONFLICTS" value="true" />
-    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
-    <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
@@ -65,42 +51,35 @@
     <fileColor scope="Test Files" color="Rose" />
     <fileColor scope="Problems" color="Orange" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Project CMake File" />
-      </list>
-    </option>
-    <option name="SCHEME" value="Project" />
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="SIGN_OFF_COMMIT" value="true" />
   </component>
   <component name="NamedScopeManager">
-    <scope name="Assembler Header Files" pattern="file[Colorize]:*.h&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
-    <scope name="Assembly Preprocessed Source Files" pattern="file[Colorize]:*.sx&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
-    <scope name="Assembly Non-Preprocessed Source Files" pattern="file[Colorize]:*.s&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
-    <scope name="CMake Caches" pattern="(file[Colorize]:*//CMakeCache.txt||file[Colorize]:CMakeCache.txt)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
-    <scope name="CMake Projects" pattern="(file[Colorize]:*//CMakeLists.txt||file[Colorize]:CMakeLists.txt)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
-    <scope name="CMake Scripts" pattern="(file[Colorize]:*.cmake||file[Colorize]:Scripts/CMake//*)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
-    <scope name="C++ Header Files" pattern="file[Colorize]:*.hxx&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
-    <scope name="C++ Source Files" pattern="file[Colorize]:*.cxx&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
-    <scope name="C Header Files" pattern="file[Colorize]:*.h&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
-    <scope name="C Source Files" pattern="file[Colorize]:*.c&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
-    <scope name="Documentation Files" pattern="(file[Colorize]:*.md||file[Colorize]:*.rst||file[Colorize]:*.tex)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
-    <scope name="GNU LD Scripts" pattern="file[Colorize]:*.ld&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
-    <scope name="Python Scripts" pattern="(file[Colorize]:*.py||file[Colorize]:Scripts/Python/Sources//*||file[Colorize]:Scripts/Python/Tests//*)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
-    <scope name="Configuration Files" pattern="(file[Colorize]:*.cfg.*||file[Colorize]:*.cfg)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
-    <scope name="Ignored Files" pattern="(file[Colorize]:*.ignore.*||file[Colorize]:*.ignore)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
-    <scope name="Temp Files" pattern="(file[Colorize]:*.tmp.*||file[Colorize]:*.tmp)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
-    <scope name="Template Files" pattern="(file[Colorize]:*.in.*||file[Colorize]:*.in)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
-    <scope name="Test Files" pattern="(file[Colorize]:*.tst.*||file[Colorize]:*.tst||file[Colorize]:Scripts/Python/Tests//*)&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*" />
+    <scope name="Assembler Header Files" pattern="file[Colorize]:*.h" />
+    <scope name="Assembly Preprocessed Source Files" pattern="file[Colorize]:*.sx" />
+    <scope name="Assembly Non-Preprocessed Source Files" pattern="file[Colorize]:*.s" />
+    <scope name="CMake Caches" pattern="file[Colorize]:CMakeCache.txt" />
+    <scope name="CMake Projects" pattern="file[Colorize]:CMakeLists.txt" />
+    <scope name="CMake Scripts" pattern="file[Colorize]:*.cmake" />
+    <scope name="C++ Header Files" pattern="file[Colorize]:*.hxx" />
+    <scope name="C++ Source Files" pattern="file[Colorize]:*.cxx" />
+    <scope name="C Header Files" pattern="file[Colorize]:*.h" />
+    <scope name="C Source Files" pattern="file[Colorize]:*.c" />
+    <scope name="Documentation Files" pattern="file[Colorize]:*.md||file[Colorize]:*.rst||file[Colorize]:*.tex" />
+    <scope name="GNU LD Scripts" pattern="file[Colorize]:*.ld" />
+    <scope name="Python Scripts" pattern="file[Colorize]:*.py" />
+
+    <scope name="Configuration Files" pattern="file[Colorize]:*.cfg.*||file[Colorize]:*.cfg" />
+    <scope name="Ignored Files" pattern="file[Colorize]:*.ignore.*||file[Colorize]:*.ignore" />
+    <scope name="Temp Files" pattern="file[Colorize]:*.tmp.*||file[Colorize]:*.tmp" />
+    <scope name="Template Files" pattern="file[Colorize]:*.in.*||file[Colorize]:*.in" />
+    <scope name="Test Files" pattern="file[Colorize]:*.tst.*||file[Colorize]:*.tst" />
   </component>
   <component name="ProjectId" id="1X0lgzs0B8ajlYJD89yQXdQT1q4" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
+    <option name="showExcludedFiles" value="false" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
@@ -108,73 +87,12 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
   </component>
-  <component name="PyDebuggerOptionsProvider">
-    <option name="doSaveCallSignatures" value="true" />
-  </component>
-  <component name="RunManager" selected="CMake Application.LinkedImage">
-    <configuration name="CompilerRuntime" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Project" TARGET_NAME="CompilerRuntime" CONFIG_NAME="Debug">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="EntryPoint" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Project" TARGET_NAME="EntryPoint" CONFIG_NAME="Debug">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="LinkedImage" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Project" TARGET_NAME="LinkedImage" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Project" RUN_TARGET_NAME="LinkedImage">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="NonStdC++Library" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Project" TARGET_NAME="NonStdC++Library" CONFIG_NAME="Debug">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="RawCompilerRuntime" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Project" TARGET_NAME="RawCompilerRuntime" CONFIG_NAME="Debug">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <list>
-      <item itemvalue="CMake Application.EntryPoint" />
-      <item itemvalue="CMake Application.LinkedImage" />
-      <item itemvalue="CMake Application.CompilerRuntime" />
-      <item itemvalue="CMake Application.RawCompilerRuntime" />
-      <item itemvalue="CMake Application.NonStdC++Library" />
-    </list>
-  </component>
-  <component name="TaskManager">
-    <task active="true" id="Default" summary="Default task">
-      <changelist id="71605df8-410f-44f1-8e46-a5813ccdbfca" name="Default Changelist" comment="" />
-      <created>1580456695266</created>
-      <option name="number" value="Default" />
-      <option name="presentableId" value="Default" />
-      <updated>1580456695266</updated>
-    </task>
-    <servers />
-  </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="348" y="224" key="#com.intellij.ide.fileTemplates.ui.ConfigureTemplatesDialog" timestamp="1580456763330">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="348" y="224" key="#com.intellij.ide.fileTemplates.ui.ConfigureTemplatesDialog/0.0.1440.900@0.0.1440.900" timestamp="1580456763330" />
-    <state x="506" y="148" width="837" height="550" key="find.popup" timestamp="1580798070673">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="506" y="148" width="837" height="550" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1580798070673" />
-    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup" timestamp="1580780867407">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1580780867407" />
   </component>
   <component name="projectDetails">
     <states>
@@ -194,6 +112,7 @@
             <scope name="Documentation Files" />
             <scope name="GNU LD Scripts" />
             <scope name="Python Scripts" />
+
             <scope name="Configuration Files" />
             <scope name="Ignored Files" />
             <scope name="Temp Files" />

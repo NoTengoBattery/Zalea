@@ -18,8 +18,7 @@
       <sourceFolder url="file://$MODULE_DIR$/Scripts/Python/Tests" isTestSource="true" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="Kernel" />
-    <orderEntry type="module" module-name="Python" />
+    <orderEntry type="excludeFolder" forTests="false" />
   </component>
   <component name="FacetManager">
     <facet type="Python" name="Project's Python Facet">
