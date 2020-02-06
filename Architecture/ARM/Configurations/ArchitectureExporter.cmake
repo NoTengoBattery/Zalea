@@ -32,5 +32,7 @@ SET_AND_EXPORT(MACHINE_STACK_DOWNWARDS ON BOOL ON
 # TODO: Maybe some day 8 KiB will be small in the future
 SET_AND_EXPORT(MACHINE_STACK_SIZE "${MACHINE_STACK_SIZE}" STRING "0x2000"
                "This is the stack size for the machine. It's default is 0x2000, which is 8 KiB.")
+SET_AND_EXPORT(MACHINE_MODES_STACK_SIZE "${MACHINE_MODES_STACK_SIZE}" STRING "0x1000"
+               "This is the other ARM modes stack size for the machine. It's default is 0x1000, which is 4 KiB.")
 SET_AND_EXPORT(MACHINE_VIRTUAL_ADDRESS "${MACHINE_VIRTUAL_ADDRESS}" STRING "0x00000000"
                "This is the 'virtual' address, which is the one that is referenced by the compiled code.")

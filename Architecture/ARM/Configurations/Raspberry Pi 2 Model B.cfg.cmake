@@ -22,11 +22,11 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 
 # MACHINE_LOADABLE_IMAGE_NAME: SET_AND_EXPORT STRING
-SET(MACHINE_LOADABLE_IMAGE_NAME "kernel.img"
+SET(MACHINE_LOADABLE_IMAGE_NAME "kernel7.img"
     CACHE STRING
     "This will set the name of the binary that the machine can run. Some machines require a specific file ")
 # MACHINE_LOAD_ADDRESS: SET_AND_EXPORT STRING
-SET(MACHINE_LOAD_ADDRESS "0x80010000"
+SET(MACHINE_LOAD_ADDRESS "0x8000"
     CACHE STRING
     "This is the load address of the image, used by the loader to place the image in memory.")
 # MACHINE_MARCH: SET_AND_EXPORT STRING
@@ -34,22 +34,18 @@ SET(MACHINE_MARCH "armv7-a"
     CACHE STRING
     "This variable is the machine minimum iteration of the ISA for the compiler and assembler to emit code.")
 # MACHINE_MFPU: SET_AND_EXPORT STRING
-SET(MACHINE_MFPU "neon-vfpv4"
+SET(MACHINE_MFPU "neon"
     CACHE STRING
     "This variable is the machine FPU that the compiler can use to generate floating point instructions.")
-# MACHINE_MODES_STACK_SIZE: SET_AND_EXPORT STRING
-SET(MACHINE_MODES_STACK_SIZE "0x2000"
-    CACHE STRING
-    "This is the other ARM modes stack size for the machine. It's default is 0x1000, which is 4 KiB.")
 # MACHINE_MTUNE: SET_AND_EXPORT STRING
-SET(MACHINE_MTUNE "cortex-a15"
+SET(MACHINE_MTUNE "cortex-a7"
     CACHE STRING
     "This variable is the default CPU for the compiler and binutils to optimize and tune the performance.")
 # MACHINE_NAME: SET_AND_EXPORT STRING
-SET(MACHINE_NAME "ARM Versatile Express for Cortex-A15"
+SET(MACHINE_NAME "Raspberry Pi 2 Model B v1.1"
     CACHE STRING
     "This variable is the machine for the build, a human readable name for the machine.")
 # MACHINE_VIRTUAL_ADDRESS: SET_AND_EXPORT STRING
-SET(MACHINE_VIRTUAL_ADDRESS "0x80010000"
+SET(MACHINE_VIRTUAL_ADDRESS "0x8000"
     CACHE STRING
     "This is the 'virtual' address, which is the one that is referenced by the compiled code.")

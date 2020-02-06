@@ -19,9 +19,6 @@
 #/ This file will include the entry point for the Main Executable for ARM. The Main Executable contains all the code
 #/ that will make the device fully functional.
 #/
-#/ TODO: In the future, we probably will compress the Main Executable image and append a "header" that will uncompress
-#/ TODO: it, and put it in the VMA (by enabling the MMU).
-#/
 #===----------------------------------------------------------------------------------------------------------------===#
 
 ADD_LIBRARY("EntryPoint" STATIC
