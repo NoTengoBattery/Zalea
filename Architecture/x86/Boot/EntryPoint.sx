@@ -87,5 +87,9 @@ GLOBAL_RODATA(rodataPlaceholder)
   .string           "rodataPlaceholder"
 GLOBAL_DATA_EPILOG(rodataPlaceholder)
 
+GLOBAL_RESERVED(reservedPlaceholder)
+  .string           "reservedPlaceholder"
+GLOBAL_RESERVED_EPILOG(reservedPlaceholder)
+
 GLOBAL_BSS_DATA(bssPlaceholder, 1)
 GLOBAL_STACK_DATA(stackPlaceholder, 1)

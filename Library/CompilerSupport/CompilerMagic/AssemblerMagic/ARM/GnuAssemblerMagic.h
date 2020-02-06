@@ -66,12 +66,14 @@
 
 #define GLOBAL_DATA(n) GLOBAL_DATA_2(n, .data, "aw", %progbits)
 #define GLOBAL_RODATA(n) GLOBAL_DATA_2(n, .rodata, "a", %progbits)
+#define GLOBAL_RESERVED(n) GLOBAL_DATA_2(n, .reserved, "a", %progbits)
 
 #define GLOBAL_DATA_2_EPILOG(n) \
     .size n, . - n
 
 #define GLOBAL_DATA_EPILOG(n) GLOBAL_DATA_2_EPILOG(n)
 #define GLOBAL_RODATA_EPILOG(n) GLOBAL_DATA_2_EPILOG(n)
+#define GLOBAL_RESERVED_EPILOG(n) GLOBAL_DATA_2_EPILOG(n)
 
 #define GLOBAL_BSS_DATA(n, s) GLOBAL_DATA_2(n, .bss, "aw", %nobits) ASM_NL \
     .skip s, 0x00 ASM_NL \
