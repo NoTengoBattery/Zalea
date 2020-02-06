@@ -24,6 +24,7 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
+#include <CompilerMagic/CompilerMagic.h>
 #include <CompilerMagic/BitwiseMacros.h>
 #include <limits.h>
 
@@ -116,7 +117,7 @@ void longDivision(struct divisionT *operands, struct resultT *result) {
 /// \param numerator (parameter introduced by the compiler)
 /// \param denominator (parameter introduced by the compiler)
 /// \return a composite value of the results which conforms with the EABI call
-unsigned long long __aeabi_uidivmod(unsigned long numerator, unsigned long denominator) {
+ATTR_USED unsigned long long __aeabi_uidivmod(unsigned long numerator, unsigned long denominator) {
     struct divisionT division = {
             .denominator.flags = 0x01U,
             .denominator.value = denominator,
