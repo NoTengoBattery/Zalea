@@ -72,7 +72,7 @@ ENDIF ()
 IF (KERNEL_BINUTILS_GNU)
   ADD_CUSTOM_COMMAND(TARGET "${THIS_EXE_NAME}" POST_BUILD VERBATIM
                      COMMAND "${CMAKE_OBJDUMP}"
-                     ARGS "-S" "-d" "-s" "-t" "-x"
+                     ARGS "-S" "-d" "-x"
                      "$<TARGET_FILE:${THIS_EXE_NAME}>" ">" "$<TARGET_FILE:${THIS_EXE_NAME}>.objdump"
                      COMMENT "Generating the object dump (objdump) for ${THIS_EXE_NAME}...")
   ADD_CUSTOM_COMMAND(TARGET "${THIS_EXE_NAME}" POST_BUILD VERBATIM
@@ -109,7 +109,7 @@ IF (KERNEL_BINUTILS_GNU)
                      "${TREE_BIN_IMPORTANT_PATH}/MainExecutable.elf"
 
                      COMMAND "${CMAKE_OBJDUMP}"
-                     ARGS "-S" "-d" "-s" "-t" "-x"
+                     ARGS "-S" "-d" "-x"
                      "${TREE_BIN_IMPORTANT_PATH}/MainExecutable.elf"
                      ">" "${TREE_BIN_IMPORTANT_PATH}/MainExecutable.objdump"
 
