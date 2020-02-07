@@ -51,6 +51,9 @@
     <fileColor scope="Test Files" color="Rose" />
     <fileColor scope="Problems" color="Orange" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="SCHEME" value="Project" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="SIGN_OFF_COMMIT" value="true" />
