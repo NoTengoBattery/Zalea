@@ -45,13 +45,12 @@ def parse_args(args):
     global program_parser
     global parsed_args
     parser = argparse.ArgumentParser(
-            description='Configuration cache fixer. This program fixes and updates a CMake file '
-                        'that contains exported cache entries.',
-            epilog='This script was designed to extend the CMake language. Even if this file '
-                   'can be call and used directly, you should avoid that. Initializing the JSON database will always '
-                   'purge it. All changes made to the JSON database will be lost upon INT command. The VALUE and the '
-                   'DOCSTRING will be updated always. The TYPE of the variable will be set on creation and never '
-                   'updated.')
+            description='Configuration cache fixer. This program fixes and updates a CMake file that contains exported '
+                        'cache entries.',
+            epilog='This script was designed to extend the CMake language. Even if this file can be call and used '
+                   'directly, you should avoid that. Initializing the JSON database will always purge it. All changes '
+                   'made to the JSON database will be lost upon INT command. The VALUE and the DOCSTRING will be '
+                   'updated always. The TYPE of the variable will be set on creation and never updated.')
     parser.add_argument('action',
                         action='store', default='SAE', type=str, metavar='action',
                         help='Selects the action to take in the file. '
