@@ -25,11 +25,11 @@
 #define __FILENAME__ "EntryPoint.sx"
 #include <AssemblerMagic/AssemblerMagic.h>
 
-NAKED_GLOBAL_ARM_FUNCTION(.start, start)
+NAKED_GLOBAL_ARM_FUNCTION(.start, entry)
   LDR   sp,         =stackStart  // Setup the stack
   BL    secondEntryPoint
   B     miserableFail
-NAKED_GLOBAL_ARM_FUNCTION_EPILOG(start)
+NAKED_GLOBAL_ARM_FUNCTION_EPILOG(entry)
 
 /// miserableFail is a global function that will fail miserably when an irrecuperable error is detected. This is only
 /// true for the very early boot process.

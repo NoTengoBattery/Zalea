@@ -1,0 +1,41 @@
+#===-- armv7-a.vectors.sx - Vector Table for ARMv7-A Processors ------------------------------------------*- ASM -*-===#
+#
+# Copyright (c) 2020 Oever González
+#
+#  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+#  the License. You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+#  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+#  specific language governing permissions and limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+#===----------------------------------------------------------------------------------------------------------------===#
+#/
+#/ \file
+#/ According to ARM's documentatio, all ARM processors for ARMv6 and earlier, ARMv7-A and ARMv7-M must have an interrupt
+#/ reset vector which consist of branch or PC-load instructions. All of these instructions must be ARM, but the ARMv6-T2
+#/ support Thumb32 instructions, which doesn't matter because if all support ARM, ARM will be used.
+#/
+#/ http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0388f/CIHFIAJC.html
+#/
+#===----------------------------------------------------------------------------------------------------------------===#
+
+#include <config.h>
+#define __FILENAME__ "EntryPoint.sx"
+#include <AssemblerMagic/AssemblerMagic.h>
+
+# TODO: Add the labels when they are ready to be included here
+NAKED_GLOBAL_ARM_FUNCTION(.start.header, start)
+                    B                   entry               @ ARM Reset vector
+                    B                   entry               @ ARM Undefined Instruction vector
+                    B                   entry               @ ARM Software Interrupt vector
+                    B                   entry               @ ARM Prefect Abort vector
+                    B                   entry               @ ARM Data Abort vector
+                    NOP                                     @ RESERVED
+                    B                   entry               @ ARM IRQ vector
+                    B                   entry               @ ARM FIQ vector
+NAKED_GLOBAL_ARM_FUNCTION_EPILOG(start)

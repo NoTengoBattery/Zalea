@@ -23,6 +23,7 @@
 
 ADD_LIBRARY("EntryPoint" STATIC
             "EntryPoint.c"
-            "EntryPoint.sx")
+            "EntryPoint.sx"
+            "${MACHINE_MARCH}.vectors.sx")
 TARGET_LINK_LIBRARIES("EntryPoint" "CoreLibraries")
 TARGET_DISABLE_FANCY_FEATURES("EntryPoint" PRIVATE C FANCY_LIST LTO SANITIZER STACK_PROTECTOR)

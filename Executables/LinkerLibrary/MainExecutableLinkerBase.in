@@ -44,6 +44,7 @@ SECTIONS {
     _SEGMENT_START("start-segment")
     .start ALIGN_COMMONPAGE : AT ( MACHINE_LOAD_ADDRESS /* MACHINE_LOAD_ADDRESS */ ) {
         PROVIDE ( imageStart = . );
+        *(.start.header);
         *(.start);
     } :start
     ALIGNED_CPS_SEGMENT_START("multiboot-segment")
