@@ -25,6 +25,8 @@
 #include <ExecutableLibrary/ImageConstants.h>
 #include <InlineMagic/MemoryClear.h>
 
+void secondEntryPoint() ATTR_SECTION(".start");
+
 ATTR_NORETURN void secondEntryPoint() {
     memoryClear(&bssStart, &bssEnd);
     BUILTIN_UNREACHABLE;

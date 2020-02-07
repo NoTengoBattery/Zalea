@@ -29,7 +29,7 @@
 /// This function will clear memory region between two pointers.
 /// \param origin the origin of the memory buffer to set
 /// \param final the target of the memory buffer to set
-extern inline void memoryClear(void *origin, void *final) ATTR_SECTION(".start");
+extern inline void memoryClear(void *origin, void *final);
 
 inline void memoryClear(void *origin, void *final) {
     void *greater = ((origin > final) ? origin : final);

@@ -32,6 +32,7 @@ extern volatile void *imageEnd;
 extern volatile void *imageStart;
 
 extern volatile void *multibootStructPointer;
+extern volatile void *vectorEnd;
 
 extern void miserableFail(void);
 

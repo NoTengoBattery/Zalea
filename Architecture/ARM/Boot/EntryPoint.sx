@@ -35,6 +35,7 @@ NAKED_GLOBAL_ARM_FUNCTION_EPILOG(entry)
 /// true for the very early boot process.
 NAKED_GLOBAL_ARM_FUNCTION(.start, miserableFail)
   WFI
+  WFE
   B     miserableFail
 NAKED_GLOBAL_ARM_FUNCTION_EPILOG(miserableFail)
 

@@ -30,12 +30,22 @@
 
 # TODO: Add the labels when they are ready to be included here
 NAKED_GLOBAL_ARM_FUNCTION(.start.header, start)
-                    B                   entry               @ ARM Reset vector
-                    B                   entry               @ ARM Undefined Instruction vector
-                    B                   entry               @ ARM Software Interrupt vector
-                    B                   entry               @ ARM Prefect Abort vector
-                    B                   entry               @ ARM Data Abort vector
+                    LDR   PC,           rreset              @ ARM Reset vector
+                    LDR   PC,           undefi              @ ARM Undefined Instruction vector
+                    LDR   PC,           armswi              @ ARM Software Interrupt vector
+                    LDR   PC,           pftabt              @ ARM Prefetch Abort vector
+                    LDR   PC,           dtaabt              @ ARM Data Abort vector
                     NOP                                     @ RESERVED
-                    B                   entry               @ ARM IRQ vector
-                    B                   entry               @ ARM FIQ vector
+                    LDR   PC,           armirq              @ ARM IRQ vector
+                    LDR   PC,           armfiq              @ ARM FIQ vector
+
+/* ------------------------------------------------ Actual Addresses ------------------------------------------------ */
+  rreset:           .word               entry               @ ARM Reset vector;
+  undefi:           .word               entry               @ ARM Undefined Instruction vector
+  armswi:           .word               entry               @ ARM Software Interrupt vector
+  pftabt:           .word               entry               @ ARM Prefetch Abort vector
+  dtaabt:           .word               entry               @ ARM Data Abort vector
+  rsrved:           .word               entry               @ RESERVED
+  armirq:           .word               entry               @ ARM IRQ vector
+  armfiq: vectorEnd:.word               entry               @ ARM FIQ vector
 NAKED_GLOBAL_ARM_FUNCTION_EPILOG(start)
