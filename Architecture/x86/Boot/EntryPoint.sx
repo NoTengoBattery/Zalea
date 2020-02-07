@@ -29,36 +29,36 @@
 /// thing to be executed when we have full control over the CPU. For x86, this will save the Multiboot2 registers, setup
 /// the main stack and finally perform a call to the C entry point.
 NAKED_GLOBAL_FUNCTION(.start, start)
-  XCHG  bx,         bx # BOCHS magic breakpoint
+  XCHG  bx,         bx        # BOCHS magic breakpoint
   LEA   esi,        iEAX
   LEA   edi,        iEBX
-  MOV   [esi],      eax  # Temporary save EAX, which contains the Multiboot2 magic number
-  MOV   [edi],      ebx  # Temporary save EAX, which contains the address of the Multiboot2 data structure
+  MOV   [esi],      eax       # Temporary save EAX, which contains the Multiboot2 magic number
+  MOV   [edi],      ebx       # Temporary save EAX, which contains the address of the Multiboot2 data structure
   LEA   esp,        stackStart  # Setup the stack
   MOV   ebp,        esp
-# --- Check for SSE2 ---
-  MOV   eax,        0x01
+
+/* --------------------------------------------------- Enable SSE --------------------------------------------------- */
+  MOV   eax,        0x01      # Ask the 0x01 set of information to CPUID
   CPUID
-  TEST  edx,        0x2000000
-  JZ    miserableFail
-# --- Enable SSE2 ---
-  MOV   eax,        cr0  # -- CR0
-  AND   ax,         0xFFFB
-  OR    ax,         0x02
-  MOV   cr0,        eax
-  MOV   eax,        cr4  # -- CR4
-  OR    ax,         0x600
-  MOV   cr4,        eax
-# --- Done with SSE2 ---
-  MOV   eax,        [edi]  # Restore and push EBX
+  TEST  edx,        0x2000000 # Test if the bit 26 is set...
+  JZ    miserableFail         # ...if not, then fail (we requiere SSE2)
+  MOV   eax,        cr0       # Read the CR0 inside EAX
+  AND   ax,         0xFFFB    # Clear the bit 3 of AX
+  OR    ax,         0x02      # Set the bit 2 of AX
+  MOV   cr0,        eax       # Move back EAX to CR0
+  MOV   eax,        cr4       # Read CR4 into EAX
+  OR    ax,         0x600     # Set the bits 10 and 11 of AX
+  MOV   cr4,        eax       # Move the EAX back to CR4
+
+  MOV   eax,        [edi]     # Restore and push EBX
   PUSH  eax
-  MOV   eax,        [esi]  # Restore and push EAX
+  MOV   eax,        [esi]     # Restore and push EAX
   PUSH  eax
   CALL  secondEntryPoint
   JMP   miserableFail
 NAKED_GLOBAL_FUNCTION_EPILOG(start)
-LOCAL_BSS_DATA(iEAX, 4)  # 4: sizeof (eax): 32 bit
-LOCAL_BSS_DATA(iEBX, 4)  # 4: sizeof (ebx): 32 bit
+LOCAL_BSS_DATA(iEAX, 4)       # 4: sizeof (eax): 32 bit
+LOCAL_BSS_DATA(iEBX, 4)       # 4: sizeof (ebx): 32 bit
 
 /// miserableFail is a global function that will fail miserably when an irrecuperable error is detected. This is only
 /// true for the very early boot process.
