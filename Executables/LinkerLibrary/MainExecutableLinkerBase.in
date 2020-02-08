@@ -38,6 +38,8 @@ PHDRS {
     data PT_LOAD FLAGS (PF_RW) ;
     rodata PT_LOAD FLAGS (PF_R) ;
     reserved PT_LOAD FLAGS (PF_RW) ;
+    bss PT_LOAD FLAGS (PF_RW) ;
+    stack PT_LOAD FLAGS (PF_RW) ;
 }
 
 SECTIONS {
@@ -91,39 +93,45 @@ SECTIONS {
         KEEP (*(.eh_frame));
         *(.eh_frame.*);
     }
-     /*
-      * Give the system a small pool for guaranteed memory. This memory is guaranteed because it will be loaded along
-      * with the image (making it bigger, I know). These pages can be used by the very early boot process, so we can
-      * save some precious data such as the bootloader information and some other computed data on the way.
-      */
+    /*
+     * Give the system a small pool for guaranteed memory. This memory is guaranteed because it will be loaded along
+     * with the image (making it bigger, I know). These pages can be used by the very early boot process, so we can
+     * save some precious data such as the bootloader information and some other computed data on the way.
+     */
     ALIGNED_CPS_SEGMENT_START("reserved-segment")
     .reserved ALIGN_MINI : ALIGN_MINI {
-        PROVIDE ( reservedStart = . );
+        reservedStart = .;
         *(.reserved);
         *(.reserved.*);
-        . = ALIGN_N_COMMONPAGE(16); /* 64 KiB in most architectures */
-        PROVIDE ( reservedEnd = . );
-     } :reserved
+        . += 15 * CONSTANT ( COMMONPAGESIZE );
+        . = ALIGN_COMMONPAGE; /* 64 KiB in most architectures */
+        reservedEnd = .;
+    } :reserved
     /*
-     * The stack and bss section, those sections are at the very end of the executable and extends to the image end.
+     * The stack and bss section, those sections are at the very end of the executable and extends towards the image
+     * end.
      */
     ALIGNED_CPS_SEGMENT_START("bss-segment")
     .bss ALIGN_MINI (NOLOAD) : ALIGN_MINI {
         PROVIDE ( bssStart = . );
         *(.bss);
         *(COMMON);
+        . = ALIGN_COMMONPAGE;
         PROVIDE ( bssEnd = . );
-     }
-     /*
-      * Adjust bss to the next page, so we have at least one RO page between 2 RW pages (just like .data).
-      */
-     . = ALIGN_COMMONPAGE;
+    } :bss
+    /*
+     * Adjust bss to the next page, this way, we can insert a RO page between BSS and the stack to detect accidental
+     * stack overflows.
+     */
+#ifdef MACHINE_STACK_DOWNWARDS
      /*
       * Leave 1 page between bss and stack (it's a RO page which will rise exception upon stack overflow). This is
       * intended to prevent accidental overflows but will not help with malicious overflows.
       */
-     . += MINI_ALIGN; . = ALIGN_COMMONPAGE;
-     .stack ALIGN_MINI (NOLOAD) : ALIGN_MINI {
+     . += MINI_ALIGN;
+#endif
+    ALIGNED_CPS_SEGMENT_START("stack-segment")
+    .stack ALIGN_MINI (NOLOAD) : ALIGN_MINI {
 #ifndef MACHINE_STACK_DOWNWARDS
         PROVIDE ( stackStart = . );
         PROVIDE ( stackLowermost = . );
@@ -140,14 +148,23 @@ SECTIONS {
         PROVIDE ( stackEnd = . );
         PROVIDE ( imageEnd = . );
 #endif
-    }
+    } :stack
+#ifndef MACHINE_STACK_DOWNWARDS
+    . += MINI_ALIGN;
+    . = ALIGN_COMMONPAGE;
+    stackGuardEnd = .;
+#endif
 
-    /* Run 3 special assertions that will ensure the correct alignment of the entry point, load address and stack */
+    /*
+     * Run 3 special assertions that will ensure the correct alignment of the entry point, load address and stack
+     */
     ASSERT_VIRTUAL_ADDRESS
     ASSERT_LOAD_ADDRESS
     ASSERT_STACK_SIZE
 
-    /* Sections emitted by the compiler (they are stripped in the final binary) */
+    /*
+     * Sections emitted by the compiler (they are stripped in the final binary)
+     */
     .comment 0 : {
         *(.comment);
     }

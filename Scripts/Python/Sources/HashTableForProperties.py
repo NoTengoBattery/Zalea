@@ -29,7 +29,7 @@ import json
 import logging
 import sys
 
-bits = 4
+bits = 8
 buffer_size = 64 * 1024  # 64kb
 collision_foresee = 1
 default_db_filename = 'properties.json'
@@ -38,7 +38,7 @@ default_source_filename = 'JsonPropertyHashTable.c'
 default_template_filename = 'template.h'
 max_64bit = 0xFFFFFFFFFFFFFFFF
 parsed_args = None
-pattern_64bit = 0xAAAAAAAAAAAAAAAA
+pattern_64bit = 0xA5A5A5A5A5A5A5A5
 program_parser = None
 this_logger = logging.getLogger(__name__)
 
@@ -128,9 +128,18 @@ def rotate_left(value):
     return mask(rotated)
 
 
+def rotate_right(value):
+    global bits
+    masked = mask(value)
+    carry = (masked & 1) << bits
+    rotated = masked >> 1
+    rotated = rotated | carry
+    return mask(rotated)
+
+
 def calculate_hash(input):
     global pattern_64bit
-    value = pattern_64bit
+    value = rotate_left(pattern_64bit)
     ascii_bits = input.encode('ASCII')
     for character in ascii_bits:
         value = rotate_left(value)
@@ -143,13 +152,13 @@ def calculate_hash(input):
 
 def calculate_hash2(input):
     global pattern_64bit
-    value = pattern_64bit
+    value = rotate_right(pattern_64bit)
     ascii_bits = input.encode('ASCII')
     for character in ascii_bits:
-        value = rotate_left(value)
+        value = rotate_right(value)
         value ^= character * ~len(input)
-        value = rotate_left(value)
-        value ^= ~character * ~len(input)
+        value = rotate_right(value)
+        value ^= ~character * len(input)
     value = mask(value)
     return value
 
@@ -193,9 +202,9 @@ def create_hashmap(args):
             collision_avoided = False
             key_hash2 = calculate_hash2(key)
             current_in_map = hashmap[key_hash2]
+            this_logger.warning("Trying to use the alternative hash {} for hash {}"
+                                .format(hex(key_hash2), hex(key_hash)))
             if current_in_map is None:
-                this_logger.warning("Trying to use the alternative hash {} for hash {}"
-                                    .format(hex(key_hash2), hex(key_hash)))
                 hashmap[key_hash2] = "{}%=%=%{}".format(key, value)
                 collision_avoided = True
                 this_logger.info("Collision avoided by using the alternative hash".format(key_hash))
@@ -208,7 +217,7 @@ def create_hashmap(args):
                 this_logger.error("Error: Unrecoverable collision detected...".format(len(hashmap)))
                 this_logger.error("Length of the map: '{}'".format(len(hashmap)))
                 this_logger.error("Key to be inserted: '{}'".format(key))
-                this_logger.error("Key with the same hash: '{}'".format(hashmap[key_hash]))
+                this_logger.error("Key with the same hash: '{}'".format(hashmap[key_hash].split("%=%=%")[0]))
                 this_logger.error("Hash that collided: '{}'".format(hex(key_hash)))
                 raise SystemExit(2, 'Hash collision detected.')
     return hashmap
