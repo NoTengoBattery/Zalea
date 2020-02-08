@@ -24,8 +24,8 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#include <CompilerMagic/CompilerMagic.h>
 #include <CompilerMagic/BitwiseMacros.h>
+#include <CompilerMagic/CompilerMagic.h>
 #include <limits.h>
 
 #define SIGN_FLAG 0x00U /// If the sign flag is enabled, the number is positive

@@ -131,7 +131,7 @@ ENDIF ()
 
 # Enable cppcheck if found the toolchain file.
 IF (CMAKE_CPPCHECK)
-  SET(CPPCHECK_CHECKS --enable=all)
+  SET(CPPCHECK_CHECKS --enable=all --suppress=unusedFunction)
   SET(CMAKE_C_CPPCHECK "${CMAKE_CPPCHECK}" "${CPPCHECK_CHECKS}" --language=c)
   SET(CMAKE_CXX_CPPCHECK "${CMAKE_CPPCHECK}" "${CPPCHECK_CHECKS}" --language=c++)
 ENDIF ()

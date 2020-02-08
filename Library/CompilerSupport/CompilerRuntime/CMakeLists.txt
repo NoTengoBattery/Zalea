@@ -25,7 +25,7 @@
 # optimizer about the standard library. For example, code that the compiler finds that is a "memcpy" will be optimized
 # to a memcpy call. Therefore, we provide those calls here.
 ADD_LIBRARY("CompilerRuntime" STATIC
-            "memset.c")
+            "phony.c")
 IF (KERNEL_ARM)
   TARGET_SOURCES("CompilerRuntime" PRIVATE
                  "${KERNEL_ARCH}/${KERNEL_ARCH}Utils.h")
@@ -50,7 +50,8 @@ TARGET_INCLUDE_DIRECTORIES("CompilerRuntime" PRIVATE "${CMAKE_CURRENT_LIST_DIR}"
 # TODO: version.
 ADD_LIBRARY("RawCompilerRuntime" STATIC
             "asan.c"
-            "division.c")
+            "division.c"
+            "memset.c")
 TARGET_DISABLE_FANCY_FEATURES("RawCompilerRuntime" PRIVATE C FANCY_LIST LTO SANITIZER STACK_PROTECTOR)
 
 TARGET_LINK_LIBRARIES("RawCompilerRuntime" "CoreLibraries")

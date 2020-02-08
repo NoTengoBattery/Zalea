@@ -40,12 +40,13 @@ NAKED_GLOBAL_ARM_FUNCTION(.start.header, start)
                     LDR   PC,           armfiq              @ ARM FIQ vector
 
 /* ------------------------------------------------ Actual Addresses ------------------------------------------------ */
-  rreset:           .word               entry               @ ARM Reset vector;
+  rreset:           .word               entry               @ ARM Reset vector
   undefi:           .word               entry               @ ARM Undefined Instruction vector
   armswi:           .word               entry               @ ARM Software Interrupt vector
   pftabt:           .word               entry               @ ARM Prefetch Abort vector
   dtaabt:           .word               entry               @ ARM Data Abort vector
   rsrved:           .word               entry               @ RESERVED
   armirq:           .word               entry               @ ARM IRQ vector
-  armfiq: vectorEnd:.word               entry               @ ARM FIQ vector
+  armfiq:           .word               entry               @ ARM FIQ vector
+  vecend:           .word               .
 NAKED_GLOBAL_ARM_FUNCTION_EPILOG(start)

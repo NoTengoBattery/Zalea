@@ -33,10 +33,8 @@
 /// \param size the size of the memory region
 /// \param alignment the expected alignment
 /// \return the address of the aligned buffer
-ATTR_ALWAYS_INLINE static inline size_t unalignedLoop(void *buffer,
-                                                      unsigned char fill,
-                                                      size_t size,
-                                                      unsigned int alignment) {
+ATTR_ALWAYS_INLINE
+static inline size_t unalignedLoop(void *buffer, unsigned char fill, size_t size, unsigned int alignment) {
     // Compute the buffer as a char addressing array...
     unsigned char *byteAddressing = buffer;
     // ... fill by char until either the size is depleted...
