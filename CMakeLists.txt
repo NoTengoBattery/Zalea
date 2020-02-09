@@ -98,7 +98,8 @@ INCLUDE("${TREE_SELF_PATH}")
 
 # Create and configure the actual CMake project and enable the languages: C, C++ and Assembler
 PROJECT("${PROJECT_NAME}" VERSION ${CMAKE_SYSTEM_VERSION} LANGUAGES ASM C CXX)
-MESSAGE(STATUS "The \"${PROJECT_NAME}\" project version ${CMAKE_PROJECT_VERSION} for ${KERNEL_ARCH}")
+SET(PROJECT_BRIEF "The \"${PROJECT_NAME}\" project version ${CMAKE_PROJECT_VERSION} for ${KERNEL_ARCH}")
+MESSAGE(STATUS "${PROJECT_BRIEF}")
 
 # Set the INTERPROCEDURAL_OPTIMIZATION default to true (LTO)
 IF (LTO_AVAILABLE)
@@ -145,6 +146,10 @@ TARGET_LINK_LIBRARIES("CoreLibraries" INTERFACE "ExecutableLibrary" "CompilerMag
 # Add all subdirectories (the root subdirectories) that will be ever used
 ADD_SUBDIRECTORY("${TREE_ARCHITECTURE_PATH}")
 ADD_SUBDIRECTORY("${TREE_LIBRARY_PATH}")
+IF (CMAKE_DOXYGEN)
+  MESSAGE(STATUS "Doxygen was found. The build system will generate the documentation during build")
+  ADD_SUBDIRECTORY("${TREE_DOCUMENTATION_PATH}")
+ENDIF ()
 
 # Dump the Current Config database to a CMake and header file at the end of configuration
 DATABASE_TO_CMAKE()

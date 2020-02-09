@@ -26,7 +26,7 @@
 #ifndef ZALEA_MAINEXECUTABLELINKERBASE_IN
 #define ZALEA_MAINEXECUTABLELINKERBASE_IN
 
-#include <LinkerLibrary/LinkerScriptDefinitions.in>
+#include <LinkerLibrary/LinkerScriptDefinitions.in.ld>
 #include <config.h>
 
 #ifdef KERNEL_LINKER_GNU

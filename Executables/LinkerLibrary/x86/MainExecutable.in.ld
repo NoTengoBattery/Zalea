@@ -24,10 +24,10 @@
  *===--------------------------------------------------------------------------------------------------------------===*/
 
 #include <config.h>
-#include <LinkerLibrary/LinkerScriptDefinitions.in>
+#include <LinkerLibrary/LinkerScriptDefinitions.in.ld>
 #undef i386
 
 OUTPUT_FORMAT( "elf32-i386", "elf32-i386", "elf32-i386" )
 OUTPUT_ARCH( i386 )
 ENTRY
-#include <LinkerLibrary/MainExecutableLinkerBase.in>
+#include <LinkerLibrary/MainExecutableLinkerBase.in.ld>

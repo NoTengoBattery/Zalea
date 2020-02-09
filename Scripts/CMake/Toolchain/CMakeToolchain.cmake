@@ -176,13 +176,17 @@ IF (TREE_SELF_PATH AND NOT TOOLCHAIN_DONE) # This will define if we have access 
   SET(CMAKE_CLANG_TIDY "clang-tidy")
   GUESS_TOOL_BY_NAME(CLANG_TIDY "COMPILER;BINUTILS;EXTRA_TOOLS")
 
+  # Try to find cppcheck, if available, set the property in the main CMakeLists.txt
+  SET(CMAKE_CPPCHECK "cppcheck")
+  GUESS_TOOL_BY_NAME(CPPCHECK "EXTRA_TOOLS;BINUTILS;COMPILER")
+
   # Try to find cpplint, if available, set the property in the main CMakeLists.txt
   SET(CMAKE_CPPLINT "cpplint")
   GUESS_TOOL_BY_NAME(CPPLINT "EXTRA_TOOLS;BINUTILS;COMPILER")
 
-  # Try to find cppcheck, if available, set the property in the main CMakeLists.txt
-  SET(CMAKE_CPPCHECK "cppcheck")
-  GUESS_TOOL_BY_NAME(CPPCHECK "EXTRA_TOOLS;BINUTILS;COMPILER")
+  # Try to find doxygen, if available, set the command and target in the Documentation subdirectory
+  SET(CMAKE_DOXYGEN "doxygen")
+  GUESS_TOOL_BY_NAME(DOXYGEN "EXTRA_TOOLS;BINUTILS;COMPILER")
 
   # Export which linker is being used to the database, so we can use it in the preprocessed linker scripts
   IF (KERNEL_USE_GOLD)
