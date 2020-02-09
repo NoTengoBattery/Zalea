@@ -24,9 +24,9 @@
  *===--------------------------------------------------------------------------------------------------------------===*/
 
 #include <config.h>
-#include <LinkerLibrary/LinkerScriptDefinitions.in>
+#include <LinkerLibrary/LinkerScriptDefinitions.in.ld>
 
 OUTPUT_FORMAT( "elf32-littlearm", "elf32-bigarm", "elf32-littlearm" )
 OUTPUT_ARCH( arm )
 ENTRY
-#include <LinkerLibrary/MainExecutableLinkerBase.in>
+#include <LinkerLibrary/MainExecutableLinkerBase.in.ld>

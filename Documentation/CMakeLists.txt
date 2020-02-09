@@ -31,4 +31,4 @@ ADD_CUSTOM_COMMAND(OUTPUT "${DOXYGEN_INDEX_FILE}"
                    WORKING_DIRECTORY "${DOXYGEN_OUTPUT_DIR}"
                    MAIN_DEPENDENCY "${DOXYGEN_DOXYFILE_OUT}"
                    COMMENT "Generating Doxygen documentation for the project...")
-ADD_CUSTOM_TARGET(Doxygen ALL DEPENDS "${DOXYGEN_INDEX_FILE}")
+ADD_CUSTOM_TARGET(Doxygen DEPENDS "${DOXYGEN_INDEX_FILE}")

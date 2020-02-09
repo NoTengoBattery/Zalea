@@ -68,7 +68,7 @@ OUTPUT_DIRECTORY       = "@DOXYGEN_OUTPUT_DIR@"
 # performance problems for the file system.
 # The default value is: NO.
 
-CREATE_SUBDIRS         = YES
+CREATE_SUBDIRS         = NO
 
 # If the ALLOW_UNICODE_NAMES tag is set to YES, doxygen will allow non-ASCII
 # characters to appear in the names of generated files. If set to NO, non-ASCII
@@ -129,7 +129,6 @@ REPEAT_BRIEF           = YES
 ABBREVIATE_BRIEF       = "The $name class" \
                          "The $name widget" \
                          "The $name file" \
-                         This \
                          is \
                          provides \
                          specifies \
@@ -144,7 +143,7 @@ ABBREVIATE_BRIEF       = "The $name class" \
 # description.
 # The default value is: NO.
 
-ALWAYS_DETAILED_SEC    = YES
+ALWAYS_DETAILED_SEC    = NO
 
 # If the INLINE_INHERITED_MEMB tag is set to YES, doxygen will show all
 # inherited members of a class in the documentation of that class as if those
@@ -262,7 +261,7 @@ TAB_SIZE               = 2
 # commands \{ and \} for these it is advised to use the version @{ and @} or use
 # a double escape (\\{ and \\})
 
-ALIASES                =
+ALIASES                = "sideeffect=@par Side Effects:\n"
 
 # This tag can be used to specify a number of word-keyword mappings (TCL only).
 # A mapping has the form "name=value". For example adding "class=itcl::class"
@@ -324,7 +323,7 @@ OPTIMIZE_OUTPUT_SLICE  = NO
 # Note that for custom extensions you also need to set FILE_PATTERNS otherwise
 # the files are not read by doxygen.
 
-EXTENSION_MAPPING      =
+EXTENSION_MAPPING      = ld=C
 
 # If the MARKDOWN_SUPPORT tag is enabled then doxygen pre-processes all comments
 # according to the Markdown format, which allows for more readable
@@ -400,7 +399,7 @@ DISTRIBUTE_GROUP_DOC   = NO
 # is disabled and one has to add nested compounds explicitly via \ingroup.
 # The default value is: NO.
 
-GROUP_NESTED_COMPOUNDS = NO
+GROUP_NESTED_COMPOUNDS = YES
 
 # Set the SUBGROUPING tag to YES to allow class member groups of the same type
 # (for instance a group of public functions) to be put as a subgroup of that
@@ -420,7 +419,7 @@ SUBGROUPING            = YES
 # SEPARATE_MEMBER_PAGES.
 # The default value is: NO.
 
-INLINE_GROUPED_CLASSES = NO
+INLINE_GROUPED_CLASSES = YES
 
 # When the INLINE_SIMPLE_STRUCTS tag is set to YES, structs, classes, and unions
 # with only public data fields or simple typedef fields will be shown inline in
@@ -430,7 +429,7 @@ INLINE_GROUPED_CLASSES = NO
 # Man pages) or section (for LaTeX and RTF).
 # The default value is: NO.
 
-INLINE_SIMPLE_STRUCTS  = NO
+INLINE_SIMPLE_STRUCTS  = YES
 
 # When TYPEDEF_HIDES_STRUCT tag is enabled, a typedef of a struct, union, or
 # enum is documented as struct, union, or enum with the name of the typedef. So
@@ -508,7 +507,7 @@ EXTRACT_LOCAL_CLASSES  = YES
 # included.
 # The default value is: NO.
 
-EXTRACT_LOCAL_METHODS  = YES
+EXTRACT_LOCAL_METHODS  = NO
 
 # If this flag is set to YES, the members of anonymous namespaces will be
 # extracted and appear in the documentation as a namespace called
@@ -554,7 +553,7 @@ HIDE_IN_BODY_DOCS      = NO
 # will be excluded. Set it to YES to include the internal documentation.
 # The default value is: NO.
 
-INTERNAL_DOCS          = NO
+INTERNAL_DOCS          = YES
 
 # If the CASE_SENSE_NAMES tag is set to NO then doxygen will only generate file
 # names in lower-case letters. If set to YES, upper-case letters are also
@@ -698,7 +697,7 @@ ENABLED_SECTIONS       =
 # documentation regardless of this setting.
 # Minimum value: 0, maximum value: 10000, default value: 30.
 
-MAX_INITIALIZER_LINES  = 30
+MAX_INITIALIZER_LINES  = 60
 
 # Set the SHOW_USED_FILES tag to NO to disable the list of files generated at
 # the bottom of the documentation of classes and structs. If set to YES, the
@@ -763,7 +762,7 @@ CITE_BIB_FILES         =
 # messages are off.
 # The default value is: NO.
 
-QUIET                  = NO
+QUIET                  = YES
 
 # The WARNINGS tag can be used to turn on/off the warning messages that are
 # generated to standard error (stderr) by doxygen. If WARNINGS is set to YES
@@ -830,7 +829,7 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = "@CMAKE_SOURCE_DIR@" "@TREE_BIN_IMPORTANT_PATH@"
+INPUT                  = "@CMAKE_SOURCE_DIR@"
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -849,7 +848,7 @@ INPUT_ENCODING         = UTF-8
 # need to set EXTENSION_MAPPING for the extension otherwise the files are not
 # read by doxygen.
 #
-# If left blank the following patterns are tested:*.c, *.cc, *.cxx, *.cpp,
+# If left blank the following patterns are tested: *.c, *.cc, *.cxx, *.cpp,
 # *.c++, *.java, *.ii, *.ixx, *.ipp, *.i++, *.inl, *.idl, *.ddl, *.odl, *.h,
 # *.hh, *.hxx, *.hpp, *.h++, *.cs, *.d, *.php, *.php4, *.php5, *.phtml, *.inc,
 # *.m, *.markdown, *.md, *.mm, *.dox (to be provided as doxygen C comment),
@@ -903,7 +902,8 @@ FILE_PATTERNS          = *.c \
                          *.vhdl \
                          *.ucf \
                          *.qsf \
-                         *.ice
+                         *.ice \
+                         *.ld
 
 # The RECURSIVE tag can be used to specify whether or not subdirectories should
 # be searched for input files as well.
@@ -934,8 +934,7 @@ EXCLUDE_SYMLINKS       = NO
 # Note that the wildcards are matched against the file with absolute path, so to
 # exclude all test directories for example use the pattern */test/*
 
-EXCLUDE_PATTERNS       = */build/* \
-                         */cmake-build-*/* \
+EXCLUDE_PATTERNS       = "@CMAKE_SOURCE_DIR@/*build*" \
                          "@TREE_SCRIPTS_PYTHON3_ENV_PATH@" \
                          "@DOXYGEN_OUTPUT_DIR@"
 
@@ -1030,7 +1029,7 @@ FILTER_SOURCE_PATTERNS =
 # (index.html). This can be useful if you have a project on for instance GitHub
 # and want to reuse the introduction page also for the doxygen output.
 
-USE_MDFILE_AS_MAINPAGE =
+USE_MDFILE_AS_MAINPAGE = README.md
 
 #---------------------------------------------------------------------------
 # Configuration options related to source browsing
@@ -1062,13 +1061,13 @@ STRIP_CODE_COMMENTS    = YES
 # entity all documented functions referencing it will be listed.
 # The default value is: NO.
 
-REFERENCED_BY_RELATION = NO
+REFERENCED_BY_RELATION = YES
 
 # If the REFERENCES_RELATION tag is set to YES then for each documented function
 # all documented entities called/used by that function will be listed.
 # The default value is: NO.
 
-REFERENCES_RELATION    = NO
+REFERENCES_RELATION    = YES
 
 # If the REFERENCES_LINK_SOURCE tag is set to YES and SOURCE_BROWSER tag is set
 # to YES then the hyperlinks from functions in REFERENCES_RELATION and
@@ -1076,7 +1075,7 @@ REFERENCES_RELATION    = NO
 # link to the documentation.
 # The default value is: YES.
 
-REFERENCES_LINK_SOURCE = YES
+REFERENCES_LINK_SOURCE = NO
 
 # If SOURCE_TOOLTIPS is enabled (the default) then hovering a hyperlink in the
 # source code will show a tooltip with additional information such as prototype,
@@ -1242,7 +1241,7 @@ HTML_EXTRA_FILES       =
 # Minimum value: 0, maximum value: 359, default value: 220.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_COLORSTYLE_HUE    = 220
+HTML_COLORSTYLE_HUE    = 180
 
 # The HTML_COLORSTYLE_SAT tag controls the purity (or saturation) of the colors
 # in the HTML output. For a value of 0 the output will use grayscales only. A
@@ -1261,7 +1260,7 @@ HTML_COLORSTYLE_SAT    = 100
 # Minimum value: 40, maximum value: 240, default value: 80.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_COLORSTYLE_GAMMA  = 80
+HTML_COLORSTYLE_GAMMA  = 160
 
 # If the HTML_TIMESTAMP tag is set to YES then the footer of each generated HTML
 # page will contain the date and time when the page was generated. Setting this
@@ -2174,7 +2173,13 @@ INCLUDE_FILE_PATTERNS  =
 # recursively expanded use the := operator instead of the = operator.
 # This tag requires that the tag ENABLE_PREPROCESSING is set to YES.
 
-PREDEFINED             =
+PREDEFINED             = __ASSEMBLER__
+PREDEFINED            += __MAGIC_INCLUDED__
+PREDEFINED            += KERNEL_ARM
+PREDEFINED            += KERNEL_BINUTILS_GNU
+PREDEFINED            += KERNEL_COMPILER_GNU
+PREDEFINED            += KERNEL_LINKER_GNU
+PREDEFINED            += KERNEL_x86
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then this
 # tag can be used to specify a list of macro names that should be expanded. The

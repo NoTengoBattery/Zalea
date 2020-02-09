@@ -856,9 +856,6 @@ MigrationBackup/
 # Files ignored and not ignored by the project
 *.ignore
 *.ignore.*
-!Architecture/*
-!Executables/*
-!Library/*
-!Scripts/*
+Documentation/html
 Scripts/Python/Environments/3
 Scripts/Python/Tests/config.i.json

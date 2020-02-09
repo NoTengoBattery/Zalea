@@ -98,7 +98,8 @@ INCLUDE("${TREE_SELF_PATH}")
 
 # Create and configure the actual CMake project and enable the languages: C, C++ and Assembler
 PROJECT("${PROJECT_NAME}" VERSION ${CMAKE_SYSTEM_VERSION} LANGUAGES ASM C CXX)
-SET(PROJECT_BRIEF "The \"${PROJECT_NAME}\" project version ${CMAKE_PROJECT_VERSION} for ${KERNEL_ARCH}")
+SET(PROJECT_BRIEF
+    "The \"${PROJECT_NAME}\" project version ${CMAKE_PROJECT_VERSION}: portable, fast and small microkernel.")
 MESSAGE(STATUS "${PROJECT_BRIEF}")
 
 # Set the INTERPROCEDURAL_OPTIMIZATION default to true (LTO)
