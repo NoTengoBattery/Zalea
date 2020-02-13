@@ -24,6 +24,7 @@
       <w>hashmap</w>
       <w>icpc</w>
       <w>interprocedural</w>
+      <w>jtag</w>
       <w>march</w>
       <w>mfpu</w>
       <w>microkernel</w>
@@ -36,6 +37,7 @@
       <w>qemu</w>
       <w>readelf</w>
       <w>readobj</w>
+      <w>simd</w>
       <w>smbios</w>
       <w>spdx</w>
       <w>stdint</w>
