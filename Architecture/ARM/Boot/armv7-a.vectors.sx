@@ -16,9 +16,9 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
-#/ According to ARM's documentatio, all ARM processors for ARMv6 and earlier, ARMv7-A and ARMv7-M must have an interrupt
-#/ reset vector which consist of branch or PC-load instructions. All of these instructions must be ARM, but the ARMv6-T2
-#/ support Thumb32 instructions, which doesn't matter because if all support ARM, ARM will be used.
+#/ According to ARM's documentation, all ARM processors for ARMv6 and earlier, ARMv7-A and ARMv7-M must have an
+# /interrupt vector table which consist of branch or PC-load instructions. All of these instructions must be ARM, but
+#/ the ARMv6-T2 support Thumb32 instructions, which doesn't matter because if all support ARM, ARM will be used.
 #/
 #/ http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0388f/CIHFIAJC.html
 #/
@@ -48,5 +48,5 @@ NAKED_GLOBAL_ARM_FUNCTION(.start.header, start)
   rsrved:           .word               entry               @ RESERVED
   armirq:           .word               entry               @ ARM IRQ vector
   armfiq:           .word               entry               @ ARM FIQ vector
-  vecend:           .word               .
+  vecend:           .word               .                   @ This labels the end
 NAKED_GLOBAL_ARM_FUNCTION_EPILOG(start)

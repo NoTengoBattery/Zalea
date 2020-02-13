@@ -26,22 +26,35 @@
 
 #ifdef __cplusplus // C++
 
+/// Set the n-th bit of a constant.
 template<typename T1, typename T2>
 constexpr auto clearNthBit(T1 x, T2 y) { return x & ~(1U << y); }
 
+/// Clear the n-th bit of a constant.
 template<typename T1, typename T2>
 constexpr auto setNthBit(T1 x, T2 y) { return x | (1U << y); }
 
 #elif defined(__ASSEMBLER__) // ASM
 
 
-#else // C
-
-#define CLEAR_NTH_BIT(x, y) ((x) & ~(1U << y))
-#define SET_NTH_BIT(x, y) ((x) | (1U << y))
-#define TEST_NTH_BIT(x, y) (((x) >> y) & 1U)
-#define XNOR_NTH_BITS(x, y, z) (TEST_NTH_BIT(x, z) == TEST_NTH_BIT(y, z) ? 0x01U : 0x00U)
-
 #endif
+
+/// \brief Clear the n-th bit of a constant.
+/// \param x the constant.
+/// \param y the bit.
+#define CLEAR_NTH_BIT(x, y) ((x) & ~(1U << y))
+/// \brief Set the n-th bit of a constant.
+/// \param x the constant.
+/// \param y the bit.
+#define SET_NTH_BIT(x, y) ((x) | (1U << y))
+/// \brief Test the n-th bit of a constant.
+/// \param x the constant.
+/// \param y the bit.
+#define TEST_NTH_BIT(x, y) (((x) >> y) & 1U)
+/// \brief XOR then NOT the n-th bit of a constant.
+/// \param x the constant.
+/// \param y the constant.
+/// \param z the bit.
+#define XNOR_NTH_BITS(x, y, z) (TEST_NTH_BIT(x, z) == TEST_NTH_BIT(y, z) ? 0x01U : 0x00U)
 
 #endif //ZALEA_BITWISEMACROS_H

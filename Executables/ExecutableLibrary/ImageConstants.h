@@ -16,26 +16,35 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 ///
 /// \file
-/// All of these constants are pointers that live inside the final binary image. They are constants at link time.
+/// All of these constants are pointers that live inside the final binary image. They are constants at link and build
+/// time.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
 #ifndef ZALEA_IMAGECONSTANTS_H
 #define ZALEA_IMAGECONSTANTS_H
 
-/* Since the header that contains this magic value is in C++, and we might need it in C, include it here */
+/// This is a magic number which is expected to be present in the Multiboot2 i386 Machine State.
 #define MULTIBOOT_2_BOOTLOADER_MAGIC 0x36D76289
 
+/// This is a pointer to the end of the bss section.
 extern volatile void *bssEnd;
+/// This is a pointer to the start of the bss section.
 extern volatile void *bssStart;
+/// This is a pointer to the end of the binary image.
 extern volatile void *imageEnd;
+/// This is a pointer to the start of the binary image.
 extern volatile void *imageStart;
 
+/// This is a pointer that will be the Multiboot2 as returned by the bootloader.
 extern volatile void *multibootStructPointer;
-extern volatile void *vectorEnd;
+/// This is a pointer to the end of the ARM vector table, which needs to be copied into memory.
+extern volatile void *vecend;
 
+/// A function to halt the CPU when a failure is detected during the very early boot process.
 extern void miserableFail(void);
 
+/// The actual entry point of the microkernel image.
 extern void start(void);
 
 #endif //ZALEA_IMAGECONSTANTS_H

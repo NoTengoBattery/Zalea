@@ -34,7 +34,6 @@ ELSEIF (KERNEL_x86)
                  "${KERNEL_ARCH}/${KERNEL_ARCH}Utils.h")
 ENDIF ()
 TARGET_INCLUDE_DIRECTORIES("CompilerRuntime" PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
-
 # This accessory library is the "libgcc" part. It does contains calls made by the compiler when the CPU or the platform
 # does not support an operation (such as ARM not supporting integer division). It contains the sanitizers, the stack
 # check protector and so on. It *does* require special compiler flags to disable fancy features (such as sanitizing the

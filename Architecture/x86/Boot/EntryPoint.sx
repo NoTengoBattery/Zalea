@@ -25,55 +25,66 @@
 #define __FILENAME__ "EntryPoint.sx"
 #include <AssemblerMagic/AssemblerMagic.h>
 
-/// start is the real entry point. It is the first thing that is found in the binary image, and it's the very first
-/// thing to be executed when we have full control over the CPU. For x86, this will save the Multiboot2 registers, setup
-/// the main stack and finally perform a call to the C entry point.
+/*
+ * `start` is the real entry point. It is the first thing that is found in the binary image, and it's the very first
+ * thing to be executed when we have full control over the CPU. For x86, this will save the Multiboot2 registers, setup
+ * the main stack and finally perform a call to the C entry point.
+ */
 NAKED_GLOBAL_FUNCTION(.start, start)
   XCHG  bx,         bx        # BOCHS magic breakpoint
   LEA   esi,        iEAX
   LEA   edi,        iEBX
   MOV   [esi],      eax       # Temporary save EAX, which contains the Multiboot2 magic number
   MOV   [edi],      ebx       # Temporary save EAX, which contains the address of the Multiboot2 data structure
+
+/* -------------------------------------------- Setup the Stack Pointer --------------------------------------------- */
   LEA   esp,        stackStart  # Setup the stack
   MOV   ebp,        esp
 
 /* --------------------------------------------------- Enable SSE --------------------------------------------------- */
   MOV   eax,        0x01      # Ask the 0x01 set of information to CPUID
   CPUID
-  TEST  edx,        0x2000000 # Test if the bit 26 is set...
+  TEST  edx,        0x2000000 # Test if the bit 25 is set...
   JZ    miserableFail         # ...if not, then fail (we requiere SSE2)
   MOV   eax,        cr0       # Read the CR0 inside EAX
-  AND   ax,         0xFFFB    # Clear the bit 3 of AX
-  OR    ax,         0x02      # Set the bit 2 of AX
+  AND   ax,         0xFFFB    # Clear the bit 2 of AX
+  OR    ax,         0x02      # Set the bit 1 of AX
   MOV   cr0,        eax       # Move back EAX to CR0
   MOV   eax,        cr4       # Read CR4 into EAX
-  OR    ax,         0x600     # Set the bits 10 and 11 of AX
+  OR    ax,         0x600     # Set the bits 9 and 10 of AX
   MOV   cr4,        eax       # Move the EAX back to CR4
 
   MOV   eax,        [edi]     # Restore and push EBX
   PUSH  eax
   MOV   eax,        [esi]     # Restore and push EAX
   PUSH  eax
-  CALL  secondEntryPoint
+  CALL  secondEntryPoint      # Call the C entry point
   JMP   miserableFail
 NAKED_GLOBAL_FUNCTION_EPILOG(start)
 LOCAL_BSS_DATA(iEAX, 4)       # 4: sizeof (eax): 32 bit
 LOCAL_BSS_DATA(iEBX, 4)       # 4: sizeof (ebx): 32 bit
 
-/// miserableFail is a global function that will fail miserably when an irrecuperable error is detected. This is only
-/// true for the very early boot process.
+/*
+ * `miserableFail` is a global function that will fail miserably when an irrecuperable error is detected. This is only
+ * true for the very early boot process.
+ */
 NAKED_GLOBAL_FUNCTION(.start, miserableFail)
   HLT
   JMP   miserableFail
 NAKED_GLOBAL_FUNCTION_EPILOG(miserableFail)
 
-// This is an address in the .data section for the multiboot pointer
+/*
+ * This is an address in the .data section for the multiboot pointer.
+ */
 GLOBAL_DATA(multibootStructPointer)
+  .long   0x00
   .long   0x00
 GLOBAL_DATA_EPILOG(multibootStructPointer)
 
-# Those are placeholders (needed because LLD will not identify the sections correctly when no data is in the sections)
-# but they are only needed when no data is in the section. Most likely to not happen ever but anyway...
+/*
+ * Those are placeholders (needed because LLD will not identify the sections correctly when no data is in the sections)
+ * but they are only needed when no data is in the section. Most likely to not happen ever but anyway...
+ */
 
 NAKED_GLOBAL_FUNCTION(.text, textPlaceholder)
   JMP   textPlaceholder

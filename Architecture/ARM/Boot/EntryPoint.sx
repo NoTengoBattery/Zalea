@@ -17,7 +17,7 @@
 #/
 #/ \file
 #/ This file is the entry point for booting in ARM. This is the first code executed by the Main Executable, the address
-#/ where the CPU jumps after performing the bootloading sequence.
+#/ where the CPU jumps after performing the bootloading sequence. This is also where the reset vector will jump.
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
@@ -31,16 +31,20 @@ NAKED_GLOBAL_ARM_FUNCTION(.start, entry)
   B     miserableFail
 NAKED_GLOBAL_ARM_FUNCTION_EPILOG(entry)
 
-/// miserableFail is a global function that will fail miserably when an irrecuperable error is detected. This is only
-/// true for the very early boot process.
+/*
+ * `miserableFail` is a global function that will fail miserably when an irrecuperable error is detected. This is only
+ * true for the very early boot process.
+ */
 NAKED_GLOBAL_ARM_FUNCTION(.start, miserableFail)
   WFI
   WFE
   B     miserableFail
 NAKED_GLOBAL_ARM_FUNCTION_EPILOG(miserableFail)
 
-# Those are placeholders (needed because LLD will not identify the sections correctly when no data is in the sections)
-# but they are only needed when no data is in the section. Most likely to not happen ever but anyway...
+/*
+ * Those are placeholders (needed because LLD will not identify the sections correctly when no data is in the sections)
+ * but they are only needed when no data is in the section. Most likely to not happen ever but anyway...
+ */
 
 NAKED_GLOBAL_ARM_FUNCTION(.text, textPlaceholder)
   B     textPlaceholder

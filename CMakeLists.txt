@@ -73,7 +73,7 @@ ENDIF ()
 # -> CMAKE_CROSSCOMPILING to ON
 # -> CMAKE_SYSTEM_PROCESSOR is set in a temp cache variable from another CMake file and then set here
 SET(CMAKE_SYSTEM_NAME Kernel)
-SET(CMAKE_SYSTEM_VERSION 0.0.0.2)
+SET(CMAKE_SYSTEM_VERSION 0.0.0.3)
 SET(CMAKE_CROSSCOMPILING ON)
 
 # Identify the "project name" with the name of the root folder of the source code
@@ -110,10 +110,8 @@ ENDIF ()
 # Set the language standard for the project (C11, C++2x)
 SET(CMAKE_C_EXTENSIONS OFF)
 SET(CMAKE_C_STANDARD 11)
-SET(CMAKE_C_STANDARD_REQUIRED ON)
 SET(CMAKE_CXX_EXTENSIONS OFF)
-SET(CMAKE_CXX_STANDARD 17)
-SET(CMAKE_CXX_STANDARD_REQUIRED ON)
+SET(CMAKE_CXX_STANDARD 20)
 
 # Enable clang-tidy if found by the toolchain file. Try to keep them in sync with CLion.
 IF (CMAKE_CLANG_TIDY AND KERNEL_COMPILER_CLANG)

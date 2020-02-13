@@ -29,7 +29,6 @@ ELSE ()
   CMAKE_LIST_TO_HUMAN_LIST(AVAILABLE_ARCHITECTURES H_VALID_ARCH)
   MESSAGE(STATUS "Found the following architectures: ${H_VALID_ARCH}.")
 ENDIF ()
-
 # Create a new cache variable, append these architectures to their available values and check if valid
 SET_WITH_STRINGS(KERNEL_ARCH "" "Target architecture for building this kernel." AVAILABLE_ARCHITECTURES)
 CHECK_WITH_STRINGS(KERNEL_ARCH VALID_ARCH)
@@ -37,14 +36,11 @@ IF (NOT VALID_ARCH)
   MESSAGE(FATAL_ERROR
           "Please set a valid architecture in the KERNEL_ARCH variable. Available architectures: ${H_VALID_ARCH}.")
 ENDIF ()
-
 # Update the source tree variables (because they are needed by the MachineSelector script)
 MESSAGE(STATUS "Architecture selected: \"${KERNEL_ARCH}\". Updating the source tree definition...")
 INCLUDE("${TREE_SELF_PATH}")
-
 # Export the current architecture to the default configuration
 SET_AND_EXPORT_FORCE(KERNEL_ARCH "${KERNEL_ARCH}" STRING "${KERNEL_ARCH}"
                      "This variable is the architecture to build, which is the CPU architecture that the machine runs.")
-
 # This will export a variable to the config.h file which can be used by C/C++ to enable architecture specific code
 SET_AND_EXPORT("KERNEL_${KERNEL_ARCH}" ON INTERNAL ON "-")

@@ -17,7 +17,7 @@
 #/
 #/ \file
 #/ This file will include the entry point for the Main Executable for ARM. The Main Executable contains all the code
-#/ that will make the device fully functional.
+#/ that will make the microkernel.
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 

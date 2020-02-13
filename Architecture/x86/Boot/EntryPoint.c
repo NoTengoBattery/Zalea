@@ -17,7 +17,8 @@
 ///
 /// \file
 /// This entry point will be called from the very first boot code (from 'start', written in ASM) and will setup the
-/// environment to further start the C++ code.
+/// environment to further start the C++ code. This file will setup some basic and critical environment features,
+/// perform some crude tests and then continue to the rest of the boot code once done.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
@@ -25,10 +26,12 @@
 #include <ExecutableLibrary/ImageConstants.h>
 #include <InlineMagic/MemoryClear.h>
 
+/// \brief Entry point from assembler to C.
+///
 /// This entry point is the secondary entry point for x86. As x86 implements (exclusively) the Multiboot2 protocol, this
 /// function will perform some basic checking for the Multiboot2 i386 status as documented in the GNU GRUB user manual.
-/// \param eax this is the value of the EAX register obtained from the bootloader
-/// \param ebx this is the value of the EBX register obtained from the bootloader
+/// \param eax this is the value of the EAX register obtained from the bootloader.
+/// \param ebx this is the value of the EBX register obtained from the bootloader.
 void secondEntryPoint(unsigned int eax, unsigned int ebx) ATTR_SECTION(".start");
 
 ATTR_NORETURN void secondEntryPoint(unsigned int eax, unsigned int ebx) {

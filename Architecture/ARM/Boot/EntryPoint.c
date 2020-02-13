@@ -17,7 +17,8 @@
 ///
 /// \file
 /// This entry point will be called from the very first boot code (from 'start', written in ASM) and will setup the
-/// environment to further start the C++ code.
+/// environment to further start the C++ code. This file will setup some basic and critical environment features,
+/// perform some crude tests and then continue to the rest of the boot code once done.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
@@ -25,6 +26,13 @@
 #include <ExecutableLibrary/ImageConstants.h>
 #include <InlineMagic/MemoryClear.h>
 
+/// \brief Entry point from assembler to C.
+///
+/// This entry point is the secondary entry point for ARM. This is called directly from ASM, just after we have control
+/// over the CPU. This will perform some testing and grab some information from the ARM ATAGS. However, since Linux had
+/// deprecated the ATAGS, we cannot rely on it. We should get critical information from our implementation of the DTB
+/// (not quite a DTB, just an equivalent).
+/// \todo Add the required parameters from the bootloader to check them here.
 void secondEntryPoint() ATTR_SECTION(".start");
 
 ATTR_NORETURN void secondEntryPoint() {

@@ -22,7 +22,12 @@
 
 #include <CompilerMagic/CompilerMagic.h>
 
-ATTR_USED void __asan_store1_noabort(unsigned long store) {
+/// \brief GCC's Address Sanitizer API.
+///
+/// GCC (any GNU compatible compiler) will call this function to store *long* when the Address Sanitizer is enabled.
+/// \todo When you done with memory allocation and error reporting, implement ASAN.
+/// \param store (more info is required)
+void __asan_store1_noabort(unsigned long store) {
     if (store != 0) {
         return;
     }

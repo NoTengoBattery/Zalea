@@ -32,15 +32,29 @@ import venv
 
 
 class ExtendedEnvBuilder(venv.EnvBuilder):
+    """This class extends and customize the Virtual Environment builder to suit the needs of this project.
+    """
+
     def __init__(self, *args, **kwargs):
+        """ Constructor of the class.
+        :param args: arguments.
+        :param kwargs: arguments.
+        """
         super().__init__(*args, **kwargs)
 
     def post_setup(self, context):
+        """This will be run just after the environment is created.
+        :param context: the current context.
+        """
         os.environ['VIRTUAL_ENV'] = context.env_dir
         self.install_pip(context)
 
     @staticmethod
     def reader(stream, context):
+        """Read lines from a stream.
+        :param stream: the stream to read.
+        :param context: the current context.
+        """
         while True:
             s = stream.readline()
             if not s:
@@ -50,6 +64,11 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         stream.close()
 
     def install_script(self, context, name, url):
+        """Run a pip installation script inside the new Virtual Environment.
+        :param context: the current context.
+        :param name: the name of the script that is to be run.
+        :param url: the URL that will point to the dowloadable script.
+        """
         _, _, path, _, _, _ = urllib.parse.urlparse(url)
         fn = os.path.split(path)[-1]
         bin_path = context.bin_path
@@ -69,6 +88,10 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         os.unlink(dist_path)
 
     def install_pip(self, context):
+        """This function will install pip inside the new environment. Then, it will use the installed pip to install the
+        required packages to perform all of the Build System tasks.
+        :param context: the context that is running.
+        """
         url = 'https://bootstrap.pypa.io/get-pip.py'
         self.install_script(context, 'pip', url)
         # Install the latest packages. If the latest breaks the scripts, we should update the scripts instead of
@@ -79,12 +102,21 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
 
 
 class FileLock:
+    """This class represents a file lock. It will create a file which will lock the flow of the program.
+    """
+
     def __init__(self, filename):
+        """The constructor of the class.
+        :param filename: a file name that will be used as a lock.
+        """
         self.filename = filename
         self.fd = None
         self.pid = os.getpid()
 
     def acquire(self):
+        """Try to acquire the file lock.
+        :return: if the lock fails, it will return 0.
+        """
         try:
             self.fd = os.open(self.filename, os.O_CREAT | os.O_EXCL | os.O_RDWR)
             os.write(self.fd, str.encode("%d" % self.pid))
@@ -94,6 +126,9 @@ class FileLock:
             return 0
 
     def release(self):
+        """Release the file lock.
+        :return: if the lock is released, it will return 0.
+        """
         if not self.fd:
             return 0
         try:
@@ -104,10 +139,15 @@ class FileLock:
             return 0
 
     def __del__(self):
+        """Destructor of the class.
+        """
         self.release()
 
 
 def main(args=None):
+    """The main function of the generator.
+    :param args: arguments from the OS.
+    """
     compatible = True
     if sys.version_info < (3, 7):
         compatible = False

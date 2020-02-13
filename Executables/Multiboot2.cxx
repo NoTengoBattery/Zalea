@@ -27,15 +27,16 @@ extern "C" {
 #include <ExecutableLibrary/ImageConstants.h>
 }
 
-const struct multibootHeaderTag multibootHeader MULTIBOOT_ATTR = {
+/// This struct is the implementation of the Multiboot2 Header Tag.
+MULTIBOOT_ATTR const struct multibootHeaderTag multibootHeader = {
         MULTIBOOT_HEADER_MAGIC,
         MULTIBOOT_HEADER_ARCHITECTURE,
         MULTIBOOT_HEADER_SIZEOF,
         static_cast<std::uint32_t>(MULTIBOOT_HEADER_CHECKSUM)
 };
 
-// NOLINTNEXTLINE
-const struct multibootInformationRequestTag multibootInformation MULTIBOOT_ATTR = {
+/// This struct is the implementation of the Multiboot2 Information Request Tag.
+MULTIBOOT_ATTR const struct multibootInformationRequestTag multibootInformation = {  // NOLINT
         MULTIBOOT_TAG_INFORMATION_REQUEST,
         MULTIBOOT_REQUIRED(MULTIBOOT_TAG_INFORMATION_REQUEST_FLAGS),
         MULTIBOOT_TAG_INFORMATION_REQUEST_SIZEOF,
@@ -54,8 +55,8 @@ const struct multibootInformationRequestTag multibootInformation MULTIBOOT_ATTR 
          MULTIBOOT_TAG_TYPE_END}
 };
 
-// NOLINTNEXTLINE
-const struct multibootAddressTag multibootAddress MULTIBOOT_ATTR = {
+/// This struct is the implementation of the Multiboot2 Address Synchronization Tag.
+MULTIBOOT_ATTR const struct multibootAddressTag multibootAddress = {  // NOLINT
         MULTIBOOT_HEADER_TAG_ADDRESS,
         MULTIBOOT_REQUIRED(MULTIBOOT_HEADER_TAG_ADDRESS_FLAGS),
         MULTIBOOT_HEADER_TAG_ADDRESS_SIZEOF,
@@ -65,16 +66,16 @@ const struct multibootAddressTag multibootAddress MULTIBOOT_ATTR = {
         reinterpret_cast<std::uint32_t>(&imageEnd + 0x01)  // NOLINT
 };
 
-// NOLINTNEXTLINE
-const struct multibootEntryAddressTag multibootEntryAddress MULTIBOOT_ATTR = {
+/// This struct is the implementation of the Multiboot2 Entry Point Address Tag.
+MULTIBOOT_ATTR const struct multibootEntryAddressTag multibootEntryAddress = {  // NOLINT
         MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS,
         MULTIBOOT_REQUIRED(MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_FLAGS),
         MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_SIZEOF,
         reinterpret_cast<std::uint32_t>(&imageStart)  // NOLINT
 };
 
-// NOLINTNEXTLINE
-const struct multibootConsoleFlagsTag multibootConsoleFlags MULTIBOOT_ATTR = {
+/// This struct is the implementation of the Multiboot2 Header Tag.
+MULTIBOOT_ATTR const struct multibootConsoleFlagsTag multibootConsoleFlags = {  // NOLINT
         MULTIBOOT_HEADER_TAG_CONSOLE_FLAGS,
         MULTIBOOT_REQUIRED(MULTIBOOT_HEADER_TAG_CONSOLE_FLAGS_FLAGS),
         MULTIBOOT_HEADER_TAG_CONSOLE_FLAGS_SIZEOF,
@@ -82,8 +83,8 @@ const struct multibootConsoleFlagsTag multibootConsoleFlags MULTIBOOT_ATTR = {
                 MULTIBOOT_HEADER_CONSOLE_FLAG_HAS_EGA(MULTIBOOT_HEADER_CONSOLE_FLAGS))
 };
 
-// NOLINTNEXTLINE
-const struct multibootFramebufferTag multibootFramebuffer MULTIBOOT_ATTR = {
+/// This struct is the implementation of the Multiboot2 Framebuffer Tag.
+MULTIBOOT_ATTR const struct multibootFramebufferTag multibootFramebuffer = {  // NOLINT
         MULTIBOOT_HEADER_TAG_FRAMEBUFFER,
         MULTIBOOT_REQUIRED(MULTIBOOT_HEADER_TAG_FRAMEBUFFER_FLAGS),
         MULTIBOOT_HEADER_TAG_FRAMEBUFFER_SIZEOF,
@@ -92,8 +93,8 @@ const struct multibootFramebufferTag multibootFramebuffer MULTIBOOT_ATTR = {
         MULTIBOOT_HEADER_TAG_FRAMEBUFFER_DEPTH
 };
 
-// NOLINTNEXTLINE
-const struct multibootModuleAlignmentTag multibootModuleAlignment MULTIBOOT_ATTR = {
+/// This struct is the implementation of the Multiboot2 Module Alignment Tag.
+MULTIBOOT_ATTR const struct multibootModuleAlignmentTag multibootModuleAlignment = {  // NOLINT
         MULTIBOOT_HEADER_TAG_MODULE_ALIGN,
         MULTIBOOT_REQUIRED(MULTIBOOT_HEADER_TAG_MODULE_ALIGN_FLAGS),
         MULTIBOOT_HEADER_TAG_MODULE_ALIGN_SIZEOF,

@@ -15,13 +15,14 @@
  *
  * @formatter:off
  *
- *===---------------------------------------------------------------------------------------------------------------===*
+ *===--------------------------------------------------------------------------------------------------------------===*/
+/***********************************************************************************************************************
  *
  * \file
  * This is the base of all linker scripts, so we include the whole file and use the macros inside the template to decide
  * which sections to use and how to fill them.
  *
- *===--------------------------------------------------------------------------------------------------------------===*/
+ **********************************************************************************************************************/
 
 #ifndef ZALEA_MAINEXECUTABLELINKERBASE_IN
 #define ZALEA_MAINEXECUTABLELINKERBASE_IN
@@ -103,8 +104,8 @@ SECTIONS {
         reservedStart = .;
         *(.reserved);
         *(.reserved.*);
-        . += 15 * CONSTANT ( COMMONPAGESIZE );
-        . = ALIGN_COMMONPAGE; /* 64 KiB in most architectures */
+        . += 31 * CONSTANT ( COMMONPAGESIZE );
+        . = ALIGN_COMMONPAGE; /* 128 KiB for architectures with pages of 4096 bytes */
         reservedEnd = .;
     } :reserved
     /*

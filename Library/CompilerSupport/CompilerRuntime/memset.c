@@ -26,6 +26,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+/// \brief loop byte by byte until the alignment requirement is fulfilled.
+///
 /// This small loop will fill unaligned memory in a byte-level loop and return the computed aligned address. It will
 /// fill to either the required alignment or the maximum size.
 /// \param buffer the buffer pointer
@@ -53,6 +55,8 @@ static inline size_t unalignedLoop(void *buffer, unsigned char fill, size_t size
     return size;
 }
 
+/// \brief a `memset` implementation compatible with the C standard `memset`.
+///
 /// This is an implementation of the C standard function "memset". This is part of CompilerRuntime, which means that the
 /// compiler may call this function without a user's explicit call. This is not part of the non-standard C library,
 /// therefore, it only exists to fulfill the compiler's assumptions about the runtime or to be used inside assembler

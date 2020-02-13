@@ -26,9 +26,12 @@
 #include <stddef.h>
 #include <stdint.h>
 
-/// This function will clear memory region between two pointers.
-/// \param origin the origin of the memory buffer to set
-/// \param final the target of the memory buffer to set
+/// \brief This function will clear memory region between two pointers.
+///
+/// The compiler will either call *memset* or may vectorize this function. This function is inline, so it will replace
+/// any other implementation. The compiler may optimize this by inserting the code instead of calling.
+/// \param origin the origin of the memory buffer to set.
+/// \param final the target of the memory buffer to set.
 inline void memoryClear(void *origin, void *final);
 
 extern inline void memoryClear(void *origin, void *final) {

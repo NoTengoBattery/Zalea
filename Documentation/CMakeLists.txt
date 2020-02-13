@@ -16,7 +16,7 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
-#/ Generate Doxygen documentation during build. This will be done always when Doxygen is found.
+#/ Generate Doxygen documentation during build. This target will be present when Doxygen is found.
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 

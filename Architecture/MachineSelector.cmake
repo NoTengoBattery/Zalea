@@ -31,7 +31,6 @@ IF (NOT AVAILABLE_MACHINES)
           "authentic default configuration.")
   MESSAGE(FATAL_ERROR "No machine configurations found in '${TREE_ARCHITECTURE_X_CONFIG_PATH}'")
 ENDIF ()
-
 # Create a new cache variable, append these architectures to their available values and check if valid
 SET_WITH_STRINGS(KERNEL_MACHINE "${KERNEL_MACHINE}" "Target machine for building this kernel." AVAILABLE_MACHINES)
 CHECK_WITH_STRINGS(KERNEL_MACHINE VALID_MACHINE)
@@ -52,10 +51,8 @@ ELSE ()
   ENDIF ()
   MESSAGE(STATUS "Building for the \"${MACHINE_NAME}\" machine...")
 ENDIF ()
-
 # Export the current architecture to the default configuration
 SET_AND_EXPORT(MACHINE_NAME "${MACHINE_NAME}" STRING "-"
                "This variable is the machine for the build, a human readable name for the machine.")
-
 # This file will give the options for valid compilers (including compiler, assembler, linker and it's minimum versions)
 INCLUDE("${TREE_ARCHITECTURE_PATH}/${KERNEL_ARCH}/${KERNEL_ARCH}.cmake")

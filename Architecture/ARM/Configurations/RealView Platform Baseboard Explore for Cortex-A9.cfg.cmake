@@ -46,6 +46,6 @@ SET(MACHINE_NAME "ARM RealView Platform Baseboard Explore for Cortex-A9"
     CACHE STRING
     "This variable is the machine for the build, a human readable name for the machine.")
 # MACHINE_VIRTUAL_ADDRESS: SET_AND_EXPORT STRING
-SET(MACHINE_VIRTUAL_ADDRESS "0x0000"
+SET(MACHINE_VIRTUAL_ADDRESS "0x00000000"
     CACHE STRING
     "This is the 'virtual' address, which is the one that is referenced by the compiled code.")

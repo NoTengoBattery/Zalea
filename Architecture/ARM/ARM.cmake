@@ -25,18 +25,16 @@
 # This is a list of the *compilers* that are able to build this kernel for this architecture
 SET(AVAILABLE_COMPILER "Clang" "GNU")
 CHECK_TOOL_BY_NAME(COMPILER "GNU")
-
 # This is a list of *binutils* that are able to build the latest stages of this kernel for this architecture
 SET(AVAILABLE_BINUTILS "GNU" "LLVM")
 CHECK_TOOL_BY_NAME(BINUTILS "GNU")
-
-# These lists will help CMake to build a target triple. The Toolchain script will test one by one until it founds one
+# These lists will help CMake to build a target triple. The Toolchain script will test one by one until it founds one.
+# The dash symbol means that it can be omitted, so we can have i.e. arm-none-eabi and arm-eabi
 SET(ARCHS arm CACHE INTERNAL "-")
 SET(SUBS - eb el hf CACHE INTERNAL "-")
 SET(VENDORS - none CACHE INTERNAL "-")
 SET(SYSS linux none - CACHE INTERNAL "-")
 SET(ABIS gnueabihf gnueabi eabi elf - CACHE INTERNAL "-")
-
 # Change the CMake output format to ELF
 SET(CMAKE_EXECUTABLE_FORMAT "ELF" CACHE INTERNAL "Executable file format")
 # This is the default target for the compiler and binutils
@@ -57,5 +55,4 @@ SET_AND_EXPORT(MACHINE_MFPU "none" STRING "none"
 # This is the default CPU for the compiler and binutils to tune the performance
 SET_AND_EXPORT(MACHINE_MTUNE "generic" STRING "generic"
                "This variable is the default CPU for the compiler and binutils to optimize and tune the performance.")
-
 INCLUDE("${TREE_ARCHITECTURE_X_CONFIG_PATH}/ArchitectureExporter.cmake")
