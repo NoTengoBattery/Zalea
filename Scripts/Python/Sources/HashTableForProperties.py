@@ -18,8 +18,8 @@
 # / \file
 # / This file will generate a C source code file which contains a Hash Table, where the hash represents a string to a
 # / property in a JSON object; and whose value is a pointer to the value of the property. This will implement a kind of
-# / lookup table, where the C program can calculate the hash of the property and use it as a index to the table and get
-# / the pointer.
+# / hash table, where the C program can calculate the hash of the property and use it as a index to the table and get
+# / the pointer, and ultimately the value of the property.
 # /
 # ===--------------------------------------------------------------------------------------------------------------=== #
 
@@ -81,6 +81,15 @@ def parse_args(args):
                         default=default_source_filename,
                         help='The output file where the source code will be generated.',
                         type=argparse.FileType(mode='w', bufsize=buffer_size))
+    parser.add_argument('-b', '--bits',
+                        action='store', type=int, metavar='bits', default="8",
+                        help='Define the number of bits that are used to generate the hash.')
+    parser.add_argument('-f', '--foresee',
+                        action='store', type=int, metavar='foresee', default="1",
+                        help='Define the number of movements around the calculated index that the program will attempt'
+                             'to seek around in order to find an available position. If the collision cannot be '
+                             'recovered by this mean, using all of the available hashes, the program will exit with an '
+                             'error code.')
     parser.add_argument('-v', '--verbose',
                         action='store_true',
                         help='Using this flag will print debug messages from the logger to the console by default.')
@@ -188,6 +197,10 @@ def hash_foresee(key_hash, name, hashmap, key, value):
 def create_hashmap(args):
     global max_64bit
     global this_logger
+    global bits
+    global collision_foresee
+    bits = args.bits
+    collision_foresee = args.forsee
     json_data = json.load(args.json_file)
     json_data = flatten_json(json_data)
     hashmap = [None] * (mask(max_64bit) + 1)
