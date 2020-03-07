@@ -30,7 +30,8 @@ TARGET_INCLUDE_DIRECTORIES("ExecutableLibrary" INTERFACE "${CMAKE_CURRENT_LIST_D
 SET(THIS_EXE_NAME LinkedImage)
 ADD_EXECUTABLE("${THIS_EXE_NAME}"
                "Multiboot2.cxx"
-               "Multiboot2.hxx")
+               "Multiboot2.hxx"
+               "${JPI_SOURCE}")
 TARGET_LINK_LIBRARIES("${THIS_EXE_NAME}"
                       "CoreLibraries"
                       "EntryPoint"

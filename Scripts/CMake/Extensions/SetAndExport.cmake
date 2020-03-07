@@ -33,22 +33,20 @@ MESSAGE(STATUS "Importing the SET_AND_EXPORT CMake extension...")
 # Initialize the module
 IF (NOT SAE_INITDB)
   MESSAGE(STATUS "Initializing module for SET_AND_EXPORT command")
-
   IF (NOT SAE_DBFILE OR
       NOT SAE_OUTPUT_FILE OR
       NOT SAE_TEMPLATE_FILE OR
       NOT SAE_HELPER)
-    MESSAGE(FATAL_ERROR "To use the SET_AND_EXPORT extension you must set these variables: \
-SAE_DBFILE: Path to the database file, \
-SAE_OUTPUT_FILE: Path to generate the CMake config, \
-SAE_TEMPLATE_FILE: Path to a template file to dump at the beginning of SAE_OUTPUT_FILE, \
-SAE_HELPER: Path to the Python helper script")
+    MESSAGE(FATAL_ERROR "To use the SET_AND_EXPORT extension you must set these variables:\n"
+            "SAE_DBFILE: Path to the database file,\n"
+            "SAE_OUTPUT_FILE: Path to generate the CMake config,\n"
+            "SAE_TEMPLATE_FILE: Path to a template file to dump at the beginning of SAE_OUTPUT_FILE,\n"
+            "SAE_HELPER: Path to the Python helper script")
   ENDIF ()
   SET(SAE_DBFILE "${SAE_DBFILE}" CACHE INTERNAL "Path to the SET_AND_EXPORT database file.")
   SET(SAE_OUTPUT_FILE "${SAE_OUTPUT_FILE}" CACHE INTERNAL "SET_AND_EXPORT output file.")
   SET(SAE_TEMPLATE_FILE "${SAE_TEMPLATE_FILE}" CACHE INTERNAL "SET_AND_EXPORT template file.")
   SET(SAE_HELPER "${SAE_HELPER}" CACHE INTERNAL "SET_AND_EXPORT helper Python script.")
-
   # Run the Python script to initialize the DB
   SET(CMD_ARGS
       "INT"

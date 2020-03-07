@@ -139,7 +139,7 @@ ENDIF ()
 # Add an interface library for config.h (and friends)
 ADD_LIBRARY("CoreLibraries" INTERFACE)
 TARGET_INCLUDE_DIRECTORIES("CoreLibraries" INTERFACE "${TREE_BIN_IMPORTANT_INCLUDE_PATH}")
-TARGET_SOURCES("CoreLibraries" INTERFACE "${CONFIGURATION_HEADER}")
+TARGET_SOURCES("CoreLibraries" INTERFACE "${CONFIGURATION_HEADER}" "${JPI_HEADER}")
 TARGET_LINK_LIBRARIES("CoreLibraries" INTERFACE "ExecutableLibrary" "CompilerMagic" "CompilerRuntime")
 
 # Add all subdirectories (the root subdirectories) that will be ever used
@@ -156,6 +156,9 @@ DATABASE_TO_HEADER()
 
 # Configure the CMake Header
 CONFIGURE_FILE("${SAE_OUTPUT_HEADER}" "${CONFIGURATION_HEADER}" ESCAPE_QUOTES)
+
+# Generate the Hash Table for the Device Descriptor
+GENERATE_DEVICE_DESCRIPTOR()
 
 # In this directory we add the main executable and the loader
 ADD_SUBDIRECTORY("${TREE_EXECUTABLES_PATH}")

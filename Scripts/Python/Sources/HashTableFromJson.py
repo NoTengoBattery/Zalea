@@ -1,4 +1,4 @@
-# ===-- HashTableForProperties.py - Create a Hash Table for C from a Configuration JSON --------------*- Python -*-=== #
+# ===-- HashTableFromJson.py - Create a Hash Table for C from a Configuration JSON -------------------*- Python -*-=== #
 #
 # Copyright (c) 2020 Oever González
 #
@@ -35,7 +35,8 @@ collision_foresee = 1
 default_db_filename = 'properties.json'
 default_header_filename = 'JsonPropertyHashTable.h'
 default_source_filename = 'JsonPropertyHashTable.c'
-default_template_filename = 'template.h'
+default_header_template = 'template.h'
+default_source_template = 'template.c.h'
 max_64bit = 0xFFFFFFFFFFFFFFFF
 parsed_args = None
 pattern_64bit = 0xA5A5A5A5A5A5A5A5
@@ -48,7 +49,8 @@ def parse_args(args):
     global default_db_filename
     global default_header_filename
     global default_source_filename
-    global default_template_filename
+    global default_header_template
+    global default_source_template
     global parsed_args
     global program_parser
     parser = argparse.ArgumentParser(
@@ -66,16 +68,21 @@ def parse_args(args):
                         help='This is the input file that will be used to generate the lookup table based on the JSON '
                              'properties of the objects in this file.',
                         type=argparse.FileType(bufsize=buffer_size))
-    parser.add_argument('-t', '--template',
+    parser.add_argument('-a', '--header-template',
                         action='store',
-                        default=default_template_filename,
-                        help='The template will be inserted at the beginning of the header and the source code.',
+                        default=default_header_template,
+                        help='The template will be inserted at the beginning of the header code.',
                         type=argparse.FileType(bufsize=buffer_size))
     parser.add_argument('-e', '--header',
                         action='store',
                         default=default_header_filename,
                         help='The output file where the header will be generated.',
                         type=argparse.FileType(mode='w', bufsize=buffer_size))
+    parser.add_argument('-o', '--source-template',
+                        action='store',
+                        default=default_source_template,
+                        help='The template will be inserted at the beginning of the header code.',
+                        type=argparse.FileType(bufsize=buffer_size))
     parser.add_argument('-s', '--source',
                         action='store',
                         default=default_source_filename,
@@ -90,6 +97,12 @@ def parse_args(args):
                              'to seek around in order to find an available position. If the collision cannot be '
                              'recovered by this mean, using all of the available hashes, the program will exit with an '
                              'error code.')
+    parser.add_argument('-p', '--api-struct-name',
+                        action='store', type=str, metavar='struct', default="jsonPropertyValue",
+                        help='This is the name of the \'struct\' that is exposed in the Header File (the API).')
+    parser.add_argument('-i', '--api-table-name',
+                        action='store', type=str, metavar='table', default="jsonPropertiesHashmap",
+                        help='This is the name of the \'Hash Table\' that is exposed in the Header File (the API).')
     parser.add_argument('-v', '--verbose',
                         action='store_true',
                         help='Using this flag will print debug messages from the logger to the console by default.')
@@ -200,7 +213,7 @@ def create_hashmap(args):
     global bits
     global collision_foresee
     bits = args.bits
-    collision_foresee = args.forsee
+    collision_foresee = args.foresee
     json_data = json.load(args.json_file)
     json_data = flatten_json(json_data)
     hashmap = [None] * (mask(max_64bit) + 1)
@@ -238,23 +251,26 @@ def create_hashmap(args):
 
 def print_to_source(args, hashmap):
     global program_parser
-    if not args.template or not args.header or not args.source:
+    api_struct = args.api_struct_name
+    api_table = args.api_table_name
+    if not args.header_template or not args.header or not args.source_template or not args.source:
         program_parser.error('Generating the source code requires the template and the output files.')
-    with args.template as template:
+    with args.source_template as template:
         with io.StringIO("") as source:
-            source.write("const struct jsonPropertyValue *const jsonParametersHashmap[] =\n\t{")
+            source.write("const struct {} *const {}[] =\n\t{{".format(api_struct, api_table))
             with io.StringIO("") as variables:
-                variables.write("\n#include <{}>\n\n".format(args.header.name))
+                variables.write("\n#include <{}>".format(args.header.name))
+                variables.write("\n#include <stddef.h>\n\n")
                 for index in range(len(hashmap)):
                     hashvalue = hashmap[index]
                     ending = ", " if index != (len(hashmap) - 1) else ""
                     if hashvalue is None:
                         source.write("NULL{}".format(ending))
                     else:
-                        varname = "jsonPropertyValue" + hex(index)
+                        varname = "{}".format(api_struct) + hex(index)
                         key, val = hashvalue.split('%=%=%')
                         source.write("&{}{}".format(varname, ending))
-                        variables.write("static const struct jsonPropertyValue {} = {{\n\t".format(varname))
+                        variables.write("static const struct {} {} = {{\n\t".format(api_struct, varname))
                         variables.write("\"{}\",\n\t\"{}\"\n}};\n".format(key, val))
                 source.write("};\n")
                 source.seek(0)
@@ -265,11 +281,11 @@ def print_to_source(args, hashmap):
                     real_output.write(template.read())
                     real_output.write(variables.read())
                     real_output.write(source.read())
+    with args.header_template as template:
         with io.StringIO("") as header:
-            header.write("\nstruct jsonPropertyValue {\n\tchar *name;\n\tchar *value;\n};\n")
-            header.write("\nconst struct jsonPropertyValue *const jsonParametersHashmap[];\n")
+            header.write("\nstruct {} {{\n\tchar *name;\n\tchar *value;\n}};\n".format(api_struct))
+            header.write("\nconst struct {} *const {}[{}];\n".format(api_struct, api_table, 2 ** bits))
             with args.header as real_output:
-                template.seek(0)
                 real_output.write(template.read())
                 header.seek(0)
                 real_output.write(header.read())
