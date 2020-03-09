@@ -24,33 +24,47 @@
 #ifndef ZALEA_BITWISEMACROS_H
 #define ZALEA_BITWISEMACROS_H
 
+#include <limits.h>
+
 #ifdef __cplusplus // C++
 
 /// Set the n-th bit of a constant.
 template<typename T1, typename T2>
-constexpr auto clearNthBit(T1 x, T2 y) { return x & ~(1U << y); }
+constexpr auto clearNthBit(T1 x, T2 y) { return x & ~(0x01U << y); }
 
 /// Clear the n-th bit of a constant.
 template<typename T1, typename T2>
-constexpr auto setNthBit(T1 x, T2 y) { return x | (1U << y); }
+constexpr auto setNthBit(T1 x, T2 y) { return x | (0x01U << y); }
 
 #elif defined(__ASSEMBLER__) // ASM
 
 
 #endif
 
+/// \brief Rotate a value to the left by n bits.
+/// \param x the constant to rotate.
+/// \param y the bits to rotate.
+#define BRL(x, y) (((x) << (y)) | (((x) >> ((sizeof(x) * CHAR_BIT) - (y))) & ~(ULLONG_MAX << (y))))
+/// \brief Rotate a value to the left by n bits, if the constant is only m bits meaningful.
+/// \param x the constant to rotate.
+/// \param y the bits to rotate.
+/// \param z the meaningful bits of the constant.
+#define BRLN(x, y, z) (((x) << (y)) | (((x) >> ((z) - (y))) & ~(ULLONG_MAX << (y))))
 /// \brief Clear the n-th bit of a constant.
 /// \param x the constant.
 /// \param y the bit.
-#define CLEAR_NTH_BIT(x, y) ((x) & ~(1U << y))
+#define CLEAR_NTH_BIT(x, y) ((x) & ~(0x01U << (y)))
 /// \brief Set the n-th bit of a constant.
 /// \param x the constant.
 /// \param y the bit.
-#define SET_NTH_BIT(x, y) ((x) | (1U << y))
+#define SET_NTH_BIT(x, y) ((x) | (0x01U << (y)))
 /// \brief Test the n-th bit of a constant.
 /// \param x the constant.
 /// \param y the bit.
-#define TEST_NTH_BIT(x, y) (((x) >> y) & 1U)
+#define TEST_NTH_BIT(x, y) (((x) >> (y)) & 0x01U)
+/// \brief create a truncate mask of n significant bits.
+/// \param x the significant bits to truncate.
+#define TRUNCATE_MASK(x) (~(ULLONG_MAX << (x)))
 /// \brief XOR then NOT the n-th bit of a constant.
 /// \param x the constant.
 /// \param y the constant.
