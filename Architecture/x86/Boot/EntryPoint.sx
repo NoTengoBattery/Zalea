@@ -54,6 +54,7 @@ NAKED_GLOBAL_FUNCTION(.start, start)
   OR    ax,         0x600     # Set the bits 9 and 10 of AX
   MOV   cr4,        eax       # Move the EAX back to CR4
 
+/* ------------------------------------------ Call the Second Entry Point ------------------------------------------- */
   MOV   eax,        [edi]     # Restore and push EBX
   PUSH  eax
   MOV   eax,        [esi]     # Restore and push EAX

@@ -23,8 +23,10 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 
 #include <CompilerMagic/CompilerMagic.h>
+#include <DeviceDescriptor.h>
 #include <ExecutableLibrary/ImageConstants.h>
 #include <InlineMagic/MemoryClear.h>
+#include <string.h>
 
 /// \brief Entry point from assembler to C.
 ///
@@ -41,6 +43,12 @@ ATTR_NORETURN void secondEntryPoint(unsigned int eax, unsigned int ebx) {
         miserableFail();
         BUILTIN_UNREACHABLE;
     } else {
+        // Perform a small test of the Device Descriptor code... Please note that since it is a test, the property and
+        // it's value are hardcoded. This should be the only special case of this.
+        const char *testValue = getDeviceDescriptorProperty("boot->testDescriptor");
+        if (!strcmp(testValue, "Working!")) {
+            miserableFail();
+        }
         // Note that clearing the .bss section will clear the stack, making all the frame pointers invalid.
         // Doesn't matter since these functions should never return, we only waste a couple of bytes of the stack.
         multibootStructPointer = (void *) ebx;

@@ -17,7 +17,7 @@
 #/
 #/ \file
 #/ According to ARM's documentation, all ARM processors for ARMv6 and earlier, ARMv7-A and ARMv7-M must have an
-# /interrupt vector table which consist of branch or PC-load instructions. All of these instructions must be ARM, but
+#/ interrupt vector table which consist of branch or PC-load instructions. All of these instructions must be ARM, but
 #/ the ARMv6-T2 support Thumb32 instructions, which doesn't matter because if all support ARM, ARM will be used.
 #/
 #/ http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0388f/CIHFIAJC.html
@@ -25,7 +25,7 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 
 #include <config.h>
-#define __FILENAME__ "EntryPoint.sx"
+#define __FILENAME__ "armv7-a.vectors.sx"
 #include <AssemblerMagic/AssemblerMagic.h>
 
 # TODO: Add the labels when they are ready to be included here

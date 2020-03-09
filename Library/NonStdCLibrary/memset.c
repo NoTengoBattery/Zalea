@@ -55,16 +55,6 @@ static inline size_t unalignedLoop(void *buffer, unsigned char fill, size_t size
     return size;
 }
 
-/// \brief a `memset` implementation compatible with the C standard `memset`.
-///
-/// This is an implementation of the C standard function "memset". This is part of CompilerRuntime, which means that the
-/// compiler may call this function without a user's explicit call. This is not part of the non-standard C library,
-/// therefore, it only exists to fulfill the compiler's assumptions about the runtime or to be used inside assembler
-/// routines.
-/// \param buffer this is a pointer that indicates where the buffer begins
-/// \param fill this is the fill which will fill the buffer
-/// \param size this is the size of the buffer to fill
-/// \return the same address as provided in the buffer address
 void *memset(void *buffer, int fill, size_t size) {
     // If the size is 0, return immediately
     if (size == 0) { return buffer; }

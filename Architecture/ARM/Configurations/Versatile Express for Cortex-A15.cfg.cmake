@@ -37,10 +37,6 @@ SET(MACHINE_MARCH "armv7-a"
 SET(MACHINE_MFPU "neon-vfpv4"
     CACHE STRING
     "This variable is the machine FPU that the compiler can use to generate floating point instructions.")
-# MACHINE_MODES_STACK_SIZE: SET_AND_EXPORT STRING
-SET(MACHINE_MODES_STACK_SIZE "0x2000"
-    CACHE STRING
-    "This is the other ARM modes stack size for the machine. It's default is 0x1000, which is 4 KiB.")
 # MACHINE_MTUNE: SET_AND_EXPORT STRING
 SET(MACHINE_MTUNE "cortex-a15"
     CACHE STRING

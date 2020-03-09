@@ -49,9 +49,8 @@ TARGET_INCLUDE_DIRECTORIES("CompilerRuntime" PRIVATE "${CMAKE_CURRENT_LIST_DIR}"
 # TODO: version.
 ADD_LIBRARY("RawCompilerRuntime" STATIC
             "asan.c"
-            "division.c"
-            "memset.c")
-TARGET_DISABLE_FANCY_FEATURES("RawCompilerRuntime" PRIVATE C FANCY_LIST LTO SANITIZER STACK_PROTECTOR)
+            "division.c")
+TARGET_DISABLE_FANCY_FEATURES("RawCompilerRuntime" PRIVATE C FANCY_LIST SANITIZER STACK_PROTECTOR)
 
 TARGET_LINK_LIBRARIES("RawCompilerRuntime" "CoreLibraries")
 TARGET_LINK_LIBRARIES("CompilerRuntime" "CoreLibraries" "RawCompilerRuntime")

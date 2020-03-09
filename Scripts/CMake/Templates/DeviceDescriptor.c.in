@@ -43,13 +43,6 @@ static inline unsigned long long calculateHash1(const char *property, const size
     return value;
 }
 
-/// \brief Return the value of the requested property.
-///
-/// This function will try to find a property in the generated hash table, and return it's value by performing a 'fast'
-/// lookup, verifying the property and checking the result. The resulting value is a pointer to a string that lives in
-/// the RO section, so it should not be changed, or NULL if the property cannot be found.
-/// \param property is the fully qualified name of the property.
-/// \return a pointer to a string that is the property value or if the property is not found, NULL.
 const char *getDeviceDescriptorProperty(const char *property) {
     // Before calculating a hash, check if the property may be a valid pointer
     if (property == NULL) {

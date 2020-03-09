@@ -1,4 +1,4 @@
-//===-- strlen.c - Implementation of the strlen Standard Function -----------------------------------------*- C -*-===//
+//===-- strcmp.c - Implementation of the strcmp Standard Function -----------------------------------------*- C -*-===//
 //
 // Copyright (c) 2020 Oever González
 //
@@ -16,18 +16,17 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 ///
 /// \file
-/// Implement the strlen function.
+/// Implement the strcmp function.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#include <stddef.h>
-
-// This is a trivial strlen implementation, the non-standard implementation maybe will be faster. Or maybe the compiler
+// This is a trivial strcmp implementation, the non-standard implementation maybe will be faster. Or maybe the compiler
 // can optimize something more.
-size_t strlen(const char *string) {
-    size_t length = 0;
-    while (*string++) {
-        length++;
+int strcmp(const char *string1, const char *string2) {
+    const unsigned char *pointer1 = (const unsigned char *) string1;
+    const unsigned char *pointer2 = (const unsigned char *) string2;
+    while (*pointer1 && *pointer1 == *pointer2) {
+        ++pointer1, ++pointer2;
     }
-    return length;
+    return (*pointer1 > *pointer2) - (*pointer2 > *pointer1);
 }

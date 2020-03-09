@@ -25,10 +25,6 @@
 SET(MACHINE_LOADABLE_IMAGE_NAME "kernel.img"
     CACHE STRING
     "This will set the name of the binary that the machine can run. Some machines require a specific file ")
-# MACHINE_LOAD_ADDRESS: SET_AND_EXPORT STRING
-SET(MACHINE_LOAD_ADDRESS "0x0000"
-    CACHE STRING
-    "This is the load address of the image, used by the loader to place the image in memory.")
 # MACHINE_MARCH: SET_AND_EXPORT STRING
 SET(MACHINE_MARCH "armv7-a"
     CACHE STRING
@@ -45,7 +41,3 @@ SET(MACHINE_MTUNE "cortex-a9"
 SET(MACHINE_NAME "ARM RealView Platform Baseboard Explore for Cortex-A9"
     CACHE STRING
     "This variable is the machine for the build, a human readable name for the machine.")
-# MACHINE_VIRTUAL_ADDRESS: SET_AND_EXPORT STRING
-SET(MACHINE_VIRTUAL_ADDRESS "0x00000000"
-    CACHE STRING
-    "This is the 'virtual' address, which is the one that is referenced by the compiled code.")

@@ -33,7 +33,7 @@
 /// \param origin the origin of the memory buffer to set.
 /// \param final the target of the memory buffer to set.
 /// \return this function does not return a value.
-static inline void memoryClear(void *origin, void *final) {
+ATTR_USED static inline void memoryClear(void *origin, void *final) {
     void *greater = ((origin > final) ? origin : final);
     void *smaller = ((origin < final) ? origin : final);
     if (greater != smaller) {

@@ -96,16 +96,17 @@ SECTIONS {
     }
     /*
      * Give the system a small pool for guaranteed memory. This memory is guaranteed because it will be loaded along
-     * with the image (making it bigger, I know). These pages can be used by the very early boot process, so we can
-     * save some precious data such as the bootloader information and some other computed data on the way.
+     * with the image (making it bigger). These pages can be used by the very early boot process, so we can save some
+     * precious data such as the bootloader information and some other computed data on the way. The PageKeeper driver
+     * can use some of that memory... probably.
      */
     ALIGNED_CPS_SEGMENT_START("reserved-segment")
     .reserved ALIGN_MINI : ALIGN_MINI {
         reservedStart = .;
         *(.reserved);
         *(.reserved.*);
-        . += 31 * CONSTANT ( COMMONPAGESIZE );
-        . = ALIGN_COMMONPAGE; /* 128 KiB for architectures with pages of 4096 bytes */
+        . += 7 * CONSTANT ( COMMONPAGESIZE ); /* 32 KiB for architectures with pages of 4096 bytes */
+        . = ALIGN_COMMONPAGE;
         reservedEnd = .;
     } :reserved
     /*
