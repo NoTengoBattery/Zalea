@@ -25,7 +25,7 @@
 #define ZALEA_IMAGECONSTANTS_H
 
 /// This is a magic number which is expected to be present in the Multiboot2 i386 Machine State.
-#define MULTIBOOT_2_BOOTLOADER_MAGIC 0x36D76289
+#define MULTIBOOT_2_BOOTLOADER_MAGIC 0x36D76289  // NOLINT
 
 /// This is a pointer to the end of the bss section.
 extern volatile void *bssEnd;
@@ -42,9 +42,9 @@ extern volatile void *multibootStructPointer;
 extern volatile void *vecend;
 
 /// A function to halt the CPU when a failure is detected during the very early boot process.
-extern void miserableFail(void);
+extern void miserableFail();
 
 /// The actual entry point of the microkernel image.
-extern void start(void);
+extern void start();
 
 #endif //ZALEA_IMAGECONSTANTS_H

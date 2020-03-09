@@ -27,12 +27,11 @@
 #include <CompilerMagic/BitwiseMacros.h>
 #include <CompilerMagic/CompilerMagic.h>
 #include <limits.h>
-#include <stdint.h>
 
 /// If the sign bit flag is enabled, the number is positive.
 #define SIGN_FLAG 0x00U
 /// If the div0 bit flag is enabled, a division by zero has occurred.
-#define DIV0_FLAG 0x01U
+#define DIV_0_FLAG 0x01U
 
 /// \brief This special struct defines a number with flags.
 ///
@@ -80,14 +79,14 @@ void longDivision(struct divisionT *operands, struct resultT *result) {
     //  1. Division by zero: quotient is ULONG_MAX, remainder is zero and set the DIV0 flag of the quotient
     if (denominator == 0x00U) {
         result->quotient.value = ULONG_MAX;
-        result->quotient.flags = SET_NTH_BIT(0x00U, DIV0_FLAG);
+        result->quotient.flags = SET_NTH_BIT(0x00U, DIV_0_FLAG);
         result->remainder = 0x00UL;
         return;
     }
     //  2. Division by one: the quotient is the number and the remainder is zero
     if (denominator == 0x01U) {
         result->quotient.value = numerator;
-        result->quotient.flags = XNOR_NTH_BITS(numeratorFlags, denominatorFlags, SIGN_FLAG);
+        result->quotient.flags = (unsigned char) XNOR_NTH_BITS(numeratorFlags, denominatorFlags, SIGN_FLAG);  // NOLINT
         result->remainder = 0x00UL;
         return;
     }
@@ -101,7 +100,7 @@ void longDivision(struct divisionT *operands, struct resultT *result) {
     //  4. Division by a larger denominator: the quotient is zero and the remainder is the numerator
     if (denominator > numerator) {
         result->quotient.value = 0x00U;
-        result->quotient.flags = XNOR_NTH_BITS(numeratorFlags, denominatorFlags, SIGN_FLAG);
+        result->quotient.flags = (unsigned char) XNOR_NTH_BITS(numeratorFlags, denominatorFlags, SIGN_FLAG);  // NOLINT
         result->remainder = numerator;
         return;
     }
@@ -128,7 +127,7 @@ void longDivision(struct divisionT *operands, struct resultT *result) {
     }
     // Set the struct values and return
     result->quotient.value = quotient;
-    result->quotient.flags = XNOR_NTH_BITS(numeratorFlags, denominatorFlags, SIGN_FLAG);
+    result->quotient.flags = (unsigned char) XNOR_NTH_BITS(numeratorFlags, denominatorFlags, SIGN_FLAG);  // NOLINT
     result->remainder = remainder;
 }
 

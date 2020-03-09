@@ -32,9 +32,8 @@
 /// any other implementation. The compiler may optimize this by inserting the code instead of calling.
 /// \param origin the origin of the memory buffer to set.
 /// \param final the target of the memory buffer to set.
-inline void memoryClear(void *origin, void *final);
-
-extern inline void memoryClear(void *origin, void *final) {
+/// \return this function does not return a value.
+static inline void memoryClear(void *origin, void *final) {
     void *greater = ((origin > final) ? origin : final);
     void *smaller = ((origin < final) ? origin : final);
     if (greater != smaller) {

@@ -20,7 +20,6 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#include "string.h"
 #include <stddef.h>
 
 // This is a trivial strlen implementation, the non-standard implementation maybe will be faster. Or maybe the compiler

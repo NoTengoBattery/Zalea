@@ -20,8 +20,6 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#include <CompilerMagic/CompilerMagic.h>
-
 /// \brief GCC's Address Sanitizer API.
 ///
 /// GCC (any GNU compatible compiler) will call this function to store *long* when the Address Sanitizer is enabled.

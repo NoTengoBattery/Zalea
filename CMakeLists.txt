@@ -115,7 +115,7 @@ SET(CMAKE_CXX_STANDARD 20)
 
 # Enable clang-tidy if found by the toolchain file. Try to keep them in sync with CLion.
 IF (CMAKE_CLANG_TIDY AND KERNEL_COMPILER_CLANG)
-  SET(TIDY_CHECKS -checks=*,-llvm-header-guard,-hicpp-signed-bitwise)
+  SET(TIDY_CHECKS -checks=*)
   SET(CMAKE_ASM_CLANG_TIDY "${CMAKE_CLANG_TIDY}" "${TIDY_CHECKS}")
   SET(CMAKE_C_CLANG_TIDY "${CMAKE_CLANG_TIDY}" "${TIDY_CHECKS}")
   SET(CMAKE_CXX_CLANG_TIDY "${CMAKE_CLANG_TIDY}" "${TIDY_CHECKS}")

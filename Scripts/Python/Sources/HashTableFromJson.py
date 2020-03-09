@@ -119,14 +119,14 @@ def flatten_json(input_json):
     def flatten(json_dict, name=''):
         if type(json_dict) is dict:
             for value in json_dict:
-                flatten(json_dict[value], name + value + '.')
+                flatten(json_dict[value], name + value + '->')
         elif type(json_dict) is list:
             index = 0
             for value in json_dict:
-                flatten(value, name + str(index) + '.')
+                flatten(value, name + str(index) + '->')
                 index += 1
         else:
-            output[name[:-1]] = json_dict
+            output[name[:-2]] = json_dict
 
     flatten(input_json)
     return output
@@ -159,28 +159,28 @@ def rotate_right(value):
     return mask(rotated)
 
 
-def calculate_hash(input):
+def calculate_hash(hash_input):
     global pattern_64bit
     value = rotate_left(pattern_64bit)
-    ascii_bits = input.encode('ASCII')
+    ascii_bits = hash_input.encode('ASCII')
     for character in ascii_bits:
         value = rotate_left(value)
-        value ^= ~character * ~len(input)
+        value ^= ~character * ~len(hash_input)
         value = rotate_left(value)
-        value ^= character * ~len(input)
+        value ^= character * ~len(hash_input)
     value = mask(value)
     return value
 
 
-def calculate_hash2(input):
+def calculate_hash2(hash_input):
     global pattern_64bit
     value = rotate_right(pattern_64bit)
-    ascii_bits = input.encode('ASCII')
+    ascii_bits = hash_input.encode('ASCII')
     for character in ascii_bits:
         value = rotate_right(value)
-        value ^= character * ~len(input)
+        value ^= character * ~len(hash_input)
         value = rotate_right(value)
-        value ^= ~character * len(input)
+        value ^= ~character * len(hash_input)
     value = mask(value)
     return value
 
@@ -257,10 +257,8 @@ def print_to_source(args, hashmap):
         program_parser.error('Generating the source code requires the template and the output files.')
     with args.source_template as template:
         with io.StringIO("") as source:
-            source.write("const struct {} *const {}[] =\n\t{{".format(api_struct, api_table))
+            source.write("const struct {} *const {}[] = {{\n\t".format(api_struct, api_table))
             with io.StringIO("") as variables:
-                variables.write("\n#include <{}>".format(args.header.name))
-                variables.write("\n#include <stddef.h>\n\n")
                 for index in range(len(hashmap)):
                     hashvalue = hashmap[index]
                     ending = ", " if index != (len(hashmap) - 1) else ""
@@ -272,12 +270,11 @@ def print_to_source(args, hashmap):
                         source.write("&{}{}".format(varname, ending))
                         variables.write("static const struct {} {} = {{\n\t".format(api_struct, varname))
                         variables.write("\"{}\",\n\t\"{}\"\n}};\n".format(key, val))
-                source.write("};\n")
+                source.write("\n};\n")
                 source.seek(0)
                 variables.write("\n")
                 variables.seek(0)
                 with args.source as real_output:
-                    template.seek(0)
                     real_output.write(template.read())
                     real_output.write(variables.read())
                     real_output.write(source.read())

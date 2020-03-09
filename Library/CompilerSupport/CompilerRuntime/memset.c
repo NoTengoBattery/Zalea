@@ -72,13 +72,13 @@ void *memset(void *buffer, int fill, size_t size) {
     static const size_t cost = 4;
     static const size_t cellSize = sizeof(uint_fast64_t);
     static const size_t alignment = cost * cellSize;
-    size_t remainingSize = unalignedLoop(buffer, fill, size, alignment);
+    size_t remainingSize = unalignedLoop(buffer, (unsigned char) fill, size, alignment);
     uint_fast64_t *wordAddressing = (uint_fast64_t *) ((uintptr_t) buffer + size - remainingSize);
     if (remainingSize >= alignment) {
         // Create a variable of the appropriate size filled with the same value every byte
-        uint_fast64_t actualFill = fill;
+        uint_fast64_t actualFill = (uint_fast64_t) fill;
         for (unsigned int i = 0x00; i < cellSize; ++i) {
-            ((unsigned char *) &actualFill)[i] = fill;
+            ((unsigned char *) &actualFill)[i] = (unsigned char) fill;
         }
         // The compiler will probably vectorize this loop :)
         while (remainingSize >= alignment) {
@@ -90,7 +90,7 @@ void *memset(void *buffer, int fill, size_t size) {
             remainingSize -= alignment;
         }
     }
-    size_t shouldBeZero = unalignedLoop(wordAddressing, fill, remainingSize, alignment);
+    size_t shouldBeZero = unalignedLoop(wordAddressing, (unsigned char) fill, remainingSize, alignment);
     if (shouldBeZero != 0) {
         return (void *) UINTPTR_MAX;
     }

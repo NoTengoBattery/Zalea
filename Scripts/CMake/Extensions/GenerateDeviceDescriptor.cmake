@@ -42,12 +42,13 @@ IF (NOT JPI_INIT)
             "JPI_SOURCE_TEMPLATE: a template header to be included at the beginning of the generated source\n"
             "JPI_SOURCE: the path to the generated source file\n")
   ENDIF ()
-  SET_AND_EXPORT(PROPERTIES_HASH_BITS "8" STRING "8"
-                 "The number of bits to be used to generate and calculate the hash table for the JSON properties.")
-  SET_AND_EXPORT(PROPERTIES_HASH_FORESEE "1" STRING "1"
-                 "The number of positions to seek around the calculated hash in the event of collision.")
   SET(JPI_INIT ON CACHE INTERNAL "GENERATE_DEVICE_DESCRIPTOR initialized status")
 ENDIF ()
+
+SET_AND_EXPORT(PROPERTIES_HASH_BITS "8" STRING "8"
+               "The number of bits to be used to generate and calculate the hash table for the JSON properties.")
+SET_AND_EXPORT(PROPERTIES_HASH_FORESEE "1" STRING "1"
+               "The number of positions to seek around the calculated hash in the event of collision.")
 
 # Compile a JSON properties file in a C source code file and a header that can be used as a Hash Table to access
 # properties that may be undiscoverable, but are not wise or useful to embed in the source code itself. This way,
