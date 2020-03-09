@@ -132,6 +132,7 @@ void longDivision(struct divisionT *operands, struct resultT *result) {
 }
 
 #if defined(KERNEL_ARM) && defined(KERNEL_COMPILER_GNU)
+#include <stdint.h>
 
 /// \brief This is the EABI call for unsigned integer division with quotient.
 ///
@@ -144,9 +145,9 @@ void longDivision(struct divisionT *operands, struct resultT *result) {
 /// \return a composite value of the results which conforms with the EABI call.
 ATTR_USED uint64_t __aeabi_uidivmod(unsigned long numerator, unsigned long denominator) {
     struct divisionT division = {
-            .denominator.flags = SET_NTH_BIT(0x00, SIGN_FLAG),
+            .denominator.flags = SET_NTH_BIT(0x00U, SIGN_FLAG),
             .denominator.value = denominator,
-            .numerator.flags =  SET_NTH_BIT(0x00, SIGN_FLAG)
+            .numerator.flags =  SET_NTH_BIT(0x00U, SIGN_FLAG),
             .numerator.value = numerator
     };
     struct resultT result = {
