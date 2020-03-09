@@ -1,0 +1,66 @@
+/*===-- DeviceDescriptor.c - Description of Undiscoverable Device Properties -------------------------------*- C -*-===*
+ *
+ * Automatically generated file. DO NOT MODIFY THIS FILE: ANY MODIFICATION WILL BE REVERTED.
+ *
+ * Copyright (c) 2020 Oever González
+ *
+ *===---------------------------------------------------------------------------------------------------------------===*
+ *
+ * \file
+ * Contains a Hash Table which contains a set of undiscoverable hardware properties, generated from a JSON file. This
+ * is intended to prevent developers from embedding magic addresses, names or general information about the hardware in
+ * the source code. Instead, developers will add properties to the JSON file and search them in the Hash Table using a
+ * descriptive property name.
+ *
+ *===--------------------------------------------------------------------------------------------------------------===*/
+
+#include "Include/DeviceDescriptor.h"
+#include <CompilerMagic/BitwiseMacros.h>
+#include <config.h>
+#include <stdint.h>
+#include <string.h>
+
+const unsigned long long pattern = 0xA5A5A5A5A5A5A5A5;
+
+static inline unsigned long long calculateHash1(const char *property, const size_t propertyLength) {
+    const unsigned long long mask = TRUNCATE_MASK(PROPERTIES_HASH_BITS);  // NOLINT
+    // Start the hash rotating to the left by 1 bit the pattern
+    unsigned long long value = BRL(pattern, 0x01U) & mask;
+    // Initialize the loop index (the index of the current char) and the value of the bit char
+    size_t characterIndex = 0;
+    unsigned char character = (unsigned char) property[characterIndex];
+    // Loop to calculate the hash until a null pointer is found (or the length is depleted)
+    while (character != (intptr_t) NULL && characterIndex < propertyLength) {
+        value = BRLN(value, 0x01U, PROPERTIES_HASH_BITS) & mask;
+        value ^= ~character * ~propertyLength;
+        value = BRLN(value, 0x01U, PROPERTIES_HASH_BITS) & mask;
+        value ^= character * ~propertyLength;
+        // Update the loop variables for the next iteration
+        characterIndex += 1;
+        character = (unsigned char) property[characterIndex];
+    }
+    value &= mask;
+    return value;
+}
+
+/// \brief Return the value of the requested property.
+///
+/// This function will try to find a property in the generated hash table, and return it's value by performing a 'fast'
+/// lookup, verifying the property and checking the result. The resulting value is a pointer to a string that lives in
+/// the RO section, so it should not be changed, or NULL if the property cannot be found.
+/// \param property is the fully qualified name of the property.
+/// \return a pointer to a string that is the property value or if the property is not found, NULL.
+const char *getDeviceDescriptorProperty(const char *property) {
+    // Before calculating a hash, check if the property may be a valid pointer
+    if (property == NULL) {
+        return NULL;
+    }
+    // Calculate the first hash as the index in the array
+    unsigned int index = calculateHash1(property, strlen(property));
+    const struct deviceProperty *returnValue = deviceDescriptor[index];
+    if (returnValue == NULL) {
+        return NULL;
+    }
+    return returnValue->value;
+}
+
