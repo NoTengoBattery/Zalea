@@ -1,4 +1,4 @@
-#===-- CMakeLists.txt - Non Standard C++ Library -------------------------------------------------------*- CMake -*-===#
+#===-- CMakeLists.txt - Non Standard C Library ---------------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -16,12 +16,13 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 #/
 #/ \file
-#/ This is the Non Standard C++ Library, which gives support to the C++ dialect used by this project.
+#/ This is the Non Standard C Library, which gives support to the C dialect used by this project.
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 
-ADD_LIBRARY("NonStdC++Library" STATIC
-            "cstdint"
-            "phony.cxx")
-TARGET_INCLUDE_DIRECTORIES("NonStdC++Library" INTERFACE "${CMAKE_CURRENT_LIST_DIR}")
-TARGET_LINK_LIBRARIES("NonStdC++Library" "CoreLibraries" "NonStdCLibrary")
+ADD_LIBRARY("NonStdCLibrary" STATIC
+            "string.h"
+            "strlen.c"
+            "phony.c")
+TARGET_INCLUDE_DIRECTORIES("NonStdCLibrary" INTERFACE "${CMAKE_CURRENT_LIST_DIR}")
+TARGET_LINK_LIBRARIES("NonStdCLibrary" "CoreLibraries")
