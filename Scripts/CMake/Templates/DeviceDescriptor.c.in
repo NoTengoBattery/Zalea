@@ -18,12 +18,11 @@
 #include <CompilerMagic/BitwiseMacros.h>
 #include <config.h>
 #include <stddef.h>
-#include <stdint.h>
 
-/// \brief the pattern that will be the starting point of the hash.
-static const uint64_t pattern = 0xA5A5A5A5A5A5A5A5;
 /// \brief a pre-computed bit mask that will be used to truncate the results to a certain bit length.
-static const unsigned long long bitMask = TRUNCATE_MASK(PROPERTIES_HASH_BITS);
+static const unsigned bitMask = TRUNCATE_MASK(PROPERTIES_HASH_BITS);
+/// \brief the pattern that will be the starting point of the hash.
+static const unsigned pattern = 0xA5A5A5A5A5A5A5A5 & bitMask;
 
 // A trivial implementation of the `strlen` function, named differently to avoid overriding the default implementation.
 static inline size_t stringLength(const char *string) {
@@ -49,10 +48,10 @@ static inline int stringCompare(const char *string1, const char *string2) {
 }
 
 // Calculate the `Hash1` value from a string, given a pointer to the string and it's length.
-static inline unsigned long long calculateHash1(const char *property, const size_t propertyLength) {
+static inline unsigned calculateHash1(const char *property, const size_t propertyLength) {
     // Start the hash rotating to the left by 1 bit the pattern
-    static unsigned long long rotatedConstant = BRLN(pattern, 0x01U, PROPERTIES_HASH_BITS);
-    unsigned long long value = rotatedConstant;
+    static unsigned rotatedConstant = BRLN(pattern, 0x01U, PROPERTIES_HASH_BITS);
+    unsigned value = rotatedConstant;
     // Initialize the loop index (the index of the current char) and the value of the bit char
     size_t characterIndex = 0;
     unsigned char character = (unsigned char) property[characterIndex];
@@ -71,10 +70,10 @@ static inline unsigned long long calculateHash1(const char *property, const size
 }
 
 // Calculate the `Hash2` value from a string, given a pointer to the string and it's length.
-static inline unsigned long long calculateHash2(const char *property, const size_t propertyLength) {
+static inline unsigned calculateHash2(const char *property, const size_t propertyLength) {
     // Start the hash rotating to the left by 1 bit the pattern
-    static unsigned long long rotatedConstant = BRRN(pattern, 0x01U, PROPERTIES_HASH_BITS);
-    unsigned long long value = rotatedConstant;
+    static unsigned rotatedConstant = BRRN(pattern, 0x01U, PROPERTIES_HASH_BITS);
+    unsigned value = rotatedConstant;
     // Initialize the loop index (the index of the current char) and the value of the bit char
     size_t characterIndex = 0;
     unsigned char character = (unsigned char) property[characterIndex];
@@ -100,13 +99,13 @@ static inline unsigned long long calculateHash2(const char *property, const size
 // This function returns NULL if the lookup failed to find the key. It returns a pointer to the struct when it actually
 // finds the correct key. It's responsibility of the caller to unpack the value of the corresponding key.
 static inline const struct deviceProperty *tableLookup(
-        unsigned long long int (*hashing)(const char *, const size_t),
+        unsigned int (*hashing)(const char *, const size_t),
         const char *property,
         const struct deviceProperty *const properties[]) {
     // Get the length of the property, which is an O(n) operation (n is the string length)
     const size_t propertyLength = stringLength(property);
     // Evaluate the hash value, which is a O(n) operation (n is the string length)
-    const unsigned long long hash = (hashing)(property, propertyLength);
+    const unsigned hash = (hashing)(property, propertyLength);
     // Get the value stored in the table, using the hash as the index
     const struct deviceProperty *propInTable = properties[hash];
     // If the property is null, return null (which means that the lookup failed)
