@@ -132,6 +132,7 @@ void longDivision(struct divisionT *operands, struct resultT *result) {
 }
 
 #if defined(KERNEL_ARM) && defined(KERNEL_COMPILER_GNU)
+
 #include <stdint.h>
 
 /// \brief This is the EABI call for unsigned integer division with quotient.
