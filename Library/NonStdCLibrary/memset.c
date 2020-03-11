@@ -59,14 +59,14 @@ void *memset(void *buffer, int fill, size_t size) {
     // If the size is 0, return immediately
     if (size == 0) { return buffer; }
     // We define a "cost". The cost is the size of the unrolled loop, which in theory should avoid branching...
-    static const size_t cost = 4;
-    static const size_t cellSize = sizeof(uint_fast64_t);
+    static const size_t cost = 8;
+    static const size_t cellSize = sizeof(uint_fast32_t);
     static const size_t alignment = cost * cellSize;
     size_t remainingSize = unalignedLoop(buffer, (unsigned char) fill, size, alignment);
-    uint_fast64_t *wordAddressing = (uint_fast64_t *) ((uintptr_t) buffer + size - remainingSize);
+    uint_fast32_t *wordAddressing = (uint_fast32_t *) ((uintptr_t) buffer + size - remainingSize);
     if (remainingSize >= alignment) {
         // Create a variable of the appropriate size filled with the same value every byte
-        uint_fast64_t actualFill = (uint_fast64_t) fill;
+        uint_fast32_t actualFill = (uint_fast32_t) fill;
         for (unsigned int i = 0x00; i < cellSize; ++i) {
             ((unsigned char *) &actualFill)[i] = (unsigned char) fill;
         }
@@ -76,6 +76,10 @@ void *memset(void *buffer, int fill, size_t size) {
             wordAddressing[1] = actualFill;
             wordAddressing[2] = actualFill;
             wordAddressing[3] = actualFill;
+            wordAddressing[4] = actualFill;
+            wordAddressing[5] = actualFill;
+            wordAddressing[6] = actualFill;
+            wordAddressing[7] = actualFill;
             wordAddressing += cost;
             remainingSize -= alignment;
         }
