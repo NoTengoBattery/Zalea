@@ -137,10 +137,12 @@ IF (CMAKE_CPPCHECK)
 ENDIF ()
 
 # Add an interface library for config.h (and friends)
-ADD_LIBRARY("CoreLibraries" INTERFACE)
+ADD_LIBRARY("CoreLibraries" STATIC
+            "${CONFIGURATION_HEADER}"
+            "${JPI_HEADER}"
+            "${JPI_SOURCE}")
 TARGET_INCLUDE_DIRECTORIES("CoreLibraries" INTERFACE "${TREE_BIN_IMPORTANT_INCLUDE_PATH}")
-TARGET_SOURCES("CoreLibraries" INTERFACE "${CONFIGURATION_HEADER}" "${JPI_HEADER}")
-TARGET_LINK_LIBRARIES("CoreLibraries" INTERFACE "ExecutableLibrary" "CompilerMagic" "CompilerRuntime")
+TARGET_LINK_LIBRARIES("CoreLibraries" "ExecutableLibrary" "CompilerMagic" "CompilerRuntime")
 
 # Add all subdirectories (the root subdirectories) that will be ever used
 ADD_SUBDIRECTORY("${TREE_ARCHITECTURE_PATH}")
