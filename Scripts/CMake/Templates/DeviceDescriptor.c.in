@@ -18,9 +18,10 @@
 #include <CompilerMagic/BitwiseMacros.h>
 #include <config.h>
 #include <stddef.h>
+#include <stdint.h>
 
 /// \brief the pattern that will be the starting point of the hash.
-static const unsigned long long pattern = 0xA5A5A5A5A5A5A5A5;
+static const uint64_t pattern = 0xA5A5A5A5A5A5A5A5;
 /// \brief a pre-computed bit mask that will be used to truncate the results to a certain bit length.
 static const unsigned long long bitMask = TRUNCATE_MASK(PROPERTIES_HASH_BITS);
 
@@ -36,13 +37,13 @@ static inline size_t stringLength(const char *string) {
 
 // A trivial implementation of the `strcmp` function, named differently to avoid overriding the default implementation.
 static inline int stringCompare(const char *string1, const char *string2) {
-    unsigned char value1 = *string1;
-    unsigned char value2 = *string2;
+    unsigned char value1 = (unsigned char) *string1;
+    unsigned char value2 = (unsigned char) *string2;
     while (value1 == value2 && value1 != 0x00 && value2 != 0x00) {
         string1 += 1;
         string2 += 1;
-        value1 = *string1;
-        value2 = *string2;
+        value1 = (unsigned char) *string1;
+        value2 = (unsigned char) *string2;
     }
     return value1 - value2;
 }
@@ -120,10 +121,10 @@ static inline const struct deviceProperty *tableLookup(
         return propInTable;
     }
     // If not found, perform the linear lookup which is an O(n) operation (n is the foresee value)
-    const size_t lh = hash - PROPERTIES_HASH_FORESEE; // Calculate the lower hash
-    const size_t hh = hash + PROPERTIES_HASH_FORESEE; // Calculate the higher hash
+    const size_t lh = (const size_t) (hash - PROPERTIES_HASH_FORESEE); // Calculate the lower hash
+    const size_t hh = (const size_t) (hash + PROPERTIES_HASH_FORESEE); // Calculate the higher hash
     const size_t pLowerHash = lh > bitMask ? 0 : lh; // Clamp, to avoid out-of-bounds errors
-    const size_t pHigherHash = hh > bitMask ? bitMask : hh; // Clamp, to avoid out-of-bounds errors
+    const size_t pHigherHash = (const size_t) (hh > bitMask ? bitMask : hh); // Clamp, to avoid out-of-bounds errors
     // After sanitizing the foresee, enter the loop with the given numbers (select the correct values here)
     const size_t lowerHash = pLowerHash <= pHigherHash ? pLowerHash : pHigherHash;
     const size_t higherHash = pLowerHash >= pHigherHash ? pLowerHash : pHigherHash;

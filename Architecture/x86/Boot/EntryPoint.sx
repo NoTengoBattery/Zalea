@@ -30,7 +30,7 @@
  * thing to be executed when we have full control over the CPU. For x86, this will save the Multiboot2 registers, setup
  * the main stack and finally perform a call to the C entry point.
  */
-NAKED_GLOBAL_FUNCTION(.start, start)
+NAKED_GLOBAL_FUNCTION(.start.header, start)
   XCHG  bx,         bx        # BOCHS magic breakpoint
   LEA   esi,        iEAX
   LEA   edi,        iEBX

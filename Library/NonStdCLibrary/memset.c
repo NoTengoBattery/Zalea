@@ -77,9 +77,9 @@ void *memset(void *buffer, int fill, size_t size) {
             wordAddressing[2] = actualFill;
             wordAddressing[3] = actualFill;
             wordAddressing[4] = actualFill;
-            wordAddressing[5] = actualFill;
-            wordAddressing[6] = actualFill;
-            wordAddressing[7] = actualFill;
+            wordAddressing[5] = actualFill;  // NOLINT
+            wordAddressing[6] = actualFill;  // NOLINT
+            wordAddressing[7] = actualFill;  // NOLINT
             wordAddressing += cost;
             remainingSize -= alignment;
         }
