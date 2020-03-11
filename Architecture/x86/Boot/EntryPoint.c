@@ -45,8 +45,8 @@ ATTR_NORETURN void secondEntryPoint(unsigned int eax, unsigned int ebx) {
     } else {
         // Perform a small test of the Device Descriptor code... Please note that since it is a test, the property and
         // it's value are hardcoded. This should be the only special case of this.
-        const char *testValue = getDeviceDescriptorProperty("boot->testDescriptor");
-        if (!strcmp(testValue, "Working!")) {
+        const char *testValue = getDeviceDescriptorProperty("boot:testDescriptor");
+        if (strcmp(testValue, "Working!") != 0) {
             miserableFail();
         }
         // Note that clearing the .bss section will clear the stack, making all the frame pointers invalid.

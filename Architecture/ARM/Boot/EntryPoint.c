@@ -40,7 +40,7 @@ void secondEntryPoint() ATTR_SECTION(".start");
 ATTR_NORETURN void secondEntryPoint() {
     // Perform a small test of the Device Descriptor code... Please note that since it is a test, the property and
     // it's value are hardcoded. This should be the only special case of this.
-    const char *testValue = getDeviceDescriptorProperty("boot->testDescriptor");
+    const char *testValue = getDeviceDescriptorProperty("boot:testDescriptor");
     if (!strcmp(testValue, "Working!")) {
         miserableFail();
     }

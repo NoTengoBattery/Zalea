@@ -26,8 +26,9 @@
 // can optimize something more.
 size_t strlen(const char *string) {
     size_t length = 0;
-    while (*string++) {
-        length++;
+    while (*string != 0x00) {
+        length += 1;
+        string += 1;
     }
     return length;
 }

@@ -99,7 +99,7 @@ static inline unsigned calculateHash2(const char *property, const size_t propert
 // This function returns NULL if the lookup failed to find the key. It returns a pointer to the struct when it actually
 // finds the correct key. It's responsibility of the caller to unpack the value of the corresponding key.
 static inline const struct deviceProperty *tableLookup(
-        unsigned int (*hashing)(const char *, const size_t),
+        unsigned (*hashing)(const char *, const size_t),
         const char *property,
         const struct deviceProperty *const properties[]) {
     // Get the length of the property, which is an O(n) operation (n is the string length)
@@ -120,8 +120,8 @@ static inline const struct deviceProperty *tableLookup(
         return propInTable;
     }
     // If not found, perform the linear lookup which is an O(n) operation (n is the foresee value)
-    const size_t lh = (const size_t) (hash - PROPERTIES_HASH_FORESEE); // Calculate the lower hash
-    const size_t hh = (const size_t) (hash + PROPERTIES_HASH_FORESEE); // Calculate the higher hash
+    const size_t lh = hash - PROPERTIES_HASH_FORESEE; // Calculate the lower hash
+    const size_t hh = hash + PROPERTIES_HASH_FORESEE; // Calculate the higher hash
     const size_t pLowerHash = lh > bitMask ? 0 : lh; // Clamp, to avoid out-of-bounds errors
     const size_t pHigherHash = (const size_t) (hh > bitMask ? bitMask : hh); // Clamp, to avoid out-of-bounds errors
     // After sanitizing the foresee, enter the loop with the given numbers (select the correct values here)

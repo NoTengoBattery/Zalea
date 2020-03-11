@@ -23,10 +23,13 @@
 // This is a trivial strcmp implementation, the non-standard implementation maybe will be faster. Or maybe the compiler
 // can optimize something more.
 int strcmp(const char *string1, const char *string2) {
-    const unsigned char *pointer1 = (const unsigned char *) string1;
-    const unsigned char *pointer2 = (const unsigned char *) string2;
-    while (*pointer1 && *pointer1 == *pointer2) {
-        ++pointer1, ++pointer2;
+    unsigned char value1 = (unsigned char) *string1;
+    unsigned char value2 = (unsigned char) *string2;
+    while (value1 == value2 && value1 != 0x00 && value2 != 0x00) {
+        string1 += 1;
+        string2 += 1;
+        value1 = (unsigned char) *string1;
+        value2 = (unsigned char) *string2;
     }
-    return (*pointer1 > *pointer2) - (*pointer2 > *pointer1);
+    return value1 - value2;
 }
