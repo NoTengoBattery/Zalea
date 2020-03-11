@@ -41,15 +41,31 @@ constexpr auto setNthBit(T1 x, T2 y) { return x | (0x01U << y); }
 
 #endif
 
+/// \brief Calculate the number of bits in certain data type.
+/// \param x the value to calculate the bit length.
+#define BITS_OF(x) (sizeof(x) * CHAR_BIT)
 /// \brief Rotate a value to the left by n bits.
 /// \param x the constant to rotate.
 /// \param y the bits to rotate.
-#define BRL(x, y) (((x) << (y)) | (((x) >> ((sizeof(x) * CHAR_BIT) - (y))) & ~(ULLONG_MAX << (y))))
+#define BRL(x, y) ((((x) << (y)) & ~TRUNCATE_MASK(y)) | \
+    (((x) >> (BITS_OF(x) - (y))) & TRUNCATE_MASK(y)))
 /// \brief Rotate a value to the left by n bits, if the constant is only m bits meaningful.
 /// \param x the constant to rotate.
 /// \param y the bits to rotate.
 /// \param z the meaningful bits of the constant.
-#define BRLN(x, y, z) (((x) << (y)) | (((x) >> ((z) - (y))) & ~(ULLONG_MAX << (y))))
+#define BRLN(x, y, z) (((((x) << (y)) & ~TRUNCATE_MASK(y)) | \
+    (((x) >> ((z) - (y))) & TRUNCATE_MASK(y))) & TRUNCATE_MASK(z))
+/// \brief Rotate a value to the right by n bits.
+/// \param x the constant to rotate.
+/// \param y the bits to rotate.
+#define BRR(x, y) ((((x) >> (y)) & TRUNCATE_MASK(BITS_OF(x) - (y))) | \
+    (((x) << (BITS_OF(x) - (y))) & ~TRUNCATE_MASK(BITS_OF(x) - (y))))
+/// \brief Rotate a value to the right by n bits, if the constant is only m bits meaningful.
+/// \param x the constant to rotate.
+/// \param y the bits to rotate.
+/// \param z the meaningful bits of the constant.
+#define BRRN(x, y, z) (((((x) >> (y)) & TRUNCATE_MASK((z) - (y))) | \
+    (((x) << ((z) - (y))) & ~TRUNCATE_MASK((z) - (y)))) & TRUNCATE_MASK(z))
 /// \brief Clear the n-th bit of a constant.
 /// \param x the constant.
 /// \param y the bit.
