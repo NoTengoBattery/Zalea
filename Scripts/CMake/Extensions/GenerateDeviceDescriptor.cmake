@@ -45,9 +45,9 @@ IF (NOT JPI_INIT)
   SET(JPI_INIT ON CACHE INTERNAL "GENERATE_DEVICE_DESCRIPTOR initialized status")
 ENDIF ()
 
-SET_AND_EXPORT(PROPERTIES_HASH_BITS "8" STRING "8"
+SET_AND_EXPORT(PROPERTIES_HASH_BITS "6U" STRING "6U"
                "The number of bits to be used to generate and calculate the hash table for the JSON properties.")
-SET_AND_EXPORT(PROPERTIES_HASH_FORESEE "1" STRING "1"
+SET_AND_EXPORT(PROPERTIES_HASH_FORESEE "2U" STRING "2U"
                "The number of positions to seek around the calculated hash in the event of collision.")
 
 # Compile a JSON properties file in a C source code file and a header that can be used as a Hash Table to access
