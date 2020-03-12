@@ -126,7 +126,7 @@ static inline const struct deviceProperty *tableLookup(
     const size_t lh = hash - PROPERTIES_HASH_FORESEE; // Calculate the lower hash
     const size_t hh = hash + PROPERTIES_HASH_FORESEE; // Calculate the higher hash
     const size_t pLowerHash = lh > bitMask ? 0 : lh; // Clamp, to avoid out-of-bounds errors
-    const size_t pHigherHash = (const size_t) (hh > bitMask ? bitMask : hh); // Clamp, to avoid out-of-bounds errors
+    const size_t pHigherHash = hh > bitMask ? bitMask : hh; // Clamp, to avoid out-of-bounds errors
     // After sanitizing the foresee, enter the loop with the given numbers (select the correct values here)
     const size_t lowerHash = pLowerHash <= pHigherHash ? pLowerHash : pHigherHash;
     const size_t higherHash = pLowerHash >= pHigherHash ? pLowerHash : pHigherHash;
