@@ -20,7 +20,7 @@
 #/ interrupt vector table which consist of branch or PC-load instructions. All of these instructions must be ARM, but
 #/ the ARMv6-T2 support Thumb32 instructions, which doesn't matter because if all support ARM, ARM will be used.
 #/
-#/ http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0388f/CIHFIAJC.html
+#/ http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.100748_0614_00_en/myv1505913559905.html
 #/
 #===----------------------------------------------------------------------------------------------------------------===#
 

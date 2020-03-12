@@ -38,13 +38,16 @@ static inline size_t stringLength(const char *string) {
 static inline int stringCompare(const char *string1, const char *string2) {
     unsigned char value1 = (unsigned char) *string1;
     unsigned char value2 = (unsigned char) *string2;
-    while (value1 == value2 && value1 != 0x00 && value2 != 0x00) {
-        string1 += 1;
-        string2 += 1;
-        value1 = (unsigned char) *string1;
-        value2 = (unsigned char) *string2;
+    if (string1 != string2) {
+        while (value1 == value2 && value1 != 0x00 && value2 != 0x00) {
+            string1 += 1;
+            string2 += 1;
+            value1 = (unsigned char) *string1;
+            value2 = (unsigned char) *string2;
+        }
+        return value1 - value2;
     }
-    return value1 - value2;
+    return 0x00;
 }
 
 // Calculate the `Hash1` value from a string, given a pointer to the string and it's length.
@@ -56,7 +59,7 @@ static inline unsigned calculateHash1(const char *property, const size_t propert
     size_t characterIndex = 0;
     unsigned char character = (unsigned char) property[characterIndex];
     // Loop to calculate the hash until a null character is found (or the length is depleted)
-    while (character != 0x00 && characterIndex < propertyLength) {
+    while (characterIndex < propertyLength) {
         value = BRLN(value, 0x01U, PROPERTIES_HASH_BITS);
         value ^= ~character * ~propertyLength;
         value = BRLN(value, 0x01U, PROPERTIES_HASH_BITS);
@@ -78,7 +81,7 @@ static inline unsigned calculateHash2(const char *property, const size_t propert
     size_t characterIndex = 0;
     unsigned char character = (unsigned char) property[characterIndex];
     // Loop to calculate the hash until a null character is found (or the length is depleted)
-    while (character != 0x00 && characterIndex < propertyLength) {
+    while (characterIndex < propertyLength) {
         value = BRRN(value, 0x01U, PROPERTIES_HASH_BITS);
         value ^= character * ~propertyLength;
         value = BRRN(value, 0x01U, PROPERTIES_HASH_BITS);

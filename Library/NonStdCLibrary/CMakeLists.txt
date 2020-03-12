@@ -22,8 +22,8 @@
 
 ADD_LIBRARY("NonStdCLibrary" STATIC
             "memset.c"
-            "string.h"
             "strcmp.c"
+            "string.h"
             "strlen.c"
             "phony.c")
 TARGET_DISABLE_FANCY_FEATURES("NonStdCLibrary" PRIVATE C FANCY_LIST SANITIZER STACK_PROTECTOR)

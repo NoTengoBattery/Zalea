@@ -1,3 +1,4 @@
+// Copyright (c) 2020 Oever González
 
 #include <CompilerMagic/CompilerMagic.h>
 

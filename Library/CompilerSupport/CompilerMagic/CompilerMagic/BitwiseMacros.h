@@ -47,8 +47,7 @@ constexpr auto setNthBit(T1 x, T2 y) { return x | (0x01U << y); }
 /// \brief Rotate a value to the left by n bits.
 /// \param x the constant to rotate.
 /// \param y the bits to rotate.
-#define BRL(x, y) ((((x) << (y)) & ~TRUNCATE_MASK(y)) | \
-    (((x) >> (BITS_OF(x) - (y))) & TRUNCATE_MASK(y)))
+#define BRL(x, y) BRLN(x, y, BITS_OF(x))
 /// \brief Rotate a value to the left by n bits, if the constant is only m bits meaningful.
 /// \param x the constant to rotate.
 /// \param y the bits to rotate.
@@ -58,8 +57,7 @@ constexpr auto setNthBit(T1 x, T2 y) { return x | (0x01U << y); }
 /// \brief Rotate a value to the right by n bits.
 /// \param x the constant to rotate.
 /// \param y the bits to rotate.
-#define BRR(x, y) ((((x) >> (y)) & TRUNCATE_MASK(BITS_OF(x) - (y))) | \
-    (((x) << (BITS_OF(x) - (y))) & ~TRUNCATE_MASK(BITS_OF(x) - (y))))
+#define BRR(x, y) BRRN(x, y, BITS_OF(x))
 /// \brief Rotate a value to the right by n bits, if the constant is only m bits meaningful.
 /// \param x the constant to rotate.
 /// \param y the bits to rotate.

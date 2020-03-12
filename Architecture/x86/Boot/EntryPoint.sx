@@ -62,8 +62,6 @@ NAKED_GLOBAL_FUNCTION(.start.header, start)
   CALL  secondEntryPoint      # Call the C entry point
   JMP   miserableFail
 NAKED_GLOBAL_FUNCTION_EPILOG(start)
-LOCAL_BSS_DATA(iEAX, 4)       # 4: sizeof (eax): 32 bit
-LOCAL_BSS_DATA(iEBX, 4)       # 4: sizeof (ebx): 32 bit
 
 /*
  * `miserableFail` is a global function that will fail miserably when an irrecuperable error is detected. This is only
@@ -79,8 +77,14 @@ NAKED_GLOBAL_FUNCTION_EPILOG(miserableFail)
  */
 GLOBAL_DATA(multibootStructPointer)
   .long   0x00
-  .long   0x00
 GLOBAL_DATA_EPILOG(multibootStructPointer)
+
+/*
+ * Allocate 2 variables for storing eax and ebx during early boot. They have really important information from the
+ * bootloader.
+ */
+LOCAL_BSS_DATA(iEAX, 4)
+LOCAL_BSS_DATA(iEBX, 4)
 
 /*
  * Those are placeholders (needed because LLD will not identify the sections correctly when no data is in the sections)

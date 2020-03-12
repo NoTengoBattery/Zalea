@@ -1,5 +1,5 @@
 {
-  "boot": {
-    "testDescriptor": "Working!"
+  "test": {
+    "descriptor": "working"
   }
 }

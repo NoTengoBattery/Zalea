@@ -25,11 +25,14 @@
 int strcmp(const char *string1, const char *string2) {
     unsigned char value1 = (unsigned char) *string1;
     unsigned char value2 = (unsigned char) *string2;
-    while (value1 == value2 && value1 != 0x00 && value2 != 0x00) {
-        string1 += 1;
-        string2 += 1;
-        value1 = (unsigned char) *string1;
-        value2 = (unsigned char) *string2;
+    if (string1 != string2) {
+        while (value1 == value2 && value1 != 0x00 && value2 != 0x00) {
+            string1 += 1;
+            string2 += 1;
+            value1 = (unsigned char) *string1;
+            value2 = (unsigned char) *string2;
+        }
+        return value1 - value2;
     }
-    return value1 - value2;
+    return 0x00;
 }

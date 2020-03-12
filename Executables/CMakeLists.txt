@@ -34,6 +34,7 @@ ADD_EXECUTABLE("${THIS_EXE_NAME}"
 TARGET_LINK_LIBRARIES("${THIS_EXE_NAME}"
                       "CoreLibraries"
                       "EntryPoint"
+                      "NonStdCLibrary"
                       "NonStdC++Library")
 # Add the linker script to the linker command line (requires linker and compiler detection)
 IF (KERNEL_COMPILER_GNU AND KERNEL_LINKER_GNU)

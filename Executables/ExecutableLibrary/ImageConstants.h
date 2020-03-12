@@ -17,34 +17,39 @@
 ///
 /// \file
 /// All of these constants are pointers that live inside the final binary image. They are constants at link and build
-/// time.
+/// time. Also, some other relevant constants that need to be globally accessible.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
 #ifndef ZALEA_IMAGECONSTANTS_H
 #define ZALEA_IMAGECONSTANTS_H
 
-/// This is a magic number which is expected to be present in the Multiboot2 i386 Machine State.
+/// \brief This is a magic number which is expected to be present in the Multiboot2 i386 Machine State.
 #define MULTIBOOT_2_BOOTLOADER_MAGIC 0x36D76289  // NOLINT
 
-/// This is a pointer to the end of the bss section.
+/// \brief This is a pointer to the end of the bss section.
 extern volatile void *bssEnd;
-/// This is a pointer to the start of the bss section.
+/// \brief This is a pointer to the start of the bss section.
 extern volatile void *bssStart;
-/// This is a pointer to the end of the binary image.
+/// \brief This is a pointer to the end of the binary image.
 extern volatile void *imageEnd;
-/// This is a pointer to the start of the binary image.
+/// \brief This is a pointer to the start of the binary image.
 extern volatile void *imageStart;
 
-/// This is a pointer that will be the Multiboot2 as returned by the bootloader.
+/// \brief This is a pointer that will be the Multiboot2 as returned by the bootloader.
 extern volatile void *multibootStructPointer;
-/// This is a pointer to the end of the ARM vector table, which needs to be copied into memory.
+/// \brief This is a pointer to the end of the ARM vector table, which needs to be copied into memory.
 extern volatile void *vecend;
 
-/// A function to halt the CPU when a failure is detected during the very early boot process.
+/// \brief A function to halt the CPU when a failure is detected during the very early boot process.
 extern void miserableFail();
 
-/// The actual entry point of the microkernel image.
+/// \brief The actual entry point of the microkernel image.
 extern void start();
+
+/// \brief This is the testing property to use as a check point for Device Descriptor.
+const char * const deviceDescriptorTestProperty =  "test:descriptor";
+/// \brief This is the expected value of the testing property for Device Descriptor.
+const char * const deviceDescriptorTestValue =  "working";
 
 #endif //ZALEA_IMAGECONSTANTS_H

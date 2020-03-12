@@ -39,6 +39,7 @@ default_header_filename = "JsonPropertyHashTable.h"
 default_header_template = "template.h"
 default_source_filename = "JsonPropertyHashTable.c"
 default_source_template = "template.c.h"
+flatten_separator = ":"
 max_64bit = 0xFFFFFFFFFFFFFFFF
 parsed_args = None
 pattern_64bit = 0xA5A5A5A5A5A5A5A5
@@ -144,14 +145,14 @@ def flatten_json(input_json):
         """
         if type(json_dict) is dict:
             for value in json_dict:
-                flatten(json_dict[value], name + value + ":")
+                flatten(json_dict[value], name + value + flatten_separator)
         elif type(json_dict) is list:
             index = 0
             for value in json_dict:
-                flatten(value, name + str(index) + ":")
+                flatten(value, name + str(index) + flatten_separator)
                 index += 1
         else:
-            output[name[:-1]] = json_dict
+            output[name[:-len(flatten_separator)]] = json_dict
 
     flatten(input_json)
     return output
@@ -276,14 +277,14 @@ def hash_foresee(key_hash: int, name: str, hashmap: [], key: str, value: str):
     for index in range(lowermost, uppermost, step):
         if index == key_hash:
             continue
-        this_logger.info("Trying to solve collision by searching around the {} hash {} in {}..."
-                         .format(name, hex(key_hash), hex(index)))
+        this_logger.warning("--! Trying to solve collision by searching around the "
+                            f"{name} hash {hex(key_hash)} in {hex(index)}...")
         current_in_map = hashmap[index]
         if current_in_map is None:
-            hashmap[index] = ("{}" + separator + "{}").format(key, value)
+            hashmap[index] = f"{key}{separator}{value}"
             collision_avoided = True
-            this_logger.info("Collision avoided by moving hash {} ({}) at index {} ({})"
-                             .format(hex(key_hash), key_hash, index, hex(index)))
+            this_logger.warning("--+ Collision avoided by moving hash "
+                                f"{hex(key_hash)} ({key_hash}) at index {index} ({hex(index)})")
             break
     return collision_avoided
 
@@ -312,34 +313,36 @@ def create_hashmap(args):
     hashmap = [None] * (mask(max_64bit) + 1)
     for key, value in json_data.items():
         key_hash = calculate_hash(key)
-        this_logger.info("Key: {}, Value: {}, Current Hash: {}".format(key, value, hex(key_hash)))
+        key_hash2 = calculate_hash2(key)
+        this_logger.info(f"Key: {key}, Value: {value}, Current Hash: {hex(key_hash)}")
         current_in_map = hashmap[key_hash]
         if current_in_map is None:
-            hashmap[key_hash] = ("{}" + separator + "{}").format(key, value)
-            this_logger.info("Key not found in the map, key added at index {}!".format(key_hash))
+            hashmap[key_hash] = f"{key}{separator}{value}"
+            this_logger.info("Key not found in the map, key added at index {key_hash}!")
         else:
-            collision_avoided = False
-            key_hash2 = calculate_hash2(key)
-            current_in_map = hashmap[key_hash2]
-            this_logger.info("Trying to use the alternative hash {} for hash {} (key: {})"
-                             .format(hex(key_hash2), hex(key_hash), key))
-            if current_in_map is None:
-                hashmap[key_hash2] = ("{}" + separator + "{}").format(key, value)
-                collision_avoided = True
-                this_logger.info("Collision avoided by using the alternative hash".format(key_hash))
+            this_logger.warning(f"--! Collision detected, hash {hex(key_hash)} (key: '{key}') already in the table")
+            collision_avoided = hash_foresee(key_hash, "Hash1", hashmap, key, value)
             if not collision_avoided:
-                collision_avoided = hash_foresee(key_hash, "Hash1", hashmap, key, value)
+                current_in_map = hashmap[key_hash2]
+                this_logger.warning("--! Trying to use the alternative hash "
+                                    f"{hex(key_hash2)} for hash {hex(key_hash)} (key: '{key}')")
+                if current_in_map is None:
+                    hashmap[key_hash2] = f"{key}{separator}{value}"
+                    collision_avoided = True
+                    this_logger.warning(f"--+ Collision avoided by using the alternative hash {hex(key_hash2)}")
+                else:
+                    this_logger.warning(
+                            f"--! Collision detected, hash {hex(key_hash2)} (key: '{key}') already in the table")
             if not collision_avoided:
                 collision_avoided = hash_foresee(key_hash2, "Hash2", hashmap, key, value)
             if not collision_avoided:
-                this_logger.warning("Failed to solve the collision for the second hash {}".format(hex(key_hash2)))
-                this_logger.error("Error: Unrecoverable collision detected...".format(len(hashmap)))
-                this_logger.error("Length of the map: '{}'".format(len(hashmap)))
-                this_logger.error("Key to be inserted: '{}'".format(key))
-                this_logger.error(
-                        "Key with the same hash: '{}'".format(hashmap[key_hash].split("" + separator + "")[0]))
-                this_logger.error("Hash that collided: '{}'".format(hex(key_hash)))
-                raise SystemExit(2, "Hash collision detected.")
+                this_logger.warning(f"--- Failed to solve the collision for the second hash {hex(key_hash2)}")
+                this_logger.error("--= Error: Unrecoverable collision detected...")
+                this_logger.error(f"--= Length of the map: '{len(hashmap)}'")
+                this_logger.error(f"--= Key to be inserted: '{key}'")
+                this_logger.error(f"--= Key with the same hash: '{hashmap[key_hash].split(separator)[0]}'")
+                this_logger.error(f"--= Hash that collided: '{hex(key_hash)}'")
+                raise SystemExit(2, "Unresolvable hash collision detected.")
     return hashmap
 
 
@@ -356,12 +359,12 @@ def print_to_source(args, hashmap: []):
     hashmap_max_index = hashmap_length - 1
     if not args.header_template or not args.header or not args.source_template or not args.source:
         program_parser.error("Generating the source code requires the template and the output files.")
+        raise (3, "Can not proceed without template or output files.")
     with args.source_template as template:
         with io.StringIO("") as source:
-            source.write("\nconst struct {} *const {}[{}] = {{"
-                         .format(api_struct, api_table, hashmap_length))
+            source.write(f"\n\nconst struct {api_struct} *const {api_table}[{hashmap_length}] = {{")
             with io.StringIO("") as variables:
-                nl = False
+                nl = True
                 for index in range(len(hashmap)):
                     hashable = hashmap[index]
                     ending = ", " if index != hashmap_max_index else ""
@@ -369,17 +372,14 @@ def print_to_source(args, hashmap: []):
                         source.write("{}NULL{}".format("\n\t" if nl else "", ending))
                         nl = False
                     else:
-                        varname = "{}{}".format(api_struct, f"{index:0{places_octal}o}")
+                        varname = f"{api_struct}{index:0{places_octal}o}"
                         key, val = hashable.split(separator)
-                        source.write("\n\t&{}{}".format(varname, ending))
-                        variables.write("\n// ({}, {}, {}, {}) : \"{}\" -> \"{}\""
-                                        .format(f"{index:0{places_binary}b}",
-                                                f"{index:0{places_octal}o}",
-                                                f"{index:0{places_decimal}d}",
-                                                f"{index:0{places_hex}x}",
-                                                key, val))
-                        variables.write("\nstatic const struct {} {} = {{\n\t".format(api_struct, varname))
-                        variables.write("\n\"{}\",\n\t\"{}\"\n}};".format(key, val))
+                        source.write(f"\n\t&{varname}{ending}")
+                        variables.write(f"\n\n// ({index:0{places_binary}b}, {index:0{places_octal}o}, "
+                                        f"{index:0{places_decimal}d}, {index:0{places_hex}x}) : "
+                                        f"\"{key}\" -> \"{val}\"")
+                        variables.write(f"\nstatic const struct {api_struct} {varname} = {{")
+                        variables.write(f"\n\t\"{key}\",\n\t\"{val}\"\n}};")
                         nl = True
                 source.write("\n};")
                 source.write("\n")
@@ -393,9 +393,9 @@ def print_to_source(args, hashmap: []):
     with args.header_template as template:
         with io.StringIO("") as header:
             header.write("\n/// \\brief Represents a key-value pair, which is used to store inside the Hash Table.")
-            header.write("\nstruct {} {{\n\tchar *key;\n\tchar *value;\n}};".format(api_struct))
-            header.write("\n\n/// \\brief The internal representation of the Hash Table")
-            header.write("\nconst struct {} *const {}[{}];".format(api_struct, api_table, hashmap_length))
+            header.write(f"\nstruct {api_struct} {{\n\tchar *key;\n\tchar *value;\n}};")
+            header.write("\n\n/// \\brief The internal representation of the Hash Table.")
+            header.write(f"\nconst struct {api_struct} *const {api_table}[{hashmap_length}];")
             header.write("\n")
             header.seek(0)
             with args.header as real_output:
