@@ -71,7 +71,7 @@ static inline unsigned calculateHash1(const char *property, const size_t propert
 
 // Calculate the `Hash2` value from a string, given a pointer to the string and it's length.
 static inline unsigned calculateHash2(const char *property, const size_t propertyLength) {
-    // Start the hash rotating to the left by 1 bit the pattern
+    // Start the hash rotating to the right by 1 bit the pattern
     static unsigned rotatedConstant = BRRN(pattern, 0x01U, PROPERTIES_HASH_BITS);
     unsigned value = rotatedConstant;
     // Initialize the loop index (the index of the current char) and the value of the bit char
@@ -113,7 +113,7 @@ static inline const struct deviceProperty *tableLookup(
         return NULL;
     }
     // Get the value of the property to compare against the provided property
-    const char *key = propInTable->name;
+    const char *key = propInTable->key;
     // Compare the provided string against the name (key) of the property
     if (stringCompare(key, property) == 0) {
         // Found, return the pointer to the struct (don't perform the linear lookup)
@@ -135,7 +135,7 @@ static inline const struct deviceProperty *tableLookup(
             continue;
         }
         // Recall the name of the current key in the map (if it's actually not empty)
-        const char *currentKey = currentPropInTable->name;
+        const char *currentKey = currentPropInTable->key;
         if (stringCompare(currentKey, property) == 0) {
             // If found, return the pointer to the struct (immediately)
             return currentPropInTable;
@@ -165,4 +165,3 @@ const char *getDeviceDescriptorProperty(const char *property) {
     // Unpack the string from the struct and return it's pointer (to be further used by the caller)
     return returnValue->value;
 }
-

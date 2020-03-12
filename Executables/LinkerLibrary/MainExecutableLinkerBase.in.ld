@@ -105,7 +105,7 @@ SECTIONS {
         reservedStart = .;
         *(.reserved);
         *(.reserved.*);
-        . += 7 * CONSTANT ( COMMONPAGESIZE ); /* 32 KiB for architectures with pages of 4096 bytes */
+        . += 2 * CONSTANT ( COMMONPAGESIZE ); /* 8 KiB for architectures with pages of 4096 bytes */
         . = ALIGN_COMMONPAGE;
         reservedEnd = .;
     } :reserved
