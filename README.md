@@ -46,16 +46,18 @@ The core modules included in the microkernel are (work in progress):
 - MemoryAllocator: reserve blocks of memory for the system
 - PageKeeper: generic driver to keep control of memory pages
 - MMU: platform specific driver that is the backend of the PageKeeper
+- AnonymousPages: extend physical memory using compressed or permanent storage
 - SystemTicker: perform asynchronous operations routinely
 - SystemTimer: platform specific System Timer driver
+- DebuggerBinding: allow the modules and the microkernel to be debugged
+- SystemIdleProcess: efficiently do nothing
+- DynamicFrequency: change the CPU frequency dynamically
 - VirtualFilesystem: virtual files and sockets for kernel and user-mode
 - FAT32: the modules and the microkernel image will be in a FAT32 partition
-- AnonymousPages: extend physical memory using compressed or permanent storage
 - BIOS: basic I/O drivers required to load the rest of the modules
 - KernelScheduler: perform basic scheduling of kernel tasks
 - SystemSockets: allow processes, modules and programs to communicate
 - CryptoCore: chippers, MACs, Checksums, HASHes and compressors
-- DebuggerBinding: allow the modules and the microkernel to be debugged
 - ModuleLoader: Load kernel modules to memory and hook them to the kernel
 
 Loadable modules include (no work done yet):
