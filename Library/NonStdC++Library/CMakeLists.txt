@@ -23,6 +23,5 @@
 ADD_LIBRARY("NonStdC++Library" STATIC
             "cstdint"
             "phony.cxx")
-TARGET_DISABLE_FANCY_FEATURES("NonStdC++Library" PRIVATE C FANCY_LIST SANITIZER STACK_PROTECTOR)
 TARGET_INCLUDE_DIRECTORIES("NonStdC++Library" INTERFACE "${CMAKE_CURRENT_LIST_DIR}")
 TARGET_LINK_LIBRARIES("NonStdC++Library" "CoreLibraries" "NonStdCLibrary")

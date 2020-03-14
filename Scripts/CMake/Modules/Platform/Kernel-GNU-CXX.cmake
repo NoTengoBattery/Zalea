@@ -56,7 +56,6 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g -DRELWITHDEBINFO ")
 
   # These flags will disable any fancy features (needed to build very early boot code or the compiler runtime)
-  SET(CXX_NO_LTO "-fno-lto")
   SET(CXX_NO_SANITIZER "-fno-sanitize=all")
   SET(CXX_NO_RTTI "-fno-rtti")
   SET(CXX_NO_UNWIND "-fno-unwind-tables")
