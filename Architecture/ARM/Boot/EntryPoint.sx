@@ -45,6 +45,13 @@ NAKED_GLOBAL_ARM_FUNCTION(.start, miserableFail)
 NAKED_GLOBAL_ARM_FUNCTION_EPILOG(miserableFail)
 
 /*
+ * Allocate 2 variables for storing r0 and r1 during early boot. They have really important information from the
+ * bootloader.
+ */
+LOCAL_BSS_DATA(iR0, 1)
+LOCAL_BSS_DATA(iR1, 1)
+
+/*
  * Those are placeholders (needed because LLD will not identify the sections correctly when no data is in the sections)
  * but they are only needed when no data is in the section. Most likely to not happen ever but anyway...
  */

@@ -83,8 +83,8 @@ GLOBAL_DATA_EPILOG(multibootStructPointer)
  * Allocate 2 variables for storing eax and ebx during early boot. They have really important information from the
  * bootloader.
  */
-LOCAL_BSS_DATA(iEAX, 4)
-LOCAL_BSS_DATA(iEBX, 4)
+LOCAL_BSS_DATA(iEAX, 1)
+LOCAL_BSS_DATA(iEBX, 1)
 
 /*
  * Those are placeholders (needed because LLD will not identify the sections correctly when no data is in the sections)

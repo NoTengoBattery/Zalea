@@ -28,57 +28,70 @@
 
 #ifdef __MAGIC_INCLUDED__
 
-    .intel_syntax noprefix // All x86 code should be in the x86 Intel Syntax without prefix
+  .intel_syntax noprefix // All x86 code should be in the x86 Intel Syntax without prefix
 
 #define NAKED_GLOBAL_FUNCTION(s, n) \
-    .text ASM_NL \
-    .section s, "ax", @progbits ASM_NL \
-    .align 0x10 ASM_NL \
-    .global n ASM_NL \
-    .type n, @function ASM_NL \
-    n:
+  .text ASM_NL \
+  .section s, "ax", @progbits ASM_NL \
+  .align 0x10 ASM_NL \
+  .global n ASM_NL \
+  .type n, @function ASM_NL \
+  n:
 
 #define GENERIC_FUNCTION_EPILOG(n) \
-    .size n, . - n
+  .size n, . - n
 
 #define NAKED_GLOBAL_FUNCTION_EPILOG(n) GENERIC_FUNCTION_EPILOG(n)
 
 #define GLOBAL_DATA_2(n, s, f, b) \
-    .global n ASM_NL \
-    .section s, f, b ASM_NL \
-    n:
+  .section s, f, b ASM_NL \
+  .align 0x04 ASM_NL \
+  .## n ##:
 
 #define GLOBAL_DATA(n) GLOBAL_DATA_2(n, .data, "aw", @progbits)
 #define GLOBAL_RODATA(n) GLOBAL_DATA_2(n, .rodata, "a", @progbits)
 #define GLOBAL_RESERVED(n) GLOBAL_DATA_2(n, .reserved, "a", @progbits)
 
 #define GLOBAL_DATA_2_EPILOG(n) \
-    .type n, @object ASM_NL \
-    .size n, . - n
+  .align 0x04 ASM_NL \
+  .type n, @object ASM_NL \
+  .global n ASM_NL \
+  n: ASM_NL \
+  .long . ## n ASM_NL \
+  .size n, . - n
 
 #define GLOBAL_DATA_EPILOG(n) GLOBAL_DATA_2_EPILOG(n)
 #define GLOBAL_RODATA_EPILOG(n) GLOBAL_DATA_2_EPILOG(n)
 #define GLOBAL_RESERVED_EPILOG(n) GLOBAL_DATA_2_EPILOG(n)
 
-#define GLOBAL_BSS_DATA(n, s) GLOBAL_DATA_2(n, .bss, "aw", @nobits) ASM_NL \
-    .skip s, 0x00 ASM_NL \
-    GLOBAL_DATA_2_EPILOG(n)
+#define GLOBAL_DATA_3(n, s, f, b) \
+  .section s, f, b ASM_NL \
+  .global n ASM_NL \
+  n:
 
-#define GLOBAL_STACK_DATA(n, s) GLOBAL_DATA_2(n, .stack, "aw", @nobits) ASM_NL \
-    .skip s, 0x00 ASM_NL \
-    GLOBAL_DATA_2_EPILOG(n)
+#define GLOBAL_DATA_3_EPILOG(n) \
+  .type n, @object ASM_NL \
+  .size n, . - n
+
+#define GLOBAL_BSS_DATA(n, s) GLOBAL_DATA_3(n, .bss, "aw", @nobits) ASM_NL \
+  .skip (s * 4), 0x00 ASM_NL \
+  GLOBAL_DATA_3_EPILOG(n)
+
+#define GLOBAL_STACK_DATA(n, s) GLOBAL_DATA_3(n, .stack, "aw", @nobits) ASM_NL \
+  .skip (s * 4), 0x00 ASM_NL \
+  GLOBAL_DATA_3_EPILOG(n)
 
 #define LOCAL_DATA_2(n, s, f, b) \
-    .section s, f, b ASM_NL \
-    n:
+  .section s, f, b ASM_NL \
+  n:
 
-#define LOCAL_DATA_EPILOG(n) GLOBAL_DATA_2_EPILOG(n)
+#define LOCAL_DATA_EPILOG(n) GLOBAL_DATA_3_EPILOG(n)
 
 #define LOCAL_BSS_DATA(n, s) LOCAL_DATA_2(n, .bss, "aw", @nobits) ASM_NL \
-    .skip s, 0x00 ASM_NL \
-    LOCAL_DATA_EPILOG(n)
+  .skip (s * 4), 0x00 ASM_NL \
+  LOCAL_DATA_EPILOG(n)
 
-    .ident "x86 AssemblerMagic for GNU Assemblers"
+  .ident "x86 AssemblerMagic for GNU Assemblers"
 
 #else
 #error "You should not include this file directly. Use the root header instead."
