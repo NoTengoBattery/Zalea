@@ -48,9 +48,8 @@ ATTR_USED uint64_t __aeabi_uidivmod(unsigned numerator, unsigned denominator) {
             .quotient.flags = 0x00U
     };
     longDivision(&division, &result);
-    uint64_t returnValue = result.remainder;
-    uint64_t returnValue32 = result.quotient.value << 16;  // NOLINT
-    returnValue32 = returnValue32 << 16;  // NOLINT
+    uint64_t returnValue = result.quotient.value;
+    uint64_t returnValue32 = (uint64_t) result.remainder << 32;  // NOLINT
     returnValue = returnValue | returnValue32;
     return returnValue;
 }

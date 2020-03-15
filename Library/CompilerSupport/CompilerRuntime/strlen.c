@@ -34,8 +34,8 @@
 size_t __strlen(const char *string) {
     size_t length = 0x00;
     while (*string != 0x00) {
-        length += 1;
-        string += 1;
+        length += 0x01;
+        string += 0x01;
     }
     return length;
 }

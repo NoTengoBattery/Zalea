@@ -44,7 +44,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_C_FLAGS_INIT "-Wformat=2 ")
   STRING(APPEND CMAKE_C_FLAGS_INIT "-Wpedantic ")
   # Those flags define the linker to be used (this is needed for all cross compilers)
-  STRING(APPEND CMAKE_EXE_LINKER_FLAGS_INIT "-fuse-ld=\"${CMAKE_LD_NAME}\" ")
+  STRING(APPEND CMAKE_EXE_LINKER_FLAGS_INIT "-g -fuse-ld=\"${CMAKE_LD_NAME}\" ")
   # Add the march and mtune flags
   STRING(APPEND CMAKE_C_FLAGS_INIT "-march=${MACHINE_MARCH} ")
   STRING(APPEND CMAKE_C_FLAGS_INIT "-mtune=${MACHINE_MTUNE} ")
