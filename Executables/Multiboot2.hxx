@@ -36,9 +36,9 @@
 
 /* These two macros define the "optional" bit flag, which is the bit 0 of the FLAGS field */
 /// A macro that will mark a Multiboot2 flag as optional.
-#define MULTIBOOT_OPTIONAL(x) setNthBit(x, 0)
+#define MULTIBOOT_OPTIONAL(x) setNthBit(x, 0x00)
 /// A macro that will mark a Multiboot2 flag as required.
-#define MULTIBOOT_REQUIRED(x) clearNthBit(x, 0)
+#define MULTIBOOT_REQUIRED(x) clearNthBit(x, 0x00)
 
 /* This is the magic number that the OS will try to look when loaded by a Multiboot2 Bootloader */
 /// A magic number that the Multiboot2 bootloader will hand to the OS in order to identify itself.
@@ -182,13 +182,13 @@ struct alignas(MULTIBOOT_ALIGNMENT) multibootEntryAddressTag {
 /// The Console tag flags.
 #define MULTIBOOT_HEADER_CONSOLE_FLAGS 0x0000
 /// This macro will set the console as required.
-#define MULTIBOOT_HEADER_CONSOLE_FLAG_REQUIRED(x) setNthBit(x, 0)
+#define MULTIBOOT_HEADER_CONSOLE_FLAG_REQUIRED(x) setNthBit(x, 0x00)
 /// This macro will set the console as optional.
-#define MULTIBOOT_HEADER_CONSOLE_FLAG_OPTIONAL(x) clearNthBit(x, 0)
+#define MULTIBOOT_HEADER_CONSOLE_FLAG_OPTIONAL(x) clearNthBit(x, 0x00)
 /// This macro will say the bootloader that there is support for the EGA console.
-#define MULTIBOOT_HEADER_CONSOLE_FLAG_HAS_EGA(x) setNthBit(x, 1)
+#define MULTIBOOT_HEADER_CONSOLE_FLAG_HAS_EGA(x) setNthBit(x, 0x01)
 /// This macro will say the bootloader that there is no support for the EGA console.
-#define MULTIBOOT_HEADER_CONSOLE_FLAG_HAS_NO_EGA(x) clearNthBit(x, 1)
+#define MULTIBOOT_HEADER_CONSOLE_FLAG_HAS_NO_EGA(x) clearNthBit(x, 0x01)
 
 /// The Console Header Tag. This tag will ask the bootloader a console, and will tell the bootloader it's requirements.
 struct alignas(MULTIBOOT_ALIGNMENT) multibootConsoleFlagsTag {

@@ -1,4 +1,4 @@
-//===-- ArmUtils.c - ARM Specific Utilities for CompilerRuntime -------------------------------------------*- C -*-===//
+//===-- ArmUtils.h - ARM Specific Utilities for CompilerRuntime -------------------------------------------*- C -*-===//
 //
 // Copyright (c) 2020 Oever González
 //

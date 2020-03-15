@@ -38,9 +38,7 @@ void secondEntryPoint() ATTR_SECTION(".start");
 
 ATTR_NORETURN void secondEntryPoint() {
     // If the Device Descriptor lookup does not work, terminate the execution immediately
-    if (isDeviceDescriptorWorking() == false) {
-        miserableFail();
-    }
+    if (isDeviceDescriptorWorking() == false) { miserableFail(); }
     // Clear the BSS section of the loaded memory...
     memoryClear(&bssStart, &bssEnd);
     BUILTIN_UNREACHABLE;

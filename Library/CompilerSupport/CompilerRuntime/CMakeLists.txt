@@ -22,32 +22,29 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 
 # This is the compiler runtime, but not the "libgcc" (or "compiler-rt") part, it is the assumptions done by the
-# optimizer about the standard library. For example, code that the compiler finds that is a "memcpy" will be optimized
-# to a memcpy call. Therefore, we provide those calls here.
+# optimizer about the standard library. For example, code that the compiler finds that is a `memcpy` will be optimized
+# to a `memcpy` call. Therefore, we implement these functions here but provide them on the Non Standard C Library.
 ADD_LIBRARY("CompilerRuntime" STATIC
+            "division.c"
+            "division.h"
             "memset.c"
             "strcmp.c"
-            "strlen.c")
-TARGET_SOURCES("CompilerRuntime" PRIVATE
-               "${KERNEL_ARCH}/${KERNEL_ARCH}Utils.h")
+            "strlen.c"
+            "${KERNEL_ARCH}/${KERNEL_ARCH}Utils.h")
 TARGET_INCLUDE_DIRECTORIES("CompilerRuntime" PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
-TARGET_DISABLE_FANCY_FEATURES("CompilerRuntime" PRIVATE C FANCY_LIST STACK_PROTECTOR)
+TARGET_DISABLE_FANCY_FEATURES("CompilerRuntime" PRIVATE C FANCY_LIST LTO_ONLY STACK_PROTECTOR)
 # This accessory library is the "libgcc" part. It does contains calls made by the compiler when the CPU or the platform
 # does not support an operation (such as ARM not supporting integer division). It contains the sanitizers, the stack
-# check protector and so on. It *does* require special compiler flags to disable fancy features (such as sanitizing the
-# sanitizer itself), and the backend support (i.e. the error reporting of the sanitizer) also requires all of these
-# features to be disabled.
+# check protector and so on. It *does* require special compiler flags to disable fancy features (like avoiding to
+# sanitize the sanitizer itself), and the backend support. Note that LTO will generate code that might change these
+# flags.
 #
-# TODO: This means that the code that supports those features needs to have it's PRIVATE_COMPILE_OPTIONS set, so this
-# TODO: target will compile against those targets with all features disabled. Some features to disable are:
-# TODO: lto, sanitizers, rtti, unwind, exceptions, stack protector
+# TODO: That means that for LTO, you will need to carefully enable or disable the features to ensure the minimum area
+# TODO: where such features are disabled.
 #
-# TODO: All libraries that need this kind of modifications should be named as their analog but beginning with "Raw"
-# TODO: All "Raw" libraries will be dependencies of their analog, therefore, you only need to link the "non-raw"
-# TODO: version.
-ADD_LIBRARY("RawCompilerRuntime" STATIC
-            "division.c"
-            "division.h")
+# TODO: For non-LTO, the code generated will be always generated without the flags and linked as-is, therefore, you will
+# TODO: not have to disable these features in the software that use the non-LTO (raw machine code) compiled versions.
+ADD_LIBRARY("RawCompilerRuntime" STATIC)
 IF (KERNEL_ARM)
   TARGET_SOURCES("RawCompilerRuntime" PRIVATE
                  "${KERNEL_ARCH}/__aeabi_uidivmod.c")

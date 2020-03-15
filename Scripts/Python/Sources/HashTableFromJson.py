@@ -48,7 +48,7 @@ places_binary = bits
 places_decimal = math.ceil(bits / math.log2(10))
 places_hex = math.ceil(bits / 4)
 places_octal = math.ceil(bits / 3)
-precomputed_mask = 0
+precomputed_mask = 0x00
 program_parser = None
 separator = "<->"
 testing_property_key = "testing" + flatten_separator + "lookup"
@@ -150,10 +150,10 @@ def flatten_json(input_json):
             for value in json_dict:
                 flatten(json_dict[value], name + value + flatten_separator)
         elif type(json_dict) is list:
-            index = 0
+            index = 0x00
             for value in json_dict:
                 flatten(value, name + str(index) + flatten_separator)
-                index += 1
+                index += 0x01
         else:
             output[name[:-len(flatten_separator)]] = json_dict
 
@@ -168,10 +168,9 @@ def mask(value):
     :return: the masked number
     """
     global precomputed_mask
-    if precomputed_mask == 0:
-        precomputed_mask = 0
+    if precomputed_mask == 0x00:
         for i in range(bits):
-            precomputed_mask = precomputed_mask << 1 | 1
+            precomputed_mask = precomputed_mask << 0x01 | 0x01
     result = value & precomputed_mask
     return result
 
@@ -182,9 +181,9 @@ def truncate_mask(positions):
     :param positions: the bits that are relevant
     :return: a mask that if it's and-ed will truncate the number
     """
-    t_mask = 0
+    t_mask = 0x00
     for i in range(positions):
-        t_mask = t_mask << 1 | 1
+        t_mask = t_mask << 0x01 | 0x01
     return t_mask
 
 
@@ -227,12 +226,12 @@ def calculate_hash(hash_input: str):
     :param hash_input: the string which is the input, it must have to be an ASCII string
     :return: the hash value for the input string
     """
-    value = rotate_left(pattern_64bit, 1)
+    value = rotate_left(pattern_64bit, 0x01)
     ascii_bits = hash_input.encode("ASCII")
     for character in ascii_bits:
-        value = rotate_left(value, 1)
+        value = rotate_left(value, 0x01)
         value ^= ~character * ~len(hash_input)
-        value = rotate_left(value, 1)
+        value = rotate_left(value, 0x01)
         value ^= character * ~len(hash_input)
     value = mask(value)
     return value
@@ -245,12 +244,12 @@ def calculate_hash2(hash_input: str):
     :param hash_input: the string which is the input, it must have to be an ASCII string
     :return: the hash value for the input string
     """
-    value = rotate_right(pattern_64bit, 1)
+    value = rotate_right(pattern_64bit, 0x01)
     ascii_bits = hash_input.encode("ASCII")
     for character in ascii_bits:
-        value = rotate_right(value, 1)
+        value = rotate_right(value, 0x01)
         value ^= character * ~len(hash_input)
-        value = rotate_right(value, 1)
+        value = rotate_right(value, 0x01)
         value ^= ~character * len(hash_input)
     value = mask(value)
     return value
@@ -273,9 +272,9 @@ def hash_foresee(key_hash: int, name: str, hashmap: [], key: str, value: str):
     """
     collision_avoided = False
     lowermost = key_hash - collision_foresee
-    lowermost = 0 if (lowermost <= 0 or lowermost >= mask(max_64bit)) else lowermost
+    lowermost = 0x00 if (lowermost <= 0x00 or lowermost >= mask(max_64bit)) else lowermost
     uppermost = key_hash + collision_foresee + 1
-    uppermost = mask(max_64bit) if (uppermost <= 0 or uppermost >= mask(max_64bit)) else uppermost
+    uppermost = mask(max_64bit) if (uppermost <= 0x00 or uppermost >= mask(max_64bit)) else uppermost
     step = 1 if uppermost >= lowermost else -1
     for index in range(lowermost, uppermost, step):
         if index == key_hash:

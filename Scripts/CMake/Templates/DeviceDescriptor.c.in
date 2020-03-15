@@ -37,7 +37,7 @@ static inline unsigned calculateHash1(const char *property, const size_t propert
     static unsigned rotatedConstant = BRLN(pattern, 0x01U, PROPERTIES_HASH_BITS);
     unsigned value = rotatedConstant;
     // Initialize the loop index (the index of the current char) and the value of the bit char
-    size_t characterIndex = 0;
+    size_t characterIndex = 0x00;
     unsigned char character = (unsigned char) property[characterIndex];
     // Loop to calculate the hash until a null character is found (or the length is depleted)
     while (characterIndex < propertyLength) {
@@ -46,7 +46,7 @@ static inline unsigned calculateHash1(const char *property, const size_t propert
         value = BRLN(value, 0x01U, PROPERTIES_HASH_BITS);
         value ^= character * ~propertyLength;
         // Update the loop variables for the next iteration
-        characterIndex += 1;
+        characterIndex += 0x01;
         character = (unsigned char) property[characterIndex];
     }
     value &= bitMask;
@@ -59,7 +59,7 @@ static inline unsigned calculateHash2(const char *property, const size_t propert
     static unsigned rotatedConstant = BRRN(pattern, 0x01U, PROPERTIES_HASH_BITS);
     unsigned value = rotatedConstant;
     // Initialize the loop index (the index of the current char) and the value of the bit char
-    size_t characterIndex = 0;
+    size_t characterIndex = 0x00;
     unsigned char character = (unsigned char) property[characterIndex];
     // Loop to calculate the hash until a null character is found (or the length is depleted)
     while (characterIndex < propertyLength) {
@@ -68,7 +68,7 @@ static inline unsigned calculateHash2(const char *property, const size_t propert
         value = BRRN(value, 0x01U, PROPERTIES_HASH_BITS);
         value ^= ~character * propertyLength;
         // Update the loop variables for the next iteration
-        characterIndex += 1;
+        characterIndex += 0x01;
         character = (unsigned char) property[characterIndex];
     }
     value &= bitMask;
@@ -93,20 +93,15 @@ static inline const struct deviceProperty *tableLookup(
     // Get the value stored in the table, using the hash as the index
     const struct deviceProperty *propInTable = properties[hash];
     // If the property is null, return null (which means that the lookup failed)
-    if (propInTable == NULL) {
-        return NULL;
-    }
+    if (propInTable == NULL) { return NULL; }
     // Get the value of the property to compare against the provided property
     const char *key = propInTable->key;
     // Compare the provided string against the name (key) of the property
-    if (__strcmp(key, property) == 0) {
-        // Found, return the pointer to the struct (don't perform the linear lookup)
-        return propInTable;
-    }
+    if (__strcmp(key, property) == 0x00) { return propInTable; }  // Found (don't perform the linear lookup) 
     // If not found, perform the linear lookup which is an O(n) operation (n is the foresee value)
     const size_t lh = hash - PROPERTIES_HASH_FORESEE; // Calculate the lower hash
     const size_t hh = hash + PROPERTIES_HASH_FORESEE; // Calculate the higher hash
-    const size_t pLowerHash = lh > bitMask ? 0 : lh; // Clamp, to avoid out-of-bounds errors
+    const size_t pLowerHash = lh > bitMask ? 0x00 : lh; // Clamp, to avoid out-of-bounds errors
     const size_t pHigherHash = hh > bitMask ? bitMask : hh; // Clamp, to avoid out-of-bounds errors
     // After sanitizing the foresee, enter the loop with the given numbers (select the correct values here)
     const size_t lowerHash = pLowerHash <= pHigherHash ? pLowerHash : pHigherHash;
@@ -115,15 +110,10 @@ static inline const struct deviceProperty *tableLookup(
         // Recall the property in the current position...
         const struct deviceProperty *currentPropInTable = properties[i];
         // ... and then, skip it if it's null or if the current index is the same as the hash (saving us one iteration)
-        if (currentPropInTable == NULL || i == hash) {
-            continue;
-        }
+        if (currentPropInTable == NULL || i == hash) { continue; }
         // Recall the name of the current key in the map (if it's actually not empty)
         const char *currentKey = currentPropInTable->key;
-        if (__strcmp(currentKey, property) == 0) {
-            // If found, return the pointer to the struct (immediately)
-            return currentPropInTable;
-        }
+        if (__strcmp(currentKey, property) == 0x00) { return currentPropInTable; }
     }
     // Return null if everything fails, that means that the lookup failed
     return NULL;
@@ -132,19 +122,14 @@ static inline const struct deviceProperty *tableLookup(
 // The documentation is in the declaration (the API header)
 const char *getDeviceDescriptorProperty(const char *property) {
     // Before calculating a hash, check if the property may be a valid pointer
-    if (property == NULL) {
-        return NULL;
-    }
+    if (property == NULL) { return NULL; }
     // Calculate the first hash (Hash1) and try to solve the value in the table
     const struct deviceProperty *returnValue = tableLookup(&calculateHash1, property, deviceDescriptor);
     // If the first hash fails, try with the second hash (Hash2)... this is the Cuckoo part of the algorithm
     if (returnValue == NULL) {
         // Calculate the second hash (Hash2) and try to solve the value in the table
         returnValue = tableLookup(&calculateHash2, property, deviceDescriptor);
-        if (returnValue == NULL) {
-            // If not found, return null immediately, which means that the lookup failed
-            return NULL;
-        }
+        if (returnValue == NULL) { return NULL; }
     }
     // Unpack the string from the struct and return it's pointer (to be further used by the caller)
     return returnValue->value;

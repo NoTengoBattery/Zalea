@@ -105,7 +105,8 @@ SECTIONS {
         reservedStart = .;
         *(.reserved);
         *(.reserved.*);
-        . += 2 * CONSTANT ( COMMONPAGESIZE ); /* 8 KiB for architectures with pages of 4096 bytes */
+        /* 0x02: 8 KiB for architectures with pages of 4096 bytes */
+        . += 0x02 * CONSTANT ( COMMONPAGESIZE );
         . = ALIGN_COMMONPAGE;
         reservedEnd = .;
     } :reserved
@@ -167,11 +168,11 @@ SECTIONS {
     /*
      * Sections emitted by the compiler (they are stripped in the final binary)
      */
-    .comment 0 : {
+    .comment 0x00 : {
         *(.comment);
     }
 #ifdef KERNEL_ARM
-    .ARM.attributes 0 : {
+    .ARM.attributes 0x00 : {
         KEEP (*(.ARM.attributes));
     }
 #endif

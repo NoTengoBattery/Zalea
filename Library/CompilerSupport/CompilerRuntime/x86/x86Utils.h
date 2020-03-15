@@ -1,4 +1,4 @@
-//===-- x86Utils.c - x86 Specific Utilities for CompilerRuntime -------------------------------------------*- C -*-===//
+//===-- x86Utils.h - x86 Specific Utilities for CompilerRuntime -------------------------------------------*- C -*-===//
 //
 // Copyright (c) 2020 Oever González
 //

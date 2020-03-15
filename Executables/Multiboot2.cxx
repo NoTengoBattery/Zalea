@@ -57,10 +57,10 @@ MULTIBOOT_ATTR const struct multibootAddressTag multibootAddress = {  // NOLINT
         MULTIBOOT_HEADER_TAG_ADDRESS,
         MULTIBOOT_REQUIRED(MULTIBOOT_HEADER_TAG_ADDRESS_FLAGS),
         MULTIBOOT_HEADER_TAG_ADDRESS_SIZEOF,
-        reinterpret_cast<std::uint32_t>(&multibootHeader),  // NOLINT
-        reinterpret_cast<std::uint32_t>(&imageStart),  // NOLINT
-        reinterpret_cast<std::uint32_t>(&bssStart),  // NOLINT
-        reinterpret_cast<std::uint32_t>(&imageEnd + 0x01)  // NOLINT
+        reinterpret_cast<std::uintptr_t>(&multibootHeader),  // NOLINT
+        reinterpret_cast<std::uintptr_t>(&imageStart),  // NOLINT
+        reinterpret_cast<std::uintptr_t>(&bssStart),  // NOLINT
+        reinterpret_cast<std::uintptr_t>(&imageEnd + 0x01)  // NOLINT
 };
 
 /// This struct is the implementation of the Multiboot2 Entry Point Address Tag.
@@ -68,7 +68,7 @@ MULTIBOOT_ATTR const struct multibootEntryAddressTag multibootEntryAddress = {  
         MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS,
         MULTIBOOT_REQUIRED(MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_FLAGS),
         MULTIBOOT_HEADER_TAG_ENTRY_ADDRESS_SIZEOF,
-        reinterpret_cast<std::uint32_t>(&imageStart)  // NOLINT
+        reinterpret_cast<std::uintptr_t>(&imageStart)  // NOLINT
 };
 
 /// This struct is the implementation of the Multiboot2 Header Tag.

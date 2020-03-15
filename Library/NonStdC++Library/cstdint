@@ -22,7 +22,7 @@
 #ifndef ZALEA_CSTDINT_
 #define ZALEA_CSTDINT_
 
-#include<stdint.h>
+#include <stdint.h>
 
 namespace std {
     using ::int8_t;

@@ -57,6 +57,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
 
   # These flags will disable any fancy features (needed to build very early boot code or the compiler runtime)
   SET(ASM_NO_LTO "-fno-lto")
+  SET(ASM_NO_LTO_ONLY "-ffat-lto-objects")
   SET(ASM_NO_SANITIZER "-fno-sanitize=all")
   SET(ASM_NO_RTTI "-fno-rtti")
   SET(ASM_NO_UNWIND "-fno-unwind-tables")

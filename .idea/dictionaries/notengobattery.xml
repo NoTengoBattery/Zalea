@@ -6,32 +6,22 @@
       <w>atags</w>
       <w>bibtex</w>
       <w>binutils</w>
-      <w>bldata</w>
       <w>bootable</w>
       <w>bootloader</w>
       <w>ccmake</w>
       <w>cmakedefine</w>
       <w>cppcheck</w>
       <w>cpplint</w>
-      <w>cstdint</w>
-      <w>defconfig</w>
       <w>distro</w>
       <w>distros</w>
       <w>filepath</w>
-      <w>fpmath</w>
       <w>framebuffer</w>
-      <w>gonzález</w>
       <w>hashmap</w>
-      <w>icpc</w>
       <w>interprocedural</w>
       <w>jtag</w>
-      <w>march</w>
-      <w>mfpu</w>
       <w>microkernel</w>
-      <w>mtune</w>
       <w>multiboot</w>
       <w>notengobattery</w>
-      <w>oever</w>
       <w>preprocess</w>
       <w>pytest</w>
       <w>qemu</w>

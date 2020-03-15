@@ -55,11 +55,11 @@
  */ . = SEGMENT_START ( x , MACHINE_VIRTUAL_ADDRESS ); /* MACHINE_VIRTUAL_ADDRESS */
 #define ALIGNED_CPS_SEGMENT_START(x) . = ALIGN_COMMONPAGE; /*
  */ . = SEGMENT_START ( x , ALIGN_COMMONPAGE );
-#define PF_X 0x1 /* Executable */
-#define PF_W 0x2 /* Writable */
-#define PF_R 0x4 /* Readable */
-#define PF_RX 0x5 /* Readable + Executable */
-#define PF_RW 0x6 /* Readable + Writable */
+#define PF_X 0x01 /* Executable */
+#define PF_W 0x02 /* Writable */
+#define PF_R 0x04 /* Readable */
+#define PF_RX 0x05 /* Readable + Executable */
+#define PF_RW 0x06 /* Readable + Writable */
 #else
 #error "Not a valid linker."
 #endif

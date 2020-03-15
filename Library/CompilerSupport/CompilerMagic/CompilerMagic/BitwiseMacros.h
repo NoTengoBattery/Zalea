@@ -39,7 +39,7 @@ constexpr auto setNthBit(T1 x, T2 y) { return x | (0x01U << y); }
 
 #else
 
-#include <limits.h>
+#include <stdint.h>
 
 /// \brief Calculate the number of bits in certain data type.
 /// \param x the value to calculate the bit length.
@@ -78,7 +78,7 @@ constexpr auto setNthBit(T1 x, T2 y) { return x | (0x01U << y); }
 #define TEST_NTH_BIT(x, y) (((x) >> (y)) & 0x01U)
 /// \brief create a truncate mask of n significant bits.
 /// \param x the significant bits to truncate.
-#define TRUNCATE_MASK(x) (~(ULLONG_MAX << (x)))
+#define TRUNCATE_MASK(x) (~(UINTMAX_MAX << (x)))
 /// \brief XOR then NOT the n-th bit of a constant.
 /// \param x the constant.
 /// \param y the constant.

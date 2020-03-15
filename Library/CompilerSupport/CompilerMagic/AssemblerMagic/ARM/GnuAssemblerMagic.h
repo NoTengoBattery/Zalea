@@ -91,11 +91,11 @@
   .size n, . - n
 
 #define GLOBAL_BSS_DATA(n, s) GLOBAL_DATA_3(n, .bss, "aw", %nobits) ASM_NL \
-  .skip (s * 4), 0x00 ASM_NL \
+  .skip (s * 0x04), 0x00 ASM_NL \
   GLOBAL_DATA_3_EPILOG(n)
 
 #define GLOBAL_STACK_DATA(n, s) GLOBAL_DATA_3(n, .stack, "aw", %nobits) ASM_NL \
-  .skip (s * 4), 0x00 ASM_NL \
+  .skip (s * 0x04), 0x00 ASM_NL \
   GLOBAL_DATA_3_EPILOG(n)
 
 #define LOCAL_DATA_2(n, s, f, b) \
@@ -105,7 +105,7 @@
 #define LOCAL_DATA_EPILOG(n) GLOBAL_DATA_3_EPILOG(n)
 
 #define LOCAL_BSS_DATA(n, s) LOCAL_DATA_2(n, .bss, "aw", %nobits) ASM_NL \
-  .skip (s * 4), 0x00 ASM_NL \
+  .skip (s * 0x04), 0x00 ASM_NL \
   LOCAL_DATA_EPILOG(n)
 
   .ident "ARM AssemblerMagic for GNU Assemblers"
