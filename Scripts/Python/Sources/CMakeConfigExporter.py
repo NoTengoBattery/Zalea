@@ -22,6 +22,7 @@
 # / allow users to generate a binary copy of the project.
 # /
 # ===--------------------------------------------------------------------------------------------------------------=== #
+
 import argparse
 import io
 import logging

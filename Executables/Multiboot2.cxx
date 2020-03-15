@@ -22,10 +22,7 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 
 #include "Multiboot2.hxx"
-
-extern "C" {
 #include <ExecutableLibrary/ImageConstants.h>
-}
 
 /// This struct is the implementation of the Multiboot2 Header Tag.
 MULTIBOOT_ATTR const struct multibootHeaderTag multibootHeader = {

@@ -1,4 +1,4 @@
-//===-- strcmp.c - Implementation of the strcmp Standard Function -----------------------------------------*- C -*-===//
+//===-- strcmp.c - An Implementation of the `strcmp` C Standard Function ----------------------------------*- C -*-===//
 //
 // Copyright (c) 2020 Oever González
 //
@@ -16,23 +16,15 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 ///
 /// \file
-/// Implement the strcmp function.
+/// This is an implementation of `strcmp` for the Non Standard C Library. The compiler, some times, will detect a
+/// `strcmp`-like behaviour and will replace the code with a `strcmp` call. This does provide the standard C API for
+/// `strcmp`.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-// This is a trivial strcmp implementation, the non-standard implementation maybe will be faster. Or maybe the compiler
-// can optimize something more.
+#include "string.h"
+
 int strcmp(const char *string1, const char *string2) {
-    unsigned char value1 = (unsigned char) *string1;
-    unsigned char value2 = (unsigned char) *string2;
-    if (string1 != string2) {
-        while (value1 == value2 && value1 != 0x00 && value2 != 0x00) {
-            string1 += 1;
-            string2 += 1;
-            value1 = (unsigned char) *string1;
-            value2 = (unsigned char) *string2;
-        }
-        return value1 - value2;
-    }
-    return 0x00;
+    extern int __strcmp(const char *, const char *);
+    return __strcmp(string1, string2);
 }

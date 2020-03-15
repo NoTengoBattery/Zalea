@@ -1,4 +1,4 @@
-#===-- CMakeLists.txt - Root of the x86/Boot Subtree --------------------------------------------------*- CMake -*-===#
+#===-- CMakeLists.txt - Root of the x86/Boot Subtree ---------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -25,4 +25,3 @@ ADD_LIBRARY("EntryPoint" STATIC
             "EntryPoint.c"
             "EntryPoint.sx")
 TARGET_LINK_LIBRARIES("EntryPoint" "CoreLibraries" "NonStdCLibrary")
-TARGET_DISABLE_FANCY_FEATURES("EntryPoint" PRIVATE C FANCY_LIST SANITIZER UNWIND STACK_PROTECTOR)

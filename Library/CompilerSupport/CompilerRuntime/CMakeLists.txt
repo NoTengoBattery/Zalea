@@ -25,15 +25,13 @@
 # optimizer about the standard library. For example, code that the compiler finds that is a "memcpy" will be optimized
 # to a memcpy call. Therefore, we provide those calls here.
 ADD_LIBRARY("CompilerRuntime" STATIC
-            "phony.c")
-IF (KERNEL_ARM)
-  TARGET_SOURCES("CompilerRuntime" PRIVATE
-                 "${KERNEL_ARCH}/${KERNEL_ARCH}Utils.h")
-ELSEIF (KERNEL_x86)
-  TARGET_SOURCES("CompilerRuntime" PRIVATE
-                 "${KERNEL_ARCH}/${KERNEL_ARCH}Utils.h")
-ENDIF ()
+            "memset.c"
+            "strcmp.c"
+            "strlen.c")
+TARGET_SOURCES("CompilerRuntime" PRIVATE
+               "${KERNEL_ARCH}/${KERNEL_ARCH}Utils.h")
 TARGET_INCLUDE_DIRECTORIES("CompilerRuntime" PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
+TARGET_DISABLE_FANCY_FEATURES("CompilerRuntime" PRIVATE C FANCY_LIST STACK_PROTECTOR)
 # This accessory library is the "libgcc" part. It does contains calls made by the compiler when the CPU or the platform
 # does not support an operation (such as ARM not supporting integer division). It contains the sanitizers, the stack
 # check protector and so on. It *does* require special compiler flags to disable fancy features (such as sanitizing the
@@ -48,10 +46,15 @@ TARGET_INCLUDE_DIRECTORIES("CompilerRuntime" PRIVATE "${CMAKE_CURRENT_LIST_DIR}"
 # TODO: All "Raw" libraries will be dependencies of their analog, therefore, you only need to link the "non-raw"
 # TODO: version.
 ADD_LIBRARY("RawCompilerRuntime" STATIC
-            "asan.c"
-            "division.c")
+            "division.c"
+            "division.h")
+IF (KERNEL_ARM)
+  TARGET_SOURCES("RawCompilerRuntime" PRIVATE
+                 "${KERNEL_ARCH}/__aeabi_uidivmod.c")
+ENDIF ()
+SET_TARGET_PROPERTIES("RawCompilerRuntime" PROPERTIES LINKER_LANGUAGE C)
 TARGET_INCLUDE_DIRECTORIES("RawCompilerRuntime" PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
-TARGET_DISABLE_FANCY_FEATURES("RawCompilerRuntime" PRIVATE C FANCY_LIST SANITIZER UNWIND STACK_PROTECTOR)
+TARGET_DISABLE_FANCY_FEATURES("RawCompilerRuntime" PRIVATE C FANCY_LIST LTO STACK_PROTECTOR)
 
-TARGET_LINK_LIBRARIES("RawCompilerRuntime" "CoreLibraries")
+TARGET_LINK_LIBRARIES("RawCompilerRuntime" "CompilerRuntime" "CoreLibraries")
 TARGET_LINK_LIBRARIES("CompilerRuntime" "CoreLibraries" "RawCompilerRuntime")

@@ -39,7 +39,7 @@
 #endif
 
 #ifndef ASM_NL
-#define ASM_NL ;  // NOLINT
+#define ASM_NL ;
 #endif
 
 #define __MAGIC_INCLUDED__

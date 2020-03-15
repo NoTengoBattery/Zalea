@@ -24,7 +24,6 @@ ADD_LIBRARY("NonStdCLibrary" STATIC
             "memset.c"
             "strcmp.c"
             "string.h"
-            "strlen.c"
-            "phony.c")
+            "strlen.c")
 TARGET_INCLUDE_DIRECTORIES("NonStdCLibrary" INTERFACE "${CMAKE_CURRENT_LIST_DIR}")
 TARGET_LINK_LIBRARIES("NonStdCLibrary" "CoreLibraries")

@@ -26,7 +26,6 @@
 #include <DeviceDescriptor.h>
 #include <ExecutableLibrary/ImageConstants.h>
 #include <InlineMagic/MemoryClear.h>
-#include <string.h>
 
 /// \brief Entry point from assembler to C.
 ///
@@ -37,21 +36,17 @@
 void secondEntryPoint(unsigned int eax, unsigned int ebx) ATTR_SECTION(".start");
 
 ATTR_NORETURN void secondEntryPoint(unsigned int eax, unsigned int ebx) {
-    if (eax != MULTIBOOT_2_BOOTLOADER_MAGIC  // If the magic value is not correct...
-        || ((volatile void **) ebx >= &imageStart && (volatile void **) ebx <= &imageEnd)  // ... if inside the image...
-        || ebx == 0x00) {  // ... or if it's pointer is null
+    if (eax != multibootMagicConstant  // If the magic value is not correct...
+        || ((unsigned *) ebx >= &imageStart && (unsigned *) ebx <= &imageEnd)  // ... if inside the image...
+        || (void *) ebx == NULL) {  // ... or if it's pointer is null
         miserableFail();
         BUILTIN_UNREACHABLE;
     } else {
-        // Perform a small test of the Device Descriptor code... Please note that since it is a test, the property and
-        // it's value are hardcoded. This should be the only special case of this.
-        const char *testValue = getDeviceDescriptorProperty(deviceDescriptorTestProperty);
-        if (strcmp(testValue, deviceDescriptorTestValue) != 0) {
+        // If the Device Descriptor lookup does not work, terminate the execution immediately
+        if (isDeviceDescriptorWorking() == false) {
             miserableFail();
         }
-        // Note that clearing the .bss section will clear the stack, making all the frame pointers invalid.
-        // Doesn't matter since these functions should never return, we only waste a couple of bytes of the stack.
-        multibootStructPointer = (void *) ebx;
+        // Clear the BSS section of the loaded memory...
         memoryClear(&bssStart, &bssEnd);
         BUILTIN_UNREACHABLE;
     }

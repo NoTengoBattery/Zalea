@@ -14,41 +14,22 @@
  *
  *===--------------------------------------------------------------------------------------------------------------===*/
 
-#include "Include/DeviceDescriptor.h"
 #include <CompilerMagic/BitwiseMacros.h>
+#include <DeviceDescriptor.h>
 #include <config.h>
 #include <stddef.h>
 
+// Extern `strlen` from CompilerRuntime
+extern size_t __strlen(const char *);
+
+// Extern `strcmp` from CompilerRuntime
+extern int __strcmp(const char *, const char *);
+
 /// \brief a pre-computed bit mask that will be used to truncate the results to a certain bit length.
 static const unsigned bitMask = TRUNCATE_MASK(PROPERTIES_HASH_BITS);
+
 /// \brief the pattern that will be the starting point of the hash.
 static const unsigned pattern = 0xA5A5A5A5A5A5A5A5 & bitMask;
-
-// A trivial implementation of the `strlen` function, named differently to avoid overriding the default implementation.
-static inline size_t stringLength(const char *string) {
-    size_t length = 0;
-    while (*string != 0x00) {
-        length += 1;
-        string += 1;
-    }
-    return length;
-}
-
-// A trivial implementation of the `strcmp` function, named differently to avoid overriding the default implementation.
-static inline int stringCompare(const char *string1, const char *string2) {
-    unsigned char value1 = (unsigned char) *string1;
-    unsigned char value2 = (unsigned char) *string2;
-    if (string1 != string2) {
-        while (value1 == value2 && value1 != 0x00 && value2 != 0x00) {
-            string1 += 1;
-            string2 += 1;
-            value1 = (unsigned char) *string1;
-            value2 = (unsigned char) *string2;
-        }
-        return value1 - value2;
-    }
-    return 0x00;
-}
 
 // Calculate the `Hash1` value from a string, given a pointer to the string and it's length.
 static inline unsigned calculateHash1(const char *property, const size_t propertyLength) {
@@ -106,7 +87,7 @@ static inline const struct deviceProperty *tableLookup(
         const char *property,
         const struct deviceProperty *const properties[]) {
     // Get the length of the property, which is an O(n) operation (n is the string length)
-    const size_t propertyLength = stringLength(property);
+    const size_t propertyLength = __strlen(property);
     // Evaluate the hash value, which is a O(n) operation (n is the string length)
     const unsigned hash = (hashing)(property, propertyLength);
     // Get the value stored in the table, using the hash as the index
@@ -118,7 +99,7 @@ static inline const struct deviceProperty *tableLookup(
     // Get the value of the property to compare against the provided property
     const char *key = propInTable->key;
     // Compare the provided string against the name (key) of the property
-    if (stringCompare(key, property) == 0) {
+    if (__strcmp(key, property) == 0) {
         // Found, return the pointer to the struct (don't perform the linear lookup)
         return propInTable;
     }
@@ -139,7 +120,7 @@ static inline const struct deviceProperty *tableLookup(
         }
         // Recall the name of the current key in the map (if it's actually not empty)
         const char *currentKey = currentPropInTable->key;
-        if (stringCompare(currentKey, property) == 0) {
+        if (__strcmp(currentKey, property) == 0) {
             // If found, return the pointer to the struct (immediately)
             return currentPropInTable;
         }
@@ -167,4 +148,10 @@ const char *getDeviceDescriptorProperty(const char *property) {
     }
     // Unpack the string from the struct and return it's pointer (to be further used by the caller)
     return returnValue->value;
+}
+
+// Return true if the property is in the table, and false otherwise
+bool isDeviceDescriptorWorking() {
+    const char *testValue = getDeviceDescriptorProperty(deviceDescriptorTestKey);
+    return __strcmp(testValue, deviceDescriptorTestValue) != 0 ? false : true;
 }

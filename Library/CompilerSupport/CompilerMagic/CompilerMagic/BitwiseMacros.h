@@ -24,8 +24,6 @@
 #ifndef ZALEA_BITWISEMACROS_H
 #define ZALEA_BITWISEMACROS_H
 
-#include <limits.h>
-
 #ifdef __cplusplus // C++
 
 /// Set the n-th bit of a constant.
@@ -39,7 +37,9 @@ constexpr auto setNthBit(T1 x, T2 y) { return x | (0x01U << y); }
 #elif defined(__ASSEMBLER__) // ASM
 
 
-#endif
+#else
+
+#include <limits.h>
 
 /// \brief Calculate the number of bits in certain data type.
 /// \param x the value to calculate the bit length.
@@ -84,5 +84,7 @@ constexpr auto setNthBit(T1 x, T2 y) { return x | (0x01U << y); }
 /// \param y the constant.
 /// \param z the bit.
 #define XNOR_NTH_BITS(x, y, z) (TEST_NTH_BIT(x, z) == TEST_NTH_BIT(y, z) ? 0x01U : 0x00U)
+
+#endif
 
 #endif //ZALEA_BITWISEMACROS_H

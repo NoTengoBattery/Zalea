@@ -1,7 +1,4 @@
 {
-  "test": {
-    "descriptor": "working"
-  },
   "memory": {
     "lower": {
       "reserved": [

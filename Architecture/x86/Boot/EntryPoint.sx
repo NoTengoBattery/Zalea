@@ -1,4 +1,4 @@
-#===-- EntryPoint.sx - Entry Point for Booting in x86 ---------------------------------------------------*- ASM -*-===#
+#===-- EntryPoint.sx - Entry Point for Booting in x86 ----------------------------------------------------*- ASM -*-===#
 #
 # Copyright (c) 2020 Oever González
 #

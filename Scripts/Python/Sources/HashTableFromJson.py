@@ -40,6 +40,7 @@ default_header_template = "template.h"
 default_source_filename = "JsonPropertyHashTable.c"
 default_source_template = "template.c.h"
 flatten_separator = ":"
+flatten_separator_api = "KS"
 max_64bit = 0xFFFFFFFFFFFFFFFF
 parsed_args = None
 pattern_64bit = 0xA5A5A5A5A5A5A5A5
@@ -50,6 +51,8 @@ places_octal = math.ceil(bits / 3)
 precomputed_mask = 0
 program_parser = None
 separator = "<->"
+testing_property_key = "testing" + flatten_separator + "lookup"
+testing_property_value = "working"
 this_logger = logging.getLogger(__name__)
 
 
@@ -134,7 +137,7 @@ def flatten_json(input_json):
     :param input_json: the JSON file to flat
     :return: a dictionary which represents the flatten JSON
     """
-    output = {}
+    output = {testing_property_key: testing_property_value}
 
     def flatten(json_dict: {}, name=""):
         """
@@ -362,24 +365,27 @@ def print_to_source(args, hashmap: []):
         raise (3, "Can not proceed without template or output files.")
     with args.source_template as template:
         with io.StringIO("") as source:
+            source.write("\n// Start of the array that holds the Hash Table as pointers to key-value structs...")
             source.write(f"\n\nconst struct {api_struct} *const {api_table}[{hashmap_length}] = {{")
             with io.StringIO("") as variables:
                 nl = True
+                variables.write("\n// Start of the structs that holds the key-value pairs...")
                 for index in range(len(hashmap)):
                     hashable = hashmap[index]
-                    ending = ", " if index != hashmap_max_index else ""
+                    ending = "," if index != hashmap_max_index else ""
                     if hashable is None:
                         source.write("{}NULL{}".format("\n\t" if nl else "", ending))
                         nl = False
                     else:
                         varname = f"{api_struct}{index:0{places_octal}o}"
                         key, val = hashable.split(separator)
+                        api_key = key.replace(flatten_separator, f"\"{flatten_separator_api}\"")
                         source.write(f"\n\t&{varname}{ending}")
                         variables.write(f"\n\n// ({index:0{places_binary}b}, {index:0{places_octal}o}, "
                                         f"{index:0{places_decimal}d}, {index:0{places_hex}x}) : "
                                         f"\"{key}\" -> \"{val}\"")
                         variables.write(f"\nstatic const struct {api_struct} {varname} = {{")
-                        variables.write(f"\n\t\"{key}\",\n\t\"{val}\"\n}};")
+                        variables.write(f"\n\t\"{api_key}\",\n\t\"{val}\"\n}};")
                         nl = True
                 source.write("\n};")
                 source.write("\n")
@@ -392,7 +398,14 @@ def print_to_source(args, hashmap: []):
                     real_output.write(source.read())
     with args.header_template as template:
         with io.StringIO("") as header:
-            header.write("\n/// \\brief Represents a key-value pair, which is used to store inside the Hash Table.")
+            tpk = testing_property_key.replace(flatten_separator, f"\"{flatten_separator_api}\"")
+            header.write("\n/// \\brief This is the separator used to separate the levels of properties.")
+            header.write(f"\n#define {flatten_separator_api} \"{flatten_separator}\"")
+            header.write("\n\n/// \\brief This is the testing property that will be used to test the lookup algorithm.")
+            header.write(f"\nstatic const char *const {api_table}TestKey = \"{tpk}\";")
+            header.write("\n\n/// \\brief This is the expected value for testing the lookup algorithm.")
+            header.write(f"\nstatic const char *const {api_table}TestValue = \"{testing_property_value}\";")
+            header.write("\n\n/// \\brief Represents a key-value pair, which is used to store inside the Hash Table.")
             header.write(f"\nstruct {api_struct} {{\n\tchar *key;\n\tchar *value;\n}};")
             header.write("\n\n/// \\brief The internal representation of the Hash Table.")
             header.write(f"\nconst struct {api_struct} *const {api_table}[{hashmap_length}];")

@@ -26,7 +26,6 @@
 #include <DeviceDescriptor.h>
 #include <ExecutableLibrary/ImageConstants.h>
 #include <InlineMagic/MemoryClear.h>
-#include <string.h>
 
 /// \brief Entry point from assembler to C.
 ///
@@ -38,12 +37,11 @@
 void secondEntryPoint() ATTR_SECTION(".start");
 
 ATTR_NORETURN void secondEntryPoint() {
-    // Perform a small test of the Device Descriptor code... Please note that since it is a test, the property and it's
-    // value are hardcoded. This should be the only special case of this.
-    const char *testValue = getDeviceDescriptorProperty(deviceDescriptorTestProperty);
-    if (!strcmp(testValue, deviceDescriptorTestValue)) {
+    // If the Device Descriptor lookup does not work, terminate the execution immediately
+    if (isDeviceDescriptorWorking() == false) {
         miserableFail();
     }
+    // Clear the BSS section of the loaded memory...
     memoryClear(&bssStart, &bssEnd);
     BUILTIN_UNREACHABLE;
 }

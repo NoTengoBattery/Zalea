@@ -1,4 +1,4 @@
-//===-- memset.c - An Implementation of 'memset' for The Compiler Runtime ---------------------------------*- C -*-===//
+//===-- memset.c - An Implementation of the `memset` C Standard Function ----------------------------------*- C -*-===//
 //
 // Copyright (c) 2020 Oever González
 //
@@ -16,77 +16,15 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 ///
 /// \file
-/// This is an implementation of 'memset' for the compiler runtime. The compiler, some times, will detect a memset-like
-/// behaviour and will replace the code with a memset call. This function does not expose an API, therefore, it can't be
-/// used directly.
+/// This is an implementation of `memset` for the Non Standard C Library. The compiler, some times, will detect a
+/// `memset`-like behaviour and will replace the code with a `memset` call. This does provide the standard C API for
+/// `memset`.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#include <CompilerMagic/CompilerMagic.h>
-#include <stddef.h>
-#include <stdint.h>
-
-/// \brief loop byte by byte until the alignment requirement is fulfilled.
-///
-/// This small loop will fill unaligned memory in a byte-level loop and return the computed aligned address. It will
-/// fill to either the required alignment or the maximum size.
-/// \param buffer the buffer pointer
-/// \param fill the fill for the memory region
-/// \param size the size of the memory region
-/// \param alignment the expected alignment
-/// \return the address of the aligned buffer
-ATTR_ALWAYS_INLINE
-static inline size_t unalignedLoop(void *buffer, unsigned char fill, size_t size, unsigned int alignment) {
-    // Compute the buffer as a char addressing array...
-    unsigned char *byteAddressing = buffer;
-    // ... fill by char until either the size is depleted...
-    while (size > 0) {
-        // ... or until the alignment is fulfilled...
-        if ((uintptr_t) byteAddressing % alignment == 0) {
-            // ... and the rest can be done in the unrolled loop
-            if (size >= alignment) {
-                break;
-            }
-        }
-        *byteAddressing = fill;
-        byteAddressing += 1;
-        size -= 1;
-    }
-    return size;
-}
+#include "string.h"
 
 void *memset(void *buffer, int fill, size_t size) {
-    // If the size is 0, return immediately
-    if (size == 0) { return buffer; }
-    // We define a "cost". The cost is the size of the unrolled loop, which in theory should avoid branching...
-    static const size_t cost = 8;
-    static const size_t cellSize = sizeof(uint_fast32_t);
-    static const size_t alignment = cost * cellSize;
-    size_t remainingSize = unalignedLoop(buffer, (unsigned char) fill, size, alignment);
-    uint_fast32_t *wordAddressing = (uint_fast32_t *) ((uintptr_t) buffer + size - remainingSize);
-    if (remainingSize >= alignment) {
-        // Create a variable of the appropriate size filled with the same value every byte
-        uint_fast32_t actualFill = (uint_fast32_t) fill;
-        for (unsigned int i = 0x00; i < cellSize; ++i) {
-            ((unsigned char *) &actualFill)[i] = (unsigned char) fill;
-        }
-        // The compiler will probably vectorize this loop :)
-        while (remainingSize >= alignment) {
-            wordAddressing[0] = actualFill;
-            wordAddressing[1] = actualFill;
-            wordAddressing[2] = actualFill;
-            wordAddressing[3] = actualFill;
-            wordAddressing[4] = actualFill;
-            wordAddressing[5] = actualFill;  // NOLINT
-            wordAddressing[6] = actualFill;  // NOLINT
-            wordAddressing[7] = actualFill;  // NOLINT
-            wordAddressing += cost;
-            remainingSize -= alignment;
-        }
-    }
-    size_t shouldBeZero = unalignedLoop(wordAddressing, (unsigned char) fill, remainingSize, alignment);
-    if (shouldBeZero != 0) {
-        return (void *) UINTPTR_MAX;
-    }
-    return buffer;
+    extern void *__memset(void *, int, size_t);
+    return __memset(buffer, fill, size);  // Use the implementation inside the Compiler Runtime
 }

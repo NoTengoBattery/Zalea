@@ -1,4 +1,4 @@
-//===-- strlen.c - Implementation of the strlen Standard Function -----------------------------------------*- C -*-===//
+//===-- strlen.c - An Implementation of the `strlen` C Standard Function ----------------------------------*- C -*-===//
 //
 // Copyright (c) 2020 Oever González
 //
@@ -16,19 +16,15 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 ///
 /// \file
-/// Implement the strlen function.
+/// This is an implementation of `strlen` for the Non Standard C Library. The compiler, some times, will detect a
+/// `strlen`-like behaviour and will replace the code with a `strlen` call. This does provide the standard C API for
+/// `strlen`.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#include <stddef.h>
+#include "string.h"
 
-// This is a trivial strlen implementation, the non-standard implementation maybe will be faster. Or maybe the compiler
-// can optimize something more.
 size_t strlen(const char *string) {
-    size_t length = 0;
-    while (*string != 0x00) {
-        length += 1;
-        string += 1;
-    }
-    return length;
+    extern size_t __strlen(const char *);
+    return __strlen(string);
 }

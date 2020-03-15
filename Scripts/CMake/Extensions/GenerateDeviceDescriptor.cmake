@@ -1,4 +1,4 @@
-#===-- GenerateDeviceDescriptor.cmake - GENERATE_DEVICE_DESCRIPTOR Extension ------------------------------*- CMake -*-===#
+#===-- GenerateDeviceDescriptor.cmake - GENERATE_DEVICE_DESCRIPTOR Extension ---------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #

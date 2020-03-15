@@ -24,11 +24,8 @@
 #ifndef ZALEA_MULTIBOOT2_HXX
 #define ZALEA_MULTIBOOT2_HXX
 
-extern "C" {
-#include <CompilerMagic/CompilerMagic.h>
-}
-
 #include <CompilerMagic/BitwiseMacros.h>
+#include <CompilerMagic/CompilerMagic.h>
 #include <cstdint>
 
 /* This is the attributes needed to assemble the Multiboot2 Header in the final image */
@@ -137,7 +134,7 @@ struct alignas(MULTIBOOT_ALIGNMENT) multibootInformationRequestTag {
     const std::uint16_t type;
     const std::uint16_t flags;
     const std::uint32_t size;
-    const std::uint32_t requests[requestNumber];  // NOLINT
+    const std::uint32_t requests[requestNumber];
 };
 
 /* These macros and structs are the Address tag, which will synchronize the physical address with the bootloader */

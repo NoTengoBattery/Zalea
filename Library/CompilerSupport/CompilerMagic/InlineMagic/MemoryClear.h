@@ -23,8 +23,8 @@
 #ifndef ZALEA_MEMORYCLEAR_H
 #define ZALEA_MEMORYCLEAR_H
 
-#include <stddef.h>
 #include <stdint.h>
+#include <string.h>
 
 /// \brief This function will clear memory region between two pointers.
 ///
@@ -36,15 +36,7 @@
 ATTR_USED static inline void memoryClear(void *origin, void *final) {
     void *greater = ((origin > final) ? origin : final);
     void *smaller = ((origin < final) ? origin : final);
-    if (greater != smaller) {
-        unsigned char *buffer = smaller;
-        size_t size = (uintptr_t) greater - (uintptr_t) smaller;
-        while (size != 0) {
-            buffer[0] = 0x00;
-            buffer += 1;
-            size -= 1;
-        }
-    }
+    memset(smaller, 0x00, (uintptr_t) greater - (uintptr_t) smaller);
 }
 
 #endif //ZALEA_MEMORYCLEAR_H

@@ -25,31 +25,26 @@
 #define ZALEA_IMAGECONSTANTS_H
 
 /// \brief This is a magic number which is expected to be present in the Multiboot2 i386 Machine State.
-#define MULTIBOOT_2_BOOTLOADER_MAGIC 0x36D76289  // NOLINT
+const unsigned multibootMagicConstant = 0x36D76289;
 
 /// \brief This is a pointer to the end of the bss section.
-extern volatile void *bssEnd;
+extern unsigned bssEnd;
 /// \brief This is a pointer to the start of the bss section.
-extern volatile void *bssStart;
+extern unsigned bssStart;
 /// \brief This is a pointer to the end of the binary image.
-extern volatile void *imageEnd;
+extern unsigned imageEnd;
 /// \brief This is a pointer to the start of the binary image.
-extern volatile void *imageStart;
+extern unsigned imageStart;
 
 /// \brief This is a pointer that will be the Multiboot2 as returned by the bootloader.
-extern volatile void *multibootStructPointer;
+extern unsigned multibootStructPointer;
 /// \brief This is a pointer to the end of the ARM vector table, which needs to be copied into memory.
-extern volatile void *vecend;
+extern unsigned vecend;
 
 /// \brief A function to halt the CPU when a failure is detected during the very early boot process.
 extern void miserableFail();
 
 /// \brief The actual entry point of the microkernel image.
 extern void start();
-
-/// \brief This is the testing property to use as a check point for Device Descriptor.
-const char * const deviceDescriptorTestProperty =  "test:descriptor";
-/// \brief This is the expected value of the testing property for Device Descriptor.
-const char * const deviceDescriptorTestValue =  "working";
 
 #endif //ZALEA_IMAGECONSTANTS_H

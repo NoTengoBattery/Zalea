@@ -1,4 +1,4 @@
-#===-- CMakeLists.txt - Root of the ARM/Boot Subtree --------------------------------------------------*- CMake -*-===#
+#===-- CMakeLists.txt - Root of the ARM/Boot Subtree ---------------------------------------------------*- CMake -*-===#
 #
 # Copyright (c) 2020 Oever González
 #
@@ -26,4 +26,3 @@ ADD_LIBRARY("EntryPoint" STATIC
             "EntryPoint.sx"
             "${MACHINE_MARCH}.vectors.sx")
 TARGET_LINK_LIBRARIES("EntryPoint" "CoreLibraries" "NonStdCLibrary")
-TARGET_DISABLE_FANCY_FEATURES("EntryPoint" PRIVATE C FANCY_LIST SANITIZER UNWIND STACK_PROTECTOR)

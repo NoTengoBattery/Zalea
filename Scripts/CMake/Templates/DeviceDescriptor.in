@@ -16,6 +16,8 @@
 
 #pragma once
 
+#include <stdbool.h>
+
 /// \brief Return the value of the requested property.
 ///
 /// This function will try to find a property in the generated hash table, and return it's value by performing a 'fast'
@@ -24,3 +26,7 @@
 /// \param property is the fully qualified name of the property.
 /// \return a pointer to a string that is the property value; or NULL if the property was not found.
 const char *getDeviceDescriptorProperty(const char *property);
+
+/// \brief Run a small test to check the lookup algorithm.
+/// \return false if the algorithm does not work, true otherwise.
+bool isDeviceDescriptorWorking();
