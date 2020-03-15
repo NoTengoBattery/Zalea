@@ -25,14 +25,14 @@
           </envs>
         </ADDITIONAL_GENERATION_ENVIRONMENT>
       </configuration>
-      <configuration PROFILE_NAME="RelWithDebInfo" CONFIG_NAME="Release With Debug Information">
+      <configuration PROFILE_NAME="RelWithDebInfo" CONFIG_NAME="RelWithDebInfo">
         <ADDITIONAL_GENERATION_ENVIRONMENT>
           <envs>
             <env name="PATH" value="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin:/opt/local/sbin" />
           </envs>
         </ADDITIONAL_GENERATION_ENVIRONMENT>
       </configuration>
-      <configuration PROFILE_NAME="MinSizeRel" CONFIG_NAME="Minimal Size Release">
+      <configuration PROFILE_NAME="MinSizeRel" CONFIG_NAME="MinSizeRel">
         <ADDITIONAL_GENERATION_ENVIRONMENT>
           <envs>
             <env name="PATH" value="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/local/bin:/opt/local/sbin" />
