@@ -39,7 +39,8 @@ IF (TREE_SELF_PATH AND NOT TOOLCHAIN_DONE) # This will define if we have access 
   # Test the available targets to determine which one is available before giving up...
   SET(_KERNEL_TARGET "${KERNEL_SECOND_TARGET}")
   IF ("${KERNEL_BINUTILS}" STREQUAL "GNU"
-      OR "${KERNEL_COMPILER}" STREQUAL "GNU")
+      OR "${KERNEL_COMPILER}" STREQUAL "GNU"
+      OR KERNEL_USE_GOLD)
     TARGET_TRIPLE_LIST(ALL_POSSIBLE_TRIPLES)
     FOREACH (_TEST_TARGET ${ALL_POSSIBLE_TRIPLES})
       SET(CMAKE_TOOLS_FOR_${_TEST_TARGET} "${_TEST_TARGET}-objcopy;${_TEST_TARGET}-g++")
