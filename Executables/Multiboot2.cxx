@@ -94,7 +94,12 @@ MULTIBOOT_ATTR const struct multibootFramebufferTag multibootFramebuffer = {  //
 MULTIBOOT_ATTR const struct multibootModuleAlignmentTag multibootModuleAlignment = {  // NOLINT
         MULTIBOOT_HEADER_TAG_MODULE_ALIGN,
         MULTIBOOT_REQUIRED(MULTIBOOT_HEADER_TAG_MODULE_ALIGN_FLAGS),
-        MULTIBOOT_HEADER_TAG_MODULE_ALIGN_SIZEOF,
+        MULTIBOOT_HEADER_TAG_MODULE_ALIGN_SIZEOF
 };
 
-
+/// This struct is the implementation of the Multiboot2 End Tag.
+MULTIBOOT_ATTR const struct multibootModuleAlignmentTag multibootEndTag = {  // NOLINT
+        MULTIBOOT_HEADER_TAG_END,
+        MULTIBOOT_HEADER_TAG_END_FLAGS,
+        MULTIBOOT_HEADER_TAG_END_SIZEOF
+};

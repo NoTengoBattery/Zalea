@@ -311,4 +311,19 @@ struct alignas(MULTIBOOT_ALIGNMENT) multibootRelocatableTag {
     const std::uint32_t preference;
 };
 
+/* These macros and structs are the End tag, which will tell the bootloader that this is the ending tag */
+/// The End tag ID.
+#define MULTIBOOT_HEADER_TAG_END 0x0000
+/// The End initial flags.
+#define MULTIBOOT_HEADER_TAG_END_FLAGS 0x0000
+/// The size of the EFI64 Entry Address Header.
+#define MULTIBOOT_HEADER_TAG_END_SIZEOF sizeof(struct multibootEndTag)
+
+/// \brief The Multiboot End Header Tag. This tag tells the bootloader to stop loading tags.
+struct alignas(MULTIBOOT_ALIGNMENT) multibootEndTag {
+    const std::uint16_t type;
+    const std::uint16_t flags;
+    const std::uint32_t size;
+};
+
 #endif //ZALEA_MULTIBOOT2_HXX
