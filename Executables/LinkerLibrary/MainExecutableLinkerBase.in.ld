@@ -34,7 +34,6 @@
 
 PHDRS {
     start PT_LOAD FLAGS (PF_RX) ;
-    multiboot PT_LOAD FLAGS (PF_R) ;
     code PT_LOAD FLAGS (PF_RX) ;
     data PT_LOAD FLAGS (PF_RW) ;
     rodata PT_LOAD FLAGS (PF_R) ;
@@ -50,13 +49,10 @@ SECTIONS {
         *(.start.header);
         *(.start);
     } :start
-    ALIGNED_CPS_SEGMENT_START("multiboot-segment")
-    .multiboot2 ALIGN_MINI : ALIGN_MINI {
-        KEEP (*(.multiboot2));
-        ASSERT (((. - imageStart) < 0x8000), "Multiboot header is out of bounds. Reduce the size of '.start' section.");
-    } :multiboot
     ALIGNED_CPS_SEGMENT_START("text-segment")
     .text ALIGN_MINI : ALIGN_MINI {
+        KEEP (*(.multiboot2));
+        ASSERT (((. - imageStart) < 0x8000), "Multiboot header is out of bounds. Reduce the size of '.start' section.");
         *(.text.unlikely);
         *(.text.hot);
         *(SORT(.text.sorted.*));
