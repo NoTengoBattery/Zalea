@@ -33,13 +33,24 @@
 /// over the CPU. This will perform some testing and grab some information from the ARM ATAGS. However, since Linux had
 /// deprecated the ATAGS, we cannot rely on it. We should get critical information from our implementation of the DTB
 /// (not quite a DTB, just an equivalent).
-/// \todo Add the required parameters from the bootloader to check them here.
-void secondEntryPoint() ATTR_SECTION(".start");
+/// \param magic the machine code as returned by the bootloader.
+/// \param mbs the address to the ATAGS as returned by the bootloader.
+void secondEntryPoint(unsigned magic, unsigned mbs) ATTR_SECTION(".start");
 
-ATTR_NORETURN void secondEntryPoint() {
-    // If the Device Descriptor lookup does not work, terminate the execution immediately
-    if (isDeviceDescriptorWorking() == false) { miserableFail(); }
-    // Clear the BSS section of the loaded memory...
-    memoryClear(&bssStart, &bssEnd);
-    BUILTIN_UNREACHABLE;
+ATTR_NORETURN void secondEntryPoint(unsigned machine, unsigned atags) {
+    if ((void *) atags == NULL  // If the ATAGS are null...
+        || ((unsigned *) atags >= &imageStart && (unsigned *) atags <= &imageEnd)) {  // ... or if inside the image...
+        miserableFail();
+        BUILTIN_UNREACHABLE;
+    } else {
+        // If the Device Descriptor lookup does not work, terminate the execution immediately
+        if (isDeviceDescriptorWorking() == false) { miserableFail(); }
+        // Store the value of ATAGS inside the (temporary) ATAGS pointer
+        *atagsStructPointer = (volatile void *) atags;
+        // Store the machine code (to be further processed later)
+        *armMachineCode = machine;
+        // Clear the BSS section of the loaded memory...
+        memoryClear(&bssStart, &bssEnd);
+        BUILTIN_UNREACHABLE;
+    }
 }

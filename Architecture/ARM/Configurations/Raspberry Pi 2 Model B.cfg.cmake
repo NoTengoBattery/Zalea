@@ -34,7 +34,7 @@ SET(MACHINE_MARCH "armv7-a"
     CACHE STRING
     "This variable is the machine minimum iteration of the ISA for the compiler and assembler to emit code.")
 # MACHINE_MFPU: SET_AND_EXPORT STRING
-SET(MACHINE_MFPU "neon"
+SET(MACHINE_MFPU "neon-vfpv4"
     CACHE STRING
     "This variable is the machine FPU that the compiler can use to generate floating point instructions.")
 # MACHINE_MTUNE: SET_AND_EXPORT STRING

@@ -24,15 +24,49 @@
 #include <config.h>
 #define __FILENAME__ "EntryPoint.sx"
 #include <AssemblerMagic/AssemblerMagic.h>
+#include <CompilerMagic/BitwiseMacros.h>
 
 NAKED_GLOBAL_ARM_FUNCTION(.start, entry)
+  CMP   r0,         #0
+  BNE	  miserableFail                   @ R0 must have to be always 0x00
+  LDR   r10,        =iR1
+  STR   r1,         [r10]               @ Temporary save the R1 (machine) register in memory
+  LDR   r10,        =iR2
+  STR   r2,         [r10]               @ Temporary save the R2 (atags) register in memory
+
+#if defined(MACHINE_ARM_NEON) || defined(MACHINE_ARM_VFP)
+/* --------------------------------------------------- Enable FPU --------------------------------------------------- */
+  MRC   p15,  0x00, r0, c1, c0, 0x02    @ Read the Co-processor access control register into R0
+#endif
+#ifdef MACHINE_ARM_NEON
+  AND   r0,   CLEAR_BIT_MASK(31)        @ Clear the ASEDIS bit (which allows SIMD functionality)
+#endif
+#if defined(MACHINE_ARM_NEON) || defined(MACHINE_ARM_VFP)
+  ORR   r0,   SET_BIT_MASK(23) | SET_BIT_MASK(22)   @ Set the cp11 (d) to be accessed by all privileged and user modes
+  ORR   r0,   SET_BIT_MASK(21) | SET_BIT_MASK(20)   @ Set the cp10 (s) to be accessed by all privileged and user modes
+  MCR   p15,  0x00, r0, c1, c0, 0x02    @ Write the Co-processor access control register from R0
+  ISB                                   @ Memory barrier
+  MOV   r1,   SET_BIT_MASK(30)          @ Enable the hardware floating point unit
+  FMXR  FPEXC,      r1                  @ Apply the changes to the hardware
+  ISB                                   @ Memory barrier
+#endif
+
+  B     entryThumb
+NAKED_GLOBAL_ARM_FUNCTION_EPILOG(entry)
+
+NAKED_GLOBAL_THUMB_FUNCTION(.start, entryThumb)
 /* -------------------------------------------- Setup the Stack Pointer --------------------------------------------- */
-  LDR   sp,         =stackStart
+  LDR   r2,         =stackStart
+  MOV   sp,         r2
 
 /* ------------------------------------------ Call the Second Entry Point ------------------------------------------- */
+  LDR   r10,        =iR1
+  LDR   r0,         [r10]               @ Read the R1 (machine) register temporary stored in memory
+  LDR   r10,        =iR2
+  LDR   r1,         [r10]               @ Read the R2 (atags) rregister temporary stored in memory
   BL    secondEntryPoint
   B     miserableFail
-NAKED_GLOBAL_ARM_FUNCTION_EPILOG(entry)
+NAKED_GLOBAL_ARM_FUNCTION_EPILOG(entryThumb)
 
 /*
  * `miserableFail` is a global function that will fail miserably when an irrecuperable error is detected. This is only
@@ -45,11 +79,21 @@ NAKED_GLOBAL_ARM_FUNCTION(.start, miserableFail)
 NAKED_GLOBAL_ARM_FUNCTION_EPILOG(miserableFail)
 
 /*
+ * This is an address in the .data section for the atags pointer and for the machine code.
+ */
+GLOBAL_DATA(atagsStructPointer)
+  .byte   0x00
+GLOBAL_DATA_EPILOG(atagsStructPointer)
+GLOBAL_DATA(armMachineCode)
+  .byte   0x00
+GLOBAL_DATA_EPILOG(armMachineCode)
+
+/*
  * Allocate 2 variables for storing r0 and r1 during early boot. They have really important information from the
  * bootloader.
  */
-LOCAL_BSS_DATA(iR0, 1)
 LOCAL_BSS_DATA(iR1, 1)
+LOCAL_BSS_DATA(iR2, 1)
 
 /*
  * Those are placeholders (needed because LLD will not identify the sections correctly when no data is in the sections)

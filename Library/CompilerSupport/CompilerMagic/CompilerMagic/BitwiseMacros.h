@@ -36,6 +36,13 @@ constexpr auto setNthBit(T1 x, T2 y) { return x | (0x01U << y); }
 
 #elif defined(__ASSEMBLER__) // ASM
 
+/// \brief Generate a bit mask to perform a bitwise AND to clear the desired bit.
+/// \param x the bit to be cleared by performin a bitwise AND.
+#define CLEAR_BIT_MASK(x) (-1 ^ (1 << (x)))
+
+/// \brief Generate a bit mask to perform a bitwise OR to set the desired bit.
+/// \param x the bit to be set by performin a bitwise OR.
+#define SET_BIT_MASK(x) (0 ^ (1 << (x)))
 
 #else
 

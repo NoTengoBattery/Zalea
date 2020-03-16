@@ -24,6 +24,8 @@
 #ifndef ZALEA_IMAGECONSTANTS_H
 #define ZALEA_IMAGECONSTANTS_H
 
+#include <stdint.h>
+
 /// \brief This is a magic number which is expected to be present in the Multiboot2 i386 Machine State.
 const unsigned multibootMagicConstant = 0x36D76289;
 
@@ -36,8 +38,12 @@ extern unsigned imageEnd;
 /// \brief This is a pointer to the start of the binary image.
 extern unsigned imageStart;
 
-/// \brief This is a pointer that will be the Multiboot2 as returned by the bootloader.
-extern unsigned multibootStructPointer;
+/// \brief This is a pointer that will be the Multiboot2 struct as returned by the bootloader.
+extern volatile void **multibootStructPointer;
+/// \brief This is a pointer that will be the ATAGS struct as returned by the bootloader.
+extern volatile void **atagsStructPointer;
+/// \brief This is a pointer that will be the ARM Machine code as returned by the bootloader.
+extern volatile unsigned *armMachineCode;
 /// \brief This is a pointer to the end of the ARM vector table, which needs to be copied into memory.
 extern unsigned vecend;
 

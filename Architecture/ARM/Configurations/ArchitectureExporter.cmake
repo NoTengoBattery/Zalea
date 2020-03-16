@@ -35,3 +35,14 @@ SET_AND_EXPORT(MACHINE_CPU_MODES_STACK_SIZE "${MACHINE_CPU_MODES_STACK_SIZE}" ST
                "This is the other ARM modes stack size for the machine. It's default is 0x1000, which is 4 KiB.")
 SET_AND_EXPORT(MACHINE_VIRTUAL_ADDRESS "${MACHINE_VIRTUAL_ADDRESS}" STRING "0x00000000"
                "This is the 'virtual' address, which is the one that is referenced by the compiled code.")
+# Try to identify the FPU (maybe a terrible idea) against a list of supported FPUs
+IF (MACHINE_MFPU MATCHES "neon")
+  SET_AND_EXPORT(MACHINE_ARM_NEON ON BOOL ON "This machine does support NEON instruction set.")
+  SET_AND_EXPORT(MACHINE_ARM_VFPV3 ON BOOL ON "This machine does support NEON instruction set.")
+ENDIF ()
+IF (MACHINE_MFPU MATCHES "vfpv4")
+  SET_AND_EXPORT(MACHINE_ARM_VFPV4 ON BOOL ON "This machine does support VFPv4 instruction set.")
+ENDIF ()
+IF (MACHINE_ARM_VFPV3 OR MACHINE_ARM_VFPV4)
+  SET_AND_EXPORT(MACHINE_ARM_VFP ON BOOL ON "This machine does support VFPv4 instruction set.")
+ENDIF ()
