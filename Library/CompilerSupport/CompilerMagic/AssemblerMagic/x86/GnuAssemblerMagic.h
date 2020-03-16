@@ -33,7 +33,7 @@
 #define NAKED_GLOBAL_FUNCTION(s, n) \
   .text ASM_NL \
   .section s, "ax", @progbits ASM_NL \
-  .align 0x10 ASM_NL \
+  .p2align 0x04,,0x0F ASM_NL \
   .global n ASM_NL \
   .type n, @function ASM_NL \
   n:
@@ -45,7 +45,7 @@
 
 #define GLOBAL_DATA_2(n, s, f, b) \
   .section s, f, b ASM_NL \
-  .align 0x04 ASM_NL \
+  .p2align 0x02, 0xFF, 0x03 ASM_NL \
   .## n ##:
 
 #define GLOBAL_DATA(n) GLOBAL_DATA_2(n, .data, "aw", @progbits)
@@ -53,7 +53,7 @@
 #define GLOBAL_RESERVED(n) GLOBAL_DATA_2(n, .reserved, "a", @progbits)
 
 #define GLOBAL_DATA_2_EPILOG(n) \
-  .align 0x04 ASM_NL \
+  .p2align 0x02, 0xFF, 0x03 ASM_NL \
   .type n, @object ASM_NL \
   .global n ASM_NL \
   n: ASM_NL \
