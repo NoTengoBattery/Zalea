@@ -36,7 +36,7 @@ import sys
 import deepmerge
 
 bits = 8
-buffer_size = 64 * 1024  # 64kb
+buffer_size = 64 * 1024  # 64kib
 collision_foresee = 1
 default_db_filename = "properties.json"
 default_header_filename = "JsonPropertyHashTable.h"
@@ -54,10 +54,10 @@ places_hex = math.ceil(bits / 4)
 places_octal = math.ceil(bits / 3)
 precomputed_mask = 0x00
 program_parser = None
-separator = "<->"
+internal_separator = "<->"
 testing_property_key = "testing" + flatten_separator + "lookup"
 testing_property_value = "working"
-this_logger = logging.getLogger(__name__)
+program_logger = logging.getLogger(__name__)
 
 
 def parse_args(args):
@@ -68,8 +68,8 @@ def parse_args(args):
     """
     parser = argparse.ArgumentParser(
             description="Creates a C source code file which contains a lookup table intended to be used as a "
-                        "dictionary from properties in a JSON file. The program will calculate a hash which will be "
-                        "the index of the array. The C program can calculate the hash and get the information from the "
+                        "dictionary for properties in a JSON file. The program will calculate a hash which will be the "
+                        "index of the array. The C program can calculate the hash and get the information from the "
                         "array, which is a pointer to the property string and it's value.",
             epilog="This file requires a template header, which will be included inside both the C header and the C "
                    "source file. The result will be in the provided output directory, which is one for the header and "
@@ -81,7 +81,7 @@ def parse_args(args):
                    "output and are pretty well behaved for ASCII strings. The hash table is not resizable and no "
                    "re-hashing is made, and this makes the lookup O(1). However, it does require a power of 2 for the "
                    "storage of the index, and it does not scale well under load. However, users can overestimate the "
-                   "foresee to give up the O(1) lookup time in order to keep the table as tidy as possible,")
+                   "foresee to give up to the O(1) lookup time in order to keep the table as tidy as possible,")
     parser.add_argument('-j', '--json-file',
                         action='store',
                         default=default_db_filename,
@@ -91,7 +91,7 @@ def parse_args(args):
     parser.add_argument('-a', '--header-template',
                         action='store',
                         default=default_header_template,
-                        help="The template will be inserted at the beginning of the header code.",
+                        help="The template will be inserted at the beginning of the generated header.",
                         type=argparse.FileType(bufsize=buffer_size))
     parser.add_argument('-e', '--header',
                         action='store',
@@ -101,7 +101,7 @@ def parse_args(args):
     parser.add_argument('-o', '--source-template',
                         action='store',
                         default=default_source_template,
-                        help="The template will be inserted at the beginning of the header code.",
+                        help="The template will be inserted at the beginning of the generated source code.",
                         type=argparse.FileType(bufsize=buffer_size))
     parser.add_argument('-s', '--source',
                         action='store',
@@ -113,36 +113,35 @@ def parse_args(args):
                         help="Define the number of bits that are used to generate the hash.")
     parser.add_argument('-f', '--foresee',
                         action='store', type=str, metavar='foresee', default="1",
-                        help="Define the number of movements around the calculated index that the program will attempt"
-                             "to seek around in order to find an available position. If the collision cannot be "
-                             "recovered by this mean, using all of the available hashes, the program will exit with an "
-                             "error code.")
+                        help="Define the linear lookup window to perform stores and lookups around the calculated hash "
+                             "to resolve collisions.")
     parser.add_argument('-p', '--api-struct-name',
                         action='store', type=str, metavar='struct', default="jsonPropertyValue",
                         help="This is the name of the 'struct' that is exposed in the Header File (the API).")
     parser.add_argument('-i', '--api-table-name',
                         action='store', type=str, metavar='table', default="jsonPropertiesHashmap",
-                        help="This is the name of the 'Hash Table' that is exposed in the Header File (the API).")
+                        help="This is the name of the Hash Table (array) that is exposed in the Header File (the API).")
     parser.add_argument('-v', '--verbose',
                         action='store_true',
-                        help="Using this flag will print debug messages from the logger to the console by default.")
+                        help="Using this flag will print debug-level messages from the logger to the console.")
     global program_parser
-    program_parser = parser
     global parsed_args
+    program_parser = parser
     parsed_args = parser.parse_args(args)
     return parsed_args
 
 
 # Extracted from:
 # https://towardsdatascience.com/how-to-flatten-deeply-nested-json-objects-in-non-recursive-elegant-python-55f96533103d
-def flatten_json(input_json: io.TextIOWrapper):
+# Pretty funny that the implementation is recursive, tho.
+def flatten_json(input_json_file: io.TextIOWrapper):
     """
     Flatten a JSON file into strings.
-    :param input_json: the JSON file to flat
+    :param input_json_file: the JSON file to flat
     :return: a dictionary which represents the flatten JSON
     """
-    rcwd = re.compile("<(?P<f>.*)>")
-    rabs = re.compile("{(?P<f>.*)}")
+    rex_current_working_directory = re.compile("<(?P<f>.*)>")
+    rex_absolute_path = re.compile("{(?P<f>.*)}")
     output = {testing_property_key: testing_property_value}
 
     def include_recurse(json_path: str, file_list: [], main_dict: {}):
@@ -164,7 +163,7 @@ def flatten_json(input_json: io.TextIOWrapper):
         :param json_path: a string which is a path to a JSON file
         :param file_list: a list which holds all the absolute paths to file that should not be processed
         :param main_dict: a dictionary which holds the result of the processed files
-        :return:
+        :return: the computed dictionary which is the combination of the files as described
         """
         with open(json_path) as open_json:
             json_dict = json.load(open_json)
@@ -173,14 +172,14 @@ def flatten_json(input_json: io.TextIOWrapper):
                 file_list.append(json_path_resolved)
             include_list = json_dict.pop("include", [])
             for include in include_list:
-                include_matched = rcwd.match(include)
-                absolute_matched = rabs.match(include)
+                include_matched = rex_current_working_directory.match(include)
+                absolute_matched = rex_absolute_path.match(include)
                 if include_matched is not None:
                     cwd = pathlib.Path(os.getcwd())
                     inferred_path = pathlib.Path(include_matched.group("f"))
                     path = str(cwd.joinpath(inferred_path).absolute())
                 elif absolute_matched is not None:
-                    inferred_path = pathlib.Path(absolute_matched.group("f"))
+                    inferred_path = pathlib.Path("/" + absolute_matched.group("f"))
                     path = str(inferred_path.absolute())
                 else:
                     included_dir = pathlib.Path(json_path_resolved).parent
@@ -192,32 +191,33 @@ def flatten_json(input_json: io.TextIOWrapper):
             deepmerge.always_merger.merge(main_dict, json_dict)
         return main_dict
 
-    def flatten(json_dict: {}, name=""):
+    def flatten(python_dictionary: {}, prefix: str = ""):
         """
-        The recursive call to flatten the JSON file.
-        :type json_dict: {}
-        :param json_dict: a dictionary to add flatten JSON objects
-        :param name: a prefix to prepend to properties
+        The recursive call to flatten the JSON file, which accepts a Python dictionary as input and deeply flattens it.
+        :type prefix: str
+        :type python_dictionary: {}
+        :param python_dictionary: a dictionary to add flatten JSON objects
+        :param prefix: a prefix to prepend to properties
         """
-        if type(json_dict) is dict:
-            for value in json_dict:
-                flatten(json_dict[value], name + value + flatten_separator)
-        elif type(json_dict) is list:
+        if type(python_dictionary) is dict:
+            for value in python_dictionary:
+                flatten(python_dictionary[value], prefix + value + flatten_separator)
+        elif type(python_dictionary) is list:
             index = 0x00
-            for value in json_dict:
-                flatten(value, name + str(index) + flatten_separator)
+            for value in python_dictionary:
+                flatten(value, prefix + f"{index:d}" + flatten_separator)
                 index += 0x01
         else:
-            output[name[:-len(flatten_separator)]] = json_dict
+            output[prefix[:-len(flatten_separator)]] = python_dictionary
 
-    reduced_dict = include_recurse(input_json.name, [], {})
-    flatten(reduced_dict)
+    reduced_dictionary = include_recurse(input_json_file.name, [], {})
+    flatten(reduced_dictionary)
     return output
 
 
 def mask(value):
     """
-    Mask a number given a number of relevant bits.
+    Mask a value to a given a number of relevant bits.
     :param value: the number to mask
     :return: the masked number
     """
@@ -235,10 +235,10 @@ def truncate_mask(positions):
     :param positions: the bits that are relevant
     :return: a mask that if it's and-ed will truncate the number
     """
-    t_mask = 0x00
+    truncate_masked = 0x00
     for i in range(positions):
-        t_mask = t_mask << 0x01 | 0x01
-    return t_mask
+        truncate_masked = truncate_masked << 0x01 | 0x01
+    return truncate_masked
 
 
 def rotate_left(value, positions):
@@ -248,12 +248,12 @@ def rotate_left(value, positions):
     :param positions: the number of relevant bits
     :return: the rotated and masked number
     """
-    tm = truncate_mask(positions)
-    rle = value << positions
-    rle &= ~tm
-    rri = value >> (bits - positions)
-    rri = rri & tm
-    rotated = rri | rle
+    truncate_masked = truncate_mask(positions)
+    left_shifted = value << positions
+    left_shifted &= ~truncate_masked
+    right_shifted = value >> (bits - positions)
+    right_shifted = right_shifted & truncate_masked
+    rotated = right_shifted | left_shifted
     return mask(rotated)
 
 
@@ -264,54 +264,54 @@ def rotate_right(value, positions):
     :param positions: the number of relevant bits
     :return: the rotated and masked number
     """
-    tm = truncate_mask(bits - positions)
-    rri = value >> positions
-    rri = rri & tm
-    rle = value << (bits - positions)
-    rle &= ~tm
-    rotated = rri | rle
+    truncate_masked = truncate_mask(bits - positions)
+    right_shifted = value >> positions
+    right_shifted = right_shifted & truncate_masked
+    left_shifted = value << (bits - positions)
+    left_shifted &= ~truncate_masked
+    rotated = right_shifted | left_shifted
     return mask(rotated)
 
 
-def calculate_hash(hash_input: str):
+def calculate_hash(string: str):
     """
     Calculate the `Hash1` hash of a given input string.
-    :type hash_input: str
-    :param hash_input: the string which is the input, it must have to be an ASCII string
+    :type string: str
+    :param string: the string which is the input, it must have to be an ASCII string
     :return: the hash value for the input string
     """
     value = rotate_left(pattern_64bit, 0x01)
-    ascii_bits = hash_input.encode("ASCII")
-    for character in ascii_bits:
+    ascii_bytes = string.encode("ASCII")
+    for character in ascii_bytes:
         value = rotate_left(value, 0x01)
-        value ^= ~character * ~len(hash_input)
+        value ^= ~character * ~len(string)
         value = rotate_left(value, 0x01)
-        value ^= character * ~len(hash_input)
+        value ^= character * ~len(string)
     value = mask(value)
     return value
 
 
-def calculate_hash2(hash_input: str):
+def calculate_hash2(string: str):
     """
     Calculate the `Hash2` hash of a given input string.
-    :type hash_input: str
-    :param hash_input: the string which is the input, it must have to be an ASCII string
+    :type string: str
+    :param string: the string which is the input, it must have to be an ASCII string
     :return: the hash value for the input string
     """
     value = rotate_right(pattern_64bit, 0x01)
-    ascii_bits = hash_input.encode("ASCII")
-    for character in ascii_bits:
+    ascii_bytes = string.encode("ASCII")
+    for character in ascii_bytes:
         value = rotate_right(value, 0x01)
-        value ^= character * ~len(hash_input)
+        value ^= character * ~len(string)
         value = rotate_right(value, 0x01)
-        value ^= ~character * len(hash_input)
+        value ^= ~character * len(string)
     value = mask(value)
     return value
 
 
 def hash_foresee(key_hash: int, name: str, hashmap: [], key: str, value: str):
     """
-    Perform the Linear Lookup to resolve collisions.
+    Perform the linear lookup to resolve collisions around a given hash, inside the given hashmap.
     :type key_hash: int
     :type name: str
     :type hashmap: []
@@ -326,21 +326,20 @@ def hash_foresee(key_hash: int, name: str, hashmap: [], key: str, value: str):
     """
     collision_avoided = False
     lowermost = key_hash - collision_foresee
-    lowermost = 0x00 if (lowermost <= 0x00 or lowermost >= mask(max_64bit)) else lowermost
+    lowermost = 0x00 if (lowermost <= 0x00 or lowermost > mask(max_64bit)) else lowermost
     uppermost = key_hash + collision_foresee + 1
-    uppermost = mask(max_64bit) if (uppermost <= 0x00 or uppermost >= mask(max_64bit)) else uppermost
-    step = 1 if uppermost >= lowermost else -1
-    for index in range(lowermost, uppermost, step):
+    uppermost = mask(max_64bit) if (uppermost < 0x00 or uppermost >= mask(max_64bit)) else uppermost
+    for index in range(lowermost, uppermost, 1):
         if index == key_hash:
             continue
-        this_logger.warning("--! Trying to solve collision by searching around the "
-                            f"{name} hash {hex(key_hash)} in {hex(index)}...")
-        current_in_map = hashmap[index]
-        if current_in_map is None:
-            hashmap[index] = f"{key}{separator}{value}"
+        program_logger.warning("--! Trying to solve collision by searching around the "
+                               f"{name} hash {hex(key_hash)} in {hex(index)}...")
+        in_map = hashmap[index]
+        if in_map is None:
+            hashmap[index] = f"{key}{internal_separator}{value}"
             collision_avoided = True
-            this_logger.warning("--+ Collision avoided by moving hash "
-                                f"{hex(key_hash)} ({key_hash}) at index {index} ({hex(index)})")
+            program_logger.warning("--+ Collision avoided by moving hash "
+                                   f"{hex(key_hash)} ({key_hash}) at index {index} ({hex(index)})")
             break
     return collision_avoided
 
@@ -351,52 +350,39 @@ def create_hashmap(args):
     :param args: the program's parsed arguments
     :return: the generated hashmap
     """
-    rex = re.compile("(?P<n>\\d+)[Uu]?")
-    global bits
-    bits = int(rex.match(args.bits).group("n"))
-    global collision_foresee
-    collision_foresee = int(rex.match(args.foresee).group("n"))
-    global places_binary
-    places_binary = bits
-    global places_decimal
-    places_decimal = math.ceil(bits / math.log2(10))
-    global places_hex
-    places_hex = math.ceil(bits / 4)
-    global places_octal
-    places_octal = math.ceil(bits / 3)
-    json_data = flatten_json(args.json_file)
+    flatten_json_data = flatten_json(args.json_file)
     hashmap = [None] * (mask(max_64bit) + 1)
-    for key, value in json_data.items():
+    for key, value in flatten_json_data.items():
         key_hash = calculate_hash(key)
         key_hash2 = calculate_hash2(key)
-        this_logger.info(f"Key: {key}, Value: {value}, Current Hash: {hex(key_hash)}")
-        current_in_map = hashmap[key_hash]
-        if current_in_map is None:
-            hashmap[key_hash] = f"{key}{separator}{value}"
-            this_logger.info("Key not found in the map, key added at index {key_hash}!")
+        program_logger.info(f"Key: {key}, Value: {value}, Hash1: {hex(key_hash)}, Hash2: {hex(key_hash2)}")
+        in_map = hashmap[key_hash]
+        if in_map is None:
+            hashmap[key_hash] = f"{key}{internal_separator}{value}"
+            program_logger.info("Key not found in the map, key added at index {key_hash}!")
         else:
-            this_logger.warning(f"--! Collision detected, hash {hex(key_hash)} (key: '{key}') already in the table")
+            program_logger.warning(f"--! Collision detected, hash {hex(key_hash)} (key: '{key}') already in the table")
             collision_avoided = hash_foresee(key_hash, "Hash1", hashmap, key, value)
             if not collision_avoided:
-                current_in_map = hashmap[key_hash2]
-                this_logger.warning("--! Trying to use the alternative hash "
-                                    f"{hex(key_hash2)} for hash {hex(key_hash)} (key: '{key}')")
-                if current_in_map is None:
-                    hashmap[key_hash2] = f"{key}{separator}{value}"
+                in_map = hashmap[key_hash2]
+                program_logger.warning("--! Trying to use the alternative hash "
+                                       f"{hex(key_hash2)} for hash {hex(key_hash)} (key: '{key}')")
+                if in_map is None:
+                    hashmap[key_hash2] = f"{key}{internal_separator}{value}"
                     collision_avoided = True
-                    this_logger.warning(f"--+ Collision avoided by using the alternative hash {hex(key_hash2)}")
+                    program_logger.warning(f"--+ Collision avoided by using the alternative hash {hex(key_hash2)}")
                 else:
-                    this_logger.warning(
+                    program_logger.warning(
                             f"--! Collision detected, hash {hex(key_hash2)} (key: '{key}') already in the table")
             if not collision_avoided:
                 collision_avoided = hash_foresee(key_hash2, "Hash2", hashmap, key, value)
             if not collision_avoided:
-                this_logger.warning(f"--- Failed to solve the collision for the second hash {hex(key_hash2)}")
-                this_logger.error("--= Error: Unrecoverable collision detected...")
-                this_logger.error(f"--= Length of the map: '{len(hashmap)}'")
-                this_logger.error(f"--= Key to be inserted: '{key}'")
-                this_logger.error(f"--= Key with the same hash: '{hashmap[key_hash].split(separator)[0]}'")
-                this_logger.error(f"--= Hash that collided: '{hex(key_hash)}'")
+                program_logger.warning(f"--- Failed to solve the collision for the second hash {hex(key_hash2)}")
+                program_logger.error("--= Error: Unrecoverable collision detected...")
+                program_logger.error(f"--= Length of the map: '{len(hashmap)}'")
+                program_logger.error(f"--= Key to be inserted: '{key}'")
+                program_logger.error(f"--= Key with the same hash: '{hashmap[key_hash].split(internal_separator)[0]}'")
+                program_logger.error(f"--= Hash that collided: '{hex(key_hash)}'")
                 raise SystemExit(2, "Unresolvable hash collision detected.")
     return hashmap
 
@@ -430,7 +416,7 @@ def print_to_source(args, hashmap: []):
                         nl = False
                     else:
                         varname = f"{api_struct}{index:0{places_octal}o}"
-                        key, val = hashable.split(separator)
+                        key, val = hashable.split(internal_separator)
                         api_key = key.replace(flatten_separator, f"\"{flatten_separator_api}\"")
                         source.write(f"\n\t&{varname}{ending}")
                         variables.write(f"\n\n// ({index:0{places_binary}b}, {index:0{places_octal}o}, "
@@ -474,11 +460,25 @@ def main(args):
     :param args: arguments from command line
     """
     parsed = parse_args(args)
+    global bits
+    global collision_foresee
+    global places_binary
+    global places_decimal
+    global places_hex
+    global places_octal
+    global program_logger
+    rex = re.compile("(?P<n>\\d+)[Uu]?")
+    bits = int(rex.match(parsed.bits).group("n"))
+    collision_foresee = int(rex.match(parsed.foresee).group("n"))
+    places_binary = bits
+    places_decimal = math.ceil(bits / math.log2(10))
+    places_hex = math.ceil(bits / 4)
+    places_octal = math.ceil(bits / 3)
     if program_parser is None or parsed_args is None:
         raise SystemExit(1, "Program argument parser not set or global argument set is None.")
     if parsed.verbose:
-        this_logger.setLevel(logging.DEBUG)
-        this_logger.warning("Debug logging enabled")
+        program_logger.setLevel(logging.DEBUG)
+        program_logger.warning("Debug logging enabled")
     hashmap = create_hashmap(parsed)
     print_to_source(parsed, hashmap)
 
