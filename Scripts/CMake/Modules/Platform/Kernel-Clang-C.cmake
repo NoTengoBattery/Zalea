@@ -52,6 +52,8 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
   STRING(APPEND CMAKE_C_FLAGS_INIT "-mtune=${MACHINE_MTUNE} ")
   # For LLVM, we need to add the target because otherwise it will fail the CMake test. CMake will add this anyway.
   STRING(APPEND CMAKE_C_FLAGS_INIT "--target=${KERNEL_SECOND_TARGET} ")
+  # Use LLVM's full LTO (CMake uses ThinLTO by default)
+  SET(CMAKE_C_COMPILE_OPTIONS_IPO "-flto")
 
   # These flags are based on which kind of build we are doing
   STRING(APPEND CMAKE_C_FLAGS_DEBUG_INIT "-g -DDEBUG ")

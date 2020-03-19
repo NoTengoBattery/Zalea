@@ -28,8 +28,12 @@ import io
 import json
 import logging
 import math
+import os
+import pathlib
 import re
 import sys
+
+import deepmerge
 
 bits = 8
 buffer_size = 64 * 1024  # 64kb
@@ -131,13 +135,62 @@ def parse_args(args):
 
 # Extracted from:
 # https://towardsdatascience.com/how-to-flatten-deeply-nested-json-objects-in-non-recursive-elegant-python-55f96533103d
-def flatten_json(input_json):
+def flatten_json(input_json: io.TextIOWrapper):
     """
     Flatten a JSON file into strings.
     :param input_json: the JSON file to flat
     :return: a dictionary which represents the flatten JSON
     """
+    rcwd = re.compile("<(?P<f>.*)>")
+    rabs = re.compile("{(?P<f>.*)}")
     output = {testing_property_key: testing_property_value}
+
+    def include_recurse(json_path: str, file_list: [], main_dict: {}):
+        """
+        Perform a recursive inclusion of other JSON files, from an array inside the JSON files, called `include`, which
+        can be either relative to the working directory (by using the '<' and '>' symbols around the file path),
+        relative to the file which included it (by using the file path as is) or an absolute file path (by using the
+        symbols '{' and '}' around the file path).
+        Files are automatically "guarded", so they will be included only once. The first leaf file is included first,
+        and the root file is included the latest. All properties that appear in more than one file will be overwrite
+        to the latest definition (so it depends on which order the files are included, and that means that the root file
+        will always override all previous definitions of a property or object).
+        Generally speaking, you should call this function with an empty list and dictionary, unless you have a list of
+        absolute paths to exclude or a dictionary which holds pre-defined values. Note that those pre-defined values
+        will have the lowest precedence.
+        :type json_path: str
+        :type file_list: []
+        :type main_dict: {}
+        :param json_path: a string which is a path to a JSON file
+        :param file_list: a list which holds all the absolute paths to file that should not be processed
+        :param main_dict: a dictionary which holds the result of the processed files
+        :return:
+        """
+        with open(json_path) as open_json:
+            json_dict = json.load(open_json)
+            json_path_resolved = str(pathlib.Path(json_path).absolute())
+            if json_path_resolved not in file_list:
+                file_list.append(json_path_resolved)
+            include_list = json_dict.pop("include", [])
+            for include in include_list:
+                include_matched = rcwd.match(include)
+                absolute_matched = rabs.match(include)
+                if include_matched is not None:
+                    cwd = pathlib.Path(os.getcwd())
+                    inferred_path = pathlib.Path(include_matched.group("f"))
+                    path = str(cwd.joinpath(inferred_path).absolute())
+                elif absolute_matched is not None:
+                    inferred_path = pathlib.Path(absolute_matched.group("f"))
+                    path = str(inferred_path.absolute())
+                else:
+                    included_dir = pathlib.Path(json_path_resolved).parent
+                    inferred_path = pathlib.Path(include)
+                    path = str(included_dir.joinpath(inferred_path).absolute())
+                if path not in file_list:  # Keep track of the included file to avoid recursion
+                    file_list.append(path)
+                    include_recurse(path, file_list, main_dict)
+            deepmerge.always_merger.merge(main_dict, json_dict)
+        return main_dict
 
     def flatten(json_dict: {}, name=""):
         """
@@ -157,7 +210,8 @@ def flatten_json(input_json):
         else:
             output[name[:-len(flatten_separator)]] = json_dict
 
-    flatten(input_json)
+    reduced_dict = include_recurse(input_json.name, [], {})
+    flatten(reduced_dict)
     return output
 
 
@@ -310,8 +364,7 @@ def create_hashmap(args):
     places_hex = math.ceil(bits / 4)
     global places_octal
     places_octal = math.ceil(bits / 3)
-    json_data = json.load(args.json_file)
-    json_data = flatten_json(json_data)
+    json_data = flatten_json(args.json_file)
     hashmap = [None] * (mask(max_64bit) + 1)
     for key, value in json_data.items():
         key_hash = calculate_hash(key)

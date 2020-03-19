@@ -64,7 +64,7 @@ FUNCTION(GENERATE_DEVICE_DESCRIPTOR)
       "--foresee" "${PROPERTIES_HASH_FORESEE}"
       "--api-struct-name" "deviceProperty"
       "--api-table-name" "deviceDescriptor")
-  RUN_PYTHON3_SCRIPT("${JPI_HELPER}" "." "${CMD_ARGS}")
+  RUN_PYTHON3_SCRIPT("${JPI_HELPER}" "${TREE_DEVICE_DESCRIPTOR_PATH}" "${CMD_ARGS}")
   MESSAGE(STATUS "Generated Device Descriptor header file in '${JPI_HEADER}'")
   MESSAGE(STATUS "Generated Device Descriptor source file in '${JPI_SOURCE}'")
 ENDFUNCTION()

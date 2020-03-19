@@ -33,9 +33,9 @@
 /// over the CPU. This will perform some testing and grab some information from the ARM ATAGS. However, since Linux had
 /// deprecated the ATAGS, we cannot rely on it. We should get critical information from our implementation of the DTB
 /// (not quite a DTB, just an equivalent).
-/// \param magic the machine code as returned by the bootloader.
-/// \param mbs the address to the ATAGS as returned by the bootloader.
-void secondEntryPoint(unsigned magic, unsigned mbs) ATTR_SECTION(".start");
+/// \param machine the machine code as returned by the bootloader.
+/// \param atags the address to the ATAGS as returned by the bootloader.
+void secondEntryPoint(unsigned machine, unsigned atags) ATTR_SECTION(".start");
 
 ATTR_NORETURN void secondEntryPoint(unsigned machine, unsigned atags) {
     if ((void *) atags == NULL  // If the ATAGS are null...
