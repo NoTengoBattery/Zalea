@@ -35,9 +35,9 @@
 /// \param final the target of the memory buffer to set.
 /// \return this function does not return a value.
 static inline void memoryClear(void *origin, void *final) {
-  void *greater = ((origin > final) ? origin : final);
-  void *smaller = ((origin < final) ? origin : final);
-  memset(smaller, 0x00, (uintptr_t) greater - (uintptr_t) smaller);
+ void *greater = ((origin > final) ? origin : final);
+ void *smaller = ((origin < final) ? origin : final);
+ memset(smaller, 0x00, (uintptr_t) greater - (uintptr_t) smaller);
 }
 
 #endif //ZALEA_MEMORYCLEAR_H

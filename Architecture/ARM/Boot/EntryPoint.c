@@ -36,24 +36,25 @@
 ///
 /// \param machine the machine code as returned by the bootloader.
 /// \param atags the address to the ATAGS as returned by the bootloader.
-void secondEntryPoint(unsigned machine, unsigned atags) ATTR_SECTION(".start");
+void secondEntryPoint(unsigned machine, unsigned atags)
+ATTR_SECTION(".start");
 
 ATTR_NORETURN void secondEntryPoint(unsigned machine, unsigned atags) {
-  if ((void *) atags == NULL  // If the ATAGS are null...
-      || ((unsigned *) atags >= &imageStart && (unsigned *) atags <= &imageEnd)) {  // ... or if inside the image...
-    miserableFail();
-    BUILTIN_UNREACHABLE;
-  } else {
-    // If the Device Descriptor lookup does not work, terminate the execution immediately
-    if (isDeviceDescriptorWorking() == false) {
-      miserableFail();
-    }
-    // Store the value of ATAGS inside the (temporary) ATAGS pointer
-    *atagsStructPointer = (volatile void *) atags;
-    // Store the machine code (to be further processed later)
-    *armMachineCode = machine;
-    // Clear the BSS section of the loaded memory...
-    memoryClear(&bssStart, &bssEnd);
-    BUILTIN_UNREACHABLE;
+ if ((void *) atags == NULL  // If the ATAGS are null...
+   || ((unsigned *) atags >= &imageStart && (unsigned *) atags <= &imageEnd)) {  // ... or if inside the image...
+  miserableFail();
+  BUILTIN_UNREACHABLE;
+ } else {
+  // If the Device Descriptor lookup does not work, terminate the execution immediately
+  if (isDeviceDescriptorWorking() == false) {
+   miserableFail();
   }
+  // Store the value of ATAGS inside the (temporary) ATAGS pointer
+  *atagsStructPointer = (volatile void *) atags;
+  // Store the machine code (to be further processed later)
+  *armMachineCode = machine;
+  // Clear the BSS section of the loaded memory...
+  memoryClear(&bssStart, &bssEnd);
+  BUILTIN_UNREACHABLE;
+ }
 }

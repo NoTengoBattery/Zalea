@@ -29,64 +29,64 @@
 #include <stdint.h>
 
 void longDivision(struct divisionT *operands, struct resultT *result) {
-  // Unpack the structs for better readability
-  unsigned denominator = operands->denominator.value;
-  unsigned denominatorFlags = operands->denominator.flags;
-  unsigned numerator = operands->numerator.value;
-  unsigned numeratorFlags = operands->numerator.flags;
-  // Handle special cases ...
-  //  1. Division by zero: quotient is -UINTMAX_MAX, remainder is UINTMAX_MAX and set the DIV0 flag of the quotient
-  if (denominator == 0x00U) {
-    result->quotient.value = (unsigned) UINTMAX_MAX;
-    result->quotient.flags = SET_NTH_BIT(result->quotient.flags, DIV_0_FLAG);
-    result->quotient.flags = CLEAR_NTH_BIT(result->quotient.flags, SIGN_FLAG);
-    result->remainder = (unsigned) UINTMAX_MAX;
-    return;
-  }
-  //  2. Division by one: the quotient is the number and the remainder is zero
-  if (denominator == 0x01U) {
-    result->quotient.value = numerator;
-    result->quotient.flags = XNOR_NTH_BITS(numeratorFlags, denominatorFlags, SIGN_FLAG);
-    result->remainder = 0x00U;
-    return;
-  }
-  //  3. Division by itself: the quotient is one and the remainder is zero
-  if (denominator == numerator) {
-    result->quotient.value = 0x01U;
-    result->quotient.flags = SET_NTH_BIT(result->quotient.flags, SIGN_FLAG);;
-    result->remainder = 0x00U;
-    return;
-  }
-  //  4. Division by a larger denominator: the quotient is zero and the remainder is the numerator
-  if (denominator > numerator) {
-    result->quotient.value = 0x00U;
-    result->quotient.flags = XNOR_NTH_BITS(numeratorFlags, denominatorFlags, SIGN_FLAG);
-    result->remainder = numerator;
-    return;
-  }
-  // Shift the denominator until it's bigger or equal than the numerator
-  unsigned long long shiftedDenominator = denominator;
-  unsigned steps = 0x00U;
-  while (shiftedDenominator <= numerator) {
-    shiftedDenominator = shiftedDenominator << 0x01U;
-    steps += 0x01U;
+ // Unpack the structs for better readability
+ unsigned denominator = operands->denominator.value;
+ unsigned denominatorFlags = operands->denominator.flags;
+ unsigned numerator = operands->numerator.value;
+ unsigned numeratorFlags = operands->numerator.flags;
+ // Handle special cases ...
+ //  1. Division by zero: quotient is -UINTMAX_MAX, remainder is UINTMAX_MAX and set the DIV0 flag of the quotient
+ if (denominator == 0x00U) {
+  result->quotient.value = (unsigned) UINTMAX_MAX;
+  result->quotient.flags = SET_NTH_BIT(result->quotient.flags, DIV_0_FLAG);
+  result->quotient.flags = CLEAR_NTH_BIT(result->quotient.flags, SIGN_FLAG);
+  result->remainder = (unsigned) UINTMAX_MAX;
+  return;
+ }
+ //  2. Division by one: the quotient is the number and the remainder is zero
+ if (denominator == 0x01U) {
+  result->quotient.value = numerator;
+  result->quotient.flags = XNOR_NTH_BITS(numeratorFlags, denominatorFlags, SIGN_FLAG);
+  result->remainder = 0x00U;
+  return;
+ }
+ //  3. Division by itself: the quotient is one and the remainder is zero
+ if (denominator == numerator) {
+  result->quotient.value = 0x01U;
+  result->quotient.flags = SET_NTH_BIT(result->quotient.flags, SIGN_FLAG);;
+  result->remainder = 0x00U;
+  return;
+ }
+ //  4. Division by a larger denominator: the quotient is zero and the remainder is the numerator
+ if (denominator > numerator) {
+  result->quotient.value = 0x00U;
+  result->quotient.flags = XNOR_NTH_BITS(numeratorFlags, denominatorFlags, SIGN_FLAG);
+  result->remainder = numerator;
+  return;
+ }
+ // Shift the denominator until it's bigger or equal than the numerator
+ unsigned long long shiftedDenominator = denominator;
+ unsigned steps = 0x00U;
+ while (shiftedDenominator <= numerator) {
+  shiftedDenominator = shiftedDenominator << 0x01U;
+  steps += 0x01U;
+ }
+ shiftedDenominator = shiftedDenominator >> 0x01U;
+ // Do the long division based on the shifted denominator calculated above
+ unsigned quotient = 0x00U;
+ unsigned remainder = numerator;
+ for (unsigned i = 0x00; i < steps; ++i) {
+  if (remainder >= shiftedDenominator) {
+   remainder -= shiftedDenominator;
+   quotient = quotient << 0x01U;
+   quotient += 0x01U;
+  } else {
+   quotient = quotient << 0x01U;
   }
   shiftedDenominator = shiftedDenominator >> 0x01U;
-  // Do the long division based on the shifted denominator calculated above
-  unsigned quotient = 0x00U;
-  unsigned remainder = numerator;
-  for (unsigned i = 0x00; i < steps; ++i) {
-    if (remainder >= shiftedDenominator) {
-      remainder -= shiftedDenominator;
-      quotient = quotient << 0x01U;
-      quotient += 0x01U;
-    } else {
-      quotient = quotient << 0x01U;
-    }
-    shiftedDenominator = shiftedDenominator >> 0x01U;
-  }
-  // Set the struct values and return
-  result->quotient.value = quotient;
-  result->quotient.flags = XNOR_NTH_BITS(numeratorFlags, denominatorFlags, SIGN_FLAG);
-  result->remainder = remainder;
+ }
+ // Set the struct values and return
+ result->quotient.value = quotient;
+ result->quotient.flags = XNOR_NTH_BITS(numeratorFlags, denominatorFlags, SIGN_FLAG);
+ result->remainder = remainder;
 }
