@@ -1,0 +1,9 @@
+{
+  "interrupt": {
+    "vector": {
+      "low": "0x00000000",
+      "high": "0xFFFF0000",
+      "default": "low"
+    }
+  }
+}
