@@ -27,6 +27,7 @@
 ADD_LIBRARY("CompilerRuntime" STATIC
             "division.c"
             "division.h"
+            "memcpy.c"
             "memset.c"
             "strcmp.c"
             "strlen.c"
