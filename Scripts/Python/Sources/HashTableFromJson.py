@@ -46,7 +46,7 @@ default_source_template = "template.c.h"
 flatten_separator = ":"
 flatten_separator_api = "KS"
 max_64bit = 0xFFFFFFFFFFFFFFFF
-parsed_args = None
+parsed_arguments = None
 pattern_64bit = 0xA5A5A5A5A5A5A5A5
 places_binary = bits
 places_decimal = math.ceil(bits / math.log2(10))
@@ -125,10 +125,10 @@ def parse_args(args):
                         action='store_true',
                         help="Using this flag will print debug-level messages from the logger to the console.")
     global program_parser
-    global parsed_args
+    global parsed_arguments
     program_parser = parser
-    parsed_args = parser.parse_args(args)
-    return parsed_args
+    parsed_arguments = parser.parse_args(args)
+    return parsed_arguments
 
 
 # Extracted from:
@@ -474,8 +474,10 @@ def main(args):
     places_decimal = math.ceil(bits / math.log2(10))
     places_hex = math.ceil(bits / 4)
     places_octal = math.ceil(bits / 3)
-    if program_parser is None or parsed_args is None:
-        raise SystemExit(1, "Program argument parser not set or global argument set is None.")
+    if program_parser is None:
+        raise SystemExit(11, 'Program argument parser not set or global argument set is None.')
+    if parsed_arguments is None:
+        raise SystemExit(14, 'Parsed program arguments is None.')
     if parsed.verbose:
         program_logger.setLevel(logging.DEBUG)
         program_logger.warning("Debug logging enabled")

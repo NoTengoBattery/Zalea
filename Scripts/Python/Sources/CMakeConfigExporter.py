@@ -33,18 +33,21 @@ from tinydb import TinyDB
 from tinydb import where
 from tinydb.middlewares import CachingMiddleware
 
-default_db_filename = 'config.i.json'
+default_json_filename = 'config.i.json'
 program_parser = None
-parsed_args = None
-buffer_size = 64 * 1024  # 64kb
-db_file = None
-tinydb_db = None
-this_logger = logging.getLogger(__name__)
+parsed_arguments = None
+buffer_size = 64 * 1024  # 64kib
+database_file = None
+tinydb_database = None
+program_logger = logging.getLogger(__name__)
 
 
 def parse_args(args):
-    global program_parser
-    global parsed_args
+    """
+    Parse the program's arguments that control the program's behaviour.
+    :param args: arguments to parse
+    :return: the parsed arguments
+    """
     parser = argparse.ArgumentParser(
             description='Configuration cache fixer. This program fixes and updates a CMake file that contains exported '
                         'cache entries.',
@@ -66,7 +69,7 @@ def parse_args(args):
                              'configuration process, when the script is called with the action "END".')
     parser.add_argument('-d', '--dbfile',
                         action='store', type=argparse.FileType(mode='a+', bufsize=buffer_size), metavar='db',
-                        default=default_db_filename,
+                        default=default_json_filename,
                         help='The destination of the database file. This is the IR for the script. All changes are '
                              'committed to this DB before the DB is dumped and formatted in the "END" action. '
                              '(default: %(default)s).')
@@ -106,39 +109,53 @@ def parse_args(args):
     parser.add_argument('-b', '--verbose',
                         action='store_true',
                         help='Using this flag will print debug messages from the logger to the console by default.')
+    global program_parser
+    global parsed_arguments
     program_parser = parser
-    parsed_args = parser.parse_args(args)
-    return parsed_args
+    parsed_arguments = parser.parse_args(args)
+    return parsed_arguments
 
 
 def open_db(args):
-    global db_file
-    global tinydb_db
-    db_file = str(args.dbfile.name)
-    this_logger.debug("Opening database file in %s" % db_file)
-    if not db_file:
-        this_logger.critical("Aborting because the database file name was not provided")
+    """
+    Open the TinyDB database to be used inside the Python script.
+    :param args: parsed arguments which contains the database file name.
+    """
+    global database_file
+    global tinydb_database
+    database_file = str(args.dbfile.name)
+    program_logger.debug("Opening database file in %s" % database_file)
+    if not database_file:
+        program_logger.critical("Aborting because the database file name was not provided")
         raise SystemExit(10, 'Cannot run this script without the reference to the DB file.')
-    tinydb_db = TinyDB(db_file, storage=CachingMiddleware(JSONStorage))
-    this_logger.info("TinyDB file opened!")
+    tinydb_database = TinyDB(database_file, storage=CachingMiddleware(JSONStorage))
+    program_logger.info("TinyDB file opened!")
 
 
 def init_db(args):
+    """
+    Initialize the database by purging all it's contents and tables.
+    :param args: parsed arguments which contains the database file name.
+    """
     open_db(args)
-    with tinydb_db as db:
+    with tinydb_database as db:
         db.purge()
         db.purge_tables()
-        this_logger.info("Initialized database!")
-        this_logger.info("The database and all it's tables are empty now")
+        program_logger.info("Initialized database!")
+        program_logger.info("The database and all it's tables are empty now")
 
 
 def set_and_export(args):
+    """
+    Perform the "set and export" step of the process.
+    :param args: parsed arguments which defines the script behaviour.
+    """
     # Verify the flags
     if not args.variable or not args.type:
         program_parser.error(
                 'For updating or inserting an entry you must provide, at least, the type and the variable name')
     open_db(args)
-    with tinydb_db as db:
+    with tinydb_database as db:
         # This code is way too bad. I know it but it is intentional. No need to optimize or generalize as:
         # 1. No new options are intended to be added
         # 2. The format and values are already fixed and should not change
@@ -153,19 +170,19 @@ def set_and_export(args):
         if entry_f:
             db_table = db_table_f
             entry = entry_f
-            this_logger.debug("Entry for variable '%s' found on table '%s'" % (args.variable, db_table.name))
+            program_logger.debug("Entry for variable '%s' found on table '%s'" % (args.variable, db_table.name))
         elif entry_nf:
             db_table = db_table_nf
             entry = entry_nf
-            this_logger.debug("Entry for variable '%s' found on table '%s'" % (args.variable, db_table.name))
+            program_logger.debug("Entry for variable '%s' found on table '%s'" % (args.variable, db_table.name))
         elif args.force:
             db_table = db_table_f
             entry = False
-            this_logger.debug("No entry found. Using the table '%s' for insert" % db_table.name)
+            program_logger.debug("No entry found. Using the table '%s' for insert" % db_table.name)
         elif not args.force:
             db_table = db_table_nf
             entry = False
-            this_logger.debug("No entry found. Using the table '%s' for insert" % db_table.name)
+            program_logger.debug("No entry found. Using the table '%s' for insert" % db_table.name)
         else:
             raise SystemExit(12, 'Cannot choose a valid table to insert or update.')
         # If the variable exist, only update the value. Delete if it's value is the default.
@@ -175,7 +192,7 @@ def set_and_export(args):
                 'default': args.default,
                 'docstring': args.docstring
             }, where('variable') == args.variable)
-            this_logger.info("Update entry: {value: '%s', docstring: '%s'}" % (args.value, args.docstring))
+            program_logger.info("Update entry: {value: '%s', docstring: '%s'}" % (args.value, args.docstring))
         else:
             db_table.insert({
                 'variable': args.variable,
@@ -183,14 +200,21 @@ def set_and_export(args):
                 'default': args.default,
                 'type': args.type,
                 'docstring': args.docstring})
-            this_logger.info("Add entry: {variable: '%s', value: '%s', type: '%s', docstring: '%s'}"
-                             % (args.variable, args.value, args.type, args.docstring))
+            program_logger.info("Add entry: {variable: '%s', value: '%s', type: '%s', docstring: '%s'}"
+                                % (args.variable, args.value, args.type, args.docstring))
 
 
 def dump_table(table: str, file, header, default):
+    """
+    Perform the table dump. This function will dump the tables inside the database according to it's respective format.
+    :param table: the table to dump.
+    :param file: the file where the result will be dumped.
+    :param header: a header to include inside the dumped resulting file.
+    :param default: default.
+    """
     if header:
-        this_logger.info("Ready to dump database to CMake Header file")
-        with tinydb_db as db:
+        program_logger.info("Ready to dump database to CMake Header file")
+        with tinydb_database as db:
             db_table = db.table(table)
             data = db_table.all()
             dicts = {data[i]['variable']: data[i] for i in range(0, len(data))}
@@ -210,10 +234,10 @@ def dump_table(table: str, file, header, default):
                 else:
                     file.write('#cmakedefine\t{}\t@{}@  // NOLINT \n'
                                .format(key, key))
-                this_logger.debug("Dumped CMake entry for variable '%s'" % key)
+                program_logger.debug("Dumped CMake entry for variable '%s'" % key)
     else:
-        this_logger.info("Ready to dump database to CMake file")
-        with tinydb_db as db:
+        program_logger.info("Ready to dump database to CMake file")
+        with tinydb_database as db:
             db_table = db.table(table)
             data = db_table.all()
             dicts = {data[i]['variable']: data[i] for i in range(0, len(data))}
@@ -232,12 +256,16 @@ def dump_table(table: str, file, header, default):
                                    .format(key, doc['value'], doc['type'], doc['docstring']))
                     else:
                         raise SystemExit(13, 'Invalid table was provided!')
-                    this_logger.debug("Dumped CMake entry for variable '%s'" % key)
+                    program_logger.debug("Dumped CMake entry for variable '%s'" % key)
                 else:
-                    this_logger.debug("Ignoring variable '%s' with default value" % key)
+                    program_logger.debug("Ignoring variable '%s' with default value" % key)
 
 
 def dump_db(args):
+    """
+    Dump the whole database, including all of it's tables.
+    :param args: parsed arguments which defines the script behaviour.
+    """
     # Verify the flags
     if not args.template or not args.file:
         program_parser.error(
@@ -247,34 +275,41 @@ def dump_db(args):
     with io.StringIO("") as output:
         with args.template as template:
             output.write(template.read())
-            this_logger.info("Copied template file to output file")
+            program_logger.info("Copied template file to output file")
         output.write('\n')
         dump_table('SET', output, args.header, args.default)
-        this_logger.info("Dumped SET table to output file")
+        program_logger.info("Dumped SET table to output file")
         dump_table('SET_FORCE', output, args.header, args.default)
-        this_logger.info("Dumped SET_FORCE table to output file")
+        program_logger.info("Dumped SET_FORCE table to output file")
         with args.file as real_output:
             output.seek(0)
             real_output.write(output.read())
-            this_logger.info("File '%s' written to disk" % real_output.name)
+            program_logger.info("File '%s' written to disk" % real_output.name)
 
 
 def main(args):
+    """
+    Main program (entry point).
+    :param args: arguments from command line
+    """
+    global program_logger
     parsed = parse_args(args)
-    if program_parser is None or parsed_args is None:
+    if program_parser is None:
         raise SystemExit(11, 'Program argument parser not set or global argument set is None.')
+    if parsed_arguments is None:
+        raise SystemExit(14, 'Parsed program arguments is None.')
     if parsed.verbose:
-        this_logger.setLevel(logging.DEBUG)
-        this_logger.info("Logger level changed to DEBUG")
+        program_logger.setLevel(logging.DEBUG)
+        program_logger.info("Logger level changed to DEBUG")
     if parsed.action == 'INT':
         init_db(parsed)
-        this_logger.info("Operation INT")
+        program_logger.info("Operation INT")
     elif parsed.action == 'SAE':
         set_and_export(parsed)
-        this_logger.info("Operation SAE")
+        program_logger.info("Operation SAE")
     elif parsed.action == 'END':
         dump_db(parsed)
-        this_logger.info("Operation END")
+        program_logger.info("Operation END")
 
 
 if __name__ == '__main__':

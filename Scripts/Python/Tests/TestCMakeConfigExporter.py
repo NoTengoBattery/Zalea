@@ -93,7 +93,7 @@ def test_init_db(db_file):
 def test_init_db_deffile():
     args = ['INT']
     main(args)
-    assert os.path.exists(default_db_filename) == 1
+    assert os.path.exists(default_json_filename) == 1
 
 
 def test_insert_no_varname():
@@ -144,7 +144,7 @@ def test_value_insertion():
     # Open the raw DB
     # Access the SET table
     # Query the just inserted value
-    raw_db = TinyDB(default_db_filename)
+    raw_db = TinyDB(default_json_filename)
     table_db = raw_db.table('SET')
     entry = table_db.search(where('variable') == 'IVAR')
     # Test: Not none, values are correct
@@ -174,7 +174,7 @@ def test_value_insertion_with_default():
     # Open the raw DB
     # Access the SET table
     # Query the just inserted value
-    raw_db = TinyDB(default_db_filename)
+    raw_db = TinyDB(default_json_filename)
     table_db = raw_db.table('SET')
     entry = table_db.search(where('variable') == 'IVAR')
     # Test: Not none, values are correct
@@ -204,7 +204,7 @@ def test_value_insertion_with_default_update():
     # Open the raw DB
     # Access the SET table
     # Query the just inserted value
-    raw_db = TinyDB(default_db_filename)
+    raw_db = TinyDB(default_json_filename)
     table_db = raw_db.table('SET')
     entry = table_db.search(where('variable') == 'IVAR')
     # Test: Not none, values are correct
@@ -221,7 +221,7 @@ def test_value_insertion_with_default_update():
             '--default', 'IVAL',
             '--docstring', 'DESC']
     main(args)
-    raw_db = TinyDB(default_db_filename)
+    raw_db = TinyDB(default_json_filename)
     table_db = raw_db.table('SET')
     entry = table_db.search(where('variable') == 'IVAR')
     # Test: Not none, values are correct
@@ -268,7 +268,7 @@ def test_value_update(caplog, template_file, cmake_file):
         # Open the raw DB
         # Access the SET table
         # Query the just inserted value
-        raw_db = TinyDB(default_db_filename)
+        raw_db = TinyDB(default_json_filename)
         table_db = raw_db.table('SET')
         entry = table_db.search(where('variable') == 'IVAR')
         # Test: Not none, values are correct
@@ -298,7 +298,7 @@ def test_value_insert_force():
     # Open the raw DB
     # Access the SET_FORCE table
     # Query the just inserted value
-    raw_db = TinyDB(default_db_filename)
+    raw_db = TinyDB(default_json_filename)
     table_db = raw_db.table('SET_FORCE')
     entry = table_db.search(where('variable') == 'IVAR')
     # Test: Not none, values are correct
@@ -336,7 +336,7 @@ def test_value_update_force():
     # Open the raw DB
     # Access the SET_FORCE table
     # Query the just inserted value
-    raw_db = TinyDB(default_db_filename)
+    raw_db = TinyDB(default_json_filename)
     table_db = raw_db.table('SET_FORCE')
     entry = table_db.search(where('variable') == 'IVAR')
     # Test: Not none, values are correct
