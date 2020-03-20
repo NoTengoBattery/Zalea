@@ -27,7 +27,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.15)
 
 # We won't support in-tree build, however, we support build in a tree subdirectory
 IF ("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
-  MESSAGE(FATAL_ERROR "In-source builds are not supported. Please run CMake in an different directory.")
+ MESSAGE(FATAL_ERROR "In-source builds are not supported. Please run CMake in an different directory.")
 ENDIF ()
 
 # Include tree definition. The 'Tree.cmake' file sets the tree structure, all the needed paths and special files
@@ -40,12 +40,12 @@ SET(CMAKE_MODULE_PATH "${TREE_SCRIPTS_CMAKE_MODULES_PATH}")
 # We rely on Python 3.7 for CMake Extensions, which are Python scripts that extends the build system
 FIND_PACKAGE(Python3 COMPONENTS Interpreter)
 IF (NOT Python3_Interpreter_FOUND)
-  MESSAGE(FATAL_ERROR "No Python 3 interpreter found. Python 3.7 or later is required.")
+ MESSAGE(FATAL_ERROR "No Python 3 interpreter found. Python 3.7 or later is required.")
 ELSEIF (Python3_VERSION VERSION_LESS 3.7)
-  MESSAGE(FATAL_ERROR "Python 3.7 or newer is required to build this project.")
+ MESSAGE(FATAL_ERROR "Python 3.7 or newer is required to build this project.")
 ELSE ()
-  MESSAGE(STATUS "Found a suitable version of Python 3: \"Python ${Python3_VERSION}\"")
-  MESSAGE(STATUS "Python executable: '${Python3_EXECUTABLE}'")
+ MESSAGE(STATUS "Found a suitable version of Python 3: \"Python ${Python3_VERSION}\"")
+ MESSAGE(STATUS "Python executable: '${Python3_EXECUTABLE}'")
 ENDIF ()
 
 # Manually include this Python extension. This is the Python runner, a pure CMake runner needed to install the VENV
@@ -53,16 +53,16 @@ INCLUDE("${TREE_SCRIPTS_CMAKE_EXTENSIONS_PATH}/PurePythonRunner.cmake")
 
 # Generate the Python Virtual Environment on the first run. Then try to update the CMake paths
 IF (NOT PYTHON3_GENERATED)
-  MESSAGE(STATUS "Ready to install the Python Virtual Environment...")
-  FILE(MAKE_DIRECTORY "${TREE_SCRIPTS_PYTHON3_ENV_PATH}")
-  RUN_PYTHON3_SCRIPT("${PYTHON_GENERATE_PY}" "${TREE_SCRIPTS_PYTHON3_ENV_PATH}" ".")
-  UNSET(_Python3_EXECUTABLE CACHE)
-  FIND_PROGRAM(_Python3_EXECUTABLE NAMES "python3" "python" PATHS
-               "${TREE_SCRIPTS_PYTHON3_ENV_PATH}" PATH_SUFFIXES "Scripts" "bin" NO_DEFAULT_PATH)
-  SET(Python3_EXECUTABLE "${_Python3_EXECUTABLE}" CACHE INTERNAL "The Python 3 Virtual Environment executable." FORCE)
-  SET(_Python3_EXECUTABLE "${_Python3_EXECUTABLE}" CACHE INTERNAL "The Python 3 Virtual Environment executable." FORCE)
-  FIND_PACKAGE(Python3 REQUIRED COMPONENTS Interpreter)
-  SET(PYTHON3_GENERATED ON CACHE INTERNAL "Detect if the Python 3 Virtual Environment has been installed.")
+ MESSAGE(STATUS "Ready to install the Python Virtual Environment...")
+ FILE(MAKE_DIRECTORY "${TREE_SCRIPTS_PYTHON3_ENV_PATH}")
+ RUN_PYTHON3_SCRIPT("${PYTHON_GENERATE_PY}" "${TREE_SCRIPTS_PYTHON3_ENV_PATH}" ".")
+ UNSET(_Python3_EXECUTABLE CACHE)
+ FIND_PROGRAM(_Python3_EXECUTABLE NAMES "python3" "python" PATHS
+              "${TREE_SCRIPTS_PYTHON3_ENV_PATH}" PATH_SUFFIXES "Scripts" "bin" NO_DEFAULT_PATH)
+ SET(Python3_EXECUTABLE "${_Python3_EXECUTABLE}" CACHE INTERNAL "The Python 3 Virtual Environment executable." FORCE)
+ SET(_Python3_EXECUTABLE "${_Python3_EXECUTABLE}" CACHE INTERNAL "The Python 3 Virtual Environment executable." FORCE)
+ FIND_PACKAGE(Python3 REQUIRED COMPONENTS Interpreter)
+ SET(PYTHON3_GENERATED ON CACHE INTERNAL "Detect if the Python 3 Virtual Environment has been installed.")
 ENDIF ()
 
 # For a CMake cross-compilation (the one used throughout this process), you must specify some variables that will
@@ -104,7 +104,7 @@ MESSAGE(STATUS "${PROJECT_BRIEF}")
 
 # Set the INTERPROCEDURAL_OPTIMIZATION default to true (LTO)
 IF (LTO_AVAILABLE)
-  SET(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
+ SET(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
 ENDIF ()
 
 # Set the language standard for the project (C11, C++2x)
@@ -115,24 +115,24 @@ SET(CMAKE_CXX_STANDARD 20)
 
 # Enable clang-tidy if found by the toolchain file. Try to keep them in sync with CLion.
 IF (CMAKE_CLANG_TIDY AND KERNEL_COMPILER_CLANG)
-  SET(TIDY_CHECKS -checks=*)
-  SET(CMAKE_C_CLANG_TIDY "${CMAKE_CLANG_TIDY}" "${TIDY_CHECKS}")
-  SET(CMAKE_CXX_CLANG_TIDY "${CMAKE_CLANG_TIDY}" "${TIDY_CHECKS}")
+ SET(TIDY_CHECKS -checks=*)
+ SET(CMAKE_C_CLANG_TIDY "${CMAKE_CLANG_TIDY}" "${TIDY_CHECKS}")
+ SET(CMAKE_CXX_CLANG_TIDY "${CMAKE_CLANG_TIDY}" "${TIDY_CHECKS}")
 ELSEIF (CMAKE_CLANG_TIDY AND NOT KERNEL_COMPILER_CLANG)
-  MESSAGE(STATUS "Clang's static analyzer found, but it won't be used because the compiler is not Clang")
+ MESSAGE(STATUS "Clang's static analyzer found, but it won't be used because the compiler is not Clang")
 ENDIF ()
 
 # Enable cpplint if found the toolchain file.
 IF (CMAKE_CPPLINT)
-  SET(CPPLINT_CHECKS --linelength=120 --recursive)
-  SET(CMAKE_CXX_CPPLINT "${CMAKE_CPPLINT}" "${CPPLINT_CHECKS}")
+ SET(CPPLINT_CHECKS --linelength=120 --recursive)
+ SET(CMAKE_CXX_CPPLINT "${CMAKE_CPPLINT}" "${CPPLINT_CHECKS}")
 ENDIF ()
 
 # Enable cppcheck if found the toolchain file.
 IF (CMAKE_CPPCHECK)
-  SET(CPPCHECK_CHECKS --enable=all --suppress=unusedFunction)
-  SET(CMAKE_C_CPPCHECK "${CMAKE_CPPCHECK}" "${CPPCHECK_CHECKS}" --language=c)
-  SET(CMAKE_CXX_CPPCHECK "${CMAKE_CPPCHECK}" "${CPPCHECK_CHECKS}" --language=c++)
+ SET(CPPCHECK_CHECKS --enable=all --suppress=unusedFunction)
+ SET(CMAKE_C_CPPCHECK "${CMAKE_CPPCHECK}" "${CPPCHECK_CHECKS}" --language=c)
+ SET(CMAKE_CXX_CPPCHECK "${CMAKE_CPPCHECK}" "${CPPCHECK_CHECKS}" --language=c++)
 ENDIF ()
 
 # Add an interface library for config.h (and friends)
@@ -147,8 +147,8 @@ TARGET_LINK_LIBRARIES("CoreLibraries" "ExecutableLibrary" "CompilerMagic" "Compi
 ADD_SUBDIRECTORY("${TREE_ARCHITECTURE_PATH}")
 ADD_SUBDIRECTORY("${TREE_LIBRARY_PATH}")
 IF (CMAKE_DOXYGEN)
-  MESSAGE(STATUS "Doxygen was found. The build system will generate the documentation during build")
-  ADD_SUBDIRECTORY("${TREE_DOCUMENTATION_PATH}")
+ MESSAGE(STATUS "Doxygen was found. The build system will generate the documentation during build")
+ ADD_SUBDIRECTORY("${TREE_DOCUMENTATION_PATH}")
 ENDIF ()
 
 # Dump the Current Config database to a CMake and header file at the end of configuration

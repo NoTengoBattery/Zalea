@@ -39,18 +39,18 @@
 /// All numbers in this struct are signed, but the value is unsigned and it's sign is defined by the sign bit in the
 /// flags field. A special process is required to build a number from a *normal* number.
 struct signedT {
-    /// The flags of this number. Flags are defined by the macros in this file.
-    unsigned flags;
-    /// The unsigned value of this number.
-    unsigned value;
+ /// The flags of this number. Flags are defined by the macros in this file.
+ unsigned flags;
+ /// The unsigned value of this number.
+ unsigned value;
 };
 
 /// \brief This is a struct that represents a division. It has two fields, which are signedT values.
 ///
 /// Thus, this struct represents a signed division between two integer numbers.
 struct divisionT {
-    struct signedT numerator;
-    struct signedT denominator;
+ struct signedT numerator;
+ struct signedT denominator;
 };
 
 /// \brief This is the result of the division operation.
@@ -58,16 +58,17 @@ struct divisionT {
 /// This struct is designed to return the values of the quotient and remainder after the division, thus returning both
 /// results in the same call.
 struct resultT {
-    /// Remainder is always positive or 0, by definition
-    unsigned remainder;
-    /// The signedT struct is to recycle the signed division for unsigned values, just discarding the sign.
-    struct signedT quotient;
+ /// Remainder is always positive or 0, by definition
+ unsigned remainder;
+ /// The signedT struct is to recycle the signed division for unsigned values, just discarding the sign.
+ struct signedT quotient;
 };
 
 /// \brief Perform a long division.
 ///
 /// This function will perform a long signed division between the 2 integers provided and will return the result by
 /// changing the values in the struct provided by the caller.
+///
 /// \param operands a divisionT that represents the two operands.
 /// \param result a pointer to a resultT struct that this function will modify to return the results.
 void longDivision(struct divisionT *operands, struct resultT *result);

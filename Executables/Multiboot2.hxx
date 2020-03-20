@@ -68,10 +68,10 @@
 
 /// The Multiboot2 Header Tag. The bootloader searches for this tag and verifies it's integrity.
 struct alignas(MULTIBOOT_ALIGNMENT) multibootHeaderTag {
-    const std::uint32_t magic;
-    const std::uint32_t architecture;
-    const std::uint32_t size;
-    const std::uint32_t checksum;
+ const std::uint32_t magic;
+ const std::uint32_t architecture;
+ const std::uint32_t size;
+ const std::uint32_t checksum;
 };
 
 /* The following macros and structs are the Information Request header tag, which request a bunch of information */
@@ -131,10 +131,10 @@ const unsigned int requestNumber = 22;
 
 /// The Multiboot2 Information Request Tag. The bootloader will try to hand over this information to the OS.
 struct alignas(MULTIBOOT_ALIGNMENT) multibootInformationRequestTag {
-    const std::uint16_t type;
-    const std::uint16_t flags;
-    const std::uint32_t size;
-    const std::uint32_t requests[requestNumber];
+ const std::uint16_t type;
+ const std::uint16_t flags;
+ const std::uint32_t size;
+ const std::uint32_t requests[requestNumber];
 };
 
 /* These macros and structs are the Address tag, which will synchronize the physical address with the bootloader */
@@ -147,13 +147,13 @@ struct alignas(MULTIBOOT_ALIGNMENT) multibootInformationRequestTag {
 
 /// The Address Header Tag. This tag will synchronize the bootloader and the OS addresses.
 struct alignas(MULTIBOOT_ALIGNMENT) multibootAddressTag {
-    const std::uint16_t type;
-    const std::uint16_t flags;
-    const std::uint32_t size;
-    const std::uint32_t headerAddress;
-    const std::uint32_t loadAddress;
-    const std::uint32_t loadEndAddress;
-    const std::uint32_t bssEndAddress;
+ const std::uint16_t type;
+ const std::uint16_t flags;
+ const std::uint32_t size;
+ const std::uint32_t headerAddress;
+ const std::uint32_t loadAddress;
+ const std::uint32_t loadEndAddress;
+ const std::uint32_t bssEndAddress;
 };
 
 /* These macros and structs are the Entry Address tag, which will tell the bootloader where to jump after loading */
@@ -166,10 +166,10 @@ struct alignas(MULTIBOOT_ALIGNMENT) multibootAddressTag {
 
 /// The Entry Address Header Tag. This tag will tell the bootloader where to jump when the OS image is loaded.
 struct alignas(MULTIBOOT_ALIGNMENT) multibootEntryAddressTag {
-    const std::uint16_t type;
-    const std::uint16_t flags;
-    const std::uint32_t size;
-    const std::uint32_t entryAddress;
+ const std::uint16_t type;
+ const std::uint16_t flags;
+ const std::uint32_t size;
+ const std::uint32_t entryAddress;
 };
 
 /* These macros and structs are the Console Flags tag, which will tell the bootloader where to jump after loading */
@@ -192,10 +192,10 @@ struct alignas(MULTIBOOT_ALIGNMENT) multibootEntryAddressTag {
 
 /// The Console Header Tag. This tag will ask the bootloader a console, and will tell the bootloader it's requirements.
 struct alignas(MULTIBOOT_ALIGNMENT) multibootConsoleFlagsTag {
-    const std::uint16_t type;
-    const std::uint16_t flags;
-    const std::uint32_t size;
-    const std::uint32_t consoleFlags;
+ const std::uint16_t type;
+ const std::uint16_t flags;
+ const std::uint32_t size;
+ const std::uint32_t consoleFlags;
 };
 
 /* These macros and structs are the Framebuffer tag, which will tell the bootloader to initialize a framebuffer */
@@ -214,12 +214,12 @@ struct alignas(MULTIBOOT_ALIGNMENT) multibootConsoleFlagsTag {
 
 /// The Framebuffer Header Tag. This tag asks the bootloader a framebuffer and set it's properties.
 struct alignas(MULTIBOOT_ALIGNMENT) multibootFramebufferTag {
-    const std::uint16_t type;
-    const std::uint16_t flags;
-    const std::uint32_t size;
-    const std::uint32_t width;
-    const std::uint32_t height;
-    const std::uint32_t depth;
+ const std::uint16_t type;
+ const std::uint16_t flags;
+ const std::uint32_t size;
+ const std::uint32_t width;
+ const std::uint32_t height;
+ const std::uint32_t depth;
 };
 
 /* These macros and structs are the Module Alignment tag, which will tell the bootloader to page-align the modules */
@@ -232,9 +232,9 @@ struct alignas(MULTIBOOT_ALIGNMENT) multibootFramebufferTag {
 
 /// The Module Alignment Header Tag. This tag will tell the bootloader to align modules to the page boundary.
 struct alignas(MULTIBOOT_ALIGNMENT) multibootModuleAlignmentTag {
-    const std::uint16_t type;
-    const std::uint16_t flags;
-    const std::uint32_t size;
+ const std::uint16_t type;
+ const std::uint16_t flags;
+ const std::uint32_t size;
 };
 
 /* These macros and structs are the EFI Boot Services tag, which will tell the bootloader to boot as in EFI mode */
@@ -248,9 +248,9 @@ struct alignas(MULTIBOOT_ALIGNMENT) multibootModuleAlignmentTag {
 /// \brief The EFI Boot Services Header Tag. This tag tells the bootloader that the OS should be loaded without
 /// terminating the EFI boot services.
 struct alignas(MULTIBOOT_ALIGNMENT) multibootEfiBootServicesTag {
-    const std::uint16_t type;
-    const std::uint16_t flags;
-    const std::uint32_t size;
+ const std::uint16_t type;
+ const std::uint16_t flags;
+ const std::uint32_t size;
 };
 
 /* These macros and structs are the EFI32 Entry Address tag, which will tell the bootloader to jump into EFI32 code */
@@ -263,10 +263,10 @@ struct alignas(MULTIBOOT_ALIGNMENT) multibootEfiBootServicesTag {
 
 /// The EFI32 Entry Address Header Tag. This tag tells the bootloader where to begin executing EFI32 code.
 struct alignas(MULTIBOOT_ALIGNMENT) multibootEfi32EntryAddressTag {
-    const std::uint16_t type;
-    const std::uint16_t flags;
-    const std::uint32_t size;
-    const std::uint32_t entryAddress;
+ const std::uint16_t type;
+ const std::uint16_t flags;
+ const std::uint32_t size;
+ const std::uint32_t entryAddress;
 };
 
 /* These macros and structs are the EFI64 Entry Address tag, which will tell the bootloader to jump into EFI64 code */
@@ -279,10 +279,10 @@ struct alignas(MULTIBOOT_ALIGNMENT) multibootEfi32EntryAddressTag {
 
 /// The EFI64 Entry Address Header Tag. This tag tells the bootloader where to begin executing EFI64 code.
 struct alignas(MULTIBOOT_ALIGNMENT) multibootEfi64EntryAddressTag {
-    const std::uint16_t type;
-    const std::uint16_t flags;
-    const std::uint32_t size;
-    const std::uint32_t entryAddress;
+ const std::uint16_t type;
+ const std::uint16_t flags;
+ const std::uint32_t size;
+ const std::uint32_t entryAddress;
 };
 
 /* These macros and structs are the Relocatable tag, which will tell the bootloader that this image is relocatable */
@@ -302,13 +302,13 @@ struct alignas(MULTIBOOT_ALIGNMENT) multibootEfi64EntryAddressTag {
 /// \brief The Relocatable Header Tag. This tag tells the bootloader that the image is relocatable, and tells it's
 /// preferences to where it may be located.
 struct alignas(MULTIBOOT_ALIGNMENT) multibootRelocatableTag {
-    const std::uint16_t type;
-    const std::uint16_t flags;
-    const std::uint32_t size;
-    const std::uint32_t minimumAddress;
-    const std::uint32_t maximumAddress;
-    const std::uint32_t alignment;
-    const std::uint32_t preference;
+ const std::uint16_t type;
+ const std::uint16_t flags;
+ const std::uint32_t size;
+ const std::uint32_t minimumAddress;
+ const std::uint32_t maximumAddress;
+ const std::uint32_t alignment;
+ const std::uint32_t preference;
 };
 
 /* These macros and structs are the End tag, which will tell the bootloader that this is the ending tag */
@@ -321,9 +321,9 @@ struct alignas(MULTIBOOT_ALIGNMENT) multibootRelocatableTag {
 
 /// \brief The Multiboot End Header Tag. This tag tells the bootloader to stop loading tags.
 struct alignas(MULTIBOOT_ALIGNMENT) multibootEndTag {
-    const std::uint16_t type;
-    const std::uint16_t flags;
-    const std::uint32_t size;
+ const std::uint16_t type;
+ const std::uint16_t flags;
+ const std::uint32_t size;
 };
 
 #endif //ZALEA_MULTIBOOT2_HXX

@@ -17,8 +17,7 @@
 ///
 /// \file
 /// Implementation of `strlen` which is globally usable. This implementation can be used globally, and it's the base of
-/// the Non Standard C Library and it's part of the Compiler Runtime, which means that it is similar to a compiler
-/// intrinsic.
+/// the Non Standard C Library and part of the Compiler Runtime, which means that it is similar to a compiler intrinsic.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
@@ -29,13 +28,16 @@
 /// This is an implementation of the C standard function `strlen`. This function behaves exactly as the standard
 /// version. It means that calling this function with a pointer that is not a string or is a string without null
 /// character at the end, then the behaviour is undefined.
+///
+/// \note This implementation is meant to be portable, not the fastest.
+///
 /// \param string is the null-terminated string to evaluate.
 /// \return the size of the string, from the beginning to the null character without including it.
 size_t __strlen(const char *string) {
-    size_t length = 0x00;
-    while (*string != 0x00) {
-        length += 0x01;
-        string += 0x01;
-    }
-    return length;
+  size_t length = 0x00;
+  while (*string != 0x00) {
+    length += 0x01;
+    string += 0x01;
+  }
+  return length;
 }

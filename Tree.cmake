@@ -34,24 +34,24 @@
 # Root folders
 SET(TREE_SRC_ROOT_PATH "${CMAKE_SOURCE_DIR}")                                                                # <- Parent
 IF (NOT TREE_SELF_PATH)
-  MESSAGE(STATUS "Source root path: '${TREE_SRC_ROOT_PATH}'")
+ MESSAGE(STATUS "Source root path: '${TREE_SRC_ROOT_PATH}'")
 ENDIF ()
 SET(TREE_BIN_ROOT_PATH "${CMAKE_BINARY_DIR}")                                                                # <- Parent
 IF (NOT TREE_SELF_PATH)
-  MESSAGE(STATUS "Binary/build root path: '${TREE_BIN_ROOT_PATH}'")
+ MESSAGE(STATUS "Binary/build root path: '${TREE_BIN_ROOT_PATH}'")
 ENDIF ()
 
 # Output important root folder
 SET(TREE_BIN_IMPORTANT_PATH ${CMAKE_BINARY_DIR}/Important)                                                   # <- Parent
 SET(TREE_BIN_IMPORTANT_INCLUDE_PATH ${TREE_BIN_IMPORTANT_PATH}/Include)
 IF (NOT TREE_SELF_PATH)
-  MESSAGE(STATUS "Build important files root path: '${TREE_BIN_IMPORTANT_PATH}'")
+ MESSAGE(STATUS "Build important files root path: '${TREE_BIN_IMPORTANT_PATH}'")
 ENDIF ()
 
 # Source code tree structure
 SET(TREE_ARCHITECTURE_PATH "${TREE_SRC_ROOT_PATH}/Architecture")                                             # <- Parent
 IF (NOT TREE_SELF_PATH)
-  MESSAGE(STATUS "Architecture root path: '${TREE_ARCHITECTURE_PATH}'")
+ MESSAGE(STATUS "Architecture root path: '${TREE_ARCHITECTURE_PATH}'")
 ENDIF ()
 SET(TREE_ARCHITECTURE_INCLUDE_PATH "${TREE_ARCHITECTURE_PATH}/Include")
 SET(TREE_ARCHITECTURE_X_PATH "${TREE_ARCHITECTURE_PATH}/${KERNEL_ARCH}")
@@ -59,20 +59,20 @@ SET(TREE_ARCHITECTURE_X_CONFIG_PATH "${TREE_ARCHITECTURE_X_PATH}/Configurations"
 SET(TREE_ARCHITECTURE_X_BOOT_PATH "${TREE_ARCHITECTURE_X_PATH}/Boot")
 SET(TREE_DEVICE_DESCRIPTOR_PATH "${TREE_SRC_ROOT_PATH}/Device Descriptor")                                   # <- Parent
 IF (NOT TREE_SELF_PATH)
-  MESSAGE(STATUS "Device Descriptor root path: '${TREE_DEVICE_DESCRIPTOR_PATH}'")
+ MESSAGE(STATUS "Device Descriptor root path: '${TREE_DEVICE_DESCRIPTOR_PATH}'")
 ENDIF ()
 SET(TREE_DEVICE_DESCRIPTOR_X_PATH "${TREE_DEVICE_DESCRIPTOR_PATH}/${KERNEL_ARCH}")
 SET(TREE_DOCUMENTATION_PATH "${TREE_SRC_ROOT_PATH}/Documentation")                                           # <- Parent
 IF (NOT TREE_SELF_PATH)
-  MESSAGE(STATUS "Documentation root path: '${TREE_DOCUMENTATION_PATH}'")
+ MESSAGE(STATUS "Documentation root path: '${TREE_DOCUMENTATION_PATH}'")
 ENDIF ()
 SET(TREE_EXECUTABLES_PATH "${TREE_SRC_ROOT_PATH}/Executables")                                               # <- Parent
 IF (NOT TREE_SELF_PATH)
-  MESSAGE(STATUS "Executables root path: '${TREE_EXECUTABLES_PATH}'")
+ MESSAGE(STATUS "Executables root path: '${TREE_EXECUTABLES_PATH}'")
 ENDIF ()
 SET(TREE_LIBRARY_PATH "${TREE_SRC_ROOT_PATH}/Library")                                                       # <- Parent
 IF (NOT TREE_SELF_PATH)
-  MESSAGE(STATUS "Library root path: '${TREE_LIBRARY_PATH}'")
+ MESSAGE(STATUS "Library root path: '${TREE_LIBRARY_PATH}'")
 ENDIF ()
 SET(TREE_LIBRARY_COMPILERSUPPORT_PATH "${TREE_LIBRARY_PATH}/CompilerSupport")
 SET(TREE_LIBRARY_COMPILERSUPPORT_COMPILERMAGIC_PATH "${TREE_LIBRARY_COMPILERSUPPORT_PATH}/CompilerMagic")
@@ -81,7 +81,7 @@ SET(TREE_LIBRARY_NONSTDCLIBRART_PATH "${TREE_LIBRARY_PATH}/NonStdCLibrary")
 SET(TREE_LIBRARY_NONSTDCXXLIBRART_PATH "${TREE_LIBRARY_PATH}/NonStdC++Library")
 SET(TREE_SCRIPTS_PATH "${TREE_SRC_ROOT_PATH}/Scripts")                                                       # <- Parent
 IF (NOT TREE_SELF_PATH)
-  MESSAGE(STATUS "Scripts root path: '${TREE_SCRIPTS_PATH}'")
+ MESSAGE(STATUS "Scripts root path: '${TREE_SCRIPTS_PATH}'")
 ENDIF ()
 SET(TREE_SCRIPTS_CMAKE_PATH "${TREE_SCRIPTS_PATH}/CMake")
 SET(TREE_SCRIPTS_CMAKE_EXTENSIONS_PATH "${TREE_SCRIPTS_CMAKE_PATH}/Extensions")

@@ -31,23 +31,26 @@
 ///
 /// This entry point is the secondary entry point for x86. As x86 implements (exclusively) the Multiboot2 protocol, this
 /// function will perform some basic checking for the Multiboot2 i386 status as documented in the GNU GRUB user manual.
+///
 /// \param magic this is the special magic number that the bootloader should provide.
 /// \param mbs this is the pointer to the structure of information that the bootloader should provide.
 void secondEntryPoint(unsigned int magic, unsigned int mbs) ATTR_SECTION(".start");
 
 ATTR_NORETURN void secondEntryPoint(unsigned int magic, unsigned int mbs) {
-    if (magic != multibootMagicConstant  // If the magic value is not correct...
-        || ((unsigned *) mbs >= &imageStart && (unsigned *) mbs <= &imageEnd)  // ... if inside the image...
-        || (void *) mbs == NULL) {  // ... or if it's pointer is null
-        miserableFail();
-        BUILTIN_UNREACHABLE;
-    } else {
-        // If the Device Descriptor lookup does not work, terminate the execution immediately
-        if (isDeviceDescriptorWorking() == false) { miserableFail(); }
-        // Store the value of EAX inside the (temporary) Multiboot pointer
-        *multibootStructPointer = (volatile void *) mbs;
-        // Clear the BSS section of the loaded memory...
-        memoryClear(&bssStart, &bssEnd);
-        BUILTIN_UNREACHABLE;
+  if (magic != multibootMagicConstant  // If the magic value is not correct...
+      || ((unsigned *) mbs >= &imageStart && (unsigned *) mbs <= &imageEnd)  // ... if inside the image...
+      || (void *) mbs == NULL) {  // ... or if it's pointer is null
+    miserableFail();
+    BUILTIN_UNREACHABLE;
+  } else {
+    // If the Device Descriptor lookup does not work, terminate the execution immediately
+    if (isDeviceDescriptorWorking() == false) {
+      miserableFail();
     }
+    // Store the value of EAX inside the (temporary) Multiboot pointer
+    *multibootStructPointer = (volatile void *) mbs;
+    // Clear the BSS section of the loaded memory...
+    memoryClear(&bssStart, &bssEnd);
+    BUILTIN_UNREACHABLE;
+  }
 }

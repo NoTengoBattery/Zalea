@@ -37,10 +37,12 @@ constexpr auto setNthBit(T1 x, T2 y) { return x | (0x01U << y); }
 #elif defined(__ASSEMBLER__) // ASM
 
 /// \brief Generate a bit mask to perform a bitwise AND to clear the desired bit.
+///
 /// \param x the bit to be cleared by performin a bitwise AND.
 #define CLEAR_BIT_MASK(x) (-1 ^ (1 << (x)))
 
 /// \brief Generate a bit mask to perform a bitwise OR to set the desired bit.
+///
 /// \param x the bit to be set by performin a bitwise OR.
 #define SET_BIT_MASK(x) (0 ^ (1 << (x)))
 
@@ -49,44 +51,54 @@ constexpr auto setNthBit(T1 x, T2 y) { return x | (0x01U << y); }
 #include <stdint.h>
 
 /// \brief Calculate the number of bits in certain data type.
+///
 /// \param x the value to calculate the bit length.
 #define BITS_OF(x) (sizeof(x) * CHAR_BIT)
 /// \brief Rotate a value to the left by n bits.
+///
 /// \param x the constant to rotate.
 /// \param y the bits to rotate.
 #define BRL(x, y) BRLN(x, y, BITS_OF(x))
 /// \brief Rotate a value to the left by n bits, if the constant is only m bits meaningful.
+///
 /// \param x the constant to rotate.
 /// \param y the bits to rotate.
 /// \param z the meaningful bits of the constant.
 #define BRLN(x, y, z) (((((x) << (y)) & ~TRUNCATE_MASK(y)) | \
     (((x) >> ((z) - (y))) & TRUNCATE_MASK(y))) & TRUNCATE_MASK(z))
 /// \brief Rotate a value to the right by n bits.
+///
 /// \param x the constant to rotate.
 /// \param y the bits to rotate.
 #define BRR(x, y) BRRN(x, y, BITS_OF(x))
 /// \brief Rotate a value to the right by n bits, if the constant is only m bits meaningful.
+///
 /// \param x the constant to rotate.
 /// \param y the bits to rotate.
 /// \param z the meaningful bits of the constant.
 #define BRRN(x, y, z) (((((x) >> (y)) & TRUNCATE_MASK((z) - (y))) | \
     (((x) << ((z) - (y))) & ~TRUNCATE_MASK((z) - (y)))) & TRUNCATE_MASK(z))
 /// \brief Clear the n-th bit of a constant.
+///
 /// \param x the constant.
 /// \param y the bit.
 #define CLEAR_NTH_BIT(x, y) ((x) & ~(0x01U << (y)))
 /// \brief Set the n-th bit of a constant.
+///
 /// \param x the constant.
 /// \param y the bit.
 #define SET_NTH_BIT(x, y) ((x) | (0x01U << (y)))
 /// \brief Test the n-th bit of a constant.
+///
 /// \param x the constant.
 /// \param y the bit.
 #define TEST_NTH_BIT(x, y) (((x) >> (y)) & 0x01U)
 /// \brief create a truncate mask of n significant bits.
+///
 /// \param x the significant bits to truncate.
 #define TRUNCATE_MASK(x) (~(UINTMAX_MAX << (x)))
 /// \brief XOR then NOT the n-th bit of a constant.
+///
 /// \param x the constant.
 /// \param y the constant.
 /// \param z the bit.

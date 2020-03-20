@@ -24,7 +24,7 @@
 
 #include "string.h"
 
-void *memset(void *buffer, int fill, size_t size) {
-    extern void *__memset(void *, int, size_t);
-    return __memset(buffer, fill, size);  // Use the implementation inside the Compiler Runtime
+void *memset(void *buffer, int fill, size_t length) {
+  extern void *__memset(void *, int, size_t);
+  return __memset(buffer, fill, length);  // Use the implementation inside the Compiler Runtime
 }

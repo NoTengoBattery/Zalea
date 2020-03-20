@@ -24,43 +24,43 @@
 
 IF (TREE_SELF_PATH) # This will define if we have access to the scope variables and cache
 
-  # If the user gave the system a path for binutils, tell the driver to use it first
-  IF (CMAKE_BINUTILS_BIN_PATH)
-    STRING(APPEND CMAKE_ASM_FLAGS_INIT "\"-B${CMAKE_BINUTILS_BIN_PATH}\" ")
-  ENDIF ()
+ # If the user gave the system a path for binutils, tell the driver to use it first
+ IF (CMAKE_BINUTILS_BIN_PATH)
+  STRING(APPEND CMAKE_ASM_FLAGS_INIT "\"-B${CMAKE_BINUTILS_BIN_PATH}\" ")
+ ENDIF ()
 
-  # Those are the base "freestanding" flags
-  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-ffreestanding ")
-  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-nostdlib ")
-  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-pedantic ")
-  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-pipe ")
-  # Those flags define part of the ABI that is common to all architectures
-  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-fno-delete-null-pointer-checks ")
-  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-fstack-protector-strong ")
-  # Those flags define the diagnostics to be issued (or not) by the compiler
-  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-Wall ")
-  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-Werror ")
-  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-Wextra ")
-  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-Wformat=2 ")
-  # Those flags define the linker to be used (this is needed for all cross compilers)
-  STRING(APPEND CMAKE_EXE_LINKER_FLAGS_INIT "-g ")
-  # Add the march and mtune flags
-  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-march=${MACHINE_MARCH} ")
-  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-mtune=${MACHINE_MTUNE} ")
+ # Those are the base "freestanding" flags
+ STRING(APPEND CMAKE_ASM_FLAGS_INIT "-ffreestanding ")
+ STRING(APPEND CMAKE_ASM_FLAGS_INIT "-nostdlib ")
+ STRING(APPEND CMAKE_ASM_FLAGS_INIT "-pedantic ")
+ STRING(APPEND CMAKE_ASM_FLAGS_INIT "-pipe ")
+ # Those flags define part of the ABI that is common to all architectures
+ STRING(APPEND CMAKE_ASM_FLAGS_INIT "-fno-delete-null-pointer-checks ")
+ STRING(APPEND CMAKE_ASM_FLAGS_INIT "-fstack-protector-strong ")
+ # Those flags define the diagnostics to be issued (or not) by the compiler
+ STRING(APPEND CMAKE_ASM_FLAGS_INIT "-Wall ")
+ STRING(APPEND CMAKE_ASM_FLAGS_INIT "-Werror ")
+ STRING(APPEND CMAKE_ASM_FLAGS_INIT "-Wextra ")
+ STRING(APPEND CMAKE_ASM_FLAGS_INIT "-Wformat=2 ")
+ # Those flags define the linker to be used (this is needed for all cross compilers)
+ STRING(APPEND CMAKE_EXE_LINKER_FLAGS_INIT "-g ")
+ # Add the march and mtune flags
+ STRING(APPEND CMAKE_ASM_FLAGS_INIT "-march=${MACHINE_MARCH} ")
+ STRING(APPEND CMAKE_ASM_FLAGS_INIT "-mtune=${MACHINE_MTUNE} ")
 
-  # These flags are based on which kind of build we are doing
-  STRING(APPEND CMAKE_ASM_FLAGS_DEBUG_INIT "-g -DDEBUG ")
-  STRING(APPEND CMAKE_ASM_FLAGS_MINSIZEREL_INIT "-Os -DMINSIZEREL ")
-  STRING(APPEND CMAKE_ASM_FLAGS_RELEASE_INIT "-O3 -DRELEASE ")
-  STRING(APPEND CMAKE_ASM_FLAGS_RELWITHDEBINFO_INIT "-O2 -g -DRELWITHDEBINFO ")
+ # These flags are based on which kind of build we are doing
+ STRING(APPEND CMAKE_ASM_FLAGS_DEBUG_INIT "-g -DDEBUG ")
+ STRING(APPEND CMAKE_ASM_FLAGS_MINSIZEREL_INIT "-Os -DMINSIZEREL ")
+ STRING(APPEND CMAKE_ASM_FLAGS_RELEASE_INIT "-O3 -DRELEASE ")
+ STRING(APPEND CMAKE_ASM_FLAGS_RELWITHDEBINFO_INIT "-O2 -g -DRELWITHDEBINFO ")
 
-  # These flags will disable any fancy features (needed to build very early boot code or the compiler runtime)
-  SET(ASM_NO_RTTI "-fno-rtti")
-  SET(ASM_NO_EXCEPTIONS "-fno-exceptions")
-  SET(ASM_NO_STACK_PROTECTOR "-fno-stack-protector")
+ # These flags will disable any fancy features (needed to build very early boot code or the compiler runtime)
+ SET(ASM_NO_RTTI "-fno-rtti")
+ SET(ASM_NO_EXCEPTIONS "-fno-exceptions")
+ SET(ASM_NO_STACK_PROTECTOR "-fno-stack-protector")
 
-  # Use the following file extensions as ASM source files
-  SET(CMAKE_ASM_SOURCE_FILE_EXTENSIONS "sx;s")
-  STRING(APPEND CMAKE_ASM_FLAGS_INIT "-x assembler-with-cpp ")
+ # Use the following file extensions as ASM source files
+ SET(CMAKE_ASM_SOURCE_FILE_EXTENSIONS "sx;s")
+ STRING(APPEND CMAKE_ASM_FLAGS_INIT "-x assembler-with-cpp ")
 
 ENDIF ()

@@ -50,8 +50,9 @@
     <codeStyleSettings language="CMake">
       <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
       <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />
+      <option name="SPACE_WITHIN_METHOD_PARENTHESES" value="true" />
       <indentOptions>
-        <option name="INDENT_SIZE" value="2" />
+        <option name="INDENT_SIZE" value="1" />
         <option name="CONTINUATION_INDENT_SIZE" value="2" />
         <option name="TAB_SIZE" value="2" />
       </indentOptions>

@@ -33,6 +33,7 @@
 #else
 
 /// \brief Set the `aligned` attribute.
+///
 /// \param x the alignment in bytes.
 #define ATTR_ALIGNED(x) __attribute__ ((aligned (x)))
 /// Force the compiler to emit the code instead of performing a function call.
@@ -44,14 +45,17 @@
 /// Mark the function as `noreturn`, this mean, the function should not return.
 #define ATTR_NORETURN __attribute__ ((noreturn))
 /// \brief Make the compiler pass some parameters using registers instead of using the stack.
+///
 /// \param x the number of registers to be used as parameters.
 #define ATTR_REGPARM(x) __attribute__ ((regparm (x)))
 /// \brief Change the attribute `section`, making the compiler to place the object in such section.
+///
 /// \param x the section where to emit the object.
 #define ATTR_SECTION(x) __attribute__ ((section (x)))
 /// Avoid the compiler from optimizing-out functions that are actually used.
 #define ATTR_USED __attribute__ ((used))
 /// \brief Change the visibility of the function.
+///
 /// \param x the new visibility.
 #define ATTR_VISIBILITY(x) __attribute__ ((visibility(x)))
 /// Hint the compiler that a section of code is unreachable. Useful when a function is marked as `noreturn`.

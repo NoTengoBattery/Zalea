@@ -24,17 +24,17 @@
 # List all subdirectories, they are the available architectures
 LIST_SUBDIR("${TREE_ARCHITECTURE_PATH}" AVAILABLE_ARCHITECTURES)
 IF (NOT AVAILABLE_ARCHITECTURES)
-  MESSAGE(FATAL_ERROR "No architectures to build! You shouldn't have to read this message ever!")
+ MESSAGE(FATAL_ERROR "No architectures to build! You shouldn't have to read this message ever!")
 ELSE ()
-  CMAKE_LIST_TO_HUMAN_LIST(AVAILABLE_ARCHITECTURES H_VALID_ARCH)
-  MESSAGE(STATUS "Found the following architectures: ${H_VALID_ARCH}.")
+ CMAKE_LIST_TO_HUMAN_LIST(AVAILABLE_ARCHITECTURES H_VALID_ARCH)
+ MESSAGE(STATUS "Found the following architectures: ${H_VALID_ARCH}.")
 ENDIF ()
 # Create a new cache variable, append these architectures to their available values and check if valid
 SET_WITH_STRINGS(KERNEL_ARCH "" "Target architecture for building this kernel." AVAILABLE_ARCHITECTURES)
 CHECK_WITH_STRINGS(KERNEL_ARCH VALID_ARCH)
 IF (NOT VALID_ARCH)
-  MESSAGE(FATAL_ERROR
-          "Please set a valid architecture in the KERNEL_ARCH variable. Available architectures: ${H_VALID_ARCH}.")
+ MESSAGE(FATAL_ERROR
+         "Please set a valid architecture in the KERNEL_ARCH variable. Available architectures: ${H_VALID_ARCH}.")
 ENDIF ()
 # Update the source tree variables (because they are needed by the MachineSelector script)
 MESSAGE(STATUS "Architecture selected: \"${KERNEL_ARCH}\". Updating the source tree definition...")

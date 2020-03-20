@@ -25,6 +25,6 @@
 #include "string.h"
 
 size_t strlen(const char *string) {
-    extern size_t __strlen(const char *);
-    return __strlen(string);
+  extern size_t __strlen(const char *);
+  return __strlen(string);
 }

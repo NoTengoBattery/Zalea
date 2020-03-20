@@ -23,6 +23,7 @@
 /// This function will try to find a property in the generated hash table, and return it's value by performing a 'fast'
 /// lookup, verifying the property and checking the result. The resulting value is a pointer to a string that lives in
 /// the RO section, so it should not be changed, or NULL if the property cannot be found.
+///
 /// \param property is the fully qualified name of the property.
 /// \return a pointer to a string that is the property value; or NULL if the property was not found.
 const char *getDeviceDescriptorProperty(const char *property);

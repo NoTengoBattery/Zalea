@@ -27,15 +27,15 @@
 # variable (which is a list) and will disable all the requested "fancy features" for that target. This works by
 # appending flags to the target which disables the previously enabled features. Not all features can be disabled and the
 # exact flag is defined in the Platform files.
-MACRO(TARGET_DISABLE_FANCY_FEATURES TARGET VISIBILITY LINKAGE FANCY_LIST)
-  IF (NOT ${ARGV3} STREQUAL FANCY_LIST)
-    MESSAGE(FATAL_ERROR
-            "You should call this macro with the target name, the options visibility, the linkage, the word "
-            "'FANCY_LIST' followed by the feature list to be disabled.")
+MACRO( TARGET_DISABLE_FANCY_FEATURES TARGET VISIBILITY LINKAGE FANCY_LIST )
+ IF (NOT ${ARGV3} STREQUAL FANCY_LIST)
+  MESSAGE(FATAL_ERROR
+          "You should call this macro with the target name, the options visibility, the linkage, the word "
+          "'FANCY_LIST' followed by the feature list to be disabled.")
+ ENDIF ()
+ FOREACH (FEATURE ${ARGN})
+  IF (${LINKAGE}_NO_${FEATURE})
+   TARGET_COMPILE_OPTIONS("${TARGET}" "${VISIBILITY}" "${${LINKAGE}_NO_${FEATURE}}")
   ENDIF ()
-  FOREACH (FEATURE ${ARGN})
-    IF (${LINKAGE}_NO_${FEATURE})
-      TARGET_COMPILE_OPTIONS("${TARGET}" "${VISIBILITY}" "${${LINKAGE}_NO_${FEATURE}}")
-    ENDIF ()
-  ENDFOREACH ()
+ ENDFOREACH ()
 ENDMACRO()
