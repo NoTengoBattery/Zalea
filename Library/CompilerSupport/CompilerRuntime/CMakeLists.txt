@@ -29,6 +29,8 @@ ADD_LIBRARY("CompilerRuntime" STATIC
             "memset.c"
             "strcmp.c"
             "strlen.c"
+            "strtoullC.c"
+            "strtoullC.h"
             "${KERNEL_ARCH}/${KERNEL_ARCH}Utils.h")
 TARGET_INCLUDE_DIRECTORIES("CompilerRuntime" PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
 TARGET_DISABLE_FANCY_FEATURES("CompilerRuntime" PRIVATE C FANCY_LIST STACK_PROTECTOR)
