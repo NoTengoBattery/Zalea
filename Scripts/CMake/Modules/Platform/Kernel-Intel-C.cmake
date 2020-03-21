@@ -63,7 +63,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
  SET(C_NO_STACK_PROTECTOR "-fno-stack-protector")
  SET(C_NO_UNWIND "-fno-unwind-tables")
  SET(C_OPTIMIZE_DEBUG "-O0")
- SET(C_OPTIMIZE_MAXIMUM "-fast")
+ SET(C_OPTIMIZE_MAXIMUM "-fast -Ofast")
  SET(C_OPTIMIZE_SIZE "-Os")
 
  # Use the following file extensions as C source files

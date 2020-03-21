@@ -63,7 +63,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
  SET(ASM_NO_STACK_PROTECTOR "-fno-stack-protector")
  SET(ASM_NO_UNWIND "-fno-unwind-tables")
  SET(ASM_OPTIMIZE_DEBUG "-O0")
- SET(ASM_OPTIMIZE_MAXIMUM "-fast")
+ SET(ASM_OPTIMIZE_MAXIMUM "-fast -Ofast")
  SET(ASM_OPTIMIZE_SIZE "-Os")
 
  # Use the following file extensions as ASM source files

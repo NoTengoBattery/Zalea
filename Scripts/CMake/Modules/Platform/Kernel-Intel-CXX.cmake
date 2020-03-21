@@ -63,7 +63,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
  SET(CXX_NO_STACK_PROTECTOR "-fno-stack-protector")
  SET(CXX_NO_UNWIND "-fno-unwind-tables")
  SET(CXX_OPTIMIZE_DEBUG "-O0")
- SET(CXX_OPTIMIZE_MAXIMUM "-fast")
+ SET(CXX_OPTIMIZE_MAXIMUM "-fast -Ofast")
  SET(CXX_OPTIMIZE_SIZE "-Os")
 
  # Use the following file extensions as C++ source files
