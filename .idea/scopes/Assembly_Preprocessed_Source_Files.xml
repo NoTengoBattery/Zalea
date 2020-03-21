@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+    <scope name="Assembly Preprocessed Source Files" pattern="file[Colorize]:*.sx"/>
+</component>

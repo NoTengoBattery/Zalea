@@ -1,0 +1,4 @@
+<component name="DependencyValidationManager">
+    <scope name="Documentation Files"
+           pattern="file[Colorize]:*.html||file[Colorize]:*.md||file[Colorize]:*.rst||file[Colorize]:*.tex"/>
+</component>

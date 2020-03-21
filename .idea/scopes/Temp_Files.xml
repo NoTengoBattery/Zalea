@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+    <scope name="Temp Files" pattern="file[Colorize]:*.tmp.*||file[Colorize]:*.tmp"/>
+</component>

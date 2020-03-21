@@ -1,0 +1,4 @@
+<component name="DependencyValidationManager">
+    <scope name="Ignored Files"
+           pattern="file[Colorize]:*.ignore.*||file[Colorize]:*.ignore"/>
+</component>

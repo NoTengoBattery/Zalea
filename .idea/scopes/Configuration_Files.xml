@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+    <scope name="Configuration Files" pattern="file[Colorize]:*.cfg.*||file[Colorize]:*.cfg||file[Colorize]:*.json"/>
+</component>

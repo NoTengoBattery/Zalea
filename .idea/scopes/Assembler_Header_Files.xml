@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+    <scope name="Assembler Header Files" pattern="file[Colorize]:*.h||file[Colorize]:*.s.h"/>
+</component>

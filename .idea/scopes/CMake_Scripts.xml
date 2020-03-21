@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+    <scope name="CMake Scripts" pattern="file[Colorize]:*.cmake"/>
+</component>

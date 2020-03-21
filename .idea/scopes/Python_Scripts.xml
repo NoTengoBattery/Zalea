@@ -1,0 +1,4 @@
+<component name="DependencyValidationManager">
+    <scope name="Python Scripts"
+           pattern="file[Colorize]:*.py&amp;&amp;!file[Colorize]:Scripts/Python/Environments/3//*"/>
+</component>

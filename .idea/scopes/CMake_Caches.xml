@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+    <scope name="CMake Caches" pattern="file[Colorize]:CMakeCache.txt"/>
+</component>
