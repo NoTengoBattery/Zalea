@@ -47,4 +47,27 @@ struct strtoullSignedT {
  uintmax_t value;
 };
 
+/// \brief a generalized implementation of `strtoull`, which can be used to implement the other (strto... and ato...)
+///
+/// This function is a customized version. The standard-compatible versions can be used from the Non Standard C Library.
+/// The main deference is that this function will take an struct pointer and use the provided struct to return the
+/// result. This is because this function can convert an arbitrary string to an unsigned long long value with a sign,
+/// which can be used to reinterpret the unsigned value as a signed value, and return it accordingly.
+///
+/// \note This implementation is inspired in the cplusplus.com/reference/cstdlib/strtol web page.
+/// \note This implementation will not accept bases (radix) bigger than 36.
+///
+/// \param string a pointer to a C-like ASCII string which is to be interpreted.
+/// \param endingPointer if not NULL, the pointer's value is changed to the address of the first invalid character.
+/// \param base the base to use when performing the conversion.
+/// \param result the struct that will be used to return the result of the conversion.
+/// \param maximum the maximum value allowed for positive numbers (unsigned)
+/// \param minimum the minimum value allowed for positive numbers (unsigned)
+void __strtoullC(const char *string,
+                 char **endingPointer,
+                 int base,
+                 struct strtoullSignedT *result,
+                 uintmax_t maximum,
+                 uintmax_t minimum);
+
 #endif //ZALEA_STRTOULLC_H

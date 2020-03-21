@@ -26,6 +26,7 @@
 
 #ifndef __ASSEMBLER__  // C and C++
 
+#include <limits.h>  // NOLINT
 #include <stdint.h>  // NOLINT
 
 /// \brief Calculate the number of bits in certain data type.

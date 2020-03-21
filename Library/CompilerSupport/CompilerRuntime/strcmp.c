@@ -34,18 +34,16 @@
 /// \return &lt;0 if the first character that does not match is lower, &#61;0 if both strings are equal and &gt;0 if the
 /// first character that does not match is greater.
 int __strcmp(const char *string1, const char *string2) {
- unsigned char value1 = (unsigned char) *string1;
- unsigned char value2 = (unsigned char) *string2;
- if (string1 != string2) {
-  while (value1 == value2 &&
-    value1 != 0x00 &&
-    value2 != 0x00) {
+ char char1 = *string1;
+ char char2 = *string2;
+ if (string1 != string2) {  // Shortcut: two strings are equal if they point to the same address.
+  while (char1 == char2 && char1 != 0x00 && char2 != 0x00) {
    string1 += 0x01;
+   char1 = *string1;
    string2 += 0x01;
-   value1 = (unsigned char) *string1;
-   value2 = (unsigned char) *string2;
+   char2 = *string2;
   }
-  return value1 - value2;
+  return char1 - char2;
  }
  return 0x00;
 }

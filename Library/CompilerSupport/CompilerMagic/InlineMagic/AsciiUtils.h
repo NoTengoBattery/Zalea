@@ -26,7 +26,7 @@
 
 #ifndef __ASSEMBLER__  // C and C++
 
-#include <stdbool.h>
+#include <stdbool.h>  // NOLINT
 
 /// \brief check if the given character is an ASCII space character.
 ///

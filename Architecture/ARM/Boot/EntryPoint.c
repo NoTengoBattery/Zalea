@@ -46,9 +46,7 @@ ATTR_NORETURN void secondEntryPoint(unsigned machine, unsigned atags) {
   BUILTIN_UNREACHABLE;
  } else {
   // If the Device Descriptor lookup does not work, terminate the execution immediately
-  if (isDeviceDescriptorWorking() == false) {
-   miserableFail();
-  }
+  if (isDeviceDescriptorWorking() == false) { miserableFail(); }
   // Store the value of ATAGS inside the (temporary) ATAGS pointer
   *atagsStructPointer = (volatile void *) atags;
   // Store the machine code (to be further processed later)

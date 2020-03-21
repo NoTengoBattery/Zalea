@@ -24,23 +24,22 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
+#include "division.h"
 #include <CompilerMagic/BitwiseMacros.h>
-#include <division.h>
-#include <stdint.h>
 
 void longDivision(struct divisionT *operands, struct resultT *result) {
  // Unpack the structs for better readability
- unsigned denominator = operands->denominator.value;
+ uintmax_t denominator = operands->denominator.value;
  unsigned denominatorFlags = operands->denominator.flags;
- unsigned numerator = operands->numerator.value;
+ uintmax_t numerator = operands->numerator.value;
  unsigned numeratorFlags = operands->numerator.flags;
  // Handle special cases ...
- //  1. Division by zero: quotient is -UINTMAX_MAX, remainder is UINTMAX_MAX and set the DIV0 flag of the quotient
+ //  1. Division by zero: quotient is -UINT_MAX, remainder is UINT_MAX and set the DIV0 flag of the quotient
  if (denominator == 0x00U) {
-  result->quotient.value = (unsigned) UINTMAX_MAX;
+  result->quotient.value = UINTMAX_MAX;
   result->quotient.flags = SET_NTH_BIT(result->quotient.flags, DIV_0_FLAG);
   result->quotient.flags = CLEAR_NTH_BIT(result->quotient.flags, SIGN_FLAG);
-  result->remainder = (unsigned) UINTMAX_MAX;
+  result->remainder = UINTMAX_MAX;
   return;
  }
  //  2. Division by one: the quotient is the number and the remainder is zero
@@ -65,7 +64,7 @@ void longDivision(struct divisionT *operands, struct resultT *result) {
   return;
  }
  // Shift the denominator until it's bigger or equal than the numerator
- unsigned long long shiftedDenominator = denominator;
+ uintmax_t shiftedDenominator = denominator;
  unsigned steps = 0x00U;
  while (shiftedDenominator <= numerator) {
   shiftedDenominator = shiftedDenominator << 0x01U;
@@ -73,16 +72,14 @@ void longDivision(struct divisionT *operands, struct resultT *result) {
  }
  shiftedDenominator = shiftedDenominator >> 0x01U;
  // Do the long division based on the shifted denominator calculated above
- unsigned quotient = 0x00U;
- unsigned remainder = numerator;
+ uintmax_t quotient = 0x00U;
+ uintmax_t remainder = numerator;
  for (unsigned i = 0x00; i < steps; ++i) {
   if (remainder >= shiftedDenominator) {
    remainder -= shiftedDenominator;
    quotient = quotient << 0x01U;
    quotient += 0x01U;
-  } else {
-   quotient = quotient << 0x01U;
-  }
+  } else { quotient = quotient << 0x01U; }
   shiftedDenominator = shiftedDenominator >> 0x01U;
  }
  // Set the struct values and return

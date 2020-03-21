@@ -29,7 +29,7 @@
 #ifdef KERNEL_COMPILER_GNU
 
 #ifdef __ASSEMBLER__
-#error "This file should not be included in Assembler."
+#error "This file should not be included in Assembler source files."
 #else
 
 /// \brief Set the `aligned` attribute.

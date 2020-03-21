@@ -34,20 +34,18 @@
 ///
 /// \param magic this is the special magic number that the bootloader should provide.
 /// \param mbs this is the pointer to the structure of information that the bootloader should provide.
-void secondEntryPoint(unsigned int magic, unsigned int mbs)
+void secondEntryPoint(unsigned magic, unsigned mbs)
 ATTR_SECTION(".start");
 
-ATTR_NORETURN void secondEntryPoint(unsigned int magic, unsigned int mbs) {
+ATTR_NORETURN void secondEntryPoint(unsigned magic, unsigned mbs) {
  if (magic != multibootMagicConstant  // If the magic value is not correct...
-   || ((unsigned *) mbs >= &imageStart && (unsigned *) mbs <= &imageEnd)  // ... if inside the image...
-   || (void *) mbs == NULL) {  // ... or if it's pointer is null
+   || (void *) mbs == NULL  // ... or if it's pointer is null...
+   || ((unsigned *) mbs >= &imageStart && (unsigned *) mbs <= &imageEnd)) {  // ... or if inside the image...
   miserableFail();
   BUILTIN_UNREACHABLE;
  } else {
   // If the Device Descriptor lookup does not work, terminate the execution immediately
-  if (isDeviceDescriptorWorking() == false) {
-   miserableFail();
-  }
+  if (isDeviceDescriptorWorking() == false) { miserableFail(); }
   // Store the value of EAX inside the (temporary) Multiboot pointer
   *multibootStructPointer = (volatile void *) mbs;
   // Clear the BSS section of the loaded memory...

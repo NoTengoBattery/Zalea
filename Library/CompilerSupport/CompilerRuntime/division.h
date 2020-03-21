@@ -28,6 +28,8 @@
 #ifndef ZALEA_DIVISION_H
 #define ZALEA_DIVISION_H
 
+#include <stdint.h>
+
 /// If the sign bit flag is enabled, the number is positive.
 #define SIGN_FLAG 0x00U
 
@@ -42,7 +44,7 @@ struct divisionSignedT {
  /// The flags of this number. Flags are defined by the macros in this file.
  unsigned flags;
  /// The unsigned value of this number.
- unsigned value;
+ uintmax_t value;
 };
 
 /// \brief This is a struct that represents a division. It has two fields, which are divisionSignedT values.
@@ -59,7 +61,7 @@ struct divisionT {
 /// results in the same call.
 struct resultT {
  /// Remainder is always positive or 0, by definition
- unsigned remainder;
+ uintmax_t remainder;
  /// The divisionSignedT struct is to recycle the signed division for unsigned values, just discarding the sign.
  struct divisionSignedT quotient;
 };

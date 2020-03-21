@@ -34,20 +34,17 @@
 /// \param length the length of the memory region.
 /// \param alignment the expected alignment.
 /// \return The address of the aligned buffer.
-static inline size_t unalignedLoop(void *buffer, unsigned char fill, size_t length, unsigned int alignment) {
+static inline size_t unalignedLoop(void *buffer, char fill, size_t length, unsigned alignment) {
  // Compute the buffer as a char addressing array...
- unsigned char *byteAddressing = buffer;
+ char *byteAddressing = buffer;
  // ... fill by char until either the length is depleted...
  while (length > 0x00) {
   unsigned moduli = (uintptr_t) byteAddressing % alignment;
   // ... or until the alignment is fulfilled...
-  if (moduli == 0x00 &&
-    length >= alignment) {
-   break;
-  }
+  if (moduli == 0x00 && length >= alignment) { break; }
   *byteAddressing = fill;
-  byteAddressing += 1;
-  length -= 1;
+  byteAddressing += 0x01;
+  length -= 0x01;
  }
  // ... and the rest can be done in the unrolled loop
  return length;
@@ -66,24 +63,22 @@ static inline size_t unalignedLoop(void *buffer, unsigned char fill, size_t leng
 /// \return The same address as provided in the buffer address.
 void *__memset(void *buffer, int fill, size_t length) {
  // If the length is 0, return immediately
- if (length == 0x00) {
-  return buffer;
- }
- // We define a "cost". The cost is the size of the unrolled loop, which in theory should avoid branching and allow
- // the compiler to vectorize (if it can).
+ if (length == 0x00) { return buffer; }
+ /*
+  * We define a "cost". The cost is the size of the unrolled loop, which in theory should avoid branching and allow
+  * the compiler to vectorize (if it the CPU has vector instructions).
+  */
  static const size_t cost = 0x08;
- static const size_t cellSize = sizeof(unsigned);
+ static const size_t cellSize = sizeof(intmax_t);
  static const size_t alignment = cost * cellSize;
  size_t remainingSize = unalignedLoop(buffer, fill, length, alignment);
- unsigned *wordAddressing = (unsigned *) ((uintptr_t) buffer + length - remainingSize);
+ intmax_t *wordAddressing = (intmax_t *) ((uintptr_t) buffer + (length - remainingSize));
  if (remainingSize >= alignment) {
   // Create a variable of the appropriate length filled with the same value every byte
-  unsigned actualFill = fill;
-  for (unsigned i = 0x00; i < cellSize; ++i) {
-   ((unsigned char *) &actualFill)[i] = fill;
-  }
+  intmax_t actualFill = fill;
+  for (unsigned i = 0x00U; i < cellSize; ++i) { (&actualFill)[i] = fill; }
   // The compiler will probably vectorize this loop :)
-  while (remainingSize >= alignment) {
+  do {
    wordAddressing[0] = actualFill;
    wordAddressing[1] = actualFill;
    wordAddressing[2] = actualFill;
@@ -94,11 +89,8 @@ void *__memset(void *buffer, int fill, size_t length) {
    wordAddressing[7] = actualFill;  // NOLINT
    wordAddressing += cost;
    remainingSize -= alignment;
-  }
+  } while (remainingSize >= alignment);
  }
  size_t shouldBeZero = unalignedLoop(wordAddressing, fill, remainingSize, alignment);
- if (shouldBeZero != 0x00) {
-  return (void *) UINTPTR_MAX;
- }
- return buffer;
+ return shouldBeZero != 0x00 ? (void *) UINTPTR_MAX : buffer;
 }

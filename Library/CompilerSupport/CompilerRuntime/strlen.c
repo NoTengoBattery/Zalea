@@ -35,9 +35,11 @@
 /// \return The size of the string, from the beginning to the null character without including it.
 size_t __strlen(const char *string) {
  size_t length = 0x00;
- while (*string != 0x00) {
+ char character = *string;
+ while (character != 0x00) {
   length += 0x01;
   string += 0x01;
+  character = *string;
  }
  return length;
 }

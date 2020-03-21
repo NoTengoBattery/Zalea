@@ -28,39 +28,27 @@
 #include <InlineMagic/AsciiUtils.h>
 #include <stddef.h>
 
-/// \brief a generalized implementation of `strtoull`, which can be used to implement the other (strto... and ato...)
-///
-/// This function is a customized version. The standard-compatible versions can be used from the Non Standard C Library.
-/// The main deference is that this function will take an struct pointer and use the provided struct to return the
-/// result. This is because this function can convert an arbitrary string to an unsigned long long value with a sign,
-/// which can be used to reinterpret the unsigned value as a signed value, and return it accordingly.
-///
-/// \note This implementation is inspired in the cplusplus.com/reference/cstdlib/strtol web page.
-/// \note This implementation will not accept bases (radix) bigger than 36.
-///
-/// \param string a pointer to a C-like ASCII string which is to be interpreted.
-/// \param endingPointer if not NULL, the pointer's value is changed to the address of the first invalid character.
-/// \param base the base to use when performing the conversion.
-/// \param result the struct that will be used to return the result of the conversion.
-/// \param maximum the maximum value allowed for positive numbers (unsigned)
-/// \param minimum the minimum value allowed for positive numbers (unsigned)
-void __strtoullC(const char *string, char **endingPointer, const int base,
-                 struct strtoullSignedT *result, const uintmax_t maximum, const uintmax_t minimum) {
+void __strtoullC(const char *string,
+                 char **endingPointer,
+                 int base,
+                 struct strtoullSignedT *result,
+                 const uintmax_t maximum,
+                 const uintmax_t minimum) {
  // Clear the struct (to avoid problems with random noise).
- result->flags = 0x00;
- result->value = 0x00;
+ result->flags = 0x00U;
+ result->value = 0x00U;
  // Initialize all the constants...
- static const unsigned noBase = 0;
- static const unsigned octalBase = 8;
- static const unsigned decimalBase = 10;
- static const unsigned hexadecimalBase = 16;
- static const unsigned maximumBase = 36;
- static const unsigned minimumBase = 2;
+ static const signed noBase = 0;
+ static const signed octalBase = 8;
+ static const signed decimalBase = 10;
+ static const signed hexadecimalBase = 16;
+ static const signed maximumBase = 36;
+ static const signed minimumBase = 2;
  // Initialize all the variables...
  const char *mobileString = string;
  char character = *mobileString;
  uintmax_t actualLimit = maximum;
- unsigned actualBase = noBase;
+ signed actualBase = noBase;
  // Discard all the whitespace characters until a non-whitespace character is found.
  while (isAsciiSpace(character)) { character = moveStringPointerOneForward(&mobileString); }
  // The next character is most likely the sign, which can be '-', '+' or none, which then is assumed to be positive.
@@ -83,8 +71,7 @@ void __strtoullC(const char *string, char **endingPointer, const int base,
   */
  if (character == '0') {
   character = moveStringPointerOneForward(&mobileString);
-  if ((character == 'x' || character == 'X') &&
-    (base == hexadecimalBase || base == noBase)) {
+  if ((character == 'x' || character == 'X') && (base == hexadecimalBase || base == noBase)) {
    character = moveStringPointerOneForward(&mobileString);
    actualBase = hexadecimalBase;
   } else if (base == octalBase || base == noBase) { actualBase = octalBase; }
@@ -100,16 +87,16 @@ void __strtoullC(const char *string, char **endingPointer, const int base,
   * not allowed inside a core library), we can safely assume that digit characters from 0 to 9 are contiguous, letters
   * from a to z and from A to Z are contiguous.
   */
- const unsigned char minDecimal = '0';
- const unsigned char maxDecimal = '0' + decimalBase - 0x01;
- const unsigned char maxLowercase = 'a' + actualBase - decimalBase - 0x01;
- const unsigned char minLowercase = 'a';
- const unsigned char maxUppercase = 'A' + actualBase - decimalBase - 0x01;
- const unsigned char minUppercase = 'A';
- uintmax_t accumulator = 0x00;
+ const char minDecimal = '0';
+ const char maxDecimal = '0' + (decimalBase - 0x01);
+ const char maxLowercase = 'a' + actualBase - (decimalBase + 0x01);
+ const char minLowercase = 'a';
+ const char maxUppercase = 'A' + actualBase - (decimalBase + 0x01);
+ const char minUppercase = 'A';
+ uintmax_t accumulator = 0x00U;
  while (true) {
   bool overflow = false;
-  unsigned computedValue;
+  signed computedValue;
   if (character >= minDecimal && character <= maxDecimal) { computedValue = character - minDecimal; }
   else if (character >= minLowercase && character <= maxLowercase) {
    computedValue = character + (decimalBase - minLowercase);

@@ -26,20 +26,12 @@
 #include "stdlib.h"
 #include <CompilerMagic/BitwiseMacros.h>
 
-// This is the actual implementation (implemented inside the Compiler Runtime library).
-extern void __strtoullC(const char *string,
-                        char **endingPointer,
-                        int base,
-                        struct strtoullSignedT *result,
-                        uintmax_t maximum,
-                        uintmax_t minimum);
-
-uintptr_t stringToUnsignedPointer(const char *string, char **endingPointer, bool *range, bool *base, int radix) {
+uintptr_t stringToUnsignedPointer(const char *string, char **endingPointer, bool *range, bool *base, unsigned radix) {
+ if (range == NULL || base == NULL) { return 0x00; }
  struct strtoullSignedT result;
  __strtoullC(string, endingPointer, radix, &result, UINTPTR_MAX, 0x00U);
  bool sign = TEST_NTH_BIT(result.flags, SIGN_FLAG);
  *range = TEST_NTH_BIT(result.flags, RANGE_FLAG);
  *base = TEST_NTH_BIT(result.flags, BASE_FLAG);
- if (sign) { return (long) result.value; }
- return (long) -result.value;
+ return sign ? result.value : -result.value;
 }
