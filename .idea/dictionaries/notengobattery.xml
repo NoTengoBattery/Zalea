@@ -12,6 +12,7 @@
       <w>cmakedefine</w>
       <w>cppcheck</w>
       <w>cpplint</w>
+      <w>cstdint</w>
       <w>distro</w>
       <w>distros</w>
       <w>filepath</w>
@@ -19,6 +20,7 @@
       <w>hashmap</w>
       <w>interprocedural</w>
       <w>jtag</w>
+      <w>memcpy</w>
       <w>microkernel</w>
       <w>multiboot</w>
       <w>notengobattery</w>
@@ -31,6 +33,11 @@
       <w>smbios</w>
       <w>spdx</w>
       <w>stdint</w>
+      <w>strcmp</w>
+      <w>strlen</w>
+      <w>strtouintptr</w>
+      <w>strtoul</w>
+      <w>strtoull</w>
       <w>subfolder</w>
       <w>subfolders</w>
       <w>sysv</w>
