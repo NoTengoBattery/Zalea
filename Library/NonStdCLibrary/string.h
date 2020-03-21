@@ -33,10 +33,10 @@
 ///
 /// \note This implementation is meant to be portable, not the fastest.
 ///
-/// \param buffer this is a pointer that indicates where the buffer begins
-/// \param fill this is the fill which will fill the buffer
-/// \param length this is the length of the buffer to fill
-/// \return the same address as provided in the buffer address
+/// \param buffer this is a pointer that indicates where the buffer begins.
+/// \param fill this is the fill which will fill the buffer.
+/// \param length this is the length of the buffer to fill.
+/// \return The same address as provided in the buffer address.
 void *memset(void *buffer, int fill, size_t length);
 
 /// \brief find whether a string is greater, smaller or equal to other string.
@@ -62,7 +62,7 @@ int strcmp(const char *string1, const char *string2);
 /// \note This implementation is meant to be portable, not the fastest.
 ///
 /// \param string is the null-terminated string to evaluate.
-/// \return the size of the string, from the beginning to the null character without including it.
+/// \return The size of the string, from the beginning to the null character without including it.
 size_t strlen(const char *string);
 
 #endif //ZALEA_STRING_H

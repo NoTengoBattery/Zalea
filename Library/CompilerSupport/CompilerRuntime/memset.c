@@ -29,11 +29,11 @@
 /// This small loop will fill unaligned memory in a byte-level loop and return the computed aligned address. It will
 /// fill to either the required alignment or the maximum length.
 ///
-/// \param buffer the buffer pointer
-/// \param fill the fill for the memory region
-/// \param length the length of the memory region
-/// \param alignment the expected alignment
-/// \return the address of the aligned buffer
+/// \param buffer the buffer pointer.
+/// \param fill the fill for the memory region.
+/// \param length the length of the memory region.
+/// \param alignment the expected alignment.
+/// \return The address of the aligned buffer.
 static inline size_t unalignedLoop(void *buffer, unsigned char fill, size_t length, unsigned int alignment) {
  // Compute the buffer as a char addressing array...
  unsigned char *byteAddressing = buffer;
@@ -60,10 +60,10 @@ static inline size_t unalignedLoop(void *buffer, unsigned char fill, size_t leng
 ///
 /// \note This implementation is meant to be portable, not the fastest.
 ///
-/// \param buffer this is a pointer that indicates where the buffer begins
-/// \param fill this is the fill which will fill the buffer
-/// \param length this is the length of the buffer to fill
-/// \return the same address as provided in the buffer address
+/// \param buffer this is a pointer that indicates where the buffer begins.
+/// \param fill this is the fill which will fill the buffer.
+/// \param length this is the length of the buffer to fill.
+/// \return The same address as provided in the buffer address.
 void *__memset(void *buffer, int fill, size_t length) {
  // If the length is 0, return immediately
  if (length == 0x00) {

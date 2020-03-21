@@ -35,9 +35,9 @@
 /// composition of both the remainder and quotient. This should work as long as EABI is used (and this function won't be
 /// called if you don't use EABI, anyway).
 ///
-/// \param numerator (parameter introduced by the compiler)
-/// \param denominator (parameter introduced by the compiler)
-/// \return a composite value of the results which conforms with the EABI call.
+/// \param numerator (parameter introduced by the compiler).
+/// \param denominator (parameter introduced by the compiler).
+/// \return The composite value of the results which conforms with the EABI call.
 ATTR_USED uint64_t __aeabi_uidivmod(unsigned numerator, unsigned denominator) {
  struct divisionT division = {
    .denominator.flags = SET_NTH_BIT(0x00U, SIGN_FLAG),
@@ -46,7 +46,9 @@ ATTR_USED uint64_t __aeabi_uidivmod(unsigned numerator, unsigned denominator) {
    .numerator.value = numerator
  };
  struct resultT result = {
-   .quotient.flags = 0x00U
+   .quotient.flags = 0x00U,
+   .quotient.value = 0x00U,
+   .remainder = 0x00U
  };
  longDivision(&division, &result);
  uint64_t returnValue = result.quotient.value;

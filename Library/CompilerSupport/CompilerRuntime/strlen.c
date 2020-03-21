@@ -32,7 +32,7 @@
 /// \note This implementation is meant to be portable, not the fastest.
 ///
 /// \param string is the null-terminated string to evaluate.
-/// \return the size of the string, from the beginning to the null character without including it.
+/// \return The size of the string, from the beginning to the null character without including it.
 size_t __strlen(const char *string) {
  size_t length = 0x00;
  while (*string != 0x00) {

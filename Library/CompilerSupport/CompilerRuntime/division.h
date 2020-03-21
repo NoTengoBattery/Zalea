@@ -38,19 +38,19 @@
 ///
 /// All numbers in this struct are signed, but the value is unsigned and it's sign is defined by the sign bit in the
 /// flags field. A special process is required to build a number from a *normal* number.
-struct signedT {
+struct divisionSignedT {
  /// The flags of this number. Flags are defined by the macros in this file.
  unsigned flags;
  /// The unsigned value of this number.
  unsigned value;
 };
 
-/// \brief This is a struct that represents a division. It has two fields, which are signedT values.
+/// \brief This is a struct that represents a division. It has two fields, which are divisionSignedT values.
 ///
 /// Thus, this struct represents a signed division between two integer numbers.
 struct divisionT {
- struct signedT numerator;
- struct signedT denominator;
+ struct divisionSignedT numerator;
+ struct divisionSignedT denominator;
 };
 
 /// \brief This is the result of the division operation.
@@ -60,8 +60,8 @@ struct divisionT {
 struct resultT {
  /// Remainder is always positive or 0, by definition
  unsigned remainder;
- /// The signedT struct is to recycle the signed division for unsigned values, just discarding the sign.
- struct signedT quotient;
+ /// The divisionSignedT struct is to recycle the signed division for unsigned values, just discarding the sign.
+ struct divisionSignedT quotient;
 };
 
 /// \brief Perform a long division.

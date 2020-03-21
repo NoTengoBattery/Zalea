@@ -47,8 +47,8 @@ ADD_LIBRARY("RawCompilerRuntime" STATIC
             "division.c"
             "division.h")
 IF (KERNEL_ARM)
-  TARGET_SOURCES("RawCompilerRuntime" PRIVATE
-                 "${KERNEL_ARCH}/__aeabi_uidivmod.c")
+ TARGET_SOURCES("RawCompilerRuntime" PRIVATE
+                "${KERNEL_ARCH}/__aeabi_uidivmod.c")
 ENDIF ()
 TARGET_INCLUDE_DIRECTORIES("RawCompilerRuntime" PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
 TARGET_DISABLE_FANCY_FEATURES("RawCompilerRuntime" PRIVATE C FANCY_LIST LTO STACK_PROTECTOR)

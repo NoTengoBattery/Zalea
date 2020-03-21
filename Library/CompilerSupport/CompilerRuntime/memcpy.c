@@ -33,11 +33,11 @@
 /// means that, if somehow, the addresses cannot be aligned at the same time by iterating them together, the full
 /// length will be copied byte by byte. This will cause severe performance loss.
 ///
-/// \param destination the buffer pointer
-/// \param source the fill for the memory region
-/// \param length the length of the memory region
-/// \param alignment the expected alignment
-/// \return the address of the aligned buffer
+/// \param destination the buffer pointer.
+/// \param source the fill for the memory region.
+/// \param size the length of the memory region.
+/// \param alignment the expected alignment.
+/// \return The address of the aligned buffer.
 static inline size_t unalignedLoop(void *destination, const void *source, size_t size, unsigned int alignment) {
  // Compute the buffers as a char addressing array...
  unsigned char *byteDestinationAddressing = destination;
@@ -69,10 +69,10 @@ static inline size_t unalignedLoop(void *destination, const void *source, size_t
 ///
 /// \note This implementation is meant to be portable, not the fastest.
 ///
-/// \param destination this is a pointer that indicates where the destination buffer begins
-/// \param source this is a pointer that indicates where the source buffer begins
-/// \param length the number of bytes to copy
-/// \return the same address as provided in the destination buffer
+/// \param destination this is a pointer that indicates where the destination buffer begins.
+/// \param source this is a pointer that indicates where the source buffer begins.
+/// \param length the number of bytes to copy.
+/// \return The same address as provided in the destination buffer.
 void *__memcpy(void *destination, const void *source, size_t length) {
  // If the length is 0, return immediately
  if (length == 0x00) {
