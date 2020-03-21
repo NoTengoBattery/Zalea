@@ -21,9 +21,12 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 
 ADD_LIBRARY("NonStdCLibrary" STATIC
+            "memcpy.c"
             "memset.c"
             "stdlib.h"
+            "strcat.c"
             "strcmp.c"
+            "strcpy.c"
             "string.h"
             "strlen.c"
             "strtouintptr.c")
