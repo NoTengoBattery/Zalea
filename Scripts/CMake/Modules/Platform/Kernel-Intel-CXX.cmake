@@ -56,7 +56,7 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
 
  # These flags will disable any fancy features (needed to build very early boot code or the compiler runtime)
  SET(CXX_NO_EXCEPTIONS "-fno-exceptions")
- SET(CXX_NO_LTO "-fno-lto")
+ SET(CXX_NO_LTO "-no-ipo")
  SET(CXX_NO_LTO_ONLY "-ffat-lto-objects")
  SET(CXX_NO_RTTI "-fno-rtti")
  SET(CXX_NO_SANITIZER "-fno-sanitize=all")
