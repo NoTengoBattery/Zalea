@@ -30,13 +30,13 @@ ADD_LIBRARY("CompilerRuntime" STATIC
             "strcmp.c"
             "strlen.c"
             "strtoullC.c"
-            "strtoullC.h"
-            "${KERNEL_ARCH}/${KERNEL_ARCH}Utils.h")
+            "strtoullC.h")
 TARGET_INCLUDE_DIRECTORIES("CompilerRuntime" PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
 TARGET_CHANGE_FEATURES("CompilerRuntime" PRIVATE C FEATURES NO_STACK_PROTECTOR)
 ADD_LIBRARY("RawCompilerRuntime" STATIC
             "division.c"
-            "division.h")
+            "division.h"
+            "${KERNEL_ARCH}/${KERNEL_ARCH}Utils.h")
 IF (KERNEL_ARM)
  TARGET_SOURCES("RawCompilerRuntime" PRIVATE
                 "${KERNEL_ARCH}/__aeabi_uidivmod.c")

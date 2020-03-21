@@ -23,11 +23,11 @@
 
 #include <stddef.h>
 
-/// \brief find the length of a null-terminated string.
+/// \brief Find the length of a null-terminated string.
 ///
 /// This is an implementation of the C standard function `strlen`. This function behaves exactly as the standard
-/// version. It means that calling this function with a pointer that is not a string or is a string without null
-/// character at the end, then the behaviour is undefined.
+/// version. It means that calling this function with a pointer that is not a string or with a string without a null
+/// character at the end will yield undefined behaviour.
 ///
 /// \note This implementation is meant to be portable, not the fastest.
 ///
@@ -36,7 +36,8 @@
 size_t __strlen(const char *string) {
  size_t length = 0x00;
  char character = *string;
- while (character != 0x00) {
+ static const char nullChar = '\0';
+ while (character != nullChar) {
   length += 0x01;
   string += 0x01;
   character = *string;

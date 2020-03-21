@@ -74,7 +74,7 @@
 /// \param x the constant.
 /// \param y the bit.
 #define TEST_NTH_BIT(x, y) (((x) >> (y)) & 0x01U)  // NOLINT
-/// \brief create a truncate mask of n significant bits.
+/// \brief Create a truncate mask of n significant bits.
 ///
 /// \param x the significant bits to truncate.
 #define TRUNCATE_MASK(x) (~(UINTMAX_MAX << (x)))  // NOLINT

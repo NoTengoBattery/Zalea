@@ -24,7 +24,7 @@
 #ifndef ZALEA_IMAGECONSTANTS_H
 #define ZALEA_IMAGECONSTANTS_H
 
-#include <stdint.h>
+#include <stdint.h>  // NOLINT
 
 /// \brief This is a magic number which is expected to be present in the Multiboot2 i386 Machine State.
 const unsigned multibootMagicConstant = 0x36D76289;

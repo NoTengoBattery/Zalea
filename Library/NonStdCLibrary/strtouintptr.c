@@ -26,12 +26,11 @@
 #include "stdlib.h"
 #include <CompilerMagic/BitwiseMacros.h>
 
-uintptr_t stringToUnsignedPointer(const char *string, char **endingPointer, bool *range, bool *base, unsigned radix) {
- if (range == NULL || base == NULL) { return 0x00; }
- struct strtoullSignedT result;
- __strtoullC(string, endingPointer, radix, &result, UINTPTR_MAX, 0x00U);
- bool sign = TEST_NTH_BIT(result.flags, SIGN_FLAG);
- *range = TEST_NTH_BIT(result.flags, RANGE_FLAG);
- *base = TEST_NTH_BIT(result.flags, BASE_FLAG);
- return sign ? result.value : -result.value;
+uintptr_t stringToUnsignedPointer(const char *string, char **endingPointer, bool *range, bool *base, int radix) {
+ if (range == NULL || base == NULL) { return 0x00U; }
+ struct strtoullSignedT result = {0x00U, 0x00U};
+ __strtoullC(string, endingPointer, (unsigned int) radix, &result, UINTPTR_MAX, 0x00U);
+ *range = (bool) TEST_NTH_BIT(result.flags, RANGE_FLAG);
+ *base = (bool) TEST_NTH_BIT(result.flags, BASE_FLAG);
+ return (uintptr_t) result.value;
 }

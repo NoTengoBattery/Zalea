@@ -29,7 +29,7 @@
 #include <stdbool.h>  // NOLINT
 #include <stdint.h>  // NOLINT
 
-/// \brief perform a "safe" unsigned addition, which will not wrap around.
+/// \brief Perform a "safe" unsigned addition, which will not wrap around.
 ///
 /// Perform a "safe" unsigned addition of two numbers, given a maximum value, that will not wrap around. Instead of
 /// wrapping around, it will clamp the value to the maximum requested by the caller and return true to indicate an
@@ -49,7 +49,7 @@ extern inline bool safeUnsignedAddition(uintmax_t a, uintmax_t b, uintmax_t max,
  return false;
 }
 
-/// \brief perform a "safe" unsigned multiplication, which will not wrap around.
+/// \brief Perform a "safe" unsigned multiplication, which will not wrap around.
 ///
 /// Perform a "safe" unsigned multiplication of two numbers, given a maximum value, that will not wrap around. Instead
 /// of wrapping around, it will clamp the value to the maximum requested by the caller and return true to indicate an

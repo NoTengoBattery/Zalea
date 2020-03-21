@@ -28,7 +28,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-/// \brief an implementation of a `strtoul`-like function that returns an unsigned integer pointer instead.
+/// \brief An implementation of a `strtoul`-like function that returns an unsigned integer pointer instead.
 ///
 /// This function behaves like the `strtoul` standard function, but it does return an unsigned integer pointer instead
 /// of a unsigned long. Most likely, the machine's `uintptr_t` is in fact a unsigned long, but you should not rely on
@@ -37,14 +37,14 @@
 /// \param string a string to convert into a unsigned pointer.
 /// \param endingPointer a pointer to a pointer which will hold the address of the first non-convertible character.
 /// \param range a pointer to a bool that will be true if the value is out of range, and false otherwise.
-/// \param radix the base which represents the encoded string as a valid number.
 /// \param base a pointer to a bool that will be true if the base is out of range, and false otherwise.
+/// \param radix the base which represents the encoded string as a valid number.
 /// \attention endingPointer can be NULL.
 /// \attention range cannot be NULL.
 /// \attention base cannot be NULL.
 /// \return The value computed from the string. If the string cannot be converted, it will return NULL. If the string is
 /// out of range, it will return UINTPTR_MAX. The `range` parameter will be true if the conversion resulted in an out
 /// of range value, given the maximum pointer that `uintptr_t` can hold.
-uintptr_t stringToUnsignedPointer(const char *string, char **endingPointer, bool *range, bool *base, unsigned radix);
+uintptr_t stringToUnsignedPointer(const char *string, char **endingPointer, bool *range, bool *base, int radix);
 
 #endif //ZALEA_STDLIB_H

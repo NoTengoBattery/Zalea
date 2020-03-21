@@ -26,10 +26,24 @@
 
 #include <stddef.h>
 
-/// \brief a `memset` implementation compatible with the C standard `memset`.
+/// \brief A `memcpy` implementation compatible with the C standard `memcpy`.
+///
+/// This is an implementation of the C standard function `memcpy`. This function behaves exactly as the standard
+/// version. This means that it will yield undefined behaviour if the length overflows or if the combination of source,
+/// destination and length overlaps.
+///
+/// \note This implementation is meant to be portable, not the fastest.
+///
+/// \param destination this is a pointer that indicates where the destination buffer begins.
+/// \param source this is a pointer that indicates where the source buffer begins.
+/// \param length the number of bytes to copy.
+/// \return The same address as provided in the destination buffer.
+void *memcpy(void *destination, const void *source, size_t length);
+
+/// \brief A `memset` implementation compatible with the C standard `memset`.
 ///
 /// This is an implementation of the C standard function `memset`. This function behaves exactly as the standard
-/// version. Mostly, it implies that the fill is `int`, but only the first byte will be used as fill.
+/// version. It means that the fill is `int`, but only the first byte will be used as fill.
 ///
 /// \note This implementation is meant to be portable, not the fastest.
 ///
@@ -39,11 +53,25 @@
 /// \return The same address as provided in the buffer address.
 void *memset(void *buffer, int fill, size_t length);
 
-/// \brief find whether a string is greater, smaller or equal to other string.
+/// \brief Concatenate two C strings.
+///
+/// This is an implementation of the C standard function `strcat`. This function behaves exactly as the standard
+/// version. It means that calling this function with a pointer that is not a string or with a string without a null
+/// character at the end will yield undefined behaviour.
+///
+/// Undefined behaviour will be yield if the destination buffer is smaller than the concatenation or if the resulting
+/// buffers overlap.
+///
+/// \param destination the string that will be compared.
+/// \param source the string to compare.
+/// \return The same address as provided in the destination address.
+char *strcat(char *destination, const char *source);
+
+/// \brief Find whether a string is greater, smaller or equal to other string.
 ///
 /// This is an implementation of the C standard function `strcmp`. This function behaves exactly as the standard
-/// version. It means that calling this function with a pointer that is not a string or is a string without null
-/// character at the end, then the behaviour is undefined.
+/// version. It means that calling this function with a pointer that is not a string or with a string without a null
+/// character at the end will yield undefined behaviour.
 ///
 /// \note This implementation is meant to be portable, not the fastest.
 ///
@@ -53,11 +81,25 @@ void *memset(void *buffer, int fill, size_t length);
 /// first character that does not match is greater.
 int strcmp(const char *string1, const char *string2);
 
-/// \brief find the length of a null-terminated string.
+/// \brief Copy a the source string inside the destination string.
+///
+/// This is an implementation of the C standard function `strcpy`. This function behaves exactly as the standard
+/// version. It means that calling this function with a pointer that is not a string or with a string without a null
+/// character at the end will yield undefined behaviour.
+///
+/// Undefined behaviour will be yield if the destination buffer is smaller than the source buffer or if both buffers
+/// overlap.
+///
+/// \param destination the destination buffer where to store the new copy of string.
+/// \param source the source string that will be copied into the destination buffer.
+/// \return The same address as provided in the destination address.
+char *strcpy(char *destination, const char *source);
+
+/// \brief Find the length of a null-terminated string.
 ///
 /// This is an implementation of the C standard function `strlen`. This function behaves exactly as the standard
-/// version. It means that calling this function with a pointer that is not a string or is a string without null
-/// character at the end, then the behaviour is undefined.
+/// version. It means that calling this function with a pointer that is not a string or with a string without a null
+/// character at the end will yield undefined behaviour.
 ///
 /// \note This implementation is meant to be portable, not the fastest.
 ///

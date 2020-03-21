@@ -34,7 +34,7 @@ void longDivision(struct divisionT *operands, struct resultT *result) {
  uintmax_t numerator = operands->numerator.value;
  unsigned numeratorFlags = operands->numerator.flags;
  // Handle special cases ...
- //  1. Division by zero: quotient is -UINT_MAX, remainder is UINT_MAX and set the DIV0 flag of the quotient
+ //  1. Division by zero: quotient is -UINTMAX_MAX, remainder is UINTMAX_MAX and set the DIV0 flag of the quotient
  if (denominator == 0x00U) {
   result->quotient.value = UINTMAX_MAX;
   result->quotient.flags = SET_NTH_BIT(result->quotient.flags, DIV_0_FLAG);

@@ -28,7 +28,7 @@
 
 #include <stdbool.h>  // NOLINT
 
-/// \brief check if the given character is an ASCII space character.
+/// \brief Check if the given character is an ASCII space character.
 ///
 /// \param character the character to test.
 /// \return true if the character is an ASCII space.
@@ -39,12 +39,14 @@ extern inline bool isAsciiSpace(const char character) {
   case '\v':
   case '\f':
   case '\r':
-  case ' ':return true;
-  default:return false;
+  case ' ':
+   return true;
+  default:
+   return false;
  }
 }
 
-/// \brief move a string pointer one character forward and return the character.
+/// \brief Move a string pointer one character forward and return the character.
 ///
 /// \param pointer the pointer to move.
 /// \return The value of the character in the new position.

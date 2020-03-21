@@ -47,7 +47,7 @@ struct strtoullSignedT {
  uintmax_t value;
 };
 
-/// \brief a generalized implementation of `strtoull`, which can be used to implement the other (strto... and ato...)
+/// \brief A generalized implementation of `strtoull`, which can be used to implement the other (strto... and ato...)
 ///
 /// This function is a customized version. The standard-compatible versions can be used from the Non Standard C Library.
 /// The main deference is that this function will take an struct pointer and use the provided struct to return the
@@ -65,7 +65,7 @@ struct strtoullSignedT {
 /// \param minimum the minimum value allowed for positive numbers (unsigned)
 void __strtoullC(const char *string,
                  char **endingPointer,
-                 int base,
+                 unsigned base,
                  struct strtoullSignedT *result,
                  uintmax_t maximum,
                  uintmax_t minimum);

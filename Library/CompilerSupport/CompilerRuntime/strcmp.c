@@ -21,11 +21,11 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-/// \brief find whether a string is greater, smaller or equal to other string.
+/// \brief Find whether a string is greater, smaller or equal to other string.
 ///
 /// This is an implementation of the C standard function `strcmp`. This function behaves exactly as the standard
-/// version. It means that calling this function with a pointer that is not a string or is a string without null
-/// character at the end, then the behaviour is undefined.
+/// version. It means that calling this function with a pointer that is not a string or with a string without a null
+/// character at the end will yield undefined behaviour.
 ///
 /// \note This implementation is meant to be portable, not the fastest.
 ///
@@ -36,8 +36,9 @@
 int __strcmp(const char *string1, const char *string2) {
  char char1 = *string1;
  char char2 = *string2;
+ static const char nullChar = '\0';
  if (string1 != string2) {  // Shortcut: two strings are equal if they point to the same address.
-  while (char1 == char2 && char1 != 0x00 && char2 != 0x00) {
+  while (char1 == char2 && char1 != nullChar && char2 != nullChar) {
    string1 += 0x01;
    char1 = *string1;
    string2 += 0x01;

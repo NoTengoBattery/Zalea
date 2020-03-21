@@ -24,7 +24,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-/// \brief loop byte by byte until the alignment requirement is fulfilled.
+/// \brief Loop byte by byte until the alignment requirement is fulfilled.
 ///
 /// This small loop will copy unaligned memory in a byte-level loop and return the computed aligned address. It will
 /// fill to either the required alignment or the maximum size.
@@ -57,7 +57,7 @@ static inline size_t unalignedLoop(void *destination, const void *source, size_t
  return length;
 }
 
-/// \brief a `memcpy` implementation compatible with the C standard `memcpy`.
+/// \brief A `memcpy` implementation compatible with the C standard `memcpy`.
 ///
 /// This is an implementation of the C standard function `memcpy`. This function behaves exactly as the standard
 /// version. This means that it will yield undefined behaviour if the length overflows or if the combination of source,
@@ -68,7 +68,7 @@ static inline size_t unalignedLoop(void *destination, const void *source, size_t
 /// \param destination this is a pointer that indicates where the destination buffer begins.
 /// \param source this is a pointer that indicates where the source buffer begins.
 /// \param length the number of bytes to copy.
-/// \return The same address as provided in the destination buffer.
+/// \return The same address as provided in the destination buffer or UINTPTR_MAX.
 void *__memcpy(void *destination, const void *source, size_t length) {
  // If the length is 0, return immediately
  if (length == 0x00) { return destination; }

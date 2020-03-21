@@ -30,7 +30,7 @@
 
 void __strtoullC(const char *string,
                  char **endingPointer,
-                 int base,
+                 unsigned base,
                  struct strtoullSignedT *result,
                  const uintmax_t maximum,
                  const uintmax_t minimum) {
@@ -38,29 +38,32 @@ void __strtoullC(const char *string,
  result->flags = 0x00U;
  result->value = 0x00U;
  // Initialize all the constants...
- static const signed noBase = 0;
- static const signed octalBase = 8;
- static const signed decimalBase = 10;
- static const signed hexadecimalBase = 16;
- static const signed maximumBase = 36;
- static const signed minimumBase = 2;
+ static const unsigned noBase = 0;
+ static const unsigned octalBase = 8;
+ static const unsigned decimalBase = 10;
+ static const unsigned hexadecimalBase = 16;
+ static const unsigned maximumBase = 36;
+ static const unsigned minimumBase = 2;
  // Initialize all the variables...
  const char *mobileString = string;
  char character = *mobileString;
  uintmax_t actualLimit = maximum;
- signed actualBase = noBase;
+ unsigned actualBase = noBase;
  // Discard all the whitespace characters until a non-whitespace character is found.
  while (isAsciiSpace(character)) { character = moveStringPointerOneForward(&mobileString); }
  // The next character is most likely the sign, which can be '-', '+' or none, which then is assumed to be positive.
  switch (character) {
-  case '-':result->flags = CLEAR_NTH_BIT(result->flags, SIGN_FLAG);
+  case '-':
+   result->flags = CLEAR_NTH_BIT(result->flags, SIGN_FLAG);
    actualLimit = minimum;
    character = moveStringPointerOneForward(&mobileString);
    break;
-  case '+':result->flags = SET_NTH_BIT(result->flags, SIGN_FLAG);
+  case '+':
+   result->flags = SET_NTH_BIT(result->flags, SIGN_FLAG);
    character = moveStringPointerOneForward(&mobileString);
    break;
-  default:result->flags = SET_NTH_BIT(result->flags, SIGN_FLAG);
+  default:
+   result->flags = SET_NTH_BIT(result->flags, SIGN_FLAG);
    break;
  }
  /*
@@ -69,9 +72,12 @@ void __strtoullC(const char *string,
   * prefix is provided, we should treat the number as base dec. If the base is provided, we treat the number as the
   * provided base.
   */
- if (character == '0') {
+ static const char charZero = '0';
+ static const char charLowerX = 'x';
+ static const char charUpperX = 'X';
+ if (character == charZero) {
   character = moveStringPointerOneForward(&mobileString);
-  if ((character == 'x' || character == 'X') && (base == hexadecimalBase || base == noBase)) {
+  if ((character == charLowerX || character == charUpperX) && (base == hexadecimalBase || base == noBase)) {
    character = moveStringPointerOneForward(&mobileString);
    actualBase = hexadecimalBase;
   } else if (base == octalBase || base == noBase) { actualBase = octalBase; }
@@ -87,17 +93,17 @@ void __strtoullC(const char *string,
   * not allowed inside a core library), we can safely assume that digit characters from 0 to 9 are contiguous, letters
   * from a to z and from A to Z are contiguous.
   */
- const char minDecimal = '0';
- const char maxDecimal = '0' + (decimalBase - 0x01);
- const char maxLowercase = 'a' + actualBase - (decimalBase + 0x01);
- const char minLowercase = 'a';
- const char maxUppercase = 'A' + actualBase - (decimalBase + 0x01);
- const char minUppercase = 'A';
+ static const char minDecimal = '0';
+ const unsigned char maxDecimal = minDecimal + (decimalBase - 0x01U);
+ static const char minLowercase = 'a';
+ const unsigned char maxLowercase = (const unsigned char) (minLowercase + actualBase - (decimalBase + 0x01U));
+ static const char minUppercase = 'A';
+ const unsigned char maxUppercase = (const unsigned char) (minUppercase + actualBase - (decimalBase + 0x01U));
  uintmax_t accumulator = 0x00U;
  while (true) {
   bool overflow = false;
-  signed computedValue;
-  if (character >= minDecimal && character <= maxDecimal) { computedValue = character - minDecimal; }
+  unsigned computedValue;
+  if (character >= minDecimal && character <= maxDecimal) { computedValue = (unsigned int) (character - minDecimal); }
   else if (character >= minLowercase && character <= maxLowercase) {
    computedValue = character + (decimalBase - minLowercase);
   } else if (character >= minUppercase && character <= maxUppercase) {

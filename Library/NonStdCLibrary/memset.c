@@ -26,5 +26,6 @@
 
 void *memset(void *buffer, int fill, size_t length) {
  extern void *__memset(void *, int, size_t);
- return __memset(buffer, fill, length);  // Use the implementation inside the Compiler Runtime
+ __memset(buffer, fill, length);  // Use the implementation inside the Compiler Runtime
+ return buffer;
 }
