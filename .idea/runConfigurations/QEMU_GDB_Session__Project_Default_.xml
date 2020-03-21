@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="QEMU GDB Session (Project Default)" type="CLion_Remote" remoteCommand="localhost:1234" symbolFile="$PROJECT_DIR$/cmake-build-project-default/Important/MainExecutable.dbg" sysroot="">
+    <method v="2" />
+  </configuration>
+</component>

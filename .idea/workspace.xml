@@ -39,18 +39,14 @@
           </envs>
         </ADDITIONAL_GENERATION_ENVIRONMENT>
       </configuration>
+      <configuration PROFILE_NAME="Project Default" />
       <configuration PROFILE_NAME="Default" />
     </configurations>
   </component>
   <component name="ClangdSettings">
-    <option name="formatViaClangd" value="false" />
     <option name="clangWarnings" value="-pedantic,-Wall,-Werror,-Wextra,-Wformat=2,-Wpedantic,-Wundef" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
-  <component name="FileColors">
-    <fileColor scope="Test Files" color="Rose" />
-    <fileColor scope="Problems" color="Orange" />
-  </component>
+  <component name="ExecutionTargetManager" />
   <component name="FileTemplateManagerImpl">
     <option name="SCHEME" value="Project" />
   </component>
@@ -58,28 +54,11 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="SIGN_OFF_COMMIT" value="true" />
   </component>
-  <component name="NamedScopeManager">
-    <scope name="Assembler Header Files" pattern="file[Colorize]:*.h" />
-    <scope name="Assembly Preprocessed Source Files" pattern="file[Colorize]:*.sx" />
-    <scope name="Assembly Non-Preprocessed Source Files" pattern="file[Colorize]:*.s" />
-    <scope name="CMake Caches" pattern="file[Colorize]:CMakeCache.txt" />
-    <scope name="CMake Projects" pattern="file[Colorize]:CMakeLists.txt" />
-    <scope name="CMake Scripts" pattern="file[Colorize]:*.cmake" />
-    <scope name="C++ Header Files" pattern="file[Colorize]:*.hxx" />
-    <scope name="C++ Source Files" pattern="file[Colorize]:*.cxx" />
-    <scope name="C Header Files" pattern="file[Colorize]:*.h" />
-    <scope name="C Source Files" pattern="file[Colorize]:*.c" />
-    <scope name="Documentation Files" pattern="file[Colorize]:*.md||file[Colorize]:*.rst||file[Colorize]:*.tex" />
-    <scope name="GNU LD Scripts" pattern="file[Colorize]:*.ld" />
-    <scope name="Python Scripts" pattern="file[Colorize]:*.py" />
-
-    <scope name="Configuration Files" pattern="file[Colorize]:*.cfg.*||file[Colorize]:*.cfg" />
-    <scope name="Ignored Files" pattern="file[Colorize]:*.ignore.*||file[Colorize]:*.ignore" />
-    <scope name="Temp Files" pattern="file[Colorize]:*.tmp.*||file[Colorize]:*.tmp" />
-    <scope name="Template Files" pattern="file[Colorize]:*.in.*||file[Colorize]:*.in" />
-    <scope name="Test Files" pattern="file[Colorize]:*.tst.*||file[Colorize]:*.tst" />
-  </component>
   <component name="ProjectId" id="1X0lgzs0B8ajlYJD89yQXdQT1q4" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+    <ConfirmationsSetting value="2" id="Remove" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="false" />
@@ -90,48 +69,47 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
   </component>
-  <component name="RunManager">
+  <component name="PyConsoleOptionsProvider">
+    <option name="myPythonConsoleState">
+      <console-settings module-name="Colorize">
+        <option name="myModuleName" value="Colorize" />
+      </console-settings>
+    </option>
+  </component>
+  <component name="PyDebuggerOptionsProvider">
+    <option name="mySaveCallSignatures" value="true" />
+    <option name="mySupportGeventDebugging" value="true" />
+  </component>
+  <component name="RunManager" selected="CMake Application.Final Executable">
+    <configuration name="Doxygen" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Zalea" TARGET_NAME="Doxygen">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Final Executable" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Zalea" TARGET_NAME="LinkedImage">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="CMake Application.Final Executable" />
+      <item itemvalue="CMake Application.Doxygen" />
+      <item itemvalue="GDB Remote Debug.QEMU GDB Session (Debug)" />
+      <item itemvalue="GDB Remote Debug.QEMU GDB Session (Default)" />
+      <item itemvalue="GDB Remote Debug.QEMU GDB Session (MinSizeRel)" />
+      <item itemvalue="GDB Remote Debug.QEMU GDB Session (Project Default)" />
+      <item itemvalue="GDB Remote Debug.QEMU GDB Session (Release)" />
+      <item itemvalue="GDB Remote Debug.QEMU GDB Session (RelWithDebInfo)" />
+    </list>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="PERFORM_ROLLBACK_IN_BACKGROUND" value="true" />
+    <option name="CHECK_LOCALLY_CHANGED_CONFLICTS_IN_BACKGROUND" value="true" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
-  </component>
-  <component name="projectDetails">
-    <states>
-      <state key="ScopeChooserConfigurable.UI">
-        <settings>
-          <order>
-            <scope name="Assembler/C Header Files" />
-            <scope name="Assembler Preprocessed Source Files" />
-            <scope name="Assembler Source Files" />
-            <scope name="CMake Caches" />
-            <scope name="CMake Projects" />
-            <scope name="CMake Scripts" />
-            <scope name="C++ Header Files" />
-            <scope name="C++ Source Files" />
-            <scope name="C Header Files" />
-            <scope name="C Source Files" />
-            <scope name="Documentation Files" />
-            <scope name="GNU LD Scripts" />
-            <scope name="Python Scripts" />
-
-            <scope name="Configuration Files" />
-            <scope name="Ignored Files" />
-            <scope name="Temp Files" />
-            <scope name="Template Files" />
-            <scope name="Test Files" />
-          </order>
-        </settings>
-      </state>
-    </states>
   </component>
 </project>

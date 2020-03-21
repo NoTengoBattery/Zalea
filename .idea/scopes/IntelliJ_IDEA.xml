@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+    <scope name="IntelliJ IDEA" pattern="file[Colorize]:.idea//*" />
+</component>

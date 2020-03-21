@@ -9,11 +9,13 @@
       <excludeFolder url="file://$MODULE_DIR$/.idea" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/cmake-build-*" />
+      <excludeFolder url="file://$MODULE_DIR$/Documentation/html" />
+      <excludeFolder url="file://$MODULE_DIR$/Scripts/Python/Environments/3" />
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Architecture" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Device Descriptor" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Executables" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Library" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Platform" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Scripts" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Scripts/Python/Tests" isTestSource="true" />
     </content>
