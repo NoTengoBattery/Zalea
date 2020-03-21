@@ -33,18 +33,7 @@ ADD_LIBRARY("CompilerRuntime" STATIC
             "strtoullC.h"
             "${KERNEL_ARCH}/${KERNEL_ARCH}Utils.h")
 TARGET_INCLUDE_DIRECTORIES("CompilerRuntime" PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
-TARGET_DISABLE_FANCY_FEATURES("CompilerRuntime" PRIVATE C FANCY_LIST STACK_PROTECTOR)
-# This accessory library is the "libgcc" part. It does contains calls made by the compiler when the CPU or the platform
-# does not support an operation (such as ARM not supporting integer division). It contains the sanitizers, the stack
-# check protector and so on. It *does* require special compiler flags to disable fancy features (like avoiding to
-# sanitize the sanitizer itself), and the backend support. Note that LTO will generate code that might change these
-# flags.
-#
-# TODO: That means that for LTO, you will need to carefully enable or disable the features to ensure the minimum area
-# TODO: where such features are disabled.
-#
-# TODO: For non-LTO, the code generated will be always generated without the flags and linked as-is, therefore, you will
-# TODO: not have to disable these features in the software that use the non-LTO (raw machine code) compiled versions.
+TARGET_CHANGE_FEATURES("CompilerRuntime" PRIVATE C FEATURES NO_STACK_PROTECTOR)
 ADD_LIBRARY("RawCompilerRuntime" STATIC
             "division.c"
             "division.h")
@@ -53,7 +42,7 @@ IF (KERNEL_ARM)
                 "${KERNEL_ARCH}/__aeabi_uidivmod.c")
 ENDIF ()
 TARGET_INCLUDE_DIRECTORIES("RawCompilerRuntime" PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
-TARGET_DISABLE_FANCY_FEATURES("RawCompilerRuntime" PRIVATE C FANCY_LIST LTO STACK_PROTECTOR)
+TARGET_CHANGE_FEATURES("RawCompilerRuntime" PRIVATE C FEATURES OPTIMIZE_MAXIMUM NO_LTO NO_STACK_PROTECTOR)
 
-TARGET_LINK_LIBRARIES("RawCompilerRuntime" "CompilerRuntime" "CoreLibraries")
+TARGET_LINK_LIBRARIES("RawCompilerRuntime" "CoreLibraries")
 TARGET_LINK_LIBRARIES("CompilerRuntime" "RawCompilerRuntime" "CoreLibraries")

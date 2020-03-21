@@ -62,13 +62,16 @@ IF (TREE_SELF_PATH) # This will define if we have access to the scope variables 
  STRING(APPEND CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g -DRELWITHDEBINFO ")
 
  # These flags will disable any fancy features (needed to build very early boot code or the compiler runtime)
+ SET(CXX_NO_EXCEPTIONS "-fno-exceptions")
  SET(CXX_NO_LTO "-fno-lto")
  SET(CXX_NO_LTO_ONLY "${CXX_NO_LTO}") # Sadly, for Clang there is no fat-LTO, so we disable it instead
- SET(CXX_NO_SANITIZER "-fno-sanitize=all")
  SET(CXX_NO_RTTI "-fno-rtti")
- SET(CXX_NO_UNWIND "-fno-unwind-tables")
- SET(CXX_NO_EXCEPTIONS "-fno-exceptions")
+ SET(CXX_NO_SANITIZER "-fno-sanitize=all")
  SET(CXX_NO_STACK_PROTECTOR "-fno-stack-protector")
+ SET(CXX_NO_UNWIND "-fno-unwind-tables")
+ SET(CXX_OPTIMIZE_DEBUG "-Og")
+ SET(CXX_OPTIMIZE_MAXIMUM "-Ofast")
+ SET(CXX_OPTIMIZE_SIZE "-Os")
 
  # Use the following file extensions as C++ source files
  SET(CMAKE_CXX_SOURCE_FILE_EXTENSIONS "cxx")
