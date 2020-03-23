@@ -39,6 +39,11 @@
   n: ASM_NL \
   .fnstart
 
+#define GLOBAL_ARM_FUNCTION(s, n, st) NAKED_GLOBAL_ARM_FUNCTION(s, n) ASM_NL \
+  push {fp, lr} ASM_NL \
+  add fp, sp, #0x04 ASM_NL \
+  sub	sp, sp, ##st ASM_NL
+
 #define NAKED_GLOBAL_THUMB_FUNCTION(s, n) \
   .text ASM_NL \
   .p2align 0x02,,0x03 ASM_NL \
@@ -57,6 +62,11 @@
   .fnend
 
 #define NAKED_GLOBAL_ARM_FUNCTION_EPILOG(n) GENERIC_FUNCTION_EPILOG(n)
+
+#define GLOBAL_ARM_FUNCTION_EPILOG(n) sub sp, fp, #0x04 ASM_NL \
+  pop {fp, pc} ASM_NL \
+  NAKED_GLOBAL_ARM_FUNCTION_EPILOG(n)
+
 #define NAKED_GLOBAL_THUMB_FUNCTION_EPILOG(n) GENERIC_FUNCTION_EPILOG(n)
 
 #define GLOBAL_DATA_2(n, s, f, b) \

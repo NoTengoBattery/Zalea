@@ -1,4 +1,4 @@
-//===-- __aeabi_uidivmod.c - ARM EABI Unsigned Integer Division with Modulo -------------------------------*- C -*-===//
+//===-- __aeabi_uldivmod.c - ARM EABI Unsigned Long Division with Modulo ----------------------------------*- C -*-===//
 //
 // Copyright (c) 2020 Oever González
 //
@@ -16,7 +16,7 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 ///
 /// \file
-/// Implement the `__aeabi_uidivmod` support function.
+/// Implement the `__aeabi_uldivmod` support function.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
@@ -28,17 +28,22 @@
 
 #if defined(KERNEL_ARM) && defined(KERNEL_COMPILER_GNU)
 
-/// \brief This is the EABI call for unsigned integer division with quotient.
+struct returnT {
+ uint64_t quotient;
+ uint64_t remainder;
+};
+
+/// \brief This is the EABI call for unsigned long division with quotient.
 ///
-/// In theory, the return quotient will go on R0 and the remainder in R1, but we can't control that (directly) from C.
-/// But the ABI says that a 64 bit value will, indeed, be returned that way, so we return a 64 bit struct which is the
-/// composition of both the remainder and quotient. This should work as long as EABI is used (and this function won't be
-/// called if you don't use EABI, anyway).
+/// In theory, the return quotient will go on R0-1 and the remainder in R2-3, but we can't control that (directly) from
+/// C. But the ABI says that a 64 bit value will, indeed, be returned that way, so we return a 128 bit struct which is
+/// the composition of both the remainder and quotient. This should work as long as EABI is used (and this function
+/// won't be called if you don't use EABI, anyway).
 ///
 /// \param numerator (parameter introduced by the compiler).
 /// \param denominator (parameter introduced by the compiler).
 /// \return The composite value of the results which conforms with the EABI call.
-ATTR_USED uint64_t __aeabi_uidivmod(uint32_t numerator, uint32_t denominator) {
+ATTR_USED uint64_t __aeabi_uldivmod(uint64_t numerator, uint64_t denominator) {
  struct divisionT division = {
    .denominator.flags = SET_NTH_BIT(0x00U, SIGN_FLAG),
    .denominator.value = denominator,
@@ -51,7 +56,7 @@ ATTR_USED uint64_t __aeabi_uidivmod(uint32_t numerator, uint32_t denominator) {
    .remainder = 0x00U
  };
  longDivision(&division, &result);
- extern uint64_t __arm_noop(uint32_t, uint32_t);
+ extern uint64_t __arm_noop(uint64_t, uint64_t);
  return __arm_noop(result.quotient.value, result.remainder);
 }
 

@@ -39,7 +39,9 @@ ADD_LIBRARY("RawCompilerRuntime" STATIC
             "${KERNEL_ARCH}/${KERNEL_ARCH}Utils.h")
 IF (KERNEL_ARM)
  TARGET_SOURCES("RawCompilerRuntime" PRIVATE
-                "${KERNEL_ARCH}/__aeabi_uidivmod.c")
+                "${KERNEL_ARCH}/__aeabi_uidivmod.c"
+                "${KERNEL_ARCH}/__aeabi_uldivmod.c"
+                "${KERNEL_ARCH}/arm_noop.sx")
 ENDIF ()
 TARGET_INCLUDE_DIRECTORIES("RawCompilerRuntime" PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
 TARGET_CHANGE_FEATURES("RawCompilerRuntime" PRIVATE C FEATURES OPTIMIZE_MAXIMUM NO_LTO NO_STACK_PROTECTOR)
