@@ -211,7 +211,7 @@ def flatten_dictionary(input_properties_file: io.TextIOWrapper):
         elif type(python_dictionary) is list:
             index = 0x00
             for value in python_dictionary:
-                flatten(value, prefix + f"{index:d}" + flatten_separator)
+                flatten(value, prefix + f"{index:04d}" + flatten_separator)
                 index += 0x01
         else:
             result_dictionary[prefix[:-len(flatten_separator)]] = python_dictionary
@@ -428,7 +428,7 @@ def print_to_source(args, hashmap: []):
                     except ValueError:
                         pass
                     source.write(f"\n\t{{\"{api_key}\", \"{val}\"}},")
-                    source.write(f"  // {index:0{places_binary}b}, {index:0{places_octal}o}")
+                    source.write(f"  // {index:0{places_decimal}d}, {index:0{places_hex}x}")
             source.seek(source.tell() - 1)
             source.write("\n};")
             source.write("\n")
