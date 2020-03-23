@@ -1,0 +1,58 @@
+---
+# A rather board memory map for x86 for non-discoverable memory regions
+memory:
+  # Areas in the lower (before the 1 MiB mark) memory (mostly used by BIOS)
+  lower:
+    reserved:
+      - start:
+          name:    Real-Mode Interrupt Vector Table
+          pointer: 0x00000000
+        end:
+          pointer: 0x000003FF
+      - start:
+          name:    BIOS Data Area
+          pointer: 0x00000400
+        end:
+          pointer: 0x000004FF
+      - start:
+          name:    Boot Sector
+          pointer: 0x00007C00
+        end:
+          pointer: 0x00007DFF
+      - start:
+          name:    Extended BIOS Data Area
+          pointer: 0x00080000
+        end:
+          pointer: 0x0009FFFF
+    guaranteed:
+      - start:
+          name:    Free Memory Area 1
+          pointer: 0x00000500
+        end:
+          pointer: 0x00007BFF
+      - start:
+          name:    Free Memory Area 2
+          pointer: 0x00007E00
+        end:
+          pointer: 0x0007FFFF
+    unusable:
+      - start:
+          name:    Used by BIOS
+          pointer: 0x000A0000
+        end:
+          pointer: 0x000FFFFF
+  # Areas in the upper (after the 1 MiB mark) memory, can be used and detected by the OS if exists
+  upper:
+    available:
+      - start:
+          name:    Available Memory (Before ISA Hole)
+          pointer: 0x00100000
+        end:
+          pointer: 0x00EFFFFF
+    unusable:
+      - start:
+          name:    ISA Memory Hole
+          pointer: 0x00F00000
+        end:
+          pointer: 0x00FFFFFF
+...

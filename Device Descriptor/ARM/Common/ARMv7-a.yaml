@@ -1,0 +1,16 @@
+---
+# Define ARMv7 interrupt controller properties
+interrupt:
+  # Define the properties of the ARM interrupt vector table
+  vector:
+    # Define the addresses of the ARM interrupt vector table
+    address:
+      # The lowermost address for the ARM interrupt vector table
+      lower:
+        name:    Lower Vector Table Address
+        pointer: 0x00000000
+      # The uppermost address for the ARM interrupt vector table
+      upper:
+        name:    Upper Vector Table Address
+        pointer: 0xFFFF0000
+...

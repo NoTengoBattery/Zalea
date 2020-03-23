@@ -138,8 +138,8 @@ ENDIF ()
 # Add an interface library for config.h (and friends)
 ADD_LIBRARY("CoreLibraries" STATIC
             "${CONFIGURATION_HEADER}"
-            "${JPI_HEADER}"
-            "${JPI_SOURCE}")
+            "${DEVICE_DESCRIPTOR_HEADER}"
+            "${DEVICE_DESCRIPTOR_SOURCE}")
 TARGET_INCLUDE_DIRECTORIES("CoreLibraries" INTERFACE "${TREE_BIN_IMPORTANT_INCLUDE_PATH}")
 TARGET_LINK_LIBRARIES("CoreLibraries" "ExecutableLibrary" "CompilerMagic" "CompilerRuntime")
 
@@ -156,7 +156,7 @@ DATABASE_TO_CMAKE()
 DATABASE_TO_HEADER()
 
 # Configure the CMake Header
-CONFIGURE_FILE("${SAE_OUTPUT_HEADER}" "${CONFIGURATION_HEADER}" ESCAPE_QUOTES)
+CONFIGURE_FILE("${SET_AND_EXPORT_OUTPUT_HEADER}" "${CONFIGURATION_HEADER}" ESCAPE_QUOTES)
 
 # Generate the Hash Table for the Device Descriptor
 GENERATE_DEVICE_DESCRIPTOR()

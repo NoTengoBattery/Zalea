@@ -44,6 +44,10 @@
       <option name="REDIRECT_FOLLOWED_BY_SPACE" value="true" />
       <option name="MINIFY_PROGRAM" value="true" />
     </Shell_Script>
+    <yaml>
+      <option name="ALIGN_VALUES_PROPERTIES" value="1" />
+      <option name="SEQUENCE_ON_NEW_LINE" value="true" />
+    </yaml>
     <codeStyleSettings language="CMake">
       <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
       <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />

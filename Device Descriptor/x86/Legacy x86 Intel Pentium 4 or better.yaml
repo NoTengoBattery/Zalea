@@ -1,0 +1,4 @@
+---
+include:
+  - <x86/Common/x86-BIOS.yaml>
+...

@@ -99,6 +99,7 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         subprocess.check_call([context.env_exe, "-m", "pip", "install", "cpplint"])
         subprocess.check_call([context.env_exe, "-m", "pip", "install", "deepmerge"])
         subprocess.check_call([context.env_exe, "-m", "pip", "install", "pytest"])
+        subprocess.check_call([context.env_exe, "-m", "pip", "install", "ruamel.yaml"])
         subprocess.check_call([context.env_exe, "-m", "pip", "install", "tinydb"])
 
 

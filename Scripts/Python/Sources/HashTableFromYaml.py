@@ -1,4 +1,4 @@
-# ===-- HashTableFromJson.py - Create a Hash Table for C from a Configuration JSON -------------------*- Python -*-=== #
+# ===-- HashTableFromYaml.py - Create a Hash Table for C from a Configuration YAML -------------------*- Python -*-=== #
 #
 # Copyright (c) 2020 Oever González
 #
@@ -17,15 +17,14 @@
 # /
 # / \file
 # / This file will generate a C source code file which contains a Hash Table, where the hash represents a string to a
-# / property in a JSON object; and whose value is a pointer to the value of the property. This will implement a kind of
-# / hash table, where the C program can calculate the hash of the property and use it as a index to the table and get
-# / the pointer, and ultimately the value of the property.
+# / property in a YAML object; and whose value is a pointer to the key-value pair of the property. This will implement a
+# / kind of hash table, where the C program can calculate the hash of the property and use it as a index to the table
+# / and get the pointer, and ultimately the value of the property's key.
 # /
 # ===--------------------------------------------------------------------------------------------------------------=== #
 
 import argparse
 import io
-import json
 import logging
 import math
 import os
@@ -34,16 +33,17 @@ import re
 import sys
 
 import deepmerge
+import ruamel.yaml
 
 bits = 8
 buffer_size = 64 * 1024  # 64kib
 collision_foresee = 1
-default_db_filename = "properties.json"
-default_header_filename = "JsonPropertyHashTable.h"
+default_db_filename = "properties.yaml"
+default_header_filename = "YamlPropertyHashTable.h"
 default_header_template = "template.h"
-default_source_filename = "JsonPropertyHashTable.c"
+default_source_filename = "YamlPropertyHashTable.c"
 default_source_template = "template.c.h"
-flatten_separator = ":"
+flatten_separator = "::"
 flatten_separator_api = "KS"
 max_64bit = 0xFFFFFFFFFFFFFFFF
 parsed_arguments = None
@@ -58,6 +58,7 @@ internal_separator = "<->"
 testing_property_key = "testing" + flatten_separator + "lookup"
 testing_property_value = "working"
 program_logger = logging.getLogger(__name__)
+yaml_parser = ruamel.yaml.YAML(typ="safe")
 
 
 def parse_args(args):
@@ -68,13 +69,13 @@ def parse_args(args):
     """
     parser = argparse.ArgumentParser(
             description="Creates a C source code file which contains a lookup table intended to be used as a "
-                        "dictionary for properties in a JSON file. The program will calculate a hash which will be the "
+                        "dictionary for properties in a YAML file. The program will calculate a hash which will be the "
                         "index of the array. The C program can calculate the hash and get the information from the "
                         "array, which is a pointer to the property string and it's value.",
             epilog="This file requires a template header, which will be included inside both the C header and the C "
                    "source file. The result will be in the provided output directory, which is one for the header and "
                    "other for the C source file. Those files can be included in a build system, just before this "
-                   "program generates them. "
+                   "program generates them.\n"
                    "To describe the generated lookup table more precisely: it have a Hopscotch open-addressing "
                    "collision solving algorithm. The linear lookup is defined by the foresee, and the hashes used to "
                    "compute values are custom hashing designed by the author. Those hashes support arbitrary length "
@@ -82,10 +83,10 @@ def parse_args(args):
                    "re-hashing is made, and this makes the lookup O(1). However, it does require a power of 2 for the "
                    "storage of the index, and it does not scale well under load. However, users can overestimate the "
                    "foresee to give up to the O(1) lookup time in order to keep the table as tidy as possible,")
-    parser.add_argument('-j', '--json-file',
+    parser.add_argument('-j', '--yaml-file',
                         action='store',
                         default=default_db_filename,
-                        help="This is the input file that will be used to generate the lookup table based on the JSON "
+                        help="This is the input file that will be used to generate the lookup table based on the YAML "
                              "properties of the objects in this file.",
                         type=argparse.FileType(bufsize=buffer_size))
     parser.add_argument('-a', '--header-template',
@@ -116,10 +117,10 @@ def parse_args(args):
                         help="Define the linear lookup window to perform stores and lookups around the calculated hash "
                              "to resolve collisions.")
     parser.add_argument('-p', '--api-struct-name',
-                        action='store', type=str, metavar='struct', default="jsonPropertyValue",
+                        action='store', type=str, metavar='struct', default="yamlPropertyValue",
                         help="This is the name of the 'struct' that is exposed in the Header File (the API).")
     parser.add_argument('-i', '--api-table-name',
-                        action='store', type=str, metavar='table', default="jsonPropertiesHashmap",
+                        action='store', type=str, metavar='table', default="yamlPropertiesHashmap",
                         help="This is the name of the Hash Table (array) that is exposed in the Header File (the API).")
     parser.add_argument('-v', '--verbose',
                         action='store_true',
@@ -134,19 +135,19 @@ def parse_args(args):
 # Extracted from:
 # https://towardsdatascience.com/how-to-flatten-deeply-nested-json-objects-in-non-recursive-elegant-python-55f96533103d
 # Pretty funny that the implementation is recursive, tho.
-def flatten_json(input_json_file: io.TextIOWrapper):
+def flatten_dictionary(input_properties_file: io.TextIOWrapper):
     """
-    Flatten a JSON file into strings.
-    :param input_json_file: the JSON file to flat
-    :return: a dictionary which represents the flatten JSON
+    Flatten a YAML file into strings.
+    :param input_properties_file: the YAML file to flat
+    :return: a dictionary which represents the flatten YAML
     """
     rex_current_working_directory = re.compile("<(?P<f>.*)>")
     rex_absolute_path = re.compile("{(?P<f>.*)}")
-    output = {testing_property_key: testing_property_value}
+    result_dictionary = {testing_property_key: testing_property_value}
 
-    def include_recurse(json_path: str, file_list: [], main_dict: {}):
+    def include_recurse(properties_file_path: str, file_list: [], main_dict: {}):
         """
-        Perform a recursive inclusion of other JSON files, from an array inside the JSON files, called `include`, which
+        Perform a recursive inclusion of other YAML files, from an array inside the YAML files, called `include`, which
         can be either relative to the working directory (by using the '<' and '>' symbols around the file path),
         relative to the file which included it (by using the file path as is) or an absolute file path (by using the
         symbols '{' and '}' around the file path).
@@ -157,46 +158,51 @@ def flatten_json(input_json_file: io.TextIOWrapper):
         Generally speaking, you should call this function with an empty list and dictionary, unless you have a list of
         absolute paths to exclude or a dictionary which holds pre-defined values. Note that those pre-defined values
         will have the lowest precedence.
-        :type json_path: str
+        :type properties_file_path: str
         :type file_list: []
         :type main_dict: {}
-        :param json_path: a string which is a path to a JSON file
+        :param properties_file_path: a string which is a path to a YAML file
         :param file_list: a list which holds all the absolute paths to file that should not be processed
         :param main_dict: a dictionary which holds the result of the processed files
         :return: the computed dictionary which is the combination of the files as described
         """
-        with open(json_path) as open_json:
-            json_dict = json.load(open_json)
-            json_path_resolved = str(pathlib.Path(json_path).absolute())
-            if json_path_resolved not in file_list:
-                file_list.append(json_path_resolved)
-            include_list = json_dict.pop("include", [])
-            for include in include_list:
-                include_matched = rex_current_working_directory.match(include)
-                absolute_matched = rex_absolute_path.match(include)
-                if include_matched is not None:
-                    cwd = pathlib.Path(os.getcwd())
-                    inferred_path = pathlib.Path(include_matched.group("f"))
-                    path = str(cwd.joinpath(inferred_path).absolute())
-                elif absolute_matched is not None:
-                    inferred_path = pathlib.Path("/" + absolute_matched.group("f"))
-                    path = str(inferred_path.absolute())
-                else:
-                    included_dir = pathlib.Path(json_path_resolved).parent
-                    inferred_path = pathlib.Path(include)
-                    path = str(included_dir.joinpath(inferred_path).absolute())
-                if path not in file_list:  # Keep track of the included file to avoid recursion
-                    file_list.append(path)
-                    include_recurse(path, file_list, main_dict)
-            deepmerge.always_merger.merge(main_dict, json_dict)
+        with open(properties_file_path) as open_yaml:
+            properties_documents = yaml_parser.load_all(open_yaml)
+            properties_file_path_resolved = str(pathlib.Path(properties_file_path).absolute())
+            if properties_file_path_resolved not in file_list:
+                file_list.append(properties_file_path_resolved)
+            for properties_object in properties_documents:
+                try:
+                    include_list = properties_object.pop("include", [])
+                except AttributeError:
+                    raise SyntaxError("Empty documents are not allowed inside YAML files.")
+                for include in include_list:
+                    include_matched = rex_current_working_directory.match(include)
+                    absolute_matched = rex_absolute_path.match(include)
+                    if include_matched is not None:
+                        working_directory = pathlib.Path(os.getcwd())
+                        inferred_path = pathlib.Path(include_matched.group("f"))
+                        computed_path = str(working_directory.joinpath(inferred_path).absolute())
+                    elif absolute_matched is not None:
+                        inferred_path = pathlib.Path("/" + absolute_matched.group("f"))
+                        computed_path = str(inferred_path.absolute())
+                    else:
+                        included_dir = pathlib.Path(properties_file_path_resolved).parent
+                        inferred_path = pathlib.Path(include)
+                        computed_path = str(included_dir.joinpath(inferred_path).absolute())
+                    if computed_path not in file_list:  # Keep track of the included file to avoid recursion
+                        file_list.append(computed_path)
+                        include_recurse(computed_path, file_list, main_dict)
+                deepmerge.always_merger.merge(main_dict, properties_object)
         return main_dict
 
     def flatten(python_dictionary: {}, prefix: str = ""):
         """
-        The recursive call to flatten the JSON file, which accepts a Python dictionary as input and deeply flattens it.
+        The recursive call to flatten the dictionary, which accepts a Python dictionary as input and deeply flattens it
+        by converting it to a composed string with the properties separated by a string separator.
         :type prefix: str
         :type python_dictionary: {}
-        :param python_dictionary: a dictionary to add flatten JSON objects
+        :param python_dictionary: a dictionary to add the flatten objects
         :param prefix: a prefix to prepend to properties
         """
         if type(python_dictionary) is dict:
@@ -208,11 +214,11 @@ def flatten_json(input_json_file: io.TextIOWrapper):
                 flatten(value, prefix + f"{index:d}" + flatten_separator)
                 index += 0x01
         else:
-            output[prefix[:-len(flatten_separator)]] = python_dictionary
+            result_dictionary[prefix[:-len(flatten_separator)]] = python_dictionary
 
-    reduced_dictionary = include_recurse(input_json_file.name, [], {})
+    reduced_dictionary = include_recurse(input_properties_file.name, [], {})
     flatten(reduced_dictionary)
-    return output
+    return result_dictionary
 
 
 def mask(value):
@@ -350,9 +356,9 @@ def create_hashmap(args):
     :param args: the program's parsed arguments
     :return: the generated hashmap
     """
-    flatten_json_data = flatten_json(args.json_file)
+    flatten_properties_data = flatten_dictionary(args.yaml_file)
     hashmap = [None] * (mask(max_64bit) + 1)
-    for key, value in flatten_json_data.items():
+    for key, value in flatten_properties_data.items():
         key_hash = calculate_hash(key)
         key_hash2 = calculate_hash2(key)
         program_logger.info(f"Key: {key}, Value: {value}, Hash1: {hex(key_hash)}, Hash2: {hex(key_hash2)}")
@@ -361,7 +367,9 @@ def create_hashmap(args):
             hashmap[key_hash] = f"{key}{internal_separator}{value}"
             program_logger.info("Key not found in the map, key added at index {key_hash}!")
         else:
-            program_logger.warning(f"--! Collision detected, hash {hex(key_hash)} (key: '{key}') already in the table")
+            program_logger.warning(f"--! Collision detected, hash {hex(key_hash)} (key: '{key}') is already in use")
+            in_use = hashmap[key_hash].split(internal_separator)[0]
+            program_logger.warning(f"--! Hash {hex(key_hash)} is currently used by the key '{in_use}'")
             collision_avoided = hash_foresee(key_hash, "Hash1", hashmap, key, value)
             if not collision_avoided:
                 in_map = hashmap[key_hash2]
@@ -373,7 +381,9 @@ def create_hashmap(args):
                     program_logger.warning(f"--+ Collision avoided by using the alternative hash {hex(key_hash2)}")
                 else:
                     program_logger.warning(
-                            f"--! Collision detected, hash {hex(key_hash2)} (key: '{key}') already in the table")
+                            f"--! Collision detected, hash {hex(key_hash2)} (key: '{key}') is already in use")
+                    in_use = hashmap[key_hash2].split(internal_separator)[0]
+                    program_logger.warning(f"--! Hash {hex(key_hash2)} is currently used by the key '{in_use}'")
             if not collision_avoided:
                 collision_avoided = hash_foresee(key_hash2, "Hash2", hashmap, key, value)
             if not collision_avoided:
@@ -418,6 +428,11 @@ def print_to_source(args, hashmap: []):
                         varname = f"{api_struct}{index:0{places_octal}o}"
                         key, val = hashable.split(internal_separator)
                         api_key = key.replace(flatten_separator, f"\"{flatten_separator_api}\"")
+                        # Try to convert the value to a hexadecimal string if it's a integer.
+                        try:
+                            val = hex(int(val))
+                        except ValueError:
+                            pass
                         source.write(f"\n\t&{varname}{ending}")
                         variables.write(f"\n\n// ({index:0{places_binary}b}, {index:0{places_octal}o}, "
                                         f"{index:0{places_decimal}d}, {index:0{places_hex}x}) : "
