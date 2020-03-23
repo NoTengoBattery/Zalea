@@ -43,7 +43,7 @@ default_header_filename = "YamlPropertyHashTable.h"
 default_header_template = "template.h"
 default_source_filename = "YamlPropertyHashTable.c"
 default_source_template = "template.c.h"
-flatten_separator = "::"
+flatten_separator = ":"
 flatten_separator_api = "KS"
 max_64bit = 0xFFFFFFFFFFFFFFFF
 parsed_arguments = None
@@ -414,41 +414,28 @@ def print_to_source(args, hashmap: []):
     with args.source_template as template:
         with io.StringIO("") as source:
             source.write("\n// Start of the array that holds the Hash Table as pointers to key-value structs...")
-            source.write(f"\n\nconst struct {api_struct} *const {api_table}[{hashmap_length}] = {{")
-            with io.StringIO("") as variables:
-                nl = True
-                variables.write("\n// Start of the structs that holds the key-value pairs...")
-                for index in range(len(hashmap)):
-                    hashable = hashmap[index]
-                    ending = "," if index != hashmap_max_index else ""
-                    if hashable is None:
-                        source.write("{}NULL{}".format("\n\t" if nl else "", ending))
-                        nl = False
-                    else:
-                        varname = f"{api_struct}{index:0{places_octal}o}"
-                        key, val = hashable.split(internal_separator)
-                        api_key = key.replace(flatten_separator, f"\"{flatten_separator_api}\"")
-                        # Try to convert the value to a hexadecimal string if it's a integer.
-                        try:
-                            val = hex(int(val))
-                        except ValueError:
-                            pass
-                        source.write(f"\n\t&{varname}{ending}")
-                        variables.write(f"\n\n// ({index:0{places_binary}b}, {index:0{places_octal}o}, "
-                                        f"{index:0{places_decimal}d}, {index:0{places_hex}x}) : "
-                                        f"\"{key}\" -> \"{val}\"")
-                        variables.write(f"\nstatic const struct {api_struct} {varname} = {{")
-                        variables.write(f"\n\t\"{api_key}\",\n\t\"{val}\"\n}};")
-                        nl = True
-                source.write("\n};")
-                source.write("\n")
-                source.seek(0)
-                variables.write("\n")
-                variables.seek(0)
-                with args.source as real_output:
-                    real_output.write(template.read())
-                    real_output.write(variables.read())
-                    real_output.write(source.read())
+            source.write(f"\n\nconst struct {api_struct} {api_table}[{hashmap_length}] = {{")
+            for index in range(len(hashmap)):
+                hashable = hashmap[index]
+                if hashable is None:
+                    source.write("\n\t{NULL, NULL},")
+                else:
+                    key, val = hashable.split(internal_separator)
+                    api_key = key.replace(flatten_separator, f"\"{flatten_separator_api}\"")
+                    # Try to convert the value to a hexadecimal string if it's a integer.
+                    try:
+                        val = hex(int(val))
+                    except ValueError:
+                        pass
+                    source.write(f"\n\t{{\"{api_key}\", \"{val}\"}},")
+                    source.write(f"  // {index:0{places_binary}b}, {index:0{places_octal}o}")
+            source.seek(source.tell() - 1)
+            source.write("\n};")
+            source.write("\n")
+            source.seek(0)
+            with args.source as real_output:
+                real_output.write(template.read())
+                real_output.write(source.read())
     with args.header_template as template:
         with io.StringIO("") as header:
             tpk = testing_property_key.replace(flatten_separator, f"\"{flatten_separator_api}\"")
@@ -461,7 +448,7 @@ def print_to_source(args, hashmap: []):
             header.write("\n\n/// \\brief Represents a key-value pair, which is used to store inside the Hash Table.")
             header.write(f"\nstruct {api_struct} {{\n\tchar *key;\n\tchar *value;\n}};")
             header.write("\n\n/// \\brief The internal representation of the Hash Table.")
-            header.write(f"\nconst struct {api_struct} *const {api_table}[{hashmap_length}];")
+            header.write(f"\nconst struct {api_struct} {api_table}[{hashmap_length}];")
             header.write("\n")
             header.seek(0)
             with args.header as real_output:

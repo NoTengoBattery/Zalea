@@ -45,7 +45,7 @@ IF (NOT JPI_INIT)
  SET(JPI_INIT ON CACHE INTERNAL "GENERATE_DEVICE_DESCRIPTOR initialized status")
 ENDIF ()
 
-SET_AND_EXPORT(DEVICE_DESCRIPTOR_HASH_BITS "9U" STRING "9U"
+SET_AND_EXPORT(DEVICE_DESCRIPTOR_HASH_BITS "8U" STRING "8U"
                "The number of bits to be used to generate and calculate the hash table for the JSON properties.")
 SET_AND_EXPORT(DEVICE_DESCRIPTOR_HASH_FORESEE "2U" STRING "2U"
                "The number of positions to seek around the calculated hash in the event of collision.")

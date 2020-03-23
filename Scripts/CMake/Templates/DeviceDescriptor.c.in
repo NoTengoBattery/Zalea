@@ -80,24 +80,23 @@ static inline unsigned calculateHash2(const char *property, const size_t propert
 // is also O(n), where n is the string length, since it uses the trivial implementation. This function only performs the
 // Linear lookup, since the Cuckoo part is embedded in the main function.
 //
-// This function returns NULL if the lookup failed to find the key. It returns a pointer to the struct when it actually
-// finds the correct key. It's responsibility of the caller to unpack the value of the corresponding key.
-static inline const struct deviceProperty *tableLookup(
-  unsigned (*hashing)(const char *, const size_t),
-  const char *property,
-  const struct deviceProperty *const properties[]) {
+// This function returns SIZE_MAX if the lookup failed to find the key. It returns an int to the struct when it actually
+// finds the correct key. It's responsibility of the caller to unpack the actual value of the corresponding key.
+static inline size_t tableLookup(unsigned (*hashing)(const char *, const size_t),
+                                 const char *property,
+                                 const struct deviceProperty properties[]) {
  // Get the length of the property, which is an O(n) operation (n is the string length)
  const size_t propertyLength = __strlen(property);
  // Evaluate the hash value, which is a O(n) operation (n is the string length)
  const unsigned hash = (hashing)(property, propertyLength);
  // Get the value stored in the table, using the hash as the index
- const struct deviceProperty *propInTable = properties[hash];
+ const struct deviceProperty propertyInTable = properties[hash];
  // If the property is null, return null (which means that the lookup failed)
- if (propInTable == NULL) { return NULL; }
+ if (propertyInTable.key == NULL) { return SIZE_MAX; }
  // Get the value of the property to compare against the provided property
- const char *key = propInTable->key;
+ const char *key = propertyInTable.key;
  // Compare the provided string against the name (key) of the property
- if (__strcmp(key, property) == 0x00) { return propInTable; }
+ if (__strcmp(key, property) == 0x00) { return hash; }
  // If not found, perform the linear lookup which is an O(n) operation (n is the foresee value)
  const size_t lh = hash - DEVICE_DESCRIPTOR_HASH_FORESEE; // Calculate the lower hash
  const size_t hh = hash + DEVICE_DESCRIPTOR_HASH_FORESEE; // Calculate the higher hash
@@ -108,15 +107,15 @@ static inline const struct deviceProperty *tableLookup(
  const size_t higherHash = pLowerHash >= pHigherHash ? pLowerHash : pHigherHash;
  for (size_t i = lowerHash; i <= higherHash; i++) {
   // Recall the property in the current position...
-  const struct deviceProperty *currentPropInTable = properties[i];
+  const struct deviceProperty currentPropInTable = properties[i];
   // ... and then, skip it if it's null or if the current index is the same as the hash (saving us one iteration)
-  if (currentPropInTable == NULL || i == hash) { continue; }
+  if (currentPropInTable.key == NULL || i == hash) { continue; }
   // Recall the name of the current key in the map (if it's actually not empty)
-  const char *currentKey = currentPropInTable->key;
-  if (__strcmp(currentKey, property) == 0x00) { return currentPropInTable; }
+  const char *currentKey = currentPropInTable.key;
+  if (__strcmp(currentKey, property) == 0x00) { return i; }
  }
  // Return null if everything fails, that means that the lookup failed
- return NULL;
+ return SIZE_MAX;
 }
 
 // The documentation is in the declaration (the API header)
@@ -124,15 +123,15 @@ const char *getDeviceDescriptorProperty(const char *property) {
  // Before calculating a hash, check if the property may be a valid pointer
  if (property == NULL) { return NULL; }
  // Calculate the first hash (Hash1) and try to solve the value in the table
- const struct deviceProperty *returnValue = tableLookup(&calculateHash1, property, deviceDescriptor);
+ size_t propertyIndex = tableLookup(&calculateHash1, property, deviceDescriptor);
  // If the first hash fails, try with the second hash (Hash2)... this is the Cuckoo part of the algorithm
- if (returnValue == NULL) {
+ if (propertyIndex == SIZE_MAX) {
   // Calculate the second hash (Hash2) and try to solve the value in the table
-  returnValue = tableLookup(&calculateHash2, property, deviceDescriptor);
-  if (returnValue == NULL) { return NULL; }
+  propertyIndex = tableLookup(&calculateHash2, property, deviceDescriptor);
+  if (propertyIndex == SIZE_MAX) { return NULL; }
  }
  // Unpack the string from the struct and return it's pointer (to be further used by the caller)
- return returnValue->value;
+ return deviceDescriptor[propertyIndex].value;
 }
 
 // Return true if the property is in the table, and false otherwise
