@@ -23,13 +23,13 @@
 
 # MACHINE_LOAD_ADDRESS: SET_AND_EXPORT STRING
 SET(MACHINE_LOAD_ADDRESS "0x100000"
-    CACHE STRING
-    "This is the load address of the image, used by the loader to place the image in memory.")
+  CACHE STRING
+  "This is the load address of the image, used by the loader to place the image in memory.")
 # MACHINE_NAME: SET_AND_EXPORT STRING
 SET(MACHINE_NAME "Legacy x86 Intel Pentium 4 or better"
-    CACHE STRING
-    "This variable is the machine for the build, a human readable name for the machine.")
+  CACHE STRING
+  "This variable is the machine for the build, a human readable name for the machine.")
 # MACHINE_VIRTUAL_ADDRESS: SET_AND_EXPORT STRING
 SET(MACHINE_VIRTUAL_ADDRESS "0x100000"
-    CACHE STRING
-    "This is the 'virtual' address, which is the one that is referenced by the compiled code.")
+  CACHE STRING
+  "This is the 'virtual' address, which is the one that is referenced by the compiled code.")

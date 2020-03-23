@@ -31,13 +31,19 @@
 # TODO: Add the labels when they are ready to be included here
 NAKED_GLOBAL_ARM_FUNCTION(.start.header, start)
                     LDR   PC,           rreset              @ ARM Reset vector
-                    LDR   PC,           undefi              @ ARM Undefined Instruction vector
-                    LDR   PC,           armswi              @ ARM Software Interrupt vector
-                    LDR   PC,           pftabt              @ ARM Prefetch Abort vector
-                    LDR   PC,           dtaabt              @ ARM Data Abort vector
+@                    LDR   PC,           undefi              @ ARM Undefined Instruction vector
+                    NOP
+@                    LDR   PC,           armswi              @ ARM Software Interrupt vector
+                    NOP
+@                    LDR   PC,           pftabt              @ ARM Prefetch Abort vector
+                    NOP
+@                    LDR   PC,           dtaabt              @ ARM Data Abort vector
+                    NOP
                     NOP                                     @ RESERVED
-                    LDR   PC,           armirq              @ ARM IRQ vector
-                    LDR   PC,           armfiq              @ ARM FIQ vector
+@                    LDR   PC,           armirq              @ ARM IRQ vector
+                    NOP
+@                    LDR   PC,           armfiq              @ ARM FIQ vector
+                    NOP
 
 /* ------------------------------------------------ Actual Addresses ------------------------------------------------ */
   rreset:           .word               entry               @ ARM Reset vector
@@ -48,5 +54,6 @@ NAKED_GLOBAL_ARM_FUNCTION(.start.header, start)
   rsrved:           .word               entry               @ RESERVED
   armirq:           .word               entry               @ ARM IRQ vector
   armfiq:           .word               entry               @ ARM FIQ vector
+  .globl vecend
   vecend:           .word               .                   @ This labels the end
 NAKED_GLOBAL_ARM_FUNCTION_EPILOG(start)

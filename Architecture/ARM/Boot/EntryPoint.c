@@ -22,10 +22,12 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
+#include <CompilerMagic/BasesMagic.h>
 #include <CompilerMagic/CompilerMagic.h>
 #include <DeviceDescriptor.h>
 #include <ExecutableLibrary/ImageConstants.h>
 #include <InlineMagic/MemoryClear.h>
+#include <stdlib.h>
 
 /// \brief Entry point from assembler to C.
 ///
@@ -41,7 +43,7 @@ ATTR_SECTION(".start");
 
 ATTR_NORETURN void secondEntryPoint(unsigned machine, unsigned atags) {
  if ((void *) atags == NULL  // If the ATAGS are null...
-   || ((unsigned *) atags >= &imageStart && (unsigned *) atags <= &imageEnd)) {  // ... or if inside the image...
+   || ((char *) atags >= &imageStart && (char *) atags <= &imageEnd)) {  // ... or if inside the image...
   miserableFail();
   BUILTIN_UNREACHABLE;
  } else {
@@ -53,6 +55,21 @@ ATTR_NORETURN void secondEntryPoint(unsigned machine, unsigned atags) {
   *armMachineCode = machine;
   // Clear the BSS section of the loaded memory...
   memoryClear(&bssStart, &bssEnd);
+  // Try to find the address of the vector table for the processor (to copy it from the binary image)
+  const char *vectorTablePosition = getDeviceDescriptorProperty("interrupt" KS "vector" KS "default");
+  const size_t positionLength = strlen(vectorTablePosition) + 0x01;
+  const char *vectorTableAddressPrefix = "interrupt" KS "vector" KS;
+  const size_t addressPrefixLength = strlen(vectorTableAddressPrefix) + 0x01;
+  char buffer[positionLength + addressPrefixLength];
+  strcpy(buffer, vectorTableAddressPrefix);  // NOLINT
+  strcat(buffer, vectorTablePosition);  // NOLINT
+  bool range;
+  bool base;
+  // Once we have the address of destination, copy the vector table from the image to it's destination
+  const char *vectorTable = getDeviceDescriptorProperty(buffer);
+  uintptr_t tableAddress = __stringToUnsignedPointer(vectorTable, NULL, &range, &base, HexadecimalBase);
+  size_t vectorTableLength = vecend - &imageStart;
+  memcpy((void *) tableAddress, &imageStart, vectorTableLength);  // NOLINT
   BUILTIN_UNREACHABLE;
  }
 }
