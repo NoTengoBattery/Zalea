@@ -21,6 +21,8 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
+#include <CompilerMagic/BasesMagic.h>
+#include <stdalign.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -39,9 +41,9 @@ static inline size_t unalignedLoop(void *buffer, char fill, size_t length, unsig
  char *byteAddressing = buffer;
  // ... fill by char until either the length is depleted...
  while (length > 0x00) {
-  unsigned moduli = (uintptr_t) byteAddressing % alignment;
+  unsigned modulo = (uintptr_t) byteAddressing % alignment;
   // ... or until the alignment is fulfilled...
-  if (moduli == 0x00 && length >= alignment) { break; }
+  if (modulo == 0x00U && length >= alignment) { break; }
   *byteAddressing = fill;
   byteAddressing += 0x01;
   length -= 0x01;
@@ -73,25 +75,26 @@ void *__memset(void *buffer, int fill, size_t length) {
  static const size_t cellSize = sizeof(intmax_t);
  static const size_t alignment = cost * cellSize;
  size_t remainingSize = unalignedLoop(buffer, charFill, length, alignment);
- intmax_t *wordAddressing = (intmax_t *) ((uintptr_t) buffer + (length - remainingSize));
+ intmax_t *bigAddressing = (intmax_t *) ((uintptr_t) buffer + (length - remainingSize));
  if (remainingSize >= alignment) {
   // Create a variable of the appropriate length filled with the same value every byte
-  intmax_t actualFill = fill;
-  for (unsigned i = 0x00U; i < cellSize; ++i) { (&actualFill)[i] = fill; }
+  intmax_t actualFill = 0x00;
+  char *actualFillBytes = (char *) &actualFill;
+  for (unsigned i = 0x00U; i < cellSize; ++i) { actualFillBytes[i] = (char) fill; }
   // The compiler will probably vectorize this loop :)
   do {
-   wordAddressing[0] = actualFill;
-   wordAddressing[1] = actualFill;
-   wordAddressing[2] = actualFill;
-   wordAddressing[3] = actualFill;
-   wordAddressing[4] = actualFill;
-   wordAddressing[5] = actualFill;  // NOLINT
-   wordAddressing[6] = actualFill;  // NOLINT
-   wordAddressing[7] = actualFill;  // NOLINT
-   wordAddressing += cost;
+   bigAddressing[Zeroth] = actualFill;
+   bigAddressing[First] = actualFill;
+   bigAddressing[Second] = actualFill;
+   bigAddressing[Third] = actualFill;
+   bigAddressing[Fourth] = actualFill;
+   bigAddressing[Fifth] = actualFill;
+   bigAddressing[Sixth] = actualFill;
+   bigAddressing[Seventh] = actualFill;
+   bigAddressing += cost;
    remainingSize -= alignment;
   } while (remainingSize >= alignment);
  }
- size_t shouldBeZero = unalignedLoop(wordAddressing, charFill, remainingSize, alignment);
+ size_t shouldBeZero = unalignedLoop(bigAddressing, charFill, remainingSize, alignment);
  return shouldBeZero != 0x00 ? (void *) UINTPTR_MAX : buffer;
 }

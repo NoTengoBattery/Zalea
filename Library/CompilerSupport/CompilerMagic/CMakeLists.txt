@@ -24,6 +24,7 @@ ADD_LIBRARY("CompilerMagic" INTERFACE)
 TARGET_SOURCES("CompilerMagic"
                INTERFACE "AssemblerMagic/AssemblerMagic.h"
                INTERFACE "AssemblerMagic/${KERNEL_ARCH}/GnuAssemblerMagic.h"
+               INTERFACE "CompilerMagic/BasesMagic.h"
                INTERFACE "CompilerMagic/BitwiseMacros.h"
                INTERFACE "CompilerMagic/CompilerMagic.h"
                INTERFACE "InlineMagic/ArithmeticUtils.h"

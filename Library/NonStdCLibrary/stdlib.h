@@ -34,6 +34,10 @@
 /// of a unsigned long. Most likely, the machine's `uintptr_t` is in fact a unsigned long, but you should not rely on
 /// it.
 ///
+/// \note The two leading dashes is a way to differentiate this function from the one without them, because this
+/// function is "raw", which means that it compiles with some features disabled while the real version will fully
+/// compile with all features.
+///
 /// \param string a string to convert into a unsigned pointer.
 /// \param endingPointer a pointer to a pointer which will hold the address of the first non-convertible character.
 /// \param range a pointer to a bool that will be true if the value is out of range, and false otherwise.
@@ -45,6 +49,6 @@
 /// \return The value computed from the string. If the string cannot be converted, it will return NULL. If the string is
 /// out of range, it will return UINTPTR_MAX. The `range` parameter will be true if the conversion resulted in an out
 /// of range value, given the maximum pointer that `uintptr_t` can hold.
-uintptr_t stringToUnsignedPointer(const char *string, char **endingPointer, bool *range, bool *base, int radix);
+uintptr_t __stringToUnsignedPointer(const char *string, char **endingPointer, bool *range, bool *base, int radix);
 
 #endif //ZALEA_STDLIB_H

@@ -23,6 +23,7 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 
 #include "strtoullC.h"
+#include <CompilerMagic/BasesMagic.h>
 #include <CompilerMagic/BitwiseMacros.h>
 #include <InlineMagic/ArithmeticUtils.h>
 #include <InlineMagic/AsciiUtils.h>
@@ -39,9 +40,6 @@ void __strtoullC(const char *string,
  result->value = 0x00U;
  // Initialize all the constants...
  static const unsigned noBase = 0;
- static const unsigned octalBase = 8;
- static const unsigned decimalBase = 10;
- static const unsigned hexadecimalBase = 16;
  static const unsigned maximumBase = 36;
  static const unsigned minimumBase = 2;
  // Initialize all the variables...
@@ -77,11 +75,11 @@ void __strtoullC(const char *string,
  static const char charUpperX = 'X';
  if (character == charZero) {
   character = moveStringPointerOneForward(&mobileString);
-  if ((character == charLowerX || character == charUpperX) && (base == hexadecimalBase || base == noBase)) {
+  if ((character == charLowerX || character == charUpperX) && (base == HexadecimalBase || base == noBase)) {
    character = moveStringPointerOneForward(&mobileString);
-   actualBase = hexadecimalBase;
-  } else if (base == octalBase || base == noBase) { actualBase = octalBase; }
- } else if (base == decimalBase || base == noBase) { actualBase = decimalBase; }
+   actualBase = HexadecimalBase;
+  } else if (base == OctalBase || base == noBase) { actualBase = OctalBase; }
+ } else if (base == DecimalBase || base == noBase) { actualBase = DecimalBase; }
  else { actualBase = base; }
  // If the base is out of range, we return with the BASE flag set.
  if (actualBase > maximumBase || actualBase < minimumBase) {
@@ -94,20 +92,20 @@ void __strtoullC(const char *string,
   * from a to z and from A to Z are contiguous.
   */
  static const char minDecimal = '0';
- const unsigned char maxDecimal = minDecimal + (decimalBase - 0x01U);
+ const unsigned char maxDecimal = minDecimal + (DecimalBase - 0x01U);
  static const char minLowercase = 'a';
- const unsigned char maxLowercase = (const unsigned char) (minLowercase + actualBase - (decimalBase + 0x01U));
+ const unsigned char maxLowercase = (const unsigned char) (minLowercase + actualBase - (DecimalBase + 0x01U));
  static const char minUppercase = 'A';
- const unsigned char maxUppercase = (const unsigned char) (minUppercase + actualBase - (decimalBase + 0x01U));
+ const unsigned char maxUppercase = (const unsigned char) (minUppercase + actualBase - (DecimalBase + 0x01U));
  uintmax_t accumulator = 0x00U;
  while (true) {
   bool overflow = false;
   unsigned computedValue;
   if (character >= minDecimal && character <= maxDecimal) { computedValue = (unsigned int) (character - minDecimal); }
   else if (character >= minLowercase && character <= maxLowercase) {
-   computedValue = character + (decimalBase - minLowercase);
+   computedValue = (unsigned int) (character + (DecimalBase - minLowercase));
   } else if (character >= minUppercase && character <= maxUppercase) {
-   computedValue = character + (decimalBase - minUppercase);
+   computedValue = (unsigned int) (character + (DecimalBase - minUppercase));
   } else { break; }
   overflow |= safeUnsignedMultiplication(accumulator, actualBase, actualLimit, &accumulator);
   overflow |= safeUnsignedAddition(accumulator, computedValue, actualLimit, &accumulator);

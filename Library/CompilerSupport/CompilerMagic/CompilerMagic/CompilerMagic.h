@@ -59,9 +59,13 @@
 /// \param x the new visibility.
 #define ATTR_VISIBILITY(x) __attribute__ ((visibility(x)))  // NOLINT
 /// Hint the compiler that a section of code is unreachable. Useful when a function is marked as `noreturn`.
-#define BUILTIN_UNREACHABLE __builtin_unreachable()  // NOLINT
+#define BUILTIN_UNREACHABLE __builtin_unreachable ()  // NOLINT
+/// Hint the compiler that a pointer is aligned to a certain data type size constraint.
+#define BUILTIN_ALIGNED_TYPE(x, y) __builtin_assume_aligned (x, sizeof(y))  // NOLINT
+/// Hint the compiler that a pointer is aligned to a given size constraint.
+#define BUILTIN_ALIGNED(x, y) __builtin_assume_aligned (x, y)  // NOLINT
 /// A *reordering barrier* to tell the compiler to not move statements around this barrier.
-#define REORDERING_BARRIER __asm__ __volatile__("":::"memory")  // NOLINT
+#define REORDERING_BARRIER __asm__ __volatile__ ("":::"memory")  // NOLINT
 
 #endif
 

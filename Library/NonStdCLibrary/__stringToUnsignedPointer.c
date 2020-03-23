@@ -1,4 +1,4 @@
-//===-- strtouintptr.c - An Implementation of the `stringToUnsignedPointer` C Non-Standard Function -------*- C -*-===//
+//===-- __stringToUnsignedPointer.c - An Implementation of the `stringToUnsignedPointer` Function ---------*- C -*-===//
 //
 // Copyright (c) 2020 Oever González
 //
@@ -16,9 +16,13 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 ///
 /// \file
-/// This is an implementation of `stringToUnsignedPointer` for the Non Standard C Library. This function is similar to
+/// This is an implementation of `__stringToUnsignedPointer` for the Non Standard C Library. This function is similar to
 /// `strtoul`, but it will return an unsigned integer pointer instead. Use this function to convert a value which is
 /// known to be a pointer to a `uintptr_t` value that can be used as a C pointer.
+///
+/// \note The two leading dashes is a way to differentiate this function from the one without them, because this
+/// function is "raw", which means that it compiles with some features disabled while the real version will fully
+/// compile with all features.
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
@@ -26,7 +30,7 @@
 #include "stdlib.h"
 #include <CompilerMagic/BitwiseMacros.h>
 
-uintptr_t stringToUnsignedPointer(const char *string, char **endingPointer, bool *range, bool *base, int radix) {
+uintptr_t __stringToUnsignedPointer(const char *string, char **endingPointer, bool *range, bool *base, int radix) {
  if (range == NULL || base == NULL) { return 0x00U; }
  struct strtoullSignedT result = {0x00U, 0x00U};
  __strtoullC(string, endingPointer, (unsigned int) radix, &result, UINTPTR_MAX, 0x00U);

@@ -21,6 +21,7 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
+#include <CompilerMagic/BasesMagic.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -44,10 +45,10 @@ static inline size_t unalignedLoop(void *destination, const void *source, size_t
  const char *byteSourceAddressing = source;
  // ... copy by char until either the length is depleted...
  while (length > 0x00) {
-  unsigned destinationModuli = (uintptr_t) byteDestinationAddressing % alignment;
-  unsigned sourceModuli = (uintptr_t) byteSourceAddressing % alignment;
+  unsigned destinationModulo = (uintptr_t) byteDestinationAddressing % alignment;
+  unsigned sourceModulo = (uintptr_t) byteSourceAddressing % alignment;
   // ... or until the alignment is fulfilled...
-  if (destinationModuli == 0x00 && sourceModuli == 0x00 && length >= alignment) { break; }
+  if (destinationModulo == 0x00U && sourceModulo == 0x00U && length >= alignment) { break; }
   *byteDestinationAddressing = *byteSourceAddressing;
   byteDestinationAddressing += 0x01;
   byteSourceAddressing += 0x01;
@@ -80,22 +81,22 @@ void *__memcpy(void *destination, const void *source, size_t length) {
  static const size_t cellSize = sizeof(intmax_t);
  static const size_t alignment = cost * cellSize;
  size_t remainingSize = unalignedLoop(destination, source, length, alignment);
- intmax_t *wordDestinationAddressing = (intmax_t *) ((uintptr_t) destination + (length - remainingSize));
- const intmax_t *wordSourceAddressing = (const intmax_t *) ((uintptr_t) source + (length - remainingSize));
+ intmax_t *bigDestinationAddressing = (intmax_t *) ((uintptr_t) destination + (length - remainingSize));
+ const intmax_t *bigSourceAddressing = (const intmax_t *) ((uintptr_t) source + (length - remainingSize));
  // The compiler will probably vectorize this loop :)
  while (remainingSize >= alignment) {
-  wordDestinationAddressing[0] = wordSourceAddressing[0];
-  wordDestinationAddressing[1] = wordSourceAddressing[1];
-  wordDestinationAddressing[2] = wordSourceAddressing[2];
-  wordDestinationAddressing[3] = wordSourceAddressing[3];
-  wordDestinationAddressing[4] = wordSourceAddressing[4];
-  wordDestinationAddressing[5] = wordSourceAddressing[5];  // NOLINT
-  wordDestinationAddressing[6] = wordSourceAddressing[6];  // NOLINT
-  wordDestinationAddressing[7] = wordSourceAddressing[7];  // NOLINT
-  wordDestinationAddressing += cost;
-  wordSourceAddressing += cost;
+  bigDestinationAddressing[Zeroth] = bigSourceAddressing[Zeroth];
+  bigDestinationAddressing[First] = bigSourceAddressing[First];
+  bigDestinationAddressing[Second] = bigSourceAddressing[Second];
+  bigDestinationAddressing[Third] = bigSourceAddressing[Third];
+  bigDestinationAddressing[Fourth] = bigSourceAddressing[Fourth];
+  bigDestinationAddressing[Fifth] = bigSourceAddressing[Fifth];
+  bigDestinationAddressing[Sixth] = bigSourceAddressing[Sixth];
+  bigDestinationAddressing[Seventh] = bigSourceAddressing[Seventh];
+  bigDestinationAddressing += cost;
+  bigSourceAddressing += cost;
   remainingSize -= alignment;
  }
- size_t shouldBeZero = unalignedLoop(wordDestinationAddressing, wordSourceAddressing, remainingSize, alignment);
+ size_t shouldBeZero = unalignedLoop(bigDestinationAddressing, bigSourceAddressing, remainingSize, alignment);
  return shouldBeZero != 0x00 ? (void *) UINTPTR_MAX : destination;
 }
