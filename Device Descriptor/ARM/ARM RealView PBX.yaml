@@ -2,3 +2,9 @@
 include:
   - !$$ <ARM/Common/ARMv7-a.yaml>
 ...
+---
+machine:
+  codename: realview_pbx
+  name:     ARM Realview PBX
+  type: !id 0x0000076D
+...

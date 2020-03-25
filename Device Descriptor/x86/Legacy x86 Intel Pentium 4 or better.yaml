@@ -1,4 +1,4 @@
----
+--- # Include all common properties from parent platforms
 include:
-  - <x86/Common/x86-BIOS.yaml>
+  - !$$ <x86/Common/x86-BIOS.yaml>
 ...

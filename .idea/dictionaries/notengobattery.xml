@@ -29,6 +29,7 @@
       <w>qemu</w>
       <w>readelf</w>
       <w>readobj</w>
+      <w>representer</w>
       <w>simd</w>
       <w>smbios</w>
       <w>spdx</w>

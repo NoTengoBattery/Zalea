@@ -361,6 +361,12 @@ $RECYCLE.BIN/
 # Files ignored and not ignored by the project
 *.ignore
 *.ignore.*
-Documentation/html
-Scripts/Python/Environments/3
+Documentation/html/
+Scripts/Python/Environments/3/
 Scripts/Python/Tests/config.i.json
+Scripts/Python/Sources/Testing/
+Scripts/Python/Sources/properties.yaml
+Scripts/Python/Sources/template.c.h
+Scripts/Python/Sources/template.h
+Scripts/Python/Sources/YamlPropertyHashTable.c
+Scripts/Python/Sources/YamlPropertyHashTable.h

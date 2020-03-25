@@ -1,16 +1,16 @@
----
-# Define ARMv7 interrupt controller properties
+--- # ARMv7-a Shared Properties for Device Descriptor
 interrupt:
-  # Define the properties of the ARM interrupt vector table
-  vector:
-    # Define the addresses of the ARM interrupt vector table
+  vector: # Define the properties of the ARM interrupt vector table
     address:
-      # The lowermost address for the ARM interrupt vector table
-      lower:
-        name:    Lower Vector Table Address
-        pointer: 0x00000000
-      # The uppermost address for the ARM interrupt vector table
-      upper:
-        name:    Upper Vector Table Address
-        pointer: 0xFFFF0000
+      lower: # The lowermost address available for the ARM interrupt vector table
+        name:           Lower Vector Table Address
+        base: !pointer  0x00000000
+      upper: # The uppermost address available for the ARM interrupt vector table
+        name:           Upper Vector Table Address
+        base: !pointer  0xFFFF0000
+machine: # ARM Machine definitions
+  codename: unknown
+  model:    Unknown ARM Board
+  name:     Unknown ARM Machine Type
+  type: !id 0xFFFFFFFF
 ...

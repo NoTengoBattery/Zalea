@@ -23,17 +23,17 @@
 # /
 # ===--------------------------------------------------------------------------------------------------------------=== #
 
-import sys
-
 import argparse
-import dateutil.parser
-import deepmerge
 import io
 import logging
-import math
 import os
 import pathlib
 import re
+import sys
+
+import dateutil.parser
+import deepmerge
+import math
 import ruamel.yaml
 import stringcase
 
@@ -63,7 +63,7 @@ program_logger = logging.getLogger(__name__)
 yaml_parser = ruamel.yaml.YAML(typ="safe")
 
 
-def parse_args(args):
+def parse_args(args: []):
     """
     Parse the program's arguments that control the program's behaviour.
     :param args: arguments to parse
@@ -134,6 +134,150 @@ def parse_args(args):
     return parsed_arguments
 
 
+# Include tags
+
+def extract_path(string: str):
+    """
+    Extract the path of a string (for YAML include files).
+    :param string: a string to be matched against the path format
+    :return: a Path object with the computed path from the tag
+    """
+    rex_include_path = re.compile("<(?P<f>.*)>")
+    path_matched = rex_include_path.match(string)
+    if path_matched is not None:
+        return pathlib.Path(path_matched.group("f"))
+    raise SyntaxError("YAML files to be included must UNIX paths enclosed between the symbols < and >.")
+
+
+@ruamel.yaml.yaml_object(yaml_parser)
+class AbsoluteDirectory:
+    """
+    This class represent a path to include a file, relative to the root path directory.
+    """
+    yaml_tag = u'!$+'
+
+    def __init__(self, value):
+        self.path = extract_path(value)
+        self.type = "abs"
+
+    @classmethod
+    def from_yaml(cls, constructor, node):
+        return cls(node.value)
+
+
+@ruamel.yaml.yaml_object(yaml_parser)
+class RelativeDirectory:
+    """
+    This class represent a path to include a file, relative to the currently processed file.
+    """
+    yaml_tag = u'!$@'
+
+    def __init__(self, value):
+        self.path = extract_path(value)
+        self.type = "rel"
+
+    @classmethod
+    def from_yaml(cls, constructor, node):
+        return cls(node.value)
+
+
+@ruamel.yaml.yaml_object(yaml_parser)
+class WorkingDirectory:
+    """
+    This class represent a path to include a file, relative to the working directory.
+    """
+    yaml_tag = u'!$$'
+
+    def __init__(self, value):
+        self.path = extract_path(value)
+        self.type = "cwd"
+
+    @classmethod
+    def from_yaml(cls, constructor, node):
+        return cls(node.value)
+
+
+# Data type tags
+
+def hex_tag_format_signed(name: str, value: str):
+    """
+    Format the tags which accept a signed hexadecimal integer value to it's proper final format (to be inserted in the
+    table).
+    :param name: the name of the tag
+    :param value: the value of the tag
+    :return: a composite string with the value appended to the tag name
+    """
+    try:
+        if re.match(r'^[+-]?0[Xx]', value):
+            return f"{name}: {hex(int(value, 16))}"
+        else:
+            raise SyntaxError(f"The tag {name} only allows hexadecimal values that start with '[+-]0[xX]'.")
+    except (SyntaxError, ValueError) as a:
+        raise SyntaxError("Cannot parse a valid value for this tag.") from a
+
+
+def hex_tag_format_unsigned(name: str, value: str):
+    """
+    Format the tags which accept an unsigned hexadecimal integer value to it's proper final format (to be inserted in
+    the table).
+    :param name: the name of the tag
+    :param value: the value of the tag
+    :return: a composite string with the value appended to the tag name
+    """
+    try:
+        if re.match(r'^\+?0[Xx]', value):
+            return f"{name}: {hex(int(value, 16))}"
+        else:
+            raise SyntaxError(f"The tag {name} only allows hexadecimal values that start with '\\+?0[xX]'.")
+    except (SyntaxError, ValueError) as a:
+        raise SyntaxError("Cannot parse a valid value for this tag.") from a
+
+
+@ruamel.yaml.yaml_object(yaml_parser)
+class ID:
+    """
+    This class represent an ID (unsigned).
+    """
+    yaml_tag = u'!id'
+
+    def __init__(self, value):
+        self.value = hex_tag_format_unsigned(self.yaml_tag, value)
+
+    @classmethod
+    def from_yaml(cls, constructor, node):
+        return cls(node.value)
+
+
+@ruamel.yaml.yaml_object(yaml_parser)
+class Offset:
+    """
+    This class represent a C pointer difference (ptrdiff_t).
+    """
+    yaml_tag = u'!offset'
+
+    def __init__(self, value):
+        self.value = hex_tag_format_signed(self.yaml_tag, value)
+
+    @classmethod
+    def from_yaml(cls, constructor, node):
+        return cls(node.value)
+
+
+@ruamel.yaml.yaml_object(yaml_parser)
+class Pointer:
+    """
+    This class represent a C pointer (uintptr_t).
+    """
+    yaml_tag = u'!pointer'
+
+    def __init__(self, value):
+        self.value = hex_tag_format_unsigned(self.yaml_tag, value)
+
+    @classmethod
+    def from_yaml(cls, constructor, node):
+        return cls(node.value)
+
+
 # Extracted from:
 # https://towardsdatascience.com/how-to-flatten-deeply-nested-json-objects-in-non-recursive-elegant-python-55f96533103d
 # Pretty funny that the implementation is recursive, tho.
@@ -143,8 +287,6 @@ def flatten_dictionary(input_properties_file: io.TextIOWrapper):
     :param input_properties_file: the YAML file to flat
     :return: a dictionary which represents the flatten YAML
     """
-    rex_current_working_directory = re.compile("<(?P<f>.*)>")
-    rex_absolute_path = re.compile("{(?P<f>.*)}")
     result_dictionary = {}
 
     def include_recurse(properties_file_path: str, file_list: [], main_dict: {}):
@@ -173,29 +315,37 @@ def flatten_dictionary(input_properties_file: io.TextIOWrapper):
             properties_file_path_resolved = str(pathlib.Path(properties_file_path).absolute())
             if properties_file_path_resolved not in file_list:
                 file_list.append(properties_file_path_resolved)
-            for properties_object in properties_documents:
-                try:
-                    include_list = properties_object.pop("include", [])
-                except AttributeError:
-                    raise SyntaxError("Empty documents are not allowed inside YAML files.")
-                for include in include_list:
-                    include_matched = rex_current_working_directory.match(include)
-                    absolute_matched = rex_absolute_path.match(include)
-                    if include_matched is not None:
-                        working_directory = pathlib.Path(os.getcwd())
-                        inferred_path = pathlib.Path(include_matched.group("f"))
-                        computed_path = str(working_directory.joinpath(inferred_path).absolute())
-                    elif absolute_matched is not None:
-                        inferred_path = pathlib.Path("/" + absolute_matched.group("f"))
-                        computed_path = str(inferred_path.absolute())
-                    else:
-                        included_dir = pathlib.Path(properties_file_path_resolved).parent
-                        inferred_path = pathlib.Path(include)
-                        computed_path = str(included_dir.joinpath(inferred_path).absolute())
-                    if computed_path not in file_list:  # Keep track of the included file to avoid recursion
-                        file_list.append(computed_path)
-                        include_recurse(computed_path, file_list, main_dict)
-                deepmerge.always_merger.merge(main_dict, properties_object)
+            try:
+                for properties_object in properties_documents:
+                    try:
+                        include_list = properties_object.pop("include", [])
+                    except AttributeError:
+                        raise SyntaxError("Empty documents are not allowed inside YAML files.")
+                    for include in include_list:
+                        try:
+                            include_type = include.type
+                            inferred_path = include.path
+                        except AttributeError:
+                            raise SyntaxError(
+                                    "In order to include another YAML file, the path must have to be tagged with:\n\t"
+                                    "$$: For paths relative to the working directory.\n\t$@: For paths relative to the "
+                                    "including file.\n\t$+: For absolute paths.")
+                        if include_type == "cwd":
+                            working_directory = pathlib.Path(os.getcwd())
+                            computed_path = str(working_directory.joinpath(inferred_path).absolute())
+                        elif include_type == "abs":
+                            computed_path = str(inferred_path.absolute())
+                        elif include_type == "rel":
+                            included_dir = pathlib.Path(properties_file_path_resolved).parent
+                            computed_path = str(included_dir.joinpath(inferred_path).absolute())
+                        else:
+                            raise AssertionError("Cannot determine the type of file included.")
+                        if computed_path not in file_list:  # Keep track of the included file to avoid recursion
+                            file_list.append(computed_path)
+                            include_recurse(computed_path, file_list, main_dict)
+                    deepmerge.always_merger.merge(main_dict, properties_object)
+            except SyntaxError as se:
+                raise SyntaxError(f"Error while processing file '{properties_file_path_resolved}'") from se
         return main_dict
 
     def flatten(python_dictionary: {}, prefix: str = ""):
@@ -216,6 +366,10 @@ def flatten_dictionary(input_properties_file: io.TextIOWrapper):
                 flatten(value, prefix + f"{index:04d}" + flatten_separator)
                 index += 0x01
         else:
+            try:  # Try to unpack the custom tags :)
+                python_dictionary = python_dictionary.value
+            except AttributeError:
+                pass
             result_dictionary[prefix[:-len(flatten_separator)]] = python_dictionary
 
     reduced_dictionary = include_recurse(input_properties_file.name, [], {})
@@ -224,7 +378,7 @@ def flatten_dictionary(input_properties_file: io.TextIOWrapper):
     return result_dictionary
 
 
-def mask(value):
+def mask(value: int):
     """
     Mask a value to a given a number of relevant bits.
     :param value: the number to mask
@@ -238,7 +392,7 @@ def mask(value):
     return result
 
 
-def truncate_mask(positions):
+def truncate_mask(positions: int):
     """
     Generate a mask that can be used to truncate numbers to a certain number of relevant bits.
     :param positions: the bits that are relevant
@@ -250,7 +404,7 @@ def truncate_mask(positions):
     return truncate_masked
 
 
-def rotate_left(value, positions):
+def rotate_left(value: int, positions: int):
     """
     Rotate a number to the left by considering only a number of relevant bits.
     :param value: the number to rotate
@@ -266,7 +420,7 @@ def rotate_left(value, positions):
     return mask(rotated)
 
 
-def rotate_right(value, positions):
+def rotate_right(value: int, positions: int):
     """
     Rotate a number to the right by considering only a number of relevant bits.
     :param value: the number to rotate
@@ -360,7 +514,7 @@ def hash_foresee(key_hash: int, direction: int, name: str, hashmap: [], key: str
     return collision_avoided
 
 
-def create_hashmap(args):
+def create_hashmap(args: argparse.Namespace):
     """
     Create the hashmap inside a Python array.
     :param args: the program's parsed arguments
@@ -475,7 +629,7 @@ def print_to_source(args, hashmap: []):
                 real_output.write(header.read())
 
 
-def main(args):
+def main(args: []):
     """
     Main program (entry point).
     :param args: arguments from command line

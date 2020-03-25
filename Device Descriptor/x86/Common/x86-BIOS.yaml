@@ -1,58 +1,55 @@
----
-# A rather board memory map for x86 for non-discoverable memory regions
+--- # x86 (legacy/BIOS) Shared Properties for Device Descriptor
 memory:
-  # Areas in the lower (before the 1 MiB mark) memory (mostly used by BIOS)
-  lower:
-    reserved:
+  lower: # Areas in the lower (before the 1 MiB mark) memory (mostly used by BIOS)
+    guaranteed: # Reserved: areas that are guaranteed to exist and to be free
       - start:
-          name:    Real-Mode Interrupt Vector Table
-          pointer: 0x00000000
+          name:             Free Memory Area 1
+          address: !pointer 0x00000500
         end:
-          pointer: 0x000003FF
+          address: !pointer 0x00007BFF
       - start:
-          name:    BIOS Data Area
-          pointer: 0x00000400
+          name:             Free Memory Area 2
+          address: !pointer 0x00007E00
         end:
-          pointer: 0x000004FF
+          address: !pointer 0x0007FFFF
+    reserved: # Reserved: areas that can not and should not be used
       - start:
-          name:    Boot Sector
-          pointer: 0x00007C00
+          name:             Real-Mode Interrupt Vector Table
+          address: !pointer 0x00000000
         end:
-          pointer: 0x00007DFF
+          address: !pointer 0x000003FF
       - start:
-          name:    Extended BIOS Data Area
-          pointer: 0x00080000
+          name:             BIOS Data Area
+          address: !pointer 0x00000400
         end:
-          pointer: 0x0009FFFF
-    guaranteed:
+          address: !pointer 0x000004FF
       - start:
-          name:    Free Memory Area 1
-          pointer: 0x00000500
+          name:             Boot Sector
+          address: !pointer 0x00007C00
         end:
-          pointer: 0x00007BFF
+          address: !pointer 0x00007DFF
       - start:
-          name:    Free Memory Area 2
-          pointer: 0x00007E00
+          name:             Extended BIOS Data Area
+          address: !pointer 0x00080000
         end:
-          pointer: 0x0007FFFF
+          address: !pointer 0x0009FFFF
+    unusable: # Unusable: areas that may or may to be free, therefore, render them unusable
+      - start:
+          name:             Used by BIOS
+          address: !pointer 0x000A0000
+        end:
+          address: !pointer 0x000FFFFF
+  upper: # Areas in the upper (after the 1 MiB mark) memory, can be used and detected by the OS if exists
+    available: # Available: Memory regions that are usable (if exist), they are not guaranteed to exist or to be usable
+      - start:
+          name:             Available Memory (Before ISA Hole)
+          address: !pointer 0x00100000
+        end:
+          address: !pointer 0x00EFFFFF
     unusable:
       - start:
-          name:    Used by BIOS
-          pointer: 0x000A0000
+          name:             ISA Memory Hole
+          address: !pointer 0x00F00000
         end:
-          pointer: 0x000FFFFF
-  # Areas in the upper (after the 1 MiB mark) memory, can be used and detected by the OS if exists
-  upper:
-    available:
-      - start:
-          name:    Available Memory (Before ISA Hole)
-          pointer: 0x00100000
-        end:
-          pointer: 0x00EFFFFF
-    unusable:
-      - start:
-          name:    ISA Memory Hole
-          pointer: 0x00F00000
-        end:
-          pointer: 0x00FFFFFF
+          address: !pointer 0x00FFFFFF
 ...
