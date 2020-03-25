@@ -21,10 +21,11 @@
 # / host Python 3.
 # /
 # ===--------------------------------------------------------------------------------------------------------------=== #
+import sys
+
 import argparse
 import os
 import subprocess
-import sys
 import threading
 import urllib.parse
 import urllib.request
@@ -99,7 +100,9 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         subprocess.check_call([context.env_exe, "-m", "pip", "install", "cpplint"])
         subprocess.check_call([context.env_exe, "-m", "pip", "install", "deepmerge"])
         subprocess.check_call([context.env_exe, "-m", "pip", "install", "pytest"])
+        subprocess.check_call([context.env_exe, "-m", "pip", "install", "python-dateutil"])
         subprocess.check_call([context.env_exe, "-m", "pip", "install", "ruamel.yaml"])
+        subprocess.check_call([context.env_exe, "-m", "pip", "install", "stringcase"])
         subprocess.check_call([context.env_exe, "-m", "pip", "install", "tinydb"])
 
 

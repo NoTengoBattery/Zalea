@@ -23,17 +23,19 @@
 # /
 # ===--------------------------------------------------------------------------------------------------------------=== #
 
+import sys
+
 import argparse
+import dateutil.parser
+import deepmerge
 import io
 import logging
 import math
 import os
 import pathlib
 import re
-import sys
-
-import deepmerge
 import ruamel.yaml
+import stringcase
 
 bits = 8
 buffer_size = 64 * 1024  # 64kib
@@ -47,7 +49,7 @@ flatten_separator = ":"
 flatten_separator_api = "KS"
 max_64bit = 0xFFFFFFFFFFFFFFFF
 parsed_arguments = None
-pattern_64bit = 0xA5A5A5A5A5A5A5A5
+pattern_64bit = 0x8192A3B4C5D6E7F8 ^ 0x5A5A5A5A5A5A5A5A
 places_binary = bits
 places_decimal = math.ceil(bits / math.log2(10))
 places_hex = math.ceil(bits / 4)
@@ -143,7 +145,7 @@ def flatten_dictionary(input_properties_file: io.TextIOWrapper):
     """
     rex_current_working_directory = re.compile("<(?P<f>.*)>")
     rex_absolute_path = re.compile("{(?P<f>.*)}")
-    result_dictionary = {testing_property_key: testing_property_value}
+    result_dictionary = {}
 
     def include_recurse(properties_file_path: str, file_list: [], main_dict: {}):
         """
@@ -218,6 +220,7 @@ def flatten_dictionary(input_properties_file: io.TextIOWrapper):
 
     reduced_dictionary = include_recurse(input_properties_file.name, [], {})
     flatten(reduced_dictionary)
+    result_dictionary[testing_property_key] = testing_property_value
     return result_dictionary
 
 
@@ -315,15 +318,17 @@ def calculate_hash2(string: str):
     return value
 
 
-def hash_foresee(key_hash: int, name: str, hashmap: [], key: str, value: str):
+def hash_foresee(key_hash: int, direction: int, name: str, hashmap: [], key: str, value: str):
     """
     Perform the linear lookup to resolve collisions around a given hash, inside the given hashmap.
     :type key_hash: int
+    :type direction: int
     :type name: str
     :type hashmap: []
     :type key: str
     :type value: str
     :param key_hash: the calculated hash
+    :param direction: the direction to lookup around first
     :param name: the name of the hash
     :param hashmap: the hashmap where the key and value will be inserted
     :param key: the key to the hashmap
@@ -333,13 +338,18 @@ def hash_foresee(key_hash: int, name: str, hashmap: [], key: str, value: str):
     collision_avoided = False
     lowermost = key_hash - collision_foresee
     lowermost = 0x00 if (lowermost <= 0x00 or lowermost > mask(max_64bit)) else lowermost
-    uppermost = key_hash + collision_foresee + 1
+    uppermost = key_hash + collision_foresee
     uppermost = mask(max_64bit) if (uppermost < 0x00 or uppermost >= mask(max_64bit)) else uppermost
-    for index in range(lowermost, uppermost, 1):
+    direction = +0x01 if direction < 0x00 else -0x01
+    start = lowermost if direction == +0x01 else uppermost
+    end = (uppermost if direction == +0x01 else lowermost) + direction
+    iter_range = range(start, end, direction)
+    program_logger.debug(f"--- Searching range: {list(iter_range)}")
+    for index in iter_range:
         if index == key_hash:
             continue
-        program_logger.warning("--! Trying to solve collision by searching around the "
-                               f"{name} hash {hex(key_hash)} in {hex(index)}...")
+        program_logger.info("--! Trying to solve collision by searching around the "
+                            f"{name} hash {hex(key_hash)} in {hex(index)}...")
         in_map = hashmap[index]
         if in_map is None:
             hashmap[index] = f"{key}{internal_separator}{value}"
@@ -370,7 +380,7 @@ def create_hashmap(args):
             program_logger.warning(f"--! Collision detected, hash {hex(key_hash)} (key: '{key}') is already in use")
             in_use = hashmap[key_hash].split(internal_separator)[0]
             program_logger.warning(f"--! Hash {hex(key_hash)} is currently used by the key '{in_use}'")
-            collision_avoided = hash_foresee(key_hash, "Hash1", hashmap, key, value)
+            collision_avoided = hash_foresee(key_hash, +1, "Hash1", hashmap, key, value)
             if not collision_avoided:
                 in_map = hashmap[key_hash2]
                 program_logger.warning("--! Trying to use the alternative hash "
@@ -385,7 +395,7 @@ def create_hashmap(args):
                     in_use = hashmap[key_hash2].split(internal_separator)[0]
                     program_logger.warning(f"--! Hash {hex(key_hash2)} is currently used by the key '{in_use}'")
             if not collision_avoided:
-                collision_avoided = hash_foresee(key_hash2, "Hash2", hashmap, key, value)
+                collision_avoided = hash_foresee(key_hash2, -1, "Hash2", hashmap, key, value)
             if not collision_avoided:
                 program_logger.warning(f"--- Failed to solve the collision for the second hash {hex(key_hash2)}")
                 program_logger.error("--= Error: Unrecoverable collision detected...")
@@ -416,9 +426,12 @@ def print_to_source(args, hashmap: []):
             source.write("\n// Start of the array that holds the Hash Table as pointers to key-value structs...")
             source.write(f"\n\nconst struct {api_struct} {api_table}[{hashmap_length}] = {{")
             for index in range(len(hashmap)):
+                comma = ' '
+                if index != hashmap_max_index:
+                    comma = ','
                 hashable = hashmap[index]
                 if hashable is None:
-                    source.write("\n\t{NULL, NULL},")
+                    source.write(f"\n\t{{NULL, NULL}}{comma}")
                 else:
                     key, val = hashable.split(internal_separator)
                     api_key = key.replace(flatten_separator, f"\"{flatten_separator_api}\"")
@@ -427,9 +440,13 @@ def print_to_source(args, hashmap: []):
                         val = hex(int(val))
                     except ValueError:
                         pass
-                    source.write(f"\n\t{{\"{api_key}\", \"{val}\"}},")
-                    source.write(f"  // {index:0{places_decimal}d}, {index:0{places_hex}x}")
-            source.seek(source.tell() - 1)
+                    # Try to convert the value to a standard ISO 8601 date/time string
+                    try:
+                        val = "datetime: " + dateutil.parser.parse(val).isoformat()
+                    except dateutil.parser.ParserError:
+                        pass
+                    source.write(f"\n\t{{\"{api_key}\", \"{val}\"}}{comma}")
+                source.write(f"  // {index:0{places_decimal}d}, {index:0{places_hex}x}")
             source.write("\n};")
             source.write("\n")
             source.seek(0)
@@ -438,13 +455,15 @@ def print_to_source(args, hashmap: []):
                 real_output.write(source.read())
     with args.header_template as template:
         with io.StringIO("") as header:
-            tpk = testing_property_key.replace(flatten_separator, f"\"{flatten_separator_api}\"")
+            tpk = testing_property_key.replace(flatten_separator, f"\" {flatten_separator_api} \"")
             header.write("\n/// \\brief This is the separator used to separate the levels of properties.")
             header.write(f"\n#define {flatten_separator_api} \"{flatten_separator}\"")
             header.write("\n\n/// \\brief This is the testing property that will be used to test the lookup algorithm.")
-            header.write(f"\nstatic const char *const {api_table}TestKey = \"{tpk}\";")
+            header.write(f"\n#define {stringcase.constcase(api_table + 'TestKey')} \"{tpk}\"")
             header.write("\n\n/// \\brief This is the expected value for testing the lookup algorithm.")
-            header.write(f"\nstatic const char *const {api_table}TestValue = \"{testing_property_value}\";")
+            header.write(f"\n#define {stringcase.constcase(api_table + 'TestValue')} \"{testing_property_value}\"")
+            header.write("\n\n/// \\brief Use this pattern to seed the hashing algorithm.")
+            header.write(f"\n#define {stringcase.constcase(api_table + 'Pattern')} {hex(pattern_64bit)}")
             header.write("\n\n/// \\brief Represents a key-value pair, which is used to store inside the Hash Table.")
             header.write(f"\nstruct {api_struct} {{\n\tchar *key;\n\tchar *value;\n}};")
             header.write("\n\n/// \\brief The internal representation of the Hash Table.")

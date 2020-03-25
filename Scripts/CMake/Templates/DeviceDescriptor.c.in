@@ -29,7 +29,7 @@ extern int __strcmp(const char *, const char *);
 static const unsigned bitMask = TRUNCATE_MASK(DEVICE_DESCRIPTOR_HASH_BITS);
 
 /// \brief The pattern that will be the starting point of the hash.
-static const unsigned pattern = 0xA5A5A5A5A5A5A5A5 & bitMask;
+static const unsigned pattern = DEVICE_DESCRIPTOR_PATTERN & bitMask;
 
 // Calculate the `Hash1` value from a string, given a pointer to the string and it's length.
 static inline unsigned calculateHash1(const char *property, const size_t propertyLength) {
@@ -136,6 +136,6 @@ const char *getDeviceDescriptorProperty(const char *property) {
 
 // Return true if the property is in the table, and false otherwise
 bool isDeviceDescriptorWorking() {
- const char *testValue = getDeviceDescriptorProperty(deviceDescriptorTestKey);
- return __strcmp(testValue, deviceDescriptorTestValue) != 0 ? false : true;
+ const char *testValue = getDeviceDescriptorProperty(DEVICE_DESCRIPTOR_TEST_KEY);
+ return __strcmp(testValue, DEVICE_DESCRIPTOR_TEST_VALUE) != 0x00 ? false : true;
 }
