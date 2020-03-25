@@ -25,7 +25,7 @@
 //===--------------------------------------------------------------------------------------------------------------===//
 
 #include "division.h"
-#include <CompilerMagic/BitwiseMacros.h>
+#include <CompilerMagic/BitwiseUtils.h>
 
 void longDivision(struct divisionT *operands, struct resultT *result) {
  // Unpack the structs for better readability

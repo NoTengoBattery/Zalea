@@ -355,7 +355,7 @@ def hash_foresee(key_hash: int, direction: int, name: str, hashmap: [], key: str
             hashmap[index] = f"{key}{internal_separator}{value}"
             collision_avoided = True
             program_logger.warning("--+ Collision avoided by moving hash "
-                                   f"{hex(key_hash)} ({key_hash}) at index {index} ({hex(index)})")
+                                   f"{hex(key_hash)} ('{key}') at index {index} ({hex(index)})")
             break
     return collision_avoided
 
@@ -434,7 +434,7 @@ def print_to_source(args, hashmap: []):
                     source.write(f"\n\t{{NULL, NULL}}{comma}")
                 else:
                     key, val = hashable.split(internal_separator)
-                    api_key = key.replace(flatten_separator, f"\"{flatten_separator_api}\"")
+                    api_key = key.replace(flatten_separator, f"\" {flatten_separator_api} \"")
                     # Try to convert the value to a hexadecimal string if it's a integer.
                     try:
                         val = hex(int(val))

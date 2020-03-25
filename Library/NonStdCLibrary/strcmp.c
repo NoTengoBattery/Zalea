@@ -22,8 +22,6 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#include "string.h"
-
 int strcmp(const char *string1, const char *string2) {
  extern int __strcmp(const char *, const char *);
  return __strcmp(string1, string2);

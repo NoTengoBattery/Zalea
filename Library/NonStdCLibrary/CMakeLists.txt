@@ -31,9 +31,8 @@ ADD_LIBRARY("NonStdCLibrary" STATIC
             "strlen.c")
 TARGET_INCLUDE_DIRECTORIES("NonStdCLibrary" INTERFACE "${CMAKE_CURRENT_LIST_DIR}")
 ADD_LIBRARY("RawNonStdCLibrary" STATIC
-            "__stringToUnsignedPointer.c")
+            "rawStringToUnsignedPointer.c")
 TARGET_INCLUDE_DIRECTORIES("RawNonStdCLibrary" INTERFACE "${CMAKE_CURRENT_LIST_DIR}")
-TARGET_CHANGE_FEATURES("RawNonStdCLibrary" PRIVATE C FEATURES NO_STACK_PROTECTOR)
 
 TARGET_LINK_LIBRARIES("RawNonStdCLibrary" "CoreLibraries")
 TARGET_LINK_LIBRARIES("NonStdCLibrary" "RawNonStdCLibrary" "CoreLibraries")

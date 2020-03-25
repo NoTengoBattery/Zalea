@@ -21,4 +21,3 @@
 #===----------------------------------------------------------------------------------------------------------------===#
 
 ADD_SUBDIRECTORY("${TREE_ARCHITECTURE_X_PATH}")
-TARGET_CHANGE_FEATURES("EntryPoint" PRIVATE C FEATURES NO_STACK_PROTECTOR)

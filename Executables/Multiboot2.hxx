@@ -24,7 +24,7 @@
 #ifndef ZALEA_MULTIBOOT2_HXX
 #define ZALEA_MULTIBOOT2_HXX
 
-#include <CompilerMagic/BitwiseMacros.h>
+#include <CompilerMagic/BitwiseUtils.h>
 #include <CompilerMagic/CompilerMagic.h>
 #include <cstdint>
 

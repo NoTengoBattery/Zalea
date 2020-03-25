@@ -32,7 +32,6 @@ ADD_LIBRARY("CompilerRuntime" STATIC
             "strtoullC.c"
             "strtoullC.h")
 TARGET_INCLUDE_DIRECTORIES("CompilerRuntime" PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
-TARGET_CHANGE_FEATURES("CompilerRuntime" PRIVATE C FEATURES NO_STACK_PROTECTOR)
 ADD_LIBRARY("RawCompilerRuntime" STATIC
             "division.c"
             "division.h"
@@ -44,7 +43,6 @@ IF (KERNEL_ARM)
                 "${KERNEL_ARCH}/arm_noop.sx")
 ENDIF ()
 TARGET_INCLUDE_DIRECTORIES("RawCompilerRuntime" PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
-TARGET_CHANGE_FEATURES("RawCompilerRuntime" PRIVATE C FEATURES OPTIMIZE_MAXIMUM NO_LTO NO_STACK_PROTECTOR)
 
 TARGET_LINK_LIBRARIES("RawCompilerRuntime" "CoreLibraries")
 TARGET_LINK_LIBRARIES("CompilerRuntime" "RawCompilerRuntime" "CoreLibraries")

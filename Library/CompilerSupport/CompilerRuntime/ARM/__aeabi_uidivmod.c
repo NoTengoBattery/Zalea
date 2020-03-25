@@ -20,11 +20,11 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#include <CompilerMagic/BitwiseMacros.h>
+#include "ArmUtils.h"
+#include <CompilerMagic/BitwiseUtils.h>
 #include <CompilerMagic/CompilerMagic.h>
 #include <config.h>
 #include <division.h>
-#include <stdint.h>
 
 #if defined(KERNEL_ARM) && defined(KERNEL_COMPILER_GNU)
 

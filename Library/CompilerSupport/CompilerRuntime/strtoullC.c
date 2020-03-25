@@ -24,7 +24,7 @@
 
 #include "strtoullC.h"
 #include <CompilerMagic/BasesMagic.h>
-#include <CompilerMagic/BitwiseMacros.h>
+#include <CompilerMagic/BitwiseUtils.h>
 #include <InlineMagic/ArithmeticUtils.h>
 #include <InlineMagic/AsciiUtils.h>
 #include <stddef.h>

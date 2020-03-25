@@ -1,4 +1,4 @@
-//===-- BasesMagic.h - Provide some numeric constants that represents bases -----------------------------*- C++ -*-===//
+//===-- BasesMagic.h - Numeric Constants that Represents Bases and Magic Values -------------------------*- C++ -*-===//
 //
 // Copyright (c) 2020 Oever González
 //

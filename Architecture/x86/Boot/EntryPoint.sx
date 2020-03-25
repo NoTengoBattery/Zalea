@@ -24,7 +24,7 @@
 #include <config.h>
 #define __FILENAME__ "EntryPoint.sx"
 #include <AssemblerMagic/AssemblerMagic.h>
-#include <CompilerMagic/BitwiseMacros.h>
+#include <CompilerMagic/BitwiseUtils.h>
 
 /*
  * `start` is the real entry point. It is the first thing that is found in the binary image, and it's the very first

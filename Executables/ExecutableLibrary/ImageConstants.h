@@ -30,13 +30,13 @@
 #define MULTIBOOT_MAGIC_CONSTANT 0x36D76289  // NOLINT
 
 /// \brief This is a pointer to the end of the bss section.
-extern char bssEnd;
+extern void *bssEnd;
 /// \brief This is a pointer to the start of the bss section.
-extern char bssStart;
+extern void *bssStart;
 /// \brief This is a pointer to the end of the binary image.
-extern char imageEnd;
+extern void *imageEnd;
 /// \brief This is a pointer to the start of the binary image.
-extern char imageStart;
+extern void *imageStart;
 
 /// \brief This is a pointer that will be the Multiboot2 struct as returned by the bootloader.
 extern volatile void **multibootStructPointer;
@@ -45,7 +45,7 @@ extern volatile void **atagsStructPointer;
 /// \brief This is a pointer that will be the ARM Machine code as returned by the bootloader.
 extern volatile unsigned *armMachineCode;
 /// \brief This is a pointer to the end of the ARM vector table, which needs to be copied into memory.
-extern char *vecend;
+extern void *vecend;
 
 /// \brief A function to halt the CPU when a failure is detected during the very early boot process.
 extern void miserableFail();

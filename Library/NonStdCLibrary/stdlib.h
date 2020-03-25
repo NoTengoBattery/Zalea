@@ -49,6 +49,6 @@
 /// \return The value computed from the string. If the string cannot be converted, it will return NULL. If the string is
 /// out of range, it will return UINTPTR_MAX. The `range` parameter will be true if the conversion resulted in an out
 /// of range value, given the maximum pointer that `uintptr_t` can hold.
-uintptr_t __stringToUnsignedPointer(const char *string, char **endingPointer, bool *range, bool *base, int radix);
+uintptr_t rawStringToUnsignedPointer(const char *string, char **endingPointer, bool *range, bool *base, int radix);
 
 #endif //ZALEA_STDLIB_H

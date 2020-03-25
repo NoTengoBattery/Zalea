@@ -14,7 +14,7 @@
  *
  *===--------------------------------------------------------------------------------------------------------------===*/
 
-#include <CompilerMagic/BitwiseMacros.h>
+#include <CompilerMagic/BitwiseUtils.h>
 #include <DeviceDescriptor.h>
 #include <config.h>
 #include <stddef.h>

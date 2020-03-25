@@ -1,4 +1,4 @@
-//===-- BitwiseMacros.h - Macros to Perform Bitwise Operations ------------------------------------------*- C++ -*-===//
+//===-- BitwiseUtils.h - Macros, static inline's and constexpr's to Perform Bitwise Operations ----------*- C++ -*-===//
 //
 // Copyright (c) 2020 Oever González
 //
@@ -21,8 +21,8 @@
 ///
 //===--------------------------------------------------------------------------------------------------------------===//
 
-#ifndef ZALEA_BITWISEMACROS_H
-#define ZALEA_BITWISEMACROS_H
+#ifndef ZALEA_BITWISEUTILS_H
+#define ZALEA_BITWISEUTILS_H
 
 #ifndef __ASSEMBLER__  // C and C++
 
@@ -111,4 +111,4 @@ constexpr auto setNthBit(T1 x, T2 y) { return SET_NTH_BIT(x, y); }
 
 #endif
 
-#endif //ZALEA_BITWISEMACROS_H
+#endif //ZALEA_BITWISEUTILS_H

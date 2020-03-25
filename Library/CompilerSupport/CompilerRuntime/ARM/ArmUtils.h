@@ -24,4 +24,6 @@
 #ifndef ZALEA_ARMUTILS_H
 #define ZALEA_ARMUTILS_H
 
+#include <stdint.h>
+
 #endif //ZALEA_ARMUTILS_H

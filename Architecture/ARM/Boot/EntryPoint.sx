@@ -24,7 +24,7 @@
 #include <config.h>
 #define __FILENAME__ "EntryPoint.sx"
 #include <AssemblerMagic/AssemblerMagic.h>
-#include <CompilerMagic/BitwiseMacros.h>
+#include <CompilerMagic/BitwiseUtils.h>
 
 NAKED_GLOBAL_ARM_FUNCTION(.start, entry)
   CMP   r0,         #0
@@ -82,10 +82,10 @@ NAKED_GLOBAL_ARM_FUNCTION_EPILOG(miserableFail)
  * This is an address in the .data section for the atags pointer and for the machine code.
  */
 GLOBAL_DATA(atagsStructPointer)
-  .byte   0x00
+  .long   0x00
 GLOBAL_DATA_EPILOG(atagsStructPointer)
 GLOBAL_DATA(armMachineCode)
-  .byte   0x00
+  .long   0x00
 GLOBAL_DATA_EPILOG(armMachineCode)
 
 /*
