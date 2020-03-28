@@ -21,11 +21,10 @@
 # / host Python 3.
 # /
 # ===--------------------------------------------------------------------------------------------------------------=== #
-import sys
-
 import argparse
 import os
 import subprocess
+import sys
 import threading
 import urllib.parse
 import urllib.request
