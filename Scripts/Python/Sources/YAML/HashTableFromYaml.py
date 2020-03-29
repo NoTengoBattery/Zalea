@@ -23,20 +23,22 @@
 # /
 # ===--------------------------------------------------------------------------------------------------------------=== #
 
-import argparse
-import io
-import logging
-import os
-import pathlib
 import re
 import sys
+from argparse import ArgumentParser, FileType, Namespace
+from io import StringIO, TextIOWrapper
+from logging import DEBUG, basicConfig, getLogger
+from os import getcwd
+from pathlib import Path
 
-import deepmerge.strategy.core
-import deepmerge.strategy.dict
-import deepmerge.strategy.list
-import math
-import ruamel.yaml
-import stringcase
+import base36
+# noinspection PyUnresolvedReferences
+from YamlMerging import FileMarkedValue, GetYamlMerger
+# noinspection PyUnresolvedReferences
+from YamlTags import FileMarker, InitializeIncludeTags, InitializeStronglyTypedTags, StringCType, YamlDirectory
+from math import ceil, log2
+from ruamel.yaml import YAML
+from stringcase import constcase
 
 bits: int = 8
 buffer_size: int = 64 * 1024  # 64kib
@@ -47,22 +49,26 @@ default_header_template: str = "template.h"
 default_source_filename: str = "YamlPropertyHashTable.c"
 default_source_template: str = "template.c.h"
 flatten_separator: str = "\\x1f"
-flatten_separator_api: str = "KS"
-include_multiplicity: int = 3
+flatten_separator_api: str = "PS"
+include_multiplicity: int = 1
 max_64bit: int = 0xFFFFFFFFFFFFFFFF
 parsed_arguments = None
 pattern_64bit: int = 0x8192A3B4C5D6E7F8 ^ 0x5A5A5A5A5A5A5A5A
 places_binary: int = bits
-places_decimal: int = math.ceil(bits / math.log2(10))
-places_hex: int = math.ceil(bits / 4)
-places_octal: int = math.ceil(bits / 3)
-precomputed_mask: int = 0x00
-program_logger = logging.getLogger(__name__)
+places_decimal: int = ceil(bits / log2(10))
+places_hex: int = ceil(bits / 4)
+places_octal: int = ceil(bits / 3)
+precomputed_mask: int = 0
+print_separator: str = "::"
+program_logger = getLogger(__name__)
 program_parser = None
-rex_include_path = re.compile("<(?P<f>.*)>")
 testing_property_key: str = "testing" + flatten_separator + "lookup"
-testing_property_value: str = "working"
-yaml_parser = ruamel.yaml.YAML(typ="safe")
+testing_property_value: StringCType = StringCType("working")
+yaml_merger = GetYamlMerger()
+yaml_parser = YAML(typ="safe")
+
+InitializeIncludeTags(yaml_parser)
+InitializeStronglyTypedTags(yaml_parser)
 
 
 def parse_args(args: []):
@@ -73,7 +79,7 @@ def parse_args(args: []):
 
     :return: the parsed arguments
     """
-    parser = argparse.ArgumentParser(
+    parser = ArgumentParser(
             description="Creates a C source code file which contains a lookup table intended to be used as a "
                         "dictionary for properties in a YAML file. The program will calculate a hash which will be the "
                         "index of the array. The C program can calculate the hash and get the information from the "
@@ -87,34 +93,34 @@ def parse_args(args: []):
                    "compute values are custom hashing designed by the author. Those hashes support arbitrary length "
                    "output and are pretty well behaved for ASCII strings. The hash table is not resizable and no "
                    "re-hashing is made, and that makes the lookup O(1). However, it does require a power of 2 for the "
-                   "storage of the index, and it does not scale well under load. However, users can overestimate the "
+                   "storage of the index, and it does not scale well under load. Anyway, users can overestimate the "
                    "foresee to give up to the O(1) lookup time in order to keep the table as tidy as possible,")
     parser.add_argument('-j', '--yaml-file',
                         action='store',
                         default=default_db_filename,
                         help="This is the input file that will be used to generate the lookup table based on the YAML "
                              "properties of the objects in this file.",
-                        type=argparse.FileType(bufsize=buffer_size))
+                        type=FileType(bufsize=buffer_size))
     parser.add_argument('-a', '--header-template',
                         action='store',
                         default=default_header_template,
                         help="The template will be inserted at the beginning of the generated header.",
-                        type=argparse.FileType(bufsize=buffer_size))
+                        type=FileType(bufsize=buffer_size))
     parser.add_argument('-e', '--header',
                         action='store',
                         default=default_header_filename,
                         help="The output file where the header will be generated.",
-                        type=argparse.FileType(mode='w', bufsize=buffer_size))
+                        type=FileType(mode='w', bufsize=buffer_size))
     parser.add_argument('-o', '--source-template',
                         action='store',
                         default=default_source_template,
                         help="The template will be inserted at the beginning of the generated source code.",
-                        type=argparse.FileType(bufsize=buffer_size))
+                        type=FileType(bufsize=buffer_size))
     parser.add_argument('-s', '--source',
                         action='store',
                         default=default_source_filename,
                         help="The output file where the source code will be generated.",
-                        type=argparse.FileType(mode='w', bufsize=buffer_size))
+                        type=FileType(mode='w', bufsize=buffer_size))
     parser.add_argument('-b', '--bits',
                         action='store', type=str, metavar='bits', default="8",
                         help="Define the number of bits that are used to generate the hash.")
@@ -138,395 +144,10 @@ def parse_args(args: []):
     return parsed_arguments
 
 
-# Merging strategy: strategies to merge two objects. They define the overall merging logic of YAML objects.
-
-# noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
-class YamlListStrategies(deepmerge.strategy.list.ListStrategies):
-    """
-    Contains the strategies provided for lists.
-    """
-    NAME = "list"
-
-    @staticmethod
-    def strategy_yaml_sequence(config, path, base, other):
-        """
-        Try to perform a merge strategy. Note that the YAML specification does not support sequence merging. This is an
-        add-on that does not follows the standard. This merger will try to replace values with the same key with the new
-        ones, and will append non-existing values to the sequence.
-
-        The merged sequence is guaranteed to be sorted. Note that this might mean that key indexes might change when new
-        elements are added in a root file after the included files are processed. making node order flexible.
-
-        :param config: the current merging configuration
-        :param path: the path to the current merging conflict
-        :param base: the base (original) value
-        :param other: the other (to be merged) value
-
-        :return: the merged list
-        """
-
-        def safe_return_key_lambda(x):
-            try:
-                return next(iter(x.items()))
-            except AttributeError:
-                return str(x), None
-
-        safe_base = list(base)
-        for b in base:
-            for n in other:
-                try:
-                    for k, v in n.items():
-                        if k in b:
-                            b[k] = config.value_strategy(path + [k], b[k], v)
-                        kv = {k: v}
-                        if kv not in safe_base:
-                            safe_base.append(kv)
-                except AttributeError:
-                    if n not in safe_base:
-                        safe_base.append(n)
-                except TypeError:
-                    pass
-        filtered_base = []
-        [filtered_base.append(x) for x in safe_base if x not in filtered_base]
-        filtered_base.sort(key=lambda x: safe_return_key_lambda(x))
-        return filtered_base
-
-
-# noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
-class YamlDictStrategies(deepmerge.strategy.dict.DictStrategies):
-    """
-    Contains the strategies provided for dictionaries.
-    """
-    NAME = "dict"
-
-    @staticmethod
-    def strategy_yaml_mapping(config, path, base, other):
-        """
-        Try to perform a merge strategy. Note that the YAML specification does not support mapping merging. This is an
-        add-on that does not follows the standard. This merger will try to replace values with the same key with the new
-        ones, and will append non-existing values to the sequence.
-
-        This is the default merger strategy for dictionary from the deepmerge package.
-
-        :param config: the current merging configuration
-        :param path: the path to the current merging conflict
-        :param base: the base (original) value
-        :param other: the other (to be merged) value
-
-        :return: the merged dictionary
-        """
-        for k, v in other.items():
-            if k not in base:
-                base[k] = v
-            else:
-                base[k] = config.value_strategy(path + [k], base[k], v)
-        return base
-
-
-# noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
-class YamlMerger(deepmerge.Merger):
-    """
-    :param type_strategies, List[Tuple]: a list of (Type, Strategy) pairs that should be used against incoming types.
-    """
-    PROVIDED_TYPE_STRATEGIES = {
-        list: YamlListStrategies,
-        dict: YamlDictStrategies
-    }
-
-
-merger = YamlMerger([(list, "yaml_sequence"), (dict, "yaml_mapping")], ["override"], [])
-
-
-# Include tags: tags that represent a YAML file to be processed before the current file, then both results will merge
-
-# noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
-class YamlDirectory:
-    """
-    This class represent a path to include a file, the base class.
-    """
-
-    def __init__(self, value):
-        self.path: str = value
-        self.type: str = "???"
-
-    def __str__(self):
-        return self.path
-
-    @classmethod
-    def from_yaml(cls, constructor, node):
-        def extract_path(string: str, mark) -> str:
-            """
-            Extract the path of a string (for YAML include files).
-
-            :param string: a string to be matched against the path format
-            :param mark: a mark to report the syntax error
-
-            :return: a Path object with the computed path from the tag
-            """
-            path_matched = rex_include_path.match(string)
-            if path_matched is not None:
-                return pathlib.Path(path_matched.group("f"))
-            raise SyntaxError("Included YAML files must have to be UNIX paths to YAML files, "
-                              f"enclosed between '<' and '>',\n{mark}")
-
-        return cls(extract_path(node.value, node.start_mark))
-
-
-# noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
-@ruamel.yaml.yaml_object(yaml_parser)
-class AbsoluteDirectory(YamlDirectory):
-    """
-    This class represent a path to include a file, relative to the root path directory.
-    """
-    yaml_tag = u'!$+'
-
-    def __init__(self, value):
-        super().__init__(value)
-        self.type: str = "abs"
-
-
-# noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
-@ruamel.yaml.yaml_object(yaml_parser)
-class RelativeDirectory(YamlDirectory):
-    """
-    This class represent a path to include a file, relative to the currently processed file.
-    """
-    yaml_tag = u'!$@'
-
-    def __init__(self, value):
-        super().__init__(value)
-        self.type: str = "rel"
-
-
-# noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
-@ruamel.yaml.yaml_object(yaml_parser)
-class WorkingDirectory(YamlDirectory):
-    """
-    This class represent a path to include a file, relative to the working directory.
-    """
-    yaml_tag = u'!$$'
-
-    def __init__(self, value):
-        super().__init__(value)
-        self.type: str = "cwd"
-
-
-# Data type tags: all the strongly typed C-compatible data types. They correspond to one or more types and their value
-
-# noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
-class UnsignedCType:
-    """
-    This class represent an unsigned value. Unsigned values can be any value, but they must have to be unsigned
-    integers. The children classes will restrict the type of the value.
-    """
-
-    def __init__(self, value):
-        self.reduced_value: str = value
-
-    def __str__(self):
-        return self.reduced_value
-
-    def __eq__(self, other):
-        if isinstance(other, type(self)):
-            return self.reduced_value == other.reduced_value
-        return NotImplemented
-
-    @classmethod
-    def from_yaml(cls, constructor, node):
-        def format_unsigned(tag: str, value: str, mark) -> str:
-            """
-            Format the tags which accept an unsigned integer value to it's proper final format ready to be inserted.
-
-            :param tag: the name of the tag
-            :param value: the value of the tag
-            :param mark: a mark to report the syntax error
-
-            :return: a composite string with the value appended to the tag name
-            """
-            string_format = "\\x01{}\\x02{}\\x03"
-            try:
-                if re.match(r'^\+?0[Xx]', value):
-                    return string_format.format(tag, hex(int(value, 16)))
-                if re.match(r'^\+?0[oO]?[0-7]', value):
-                    return string_format.format(tag, hex(int(value, 8)))
-                if re.match(r'^\+?0[bB]', value):
-                    return string_format.format(tag, hex(int(value, 2)))
-                if re.match(r'^\+?[\d]', value):
-                    return string_format.format(tag, hex(int(value)))
-                raise ValueError("Not a valid format for unsigned integers.")
-            except (ValueError, TypeError) as e:
-                raise SyntaxError(f"Can not parse a valid unsigned value for this tag,\n{mark}") from e
-
-        return cls(format_unsigned(node.tag, node.value, node.start_mark))
-
-
-# noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
-class SignedCType(UnsignedCType):
-    """
-    This class represent a signed value. Signed values can be any value, but they must have to be signed integers. The
-    children classes will restrict the type of the value.
-    """
-
-    @classmethod
-    def from_yaml(cls, constructor, node):
-        def format_signed(tag: str, value: str, mark) -> str:
-            """
-            Format the tags which accept a signed integer value to it's proper final format ready to be inserted.
-
-            :param tag: the name of the tag
-            :param value: the value of the tag
-            :param mark: a mark to report the syntax error
-
-            :return: a composite string with the value appended to the tag name
-            """
-            string_format = "\\x01{}\\x02{}\\x03"
-            try:
-                if re.match(r'^[+-]?0[Xx]', value):
-                    return string_format.format(tag, hex(int(value, 16)))
-                if re.match(r'^[+-]?0[oO]?[0-7]', value):
-                    return string_format.format(tag, hex(int(value, 8)))
-                if re.match(r'^[+-]?0[bB]', value):
-                    return string_format.format(tag, hex(int(value, 2)))
-                if re.match(r'^[+-]?[\d]', value):
-                    return string_format.format(tag, hex(int(value)))
-                raise ValueError("Not a valid format for signed integers.")
-            except (ValueError, TypeError) as e:
-                raise SyntaxError(f"Can not parse a valid signed value for this tag,\n{mark}") from e
-
-        return cls(format_signed(node.tag, node.value, node.start_mark))
-
-
-# noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
-@ruamel.yaml.yaml_object(yaml_parser)
-class Offset(SignedCType):
-    """
-    This class represent a pointer difference, which also means an offset or an array index. They are always signed
-    constants.
-
-    They are always of the machine's `ptrdiff_t` size.
-    """
-    yaml_tag = u'!offset'
-
-
-# noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
-@ruamel.yaml.yaml_object(yaml_parser)
-class Pointer(UnsignedCType):
-    """
-    This class represent a pointer. Pointers are always unsigned constants.
-
-    They are always of the machine's `uintptr_t` size.
-    """
-    yaml_tag = u'!pointer'
-
-
-# noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
-@ruamel.yaml.yaml_object(yaml_parser)
-class SID(SignedCType):
-    """
-    This class represent a signed ID. Signed ID's are always signed constants.
-
-    They are always of the machine's `signed` size.
-    """
-    yaml_tag = u'!s-id'
-
-
-# noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
-@ruamel.yaml.yaml_object(yaml_parser)
-class Signed(SignedCType):
-    """
-    This class represent a signed value. Signed value are always signed constants.
-
-    They are always of the machine's `signed` size.
-    """
-    yaml_tag = u'!signed'
-
-
-# noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
-@ruamel.yaml.yaml_object(yaml_parser)
-class UID(UnsignedCType):
-    """
-    This class represent an unsigned ID. Unsigned ID's are always unsigned constants.
-
-    They are always of the machine's `unsigned` size.
-    """
-    yaml_tag = u'!u-id'
-
-
-# noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
-@ruamel.yaml.yaml_object(yaml_parser)
-class Unsigned(UnsignedCType):
-    """
-    This class represent an unsigned value. Unsigned values are always unsigned constants.
-
-    They are always of the machine's `unsigned` size.
-    """
-    yaml_tag = u'!unsigned'
-
-
-# noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
-@ruamel.yaml.yaml_object(yaml_parser)
-class Range:
-    """
-    This class represent a range. Ranges can contain any value inside them, but they must have to define a start, an end
-    and a name.
-    """
-    yaml_tag = u'!range'
-
-    def __init__(self, value):
-        self.reduced_value: str = value
-
-    def __str__(self):
-        return self.reduced_value
-
-    @classmethod
-    def from_yaml(cls, constructor, node):
-        def reduce_range(tag: str, mapping_object: {}, mark) -> str:
-            """
-            Try to reduce the range tag to a string with a special format. Note that this is a generic range function,
-            which can reduce any range (given the rules for range reduction).
-
-            :param tag: the name of the tag
-            :param mapping_object: the value of the tag
-            :param mark: a mark to report the syntax error
-
-            :return: a composite string with the value appended to the tag name
-            """
-            try:
-                start = mapping_object['start']
-                end = mapping_object['end']
-                description = mapping_object['description']
-                # Raise an error if description is not a string
-                if type(description) is not str:
-                    raise SyntaxError(f"The 'description' property must have to be a string,\n{mark}")
-                # Attempt to give a proper format to string values
-                try:
-                    description.encode('ASCII')
-                    if type(start) is str or type(end) is str:
-                        # Try to parse the strings as ASCII-only strings
-                        try:
-                            start.encode('ASCII')
-                            end.encode('ASCII')
-                        except AttributeError:
-                            pass
-                except UnicodeEncodeError as e:
-                    raise SyntaxError("All properties must have to be ASCII strings or any other valid tag or scalar,"
-                                      f"\n{mark}") from e
-                # Raise an error if start and end are not the same type
-                if type(start) is not type(end):
-                    raise SyntaxError(f"The 'start' and 'end' properties must have to be the same type,\n{mark}")
-                return f"\\x01{tag}\\x02{start}\\x1e{end}\\x1e\\x02{description}\\x03\\x03"
-            except KeyError as e:
-                raise SyntaxError(
-                        f"The {tag} tag requires 3 properties: 'start', 'end' and 'description'.\n{mark}") from e
-
-        mapping = constructor.construct_mapping(node)
-        return cls(reduce_range(node.tag, mapping, node.start_mark))
-
-
 # Extracted from:
 # https://towardsdatascience.com/how-to-flatten-deeply-nested-json-objects-in-non-recursive-elegant-python-55f96533103d
 # Pretty funny that the implementation is recursive, tho.
-def flatten_dictionary(input_properties_file: io.TextIOWrapper) -> {}:
+def flatten_dictionary(input_properties_file: TextIOWrapper) -> {}:
     """
     Flatten a YAML file into strings.
 
@@ -558,7 +179,7 @@ def flatten_dictionary(input_properties_file: io.TextIOWrapper) -> {}:
         """
         with open(properties_file_path) as open_yaml:
             properties_documents = yaml_parser.load_all(open_yaml)
-            properties_path_absolute: str = str(pathlib.Path(properties_file_path).absolute())
+            properties_path_absolute: str = str(Path(properties_file_path).absolute())
             document_index: int = 0
             for properties_object in properties_documents:
                 document_index += 1
@@ -567,7 +188,7 @@ def flatten_dictionary(input_properties_file: io.TextIOWrapper) -> {}:
                 file_and_document: str = f"{properties_path_absolute}:document:#{document_index}"
                 per_document_includes: {} = file_carry.pop(file_and_document, {})
                 try:
-                    include_list: [] = properties_object.pop("$INCLUDE", [])
+                    include_list: [] = properties_object.pop(StringCType("$INCLUDE"), [])
                 except TypeError:
                     program_logger.debug("Could not find the include list, the file probably does not include files.")
                     include_list = []
@@ -579,23 +200,25 @@ def flatten_dictionary(input_properties_file: io.TextIOWrapper) -> {}:
                 try:
                     for include in include_list:
                         try:
-                            inferred_path: pathlib.Path = include.path
+                            inferred_path: Path = include.path
                             include_type: str = include.type
                         except AttributeError:
+                            if type(include) is not FileMarker:
+                                raise AttributeError("Invalid tag inside the include sequence.")
                             continue
                         if include_type == "abs":
                             computed_path: str = str(inferred_path.absolute())
-                            program_logger.debug(f"Found an include for an absolute path to '{computed_path}'")
+                            program_logger.debug(f"Found an include for an absolute path: '{computed_path}'")
                         elif include_type == "cwd":
-                            working_directory = pathlib.Path(os.getcwd())
+                            working_directory = Path(getcwd())
                             computed_path: str = str(working_directory.joinpath(inferred_path).absolute())
                             program_logger.debug(
-                                    f"Found an include for a path relative to the c.w.d. to '{computed_path}'")
+                                    f"Found an include for a path relative to the working directory: '{computed_path}'")
                         elif include_type == "rel":
-                            included_dir = pathlib.Path(properties_path_absolute).parent
+                            included_dir = Path(properties_path_absolute).parent
                             computed_path: str = str(included_dir.joinpath(inferred_path).absolute())
                             program_logger.debug(
-                                    f"Found an include for a path relative to the file to '{computed_path}'")
+                                    f"Found an include for a path relative to the current file: '{computed_path}'")
                         else:
                             raise AssertionError("Can not determine the type of file included.")
                         warned_path: str = f"{computed_path}:warning"
@@ -607,12 +230,12 @@ def flatten_dictionary(input_properties_file: io.TextIOWrapper) -> {}:
                         per_document_includes[warned_path]: bool = warned_file
                         file_carry[file_and_document] = per_document_includes
                         if included_times <= include_multiplicity:
-                            program_logger.debug(f"Including file '{computed_path}' from '{file_and_document}'")
+                            program_logger.debug(f"Including file '{computed_path}' from '{file_and_document}'...")
                             include_recurse(computed_path, file_carry, main_dict)
                             program_logger.info(f"Included file '{computed_path}' from '{file_and_document}'")
                         elif warned_file:
                             program_logger.warning(
-                                    f"\n--! The file:\n"
+                                    f"--! The file:\n"
                                     f"--~\t\t'{properties_path_absolute}',\n"
                                     f"--! Inside the document: #{document_index}; included the file:\n"
                                     f"--~\t\t'{computed_path}',\n"
@@ -629,43 +252,59 @@ def flatten_dictionary(input_properties_file: io.TextIOWrapper) -> {}:
                     raise e
                 # Note that merging lists is not part of the YAML specification, so if a list is found in two files or
                 # documents, the latest one found will replace the previous definitions.
-                merger.merge(main_dict, properties_object)
-                program_logger.info(f"Merged file '{properties_path_absolute}' into the return dictionary")
+                yaml_merger.merge(main_dict, properties_object)
+                program_logger.info(
+                        f"Merged file '{properties_path_absolute}#{document_index}' into the return dictionary")
+        yaml_merger.merge(main_dict, main_dict)
         return main_dict
 
-    def flatten(python_dictionary: {}, prefix: str = ""):
+    def flatten(reducible: {}, prefix: str = ""):
         """
         The recursive call to flatten the dictionary, which accepts a Python dictionary as input and deeply flattens it
         by converting it to a composed string with the properties separated by a string separator.
 
-        :param python_dictionary: a dictionary to add the flatten objects
+        :param reducible: a dictionary to add the flatten objects
         :param prefix: a prefix to prepend to properties
 
         :return: the flatten Python dictionary
         """
-        if type(python_dictionary) is dict:
-            for value in python_dictionary:
-                flatten(python_dictionary[value], prefix + value + flatten_separator)
-        elif type(python_dictionary) is list:
-            records = {}
-            for value in python_dictionary:
+        fixed_key: str = prefix[:-len(flatten_separator)]
+        printable_fixed_key: str = fixed_key.replace(flatten_separator, print_separator)
+        if type(reducible) is dict:
+            for value in reducible:
+                flatten(reducible[value], f"{prefix}{value}{flatten_separator}")
+        elif type(reducible) is list:
+            indexes_mapping: {} = {}
+            for value in reducible:
+                if type(value) is FileMarkedValue:
+                    value = value.contents
+                else:
+                    if isinstance(value, YamlDirectory):
+                        raise SyntaxError("Found include tags outside of the include sequence.\n\t"
+                                          f"Offending key path: '{printable_fixed_key}'")
+                    continue
                 if type(value) is dict:
-                    computed_prefix = prefix + next(iter(value))
+                    computed_prefix = f"{prefix}{flatten_separator}{next(iter(value))}"
                 else:
                     computed_prefix = prefix
-                index = records.pop(computed_prefix, 0)
-                flatten(value, prefix + f"0x{index:04x}" + flatten_separator)
-                records[computed_prefix] = index + 1
+                index = indexes_mapping.pop(computed_prefix, 0)
+                max_index = 4294967295
+                if index > max_index:
+                    raise AssertionError(f"Maximum elements for table reached: {max_index + 1} elements.\n\t"
+                                         f"Offending key path: '{printable_fixed_key}'")
+                printable_index = base36.dumps(index).upper().rjust(7, "0")
+                flatten(value, prefix + printable_index + flatten_separator)
+                indexes_mapping[computed_prefix] = index + 1
         else:
-            fixed_key = prefix[:-len(flatten_separator)]
             try:
-                python_dictionary.encode('ASCII')
+                fixed_key.encode("ASCII")
             except UnicodeEncodeError as e:
-                raise UnicodeError(
-                        f"Can not interpret '{fixed_key}' : '{python_dictionary}' as an ASCII string.") from e
-            except AttributeError:
-                pass
-            result_dictionary[fixed_key] = python_dictionary
+                raise AssertionError(f"Can not interpret key '{printable_fixed_key}' as an ASCII string.") from e
+            if fixed_key not in result_dictionary:
+                result_dictionary[fixed_key] = reducible
+            else:
+                raise AssertionError("Unrecoverable collision detected while building the reduced key-value mappings. "
+                                     f"Offending key path: '{printable_fixed_key}'.")
 
     reduced_dictionary = include_recurse(input_properties_file.name, {}, {})
     flatten(reduced_dictionary)
@@ -698,9 +337,9 @@ def truncate_mask(positions: int) -> int:
 
     :return: a mask that if it's and-ed will truncate the number
     """
-    truncate_masked: int = 0x00
+    truncate_masked: int = 0
     for i in range(positions):
-        truncate_masked = truncate_masked << 0x01 | 0x01
+        truncate_masked = truncate_masked << 1 | 1
     return truncate_masked
 
 
@@ -750,12 +389,12 @@ def calculate_hash(string: str) -> int:
 
     :return: the hash value for the input string
     """
-    value: int = rotate_left(pattern_64bit, 0x01)
+    value: int = rotate_left(pattern_64bit, 1)
     ascii_bytes = string.encode("ASCII")
     for character in ascii_bytes:
-        value = rotate_left(value, 0x01)
+        value = rotate_left(value, 1)
         value ^= ~character * ~len(string)
-        value = rotate_left(value, 0x01)
+        value = rotate_left(value, 1)
         value ^= character * ~len(string)
     value = mask(value)
     return value
@@ -769,12 +408,12 @@ def calculate_hash2(string: str) -> int:
 
     :return: the hash value for the input string
     """
-    value: int = rotate_right(pattern_64bit, 0x01)
+    value: int = rotate_right(pattern_64bit, 1)
     ascii_bytes = string.encode("ASCII")
     for character in ascii_bytes:
-        value = rotate_right(value, 0x01)
+        value = rotate_right(value, 1)
         value ^= character * ~len(string)
-        value = rotate_right(value, 0x01)
+        value = rotate_right(value, 1)
         value ^= ~character * len(string)
     value = mask(value)
     return value
@@ -796,12 +435,12 @@ def hash_foresee(key_hash: int, direction: int, name: str, hashmap: [], key: str
     program_logger.info("Linear collision solving algorithm started...")
     collision_avoided: bool = False
     lowermost: int = key_hash - collision_foresee
-    lowermost = 0x00 if (lowermost <= 0x00 or lowermost > mask(max_64bit)) else lowermost
+    lowermost = 0 if (lowermost <= 0 or lowermost > mask(max_64bit)) else lowermost
     uppermost: int = key_hash + collision_foresee
-    uppermost = mask(max_64bit) if (uppermost < 0x00 or uppermost >= mask(max_64bit)) else uppermost
-    direction: int = +0x01 if direction < 0x00 else -0x01
-    start: int = lowermost if direction == +0x01 else uppermost
-    end: int = (uppermost if direction == +0x01 else lowermost) + direction
+    uppermost = mask(max_64bit) if (uppermost < 0 or uppermost >= mask(max_64bit)) else uppermost
+    direction: int = +1 if direction < 0 else -1
+    start: int = lowermost if direction == 1 else uppermost
+    end: int = (uppermost if direction == 1 else lowermost) + direction
     iter_range = range(start, end, direction)
     program_logger.debug(f"Linear searching range: {list(iter_range)}")
     for index in iter_range:
@@ -813,14 +452,15 @@ def hash_foresee(key_hash: int, direction: int, name: str, hashmap: [], key: str
         if in_map is None:
             hashmap[index] = (key, value)
             collision_avoided = True
-            program_logger.warning(
-                    f"--+ Collision avoided by moving hash {hex(key_hash)} ('{key}') at index {index} ({hex(index)})")
+            printable_key: str = key.replace(flatten_separator, print_separator)
+            program_logger.warning(f"--+ Collision avoided by moving hash {hex(key_hash)} ('{printable_key}') "
+                                   f"at index {index} ({hex(index)})")
             break
     program_logger.info(f"Linear collision solving algorithm ended, resolved? {collision_avoided}")
     return collision_avoided
 
 
-def create_hashmap(args: argparse.Namespace):
+def create_hashmap(args: Namespace):
     """
     Create the hashmap inside a Python array.
 
@@ -828,41 +468,46 @@ def create_hashmap(args: argparse.Namespace):
 
     :return: the generated hashmap
     """
-    flatten_properties_data: {} = flatten_dictionary(args.yaml_file)
+    flatten_properties: {} = flatten_dictionary(args.yaml_file)
     hashmap: [] = [None] * (mask(max_64bit) + 1)
-    for key, value in flatten_properties_data.items():
+    for key, value in flatten_properties.items():
+        printable_key: str = key.replace(flatten_separator, print_separator)
         key_hash: int = calculate_hash(key)
         key_hash2: int = calculate_hash2(key)
-        program_logger.info(f"Key: \"{key}\", Value: \"{value}\", Hash1: {hex(key_hash)}, Hash2: {hex(key_hash2)}")
+        program_logger.info(f"Key: \"{printable_key}\", Value: \"{value}\", "
+                            f"Hash1: {hex(key_hash)}, Hash2: {hex(key_hash2)}")
         in_map: () = hashmap[key_hash]
         if in_map is None:
             hashmap[key_hash] = (key, value)
             program_logger.info(f"Key not found in the map, key added at index {key_hash}!")
         else:
-            program_logger.warning(f"--! Collision detected, hash {hex(key_hash)} (key: '{key}') is already in use")
+            program_logger.warning(f"--! Collision detected, hash {hex(key_hash)} (key: '{printable_key}') "
+                                   "is already in use")
             in_use: () = hashmap[key_hash]
-            program_logger.warning(f"--! Hash {hex(key_hash)} is currently used by '{in_use}'")
-            collision_avoided: bool = hash_foresee(key_hash, +1, "Hash1", hashmap, key, value)
+            program_logger.warning(f"--! Hash {hex(key_hash)} is currently used by '{in_use}'".
+                                   replace("\\" + flatten_separator, print_separator))
+            collision_avoided: bool = hash_foresee(key_hash, 1, "Hash1", hashmap, key, value)
             if not collision_avoided:
                 in_map = hashmap[key_hash2]
                 program_logger.warning("--! Trying to use the alternative hash "
-                                       f"{hex(key_hash2)} for hash {hex(key_hash)} (key: '{key}')")
+                                       f"{hex(key_hash2)} for hash {hex(key_hash)} (key: '{printable_key}')")
                 if in_map is None:
                     hashmap[key_hash2] = (key, value)
                     collision_avoided = True
                     program_logger.warning(f"--+ Collision avoided by using the alternative hash {hex(key_hash2)}")
                 else:
                     program_logger.warning(
-                            f"--! Collision detected, hash {hex(key_hash2)} (key: '{key}') is already in use")
+                            f"--! Collision detected, hash {hex(key_hash2)} (key: '{printable_key}') is already in use")
                     in_use: {} = hashmap[key_hash2]
-                    program_logger.warning(f"--! Hash {hex(key_hash2)} is currently used by '{in_use}'")
+                    program_logger.warning(f"--! Hash {hex(key_hash2)} is currently used by '{in_use}'".
+                                           replace("\\" + flatten_separator, print_separator))
             if not collision_avoided:
                 collision_avoided = hash_foresee(key_hash2, -1, "Hash2", hashmap, key, value)
             if not collision_avoided:
                 program_logger.warning(f"--- Failed to solve the collision for the second hash {hex(key_hash2)}")
                 program_logger.error("--= Error: Unrecoverable collision detected...")
                 program_logger.error(f"--= Length of the map: '{len(hashmap)}'")
-                program_logger.error(f"--= Key to be inserted: '{key}'")
+                program_logger.error(f"--= Key to be inserted: '{printable_key}'")
                 program_logger.error(f"--= Key with the same hash: '{hashmap[key_hash]}'")
                 program_logger.error(f"--= Hash that collided: '{hex(key_hash)}'")
                 raise SystemExit(2, "Unresolvable hash collision detected.")
@@ -884,7 +529,7 @@ def print_to_source(args, hashmap: []):
         program_parser.error("Generating the source code requires the template and the output files.")
         raise (3, "Can not proceed without template or output files.")
     with args.source_template as template:
-        with io.StringIO("") as source:
+        with StringIO("") as source:
             source.write("\n// Start of the array that holds the Hash Table as pointers to key-value structs...")
             source.write(f"\n\nconst struct {api_struct} {api_table}[{hashmap_length}] = {{")
             for index in range(len(hashmap)):
@@ -896,20 +541,17 @@ def print_to_source(args, hashmap: []):
                     source.write(f"\n\t{{NULL, NULL}}{comma}")
                 else:
                     key, val = value_at_index
-                    # Try to unpack values that came from custom tags
+                    printable_key: str = key.replace(flatten_separator, print_separator)
                     try:
                         val = val.reduced_value
-                        program_logger.info(f"Found packed value from tag for \"{key}\": {val}")
+                        program_logger.info(f"Found packed value from tag for \"{printable_key}\": {val}")
                     except AttributeError:
-                        if type(val) is not str:
-                            raise AssertionError("Due to the nature of the C language, all values must have to be "
-                                                 "tagged with their correct type, including all integers. Only "
-                                                 "strings, mappings and sequences can be untagged.\n\tOffending key "
-                                                 f"path: '{key}'")
-                        else:
-                            val.encode('ASCII')
-                    api_key = key.replace(flatten_separator, f"\" {flatten_separator_api} \"")
-                    source.write(f"\n\t{{\"{api_key}\", \"{val}\"}}{comma}")
+                        raise AssertionError(
+                                "Due to the nature of the C language, all values must have to be tagged with their "
+                                "correct type, including all integers. Only mappings and sequences can be untagged.\n\t"
+                                f"Offending key path: '{printable_key}'")
+                    api_key = key.replace(flatten_separator, f"\"{flatten_separator_api}\"")
+                    source.write(f"\n\t{{\"{api_key}\",\n\t \"{val}\"}}{comma}")
                 source.write(f"  // {index:0{places_decimal}d}, {index:0{places_hex}x}")
             source.write("\n};")
             source.write("\n")
@@ -918,16 +560,16 @@ def print_to_source(args, hashmap: []):
                 real_output.write(template.read())
                 real_output.write(source.read())
     with args.header_template as template:
-        with io.StringIO("") as header:
-            tpk = testing_property_key.replace(flatten_separator, f"\" {flatten_separator_api} \"")
+        with StringIO("") as header:
+            tpk = testing_property_key.replace(flatten_separator, f"\"{flatten_separator_api}\"")
             header.write("\n/// \\brief This is the separator used to separate the levels of properties.")
             header.write(f"\n#define {flatten_separator_api} \"{flatten_separator}\"")
             header.write("\n\n/// \\brief This is the testing property that will be used to test the lookup algorithm.")
-            header.write(f"\n#define {stringcase.constcase(api_table + 'TestKey')} \"{tpk}\"")
+            header.write(f"\n#define {constcase(api_table + 'TestKey')} \"{tpk}\"")
             header.write("\n\n/// \\brief This is the expected value for testing the lookup algorithm.")
-            header.write(f"\n#define {stringcase.constcase(api_table + 'TestValue')} \"{testing_property_value}\"")
+            header.write(f"\n#define {constcase(api_table + 'TestValue')} \"{testing_property_value}\"")
             header.write("\n\n/// \\brief Use this pattern to seed the hashing algorithm.")
-            header.write(f"\n#define {stringcase.constcase(api_table + 'Pattern')} {hex(pattern_64bit)}")
+            header.write(f"\n#define {constcase(api_table + 'Pattern')} {hex(pattern_64bit)}")
             header.write("\n\n/// \\brief Represents a key-value pair, which is used to store inside the Hash Table.")
             header.write(f"\nstruct {api_struct} {{\n\tchar *key;\n\tchar *value;\n}};")
             header.write("\n\n/// \\brief The internal representation of the Hash Table.")
@@ -957,15 +599,15 @@ def main(args: []):
     bits = int(rex.match(parsed.bits).group("n"))
     collision_foresee = int(rex.match(parsed.foresee).group("n"))
     places_binary = bits
-    places_decimal = math.ceil(bits / math.log2(10))
-    places_hex = math.ceil(bits / 4)
-    places_octal = math.ceil(bits / 3)
+    places_decimal = ceil(bits / log2(10))
+    places_hex = ceil(bits / 4)
+    places_octal = ceil(bits / 3)
     if program_parser is None:
         raise SystemExit(11, 'Program argument parser not set or global argument set is None.')
     if parsed_arguments is None:
         raise SystemExit(14, 'Parsed program arguments is None.')
     if parsed.verbose:
-        logging.basicConfig(level=logging.DEBUG)
+        basicConfig(level=DEBUG)
     hashmap = create_hashmap(parsed)
     print_to_source(parsed, hashmap)
 

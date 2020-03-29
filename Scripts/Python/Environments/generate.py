@@ -96,6 +96,7 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
         self.install_script(context, 'pip', url)
         # Install the latest packages. If the latest breaks the scripts, we should update the scripts instead of
         # installing a specific version of the packages.
+        subprocess.check_call([context.env_exe, "-m", "pip", "install", "base36"])
         subprocess.check_call([context.env_exe, "-m", "pip", "install", "cpplint"])
         subprocess.check_call([context.env_exe, "-m", "pip", "install", "deepmerge"])
         subprocess.check_call([context.env_exe, "-m", "pip", "install", "pytest"])
