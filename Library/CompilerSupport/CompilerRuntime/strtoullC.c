@@ -100,7 +100,7 @@ void __strtoullC(const char *string,
  uintmax_t accumulator = 0x00U;
  while (true) {
   bool overflow = false;
-  unsigned computedValue;
+  unsigned computedValue = 0x00U;
   if (character >= minDecimal && character <= maxDecimal) { computedValue = (unsigned int) (character - minDecimal); }
   else if (character >= minLowercase && character <= maxLowercase) {
    computedValue = (unsigned int) (character + (DecimalBase - minLowercase));

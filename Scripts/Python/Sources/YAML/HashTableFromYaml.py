@@ -23,20 +23,20 @@
 # /
 # ===--------------------------------------------------------------------------------------------------------------=== #
 
-import re
 import sys
-from argparse import ArgumentParser, FileType, Namespace
-from io import StringIO, TextIOWrapper
 from logging import DEBUG, basicConfig, getLogger
-from os import getcwd
-from pathlib import Path
+from math import ceil, log2
 
 import base36
+import re
 # noinspection PyUnresolvedReferences
 from YamlMerging import FileMarkedValue, GetYamlMerger
 # noinspection PyUnresolvedReferences
-from YamlTags import FileMarker, InitializeIncludeTags, InitializeStronglyTypedTags, StringCType, YamlDirectory
-from math import ceil, log2
+from YamlTags import FileMarker, InitializeIncludeTags, InitializeStronglyTypedTags, StringCType, YamlInclude
+from argparse import ArgumentParser, FileType, Namespace
+from io import StringIO, TextIOWrapper
+from os import getcwd
+from pathlib import Path
 from ruamel.yaml import YAML
 from stringcase import constcase
 
@@ -94,29 +94,29 @@ def parse_args(args: []):
                    "output and are pretty well behaved for ASCII strings. The hash table is not resizable and no "
                    "re-hashing is made, and that makes the lookup O(1). However, it does require a power of 2 for the "
                    "storage of the index, and it does not scale well under load. Anyway, users can overestimate the "
-                   "foresee to give up to the O(1) lookup time in order to keep the table as tidy as possible,")
-    parser.add_argument('-j', '--yaml-file',
+                   "foresee to give up to the O(1) lookup time in order to keep the table as tidy as possible.")
+    parser.add_argument('-y', '--yaml-file',
                         action='store',
                         default=default_db_filename,
                         help="This is the input file that will be used to generate the lookup table based on the YAML "
                              "properties of the objects in this file.",
                         type=FileType(bufsize=buffer_size))
-    parser.add_argument('-a', '--header-template',
+    parser.add_argument('-e', '--header-template',
                         action='store',
                         default=default_header_template,
                         help="The template will be inserted at the beginning of the generated header.",
                         type=FileType(bufsize=buffer_size))
-    parser.add_argument('-e', '--header',
+    parser.add_argument('-a', '--header',
                         action='store',
                         default=default_header_filename,
                         help="The output file where the header will be generated.",
                         type=FileType(mode='w', bufsize=buffer_size))
-    parser.add_argument('-o', '--source-template',
+    parser.add_argument('-s', '--source-template',
                         action='store',
                         default=default_source_template,
                         help="The template will be inserted at the beginning of the generated source code.",
                         type=FileType(bufsize=buffer_size))
-    parser.add_argument('-s', '--source',
+    parser.add_argument('-o', '--source',
                         action='store',
                         default=default_source_filename,
                         help="The output file where the source code will be generated.",
@@ -144,9 +144,6 @@ def parse_args(args: []):
     return parsed_arguments
 
 
-# Extracted from:
-# https://towardsdatascience.com/how-to-flatten-deeply-nested-json-objects-in-non-recursive-elegant-python-55f96533103d
-# Pretty funny that the implementation is recursive, tho.
 def flatten_dictionary(input_properties_file: TextIOWrapper) -> {}:
     """
     Flatten a YAML file into strings.
@@ -185,7 +182,7 @@ def flatten_dictionary(input_properties_file: TextIOWrapper) -> {}:
                 document_index += 1
                 program_logger.debug(f"Processing document #{document_index} from file "
                                      f"'{properties_path_absolute}' for include directives...")
-                file_and_document: str = f"{properties_path_absolute}:document:#{document_index}"
+                file_and_document: str = f"{properties_path_absolute}#{document_index}"
                 per_document_includes: {} = file_carry.pop(file_and_document, {})
                 try:
                     include_list: [] = properties_object.pop(StringCType("$INCLUDE"), [])
@@ -194,8 +191,7 @@ def flatten_dictionary(input_properties_file: TextIOWrapper) -> {}:
                     include_list = []
                 except AttributeError as e:
                     if properties_object is None:
-                        raise SyntaxError(
-                                "Empty documents are not allowed. Delete the document or insert a value.") from e
+                        raise AssertionError("Empty documents are not allowed.") from e
                     raise e
                 try:
                     for include in include_list:
@@ -204,32 +200,29 @@ def flatten_dictionary(input_properties_file: TextIOWrapper) -> {}:
                             include_type: str = include.type
                         except AttributeError:
                             if type(include) is not FileMarker:
-                                raise AttributeError("Invalid tag inside the include sequence.")
+                                raise AssertionError("Invalid tag inside the include sequence.")
                             continue
                         if include_type == "abs":
                             computed_path: str = str(inferred_path.absolute())
-                            program_logger.debug(f"Found an include for an absolute path: '{computed_path}'")
+                            program_logger.debug(f"Found an absolute path include: '{computed_path}'")
                         elif include_type == "cwd":
                             working_directory = Path(getcwd())
                             computed_path: str = str(working_directory.joinpath(inferred_path).absolute())
-                            program_logger.debug(
-                                    f"Found an include for a path relative to the working directory: '{computed_path}'")
+                            program_logger.debug(f"Found an include relative to working directory: '{computed_path}'")
                         elif include_type == "rel":
                             included_dir = Path(properties_path_absolute).parent
                             computed_path: str = str(included_dir.joinpath(inferred_path).absolute())
-                            program_logger.debug(
-                                    f"Found an include for a path relative to the current file: '{computed_path}'")
+                            program_logger.debug(f"Found an include relative to the current file: '{computed_path}'")
                         else:
                             raise AssertionError("Can not determine the type of file included.")
                         warned_path: str = f"{computed_path}:warning"
                         warned_file: bool = per_document_includes.pop(warned_path, True)
-                        program_logger.debug(f"Should warn about include multiplicity?: {warned_file}")
                         included_times: int = per_document_includes.pop(computed_path, 0) + 1
-                        program_logger.debug(f"Total number of attempts to include: {included_times}")
                         per_document_includes[computed_path]: int = included_times
                         per_document_includes[warned_path]: bool = warned_file
                         file_carry[file_and_document] = per_document_includes
                         if included_times <= include_multiplicity:
+                            program_logger.debug(f"Total number of attempts to include: {included_times}")
                             program_logger.debug(f"Including file '{computed_path}' from '{file_and_document}'...")
                             include_recurse(computed_path, file_carry, main_dict)
                             program_logger.info(f"Included file '{computed_path}' from '{file_and_document}'")
@@ -241,20 +234,17 @@ def flatten_dictionary(input_properties_file: TextIOWrapper) -> {}:
                                     f"--~\t\t'{computed_path}',\n"
                                     f"--! More than {include_multiplicity} times. "
                                     "Subsequent includes will be ignored.")
-                            warned_file = False
                             program_logger.debug(f"Will warn about include multiplicity?: {warned_file}")
-                            per_document_includes[warned_path] = warned_file
+                            per_document_includes[warned_path] = False
                         file_carry[file_and_document] = per_document_includes
-                        program_logger.debug(f"File carry data structure: '{file_carry}'")
                 except TypeError as e:
                     if include_list is None:
-                        raise SyntaxError("Empty include lists are not allowed.") from e
+                        raise AssertionError("Empty include lists are not allowed.") from e
                     raise e
                 # Note that merging lists is not part of the YAML specification, so if a list is found in two files or
                 # documents, the latest one found will replace the previous definitions.
                 yaml_merger.merge(main_dict, properties_object)
-                program_logger.info(
-                        f"Merged file '{properties_path_absolute}#{document_index}' into the return dictionary")
+                program_logger.info(f"Merged file '{properties_path_absolute}#{document_index}' into the dictionary")
         yaml_merger.merge(main_dict, main_dict)
         return main_dict
 
@@ -271,28 +261,29 @@ def flatten_dictionary(input_properties_file: TextIOWrapper) -> {}:
         fixed_key: str = prefix[:-len(flatten_separator)]
         printable_fixed_key: str = fixed_key.replace(flatten_separator, print_separator)
         if type(reducible) is dict:
-            for value in reducible:
-                flatten(reducible[value], f"{prefix}{value}{flatten_separator}")
+            for key in reducible:
+                flatten(reducible[key], f"{prefix}{key}{flatten_separator}")
         elif type(reducible) is list:
             indexes_mapping: {} = {}
             for value in reducible:
                 if type(value) is FileMarkedValue:
                     value = value.contents
                 else:
-                    if isinstance(value, YamlDirectory):
-                        raise SyntaxError("Found include tags outside of the include sequence.\n\t"
-                                          f"Offending key path: '{printable_fixed_key}'")
-                    continue
+                    if isinstance(value, YamlInclude):
+                        raise AssertionError("Found include tags outside of the include sequence.\n\t"
+                                             f"Offending key path: '{printable_fixed_key}'")
+                    raise AssertionError("Internal: Invalid encapsulation inside the YAML sequence.")
                 if type(value) is dict:
                     computed_prefix = f"{prefix}{flatten_separator}{next(iter(value))}"
                 else:
                     computed_prefix = prefix
                 index = indexes_mapping.pop(computed_prefix, 0)
-                max_index = 4294967295
+                max_36 = "3W5E11264SGSF"
+                max_index = int(max_36, 36)
                 if index > max_index:
-                    raise AssertionError(f"Maximum elements for table reached: {max_index + 1} elements.\n\t"
+                    raise AssertionError(f"Maximum elements for table reached: {max_index + 1}.\n\t"
                                          f"Offending key path: '{printable_fixed_key}'")
-                printable_index = base36.dumps(index).upper().rjust(7, "0")
+                printable_index = base36.dumps(index).upper().rjust(len(max_36), "0")
                 flatten(value, prefix + printable_index + flatten_separator)
                 indexes_mapping[computed_prefix] = index + 1
         else:
@@ -303,7 +294,7 @@ def flatten_dictionary(input_properties_file: TextIOWrapper) -> {}:
             if fixed_key not in result_dictionary:
                 result_dictionary[fixed_key] = reducible
             else:
-                raise AssertionError("Unrecoverable collision detected while building the reduced key-value mappings. "
+                raise AssertionError("Unrecoverable collision detected while building the key-value mappings.\n\t"
                                      f"Offending key path: '{printable_fixed_key}'.")
 
     reduced_dictionary = include_recurse(input_properties_file.name, {}, {})
@@ -438,22 +429,23 @@ def hash_foresee(key_hash: int, direction: int, name: str, hashmap: [], key: str
     lowermost = 0 if (lowermost <= 0 or lowermost > mask(max_64bit)) else lowermost
     uppermost: int = key_hash + collision_foresee
     uppermost = mask(max_64bit) if (uppermost < 0 or uppermost >= mask(max_64bit)) else uppermost
-    direction: int = +1 if direction < 0 else -1
+    direction: int = 1 if direction < 0 else -1
     start: int = lowermost if direction == 1 else uppermost
     end: int = (uppermost if direction == 1 else lowermost) + direction
     iter_range = range(start, end, direction)
     program_logger.debug(f"Linear searching range: {list(iter_range)}")
+    index: int
     for index in iter_range:
         if index == key_hash:
             continue
         program_logger.info(
-                f"Trying to solve collision by searching around the {name} hash {hex(key_hash)} in {hex(index)}...")
+                f"Trying to solve collision by searching around the {name} index {hex(key_hash)} in {hex(index)}...")
         in_map: [] = hashmap[index]
         if in_map is None:
             hashmap[index] = (key, value)
             collision_avoided = True
             printable_key: str = key.replace(flatten_separator, print_separator)
-            program_logger.warning(f"--+ Collision avoided by moving hash {hex(key_hash)} ('{printable_key}') "
+            program_logger.warning(f"--+ Collision solved by moving the hash {hex(key_hash)} ('{printable_key}'),\n\t\t"
                                    f"at index {index} ({hex(index)})")
             break
     program_logger.info(f"Linear collision solving algorithm ended, resolved? {collision_avoided}")
@@ -474,43 +466,48 @@ def create_hashmap(args: Namespace):
         printable_key: str = key.replace(flatten_separator, print_separator)
         key_hash: int = calculate_hash(key)
         key_hash2: int = calculate_hash2(key)
-        program_logger.info(f"Key: \"{printable_key}\", Value: \"{value}\", "
-                            f"Hash1: {hex(key_hash)}, Hash2: {hex(key_hash2)}")
+        program_logger.info(f"Key: \"{printable_key}\", Value: \"{value}\"")
+        program_logger.info(f"Hash1: {hex(key_hash)}, Hash2: {hex(key_hash2)}")
         in_map: () = hashmap[key_hash]
         if in_map is None:
             hashmap[key_hash] = (key, value)
             program_logger.info(f"Key not found in the map, key added at index {key_hash}!")
+            continue
         else:
-            program_logger.warning(f"--! Collision detected, hash {hex(key_hash)} (key: '{printable_key}') "
-                                   "is already in use")
             in_use: () = hashmap[key_hash]
-            program_logger.warning(f"--! Hash {hex(key_hash)} is currently used by '{in_use}'".
-                                   replace("\\" + flatten_separator, print_separator))
-            collision_avoided: bool = hash_foresee(key_hash, 1, "Hash1", hashmap, key, value)
-            if not collision_avoided:
-                in_map = hashmap[key_hash2]
-                program_logger.warning("--! Trying to use the alternative hash "
-                                       f"{hex(key_hash2)} for hash {hex(key_hash)} (key: '{printable_key}')")
-                if in_map is None:
-                    hashmap[key_hash2] = (key, value)
-                    collision_avoided = True
-                    program_logger.warning(f"--+ Collision avoided by using the alternative hash {hex(key_hash2)}")
-                else:
-                    program_logger.warning(
-                            f"--! Collision detected, hash {hex(key_hash2)} (key: '{printable_key}') is already in use")
-                    in_use: {} = hashmap[key_hash2]
-                    program_logger.warning(f"--! Hash {hex(key_hash2)} is currently used by '{in_use}'".
-                                           replace("\\" + flatten_separator, print_separator))
-            if not collision_avoided:
-                collision_avoided = hash_foresee(key_hash2, -1, "Hash2", hashmap, key, value)
-            if not collision_avoided:
-                program_logger.warning(f"--- Failed to solve the collision for the second hash {hex(key_hash2)}")
-                program_logger.error("--= Error: Unrecoverable collision detected...")
-                program_logger.error(f"--= Length of the map: '{len(hashmap)}'")
-                program_logger.error(f"--= Key to be inserted: '{printable_key}'")
-                program_logger.error(f"--= Key with the same hash: '{hashmap[key_hash]}'")
-                program_logger.error(f"--= Hash that collided: '{hex(key_hash)}'")
-                raise SystemExit(2, "Unresolvable hash collision detected.")
+            program_logger.warning(f"--! Index {hex(key_hash)} is currently used by '{in_use}'"
+                                   .replace("\\" + flatten_separator, print_separator))
+            collision_avoided = hash_foresee(key_hash, 1, "Hash1", hashmap, key, value)
+        if collision_avoided:
+            continue
+        else:
+            in_map = hashmap[key_hash2]
+            program_logger.warning(f"--! Trying to use the alternative hash {hex(key_hash2)},\n\t"
+                                   f"for hash{hex(key_hash)} (key: '{printable_key}')")
+            if in_map is None:
+                hashmap[key_hash2] = (key, value)
+                program_logger.warning(f"--+ Collision resolved by using the alternative hash {hex(key_hash2)}")
+                continue
+            else:
+                in_use: {} = hashmap[key_hash2]
+                program_logger.warning(f"--! Index {hex(key_hash2)} is currently used by '{in_use}'".
+                                       replace("\\" + flatten_separator, print_separator))
+                collision_avoided = False
+        if collision_avoided:
+            continue
+        else:
+            collision_avoided = hash_foresee(key_hash2, -1, "Hash2", hashmap, key, value)
+        if collision_avoided:
+            continue
+        else:
+            program_logger.warning("--- Failed to solve the collision!")
+            program_logger.error("--= Error: Unrecoverable collision detected...")
+            program_logger.error(f"--= Length of the map: '{len(hashmap)}'")
+            program_logger.error(f"--= Key to be inserted: '{printable_key}'")
+            program_logger.error(f"--= Key with the same hash: '{hashmap[key_hash]}'")
+            program_logger.error(f"--= Index that collided: '{hex(key_hash)}'")
+            program_logger.error(f"--= Alternative index that collided: '{hex(key_hash2)}'")
+            raise SystemExit("Unresolvable hash collision detected.")
     return hashmap
 
 
@@ -527,10 +524,10 @@ def print_to_source(args, hashmap: []):
     hashmap_max_index = hashmap_length - 1
     if not args.header_template or not args.header or not args.source_template or not args.source:
         program_parser.error("Generating the source code requires the template and the output files.")
-        raise (3, "Can not proceed without template or output files.")
+        raise SystemExit("Can not proceed without template or output files.")
     with args.source_template as template:
         with StringIO("") as source:
-            source.write("\n// Start of the array that holds the Hash Table as pointers to key-value structs...")
+            source.write("\n// Start of the array that holds the Hash Table of the key-value pairs...")
             source.write(f"\n\nconst struct {api_struct} {api_table}[{hashmap_length}] = {{")
             for index in range(len(hashmap)):
                 comma = ' '
@@ -548,7 +545,8 @@ def print_to_source(args, hashmap: []):
                     except AttributeError:
                         raise AssertionError(
                                 "Due to the nature of the C language, all values must have to be tagged with their "
-                                "correct type, including all integers. Only mappings and sequences can be untagged.\n\t"
+                                "correct type, including all integers. Only strings, mappings and sequences can be "
+                                "untagged.\n\t"
                                 f"Offending key path: '{printable_key}'")
                     api_key = key.replace(flatten_separator, f"\"{flatten_separator_api}\"")
                     source.write(f"\n\t{{\"{api_key}\",\n\t \"{val}\"}}{comma}")
@@ -603,9 +601,9 @@ def main(args: []):
     places_hex = ceil(bits / 4)
     places_octal = ceil(bits / 3)
     if program_parser is None:
-        raise SystemExit(11, 'Program argument parser not set or global argument set is None.')
+        raise SystemExit("Program argument parser not set or global argument set is None.")
     if parsed_arguments is None:
-        raise SystemExit(14, 'Parsed program arguments is None.')
+        raise SystemExit("Parsed program arguments is None.")
     if parsed.verbose:
         basicConfig(level=DEBUG)
     hashmap = create_hashmap(parsed)

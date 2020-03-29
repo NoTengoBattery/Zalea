@@ -8,7 +8,7 @@ memory:
       data: &bios_data     bios_data
       boot: &boot_sector   boot_sector
       ebda: &bios_extended bios_data_extended
-      brom: &bios_rom      bios_rom_area
+      rom: &bios_rom       bios_rom_area
   lower: # Areas in the lower (before the 1 MiB mark) memory (mostly used by BIOS)
     guaranteed: # Guaranteed: areas that are guaranteed to exist and to be free
       - !range

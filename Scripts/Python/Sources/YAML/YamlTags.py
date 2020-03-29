@@ -36,10 +36,10 @@ rex_include_path = re.compile("<(?P<f>.*)>")
 # noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
 class FileMarker:
     def __init__(self, path: Path, start: str, end: str):
-        self.marker = f"{path.anchor.join(path.parts)}:{start}:{end}"
+        self.marker = f"{path}:$:{start}:$:{end}"
 
     def __str__(self):
-        return f"File: '{self.marker}'"
+        return f"Mark for file: '{self.marker}'"
 
 
 # noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
@@ -62,17 +62,14 @@ class CustomSafeConstructor(SafeConstructor):
         try:
             value.encode('ASCII')
         except UnicodeEncodeError:
-            raise SyntaxError(f"String values can only be ASCII encoded strings,\n{node.start_mark}")
+            raise SyntaxError(f"String values can only be standard ASCII strings,\n{node.start_mark}")
         return StringCType(value)
 
 
 # ===--------------------------------------------------------------------------------------------------------------=== #
 
 # noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
-class YamlDirectory:
-    """
-    This class represent a path to include a file, the base class.
-    """
+class YamlInclude:
 
     def __init__(self, value: str):
         self.path: str = value
@@ -85,7 +82,7 @@ class YamlDirectory:
     def from_yaml(cls, constructor, node):
         def extract_path(string: str, mark) -> str:
             """
-            Extract the path of a string (for YAML include files).
+            Extract the path of a string (for YAML include files). The format is similar to the C include directive.
 
             :param string: a string to be matched against the path format
             :param mark: a mark to report the syntax error
@@ -95,9 +92,8 @@ class YamlDirectory:
             path_matched = rex_include_path.match(string)
             if path_matched is not None:
                 return Path(path_matched.group("f"))
-            raise SyntaxError(
-                    "Included YAML files must have to be UNIX paths to YAML files, enclosed between '<' and '>',"
-                    "\n{mark}")
+            raise SyntaxError("Included YAML files must have to be valid paths files, enclosed between '<' and '>',"
+                              "\n{mark}")
 
         return cls(extract_path(node.value, node.start_mark))
 
@@ -106,7 +102,7 @@ class YamlDirectory:
 def InitializeIncludeTags(yaml_parser):
     # noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
     @yaml_object(yaml_parser)
-    class AbsoluteDirectory(YamlDirectory):
+    class AbsoluteInclude(YamlInclude):
         """
         This class represent a path to include a file, relative to the root path directory.
         """
@@ -118,7 +114,7 @@ def InitializeIncludeTags(yaml_parser):
 
     # noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
     @yaml_object(yaml_parser)
-    class RelativeDirectory(YamlDirectory):
+    class RelativeInclude(YamlInclude):
         """
         This class represent a path to include a file, relative to the currently processed file.
         """
@@ -130,9 +126,9 @@ def InitializeIncludeTags(yaml_parser):
 
     # noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
     @yaml_object(yaml_parser)
-    class WorkingDirectory(YamlDirectory):
+    class WorkingDirectoryInclude(YamlInclude):
         """
-        This class represent a path to include a file, relative to the working directory.
+        This class represent a path to include a file, relative to the current working directory.
         """
         yaml_tag = u'!$$'
 
@@ -195,7 +191,7 @@ class UnsignedCType(CType):
                     return string_format.format(tag, hex(int(value)))
                 raise ValueError("Not a valid format for unsigned integers.")
             except (ValueError, TypeError) as e:
-                raise SyntaxError(f"Can not parse a valid unsigned value for this tag,\n{mark}") from e
+                raise SyntaxError(f"Can not parse a valid unsigned value for this {tag} tag,\n{mark}") from e
 
         return cls(format_unsigned(node.tag, node.value, node.start_mark))
 
@@ -231,7 +227,7 @@ class SignedCType(UnsignedCType):
                     return string_format.format(tag, hex(int(value)))
                 raise ValueError("Not a valid format for signed integers.")
             except (ValueError, TypeError) as e:
-                raise SyntaxError(f"Can not parse a valid signed value for this tag,\n{mark}") from e
+                raise SyntaxError(f"Can not parse a valid signed value for this {tag} tag,\n{mark}") from e
 
         return cls(format_signed(node.tag, node.value, node.start_mark))
 
@@ -250,7 +246,7 @@ def InitializeStronglyTypedTags(yaml_parser):
     class Offset(SignedCType):
         """
         This class represent a pointer difference, which also means an offset or an array index. They are always signed
-        constants.
+        integer constants.
 
         They are always of the machine's `ptrdiff_t` size.
         """
@@ -260,9 +256,9 @@ def InitializeStronglyTypedTags(yaml_parser):
     @yaml_object(yaml_parser)
     class Pointer(UnsignedCType):
         """
-        This class represent a pointer. Pointers are always unsigned constants.
+        This class represent a pointer. Pointers are always unsigned integer constants.
 
-        They are always of the machine's `uintptr_t` size.
+        They are always of the machine's `uintptr_t` or `void *` size.
         """
         yaml_tag = u'!pointer'
 
@@ -313,7 +309,7 @@ def InitializeStronglyTypedTags(yaml_parser):
     @yaml_object(yaml_parser)
     class SID(SignedCType):
         """
-        This class represent a signed ID. Signed ID's are always signed constants.
+        This class represent a signed ID. Signed ID's are always signed integer constants.
 
         They are always of the machine's `signed` size.
         """
@@ -323,7 +319,7 @@ def InitializeStronglyTypedTags(yaml_parser):
     @yaml_object(yaml_parser)
     class Signed(SignedCType):
         """
-        This class represent a signed value. Signed value are always signed constants.
+        This class represent a signed value. Signed value are always signed integer constants.
 
         They are always of the machine's `signed` size.
         """
@@ -333,7 +329,7 @@ def InitializeStronglyTypedTags(yaml_parser):
     @yaml_object(yaml_parser)
     class UID(UnsignedCType):
         """
-        This class represent an unsigned ID. Unsigned ID's are always unsigned constants.
+        This class represent an unsigned ID. Unsigned ID's are always unsigned integer constants.
 
         They are always of the machine's `unsigned` size.
         """
@@ -343,7 +339,7 @@ def InitializeStronglyTypedTags(yaml_parser):
     @yaml_object(yaml_parser)
     class Unsigned(UnsignedCType):
         """
-        This class represent an unsigned value. Unsigned values are always unsigned constants.
+        This class represent an unsigned value. Unsigned values are always unsigned integer constants.
 
         They are always of the machine's `unsigned` size.
         """

@@ -23,10 +23,8 @@
 # /
 # ===--------------------------------------------------------------------------------------------------------------=== #
 
-from typing import Any
-
 # noinspection PyUnresolvedReferences
-from YamlTags import FileMarker
+from YamlTags import CType, FileMarker
 from deepmerge import Merger
 from deepmerge.strategy.dict import DictStrategies
 from deepmerge.strategy.list import ListStrategies
@@ -36,7 +34,7 @@ from deepmerge.strategy.list import ListStrategies
 
 # noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints,PyUnusedLocal
 class FileMarkedValue:
-    def __init__(self, path: str, value: Any):
+    def __init__(self, path: str, value):
         self.marking = path
         self.contents = value
 
@@ -46,6 +44,8 @@ class FileMarkedValue:
     def __eq__(self, other):
         if isinstance(other, type(self)):
             return self.marking.__eq__(other.marking) and self.contents.__eq__(other.contents)
+        if isinstance(other, CType):
+            return self.contents.__eq__(other)
         return NotImplemented
 
 
@@ -62,11 +62,12 @@ class YamlListStrategies(ListStrategies):
     def strategy_yaml_sequence(config, path: [], base: [], other: []):
         """
         Try to perform a merge strategy. Note that the YAML specification does not support sequence merging. This is an
-        add-on that does not follows the standard. This merger will try to replace values with the same key with the new
-        ones, and will append non-existing values to the sequence.
+        add-on that does not follows the standard. This merger will always append lists with values from lists with the
+        same path from different documents. They will always appear in the order that they are processed.
 
-        The merged sequence is guaranteed to be sorted. Note that this might mean that key indexes might change when new
-        elements are added in a root file after the included files are processed. making node order flexible.
+        Note that items in a sequence that are the same path and value, *and* are part of the same path in the same
+        document will be merged into the first appearing key. Items with the same path and value within document or file
+        scopes will be always appended to the list.
 
         :param config: the current merging configuration
         :param path: the path to the current merging conflict
@@ -101,11 +102,9 @@ class YamlDictStrategies(DictStrategies):
     @staticmethod
     def strategy_yaml_mapping(config, path: {}, base: {}, other: {}):
         """
-        Try to perform a merge strategy. Note that the YAML specification does not support mapping merging. This is an
-        add-on that does not follows the standard. This merger will try to replace values with the same key with the new
-        ones, and will append non-existing values to the sequence.
-
-        This is the default merger strategy for dictionary from the deepmerge package.
+        Try to perform a merge strategy. Note that the YAML specification does not support merging of mappings. This is
+        an add-on that does not follows the standard. This merger will try to replace values with the same path with the
+        newest one, and will append non-existing values to the mapping path.
 
         :param config: the current merging configuration
         :param path: the path to the current merging conflict
