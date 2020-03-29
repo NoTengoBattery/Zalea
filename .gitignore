@@ -364,9 +364,9 @@ $RECYCLE.BIN/
 Documentation/html/
 Scripts/Python/Environments/3/
 Scripts/Python/Tests/config.i.json
-Scripts/Python/Sources/Testing/
-Scripts/Python/Sources/properties.yaml
-Scripts/Python/Sources/template.c.h
-Scripts/Python/Sources/template.h
-Scripts/Python/Sources/YamlPropertyHashTable.c
-Scripts/Python/Sources/YamlPropertyHashTable.h
+Scripts/Python/Sources/YAML/Testing/
+Scripts/Python/Sources/YAML/properties.yaml
+Scripts/Python/Sources/YAML/template.c.h
+Scripts/Python/Sources/YAML/template.h
+Scripts/Python/Sources/YAML/YamlPropertyHashTable.c
+Scripts/Python/Sources/YAML/YamlPropertyHashTable.h
