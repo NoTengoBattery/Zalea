@@ -1,10 +1,10 @@
---- # Include all common properties from parent platforms
-include:
+---
+$INCLUDE:
   - !$$ <ARM/Common/ARMv7-a.yaml>
 ...
----
+--- # Description for the ARM RealView Platform Baseboard Explore (PBX) machine
 machine:
-  codename: realview_pbx
-  name:     ARM Realview PBX
-  type: !id 0x0000076D
+  codename:   realview_pbx
+  name:       "ARM RealView Platform Baseboard Explore (PBX)"
+  type: !u-id 0x0000076D
 ...

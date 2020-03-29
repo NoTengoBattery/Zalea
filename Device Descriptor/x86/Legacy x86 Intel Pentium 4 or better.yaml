@@ -1,4 +1,6 @@
---- # Include all common properties from parent platforms
-include:
+---
+$INCLUDE:
   - !$$ <x86/Common/x86-BIOS.yaml>
 ...
+#--- # Description for the Legacy x86 Intel Pentium 4 (or better)
+#...

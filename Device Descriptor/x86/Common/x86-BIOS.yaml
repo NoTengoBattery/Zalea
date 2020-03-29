@@ -1,55 +1,64 @@
---- # x86 (legacy/BIOS) Shared Properties for Device Descriptor
+--- # Description for the generic x86-BIOS (Legacy) Architecture
 memory:
+  types: # Types of the memory ranges
+    conventional: &conventional conventional
+    interrupt: &interrupt       interrupt_vector
+    isa: &isa                   isa_memory_hole
+    bios:
+      data: &bios_data     bios_data
+      boot: &boot_sector   boot_sector
+      ebda: &bios_extended bios_data_extended
+      brom: &bios_rom      bios_rom_area
   lower: # Areas in the lower (before the 1 MiB mark) memory (mostly used by BIOS)
-    guaranteed: # Reserved: areas that are guaranteed to exist and to be free
-      - start:
-          name:             Free Memory Area 1
-          address: !pointer 0x00000500
-        end:
-          address: !pointer 0x00007BFF
-      - start:
-          name:             Free Memory Area 2
-          address: !pointer 0x00007E00
-        end:
-          address: !pointer 0x0007FFFF
+    guaranteed: # Guaranteed: areas that are guaranteed to exist and to be free
+      - !range
+        start: !pointer 0x00000500
+        end: !pointer   0x00007BFF
+        type: *conventional
+        description:    "Free Memory Area (Region 1)"
+      - !range
+        start: !pointer 0x00007E00
+        end: !pointer   0x0007FFFF
+        type: *conventional
+        description:    "Free Memory Area (Region 2)"
     reserved: # Reserved: areas that can not and should not be used
-      - start:
-          name:             Real-Mode Interrupt Vector Table
-          address: !pointer 0x00000000
-        end:
-          address: !pointer 0x000003FF
-      - start:
-          name:             BIOS Data Area
-          address: !pointer 0x00000400
-        end:
-          address: !pointer 0x000004FF
-      - start:
-          name:             Boot Sector
-          address: !pointer 0x00007C00
-        end:
-          address: !pointer 0x00007DFF
-      - start:
-          name:             Extended BIOS Data Area
-          address: !pointer 0x00080000
-        end:
-          address: !pointer 0x0009FFFF
+      - !range
+        start: !pointer 0x00000000
+        end: !pointer   0x000003FF
+        type: *interrupt
+        description:    "Real-Mode Interrupt Vector Table"
+      - !range
+        start: !pointer 0x00000400
+        end: !pointer   0x000004FF
+        type: *bios_data
+        description:    "BIOS Data Area"
+      - !range
+        start: !pointer 0x00007C00
+        end: !pointer   0x00007DFF
+        type: *boot_sector
+        description:    "Operating System Boot Sector"
+      - !range
+        start: !pointer 0x00080000
+        end: !pointer   0x0009FFFF
+        type: *bios_extended
+        description:    "Extended BIOS Data Area"
     unusable: # Unusable: areas that may or may to be free, therefore, render them unusable
-      - start:
-          name:             Used by BIOS
-          address: !pointer 0x000A0000
-        end:
-          address: !pointer 0x000FFFFF
-  upper: # Areas in the upper (after the 1 MiB mark) memory, can be used and detected by the OS if exists
-    available: # Available: Memory regions that are usable (if exist), they are not guaranteed to exist or to be usable
-      - start:
-          name:             Available Memory (Before ISA Hole)
-          address: !pointer 0x00100000
-        end:
-          address: !pointer 0x00EFFFFF
+      - !range
+        start: !pointer 0x000A0000
+        end: !pointer   0x000FFFFF
+        type: *bios_rom
+        description:    "Reclaimed by BIOS"
+  upper:
+    available: # Available: Memory regions that are usable (if exist), it is not guaranteed to exist or to be usable
+      - !range
+        start: !pointer 0x00100000
+        end: !pointer   0x00EFFFFF
+        type: *conventional
+        description:    "Available Memory (Before ISA Memory Hole)"
     unusable:
-      - start:
-          name:             ISA Memory Hole
-          address: !pointer 0x00F00000
-        end:
-          address: !pointer 0x00FFFFFF
+      - !range
+        start: !pointer 0x00F00000
+        end: !pointer   0x00FFFFFF
+        type: *isa
+        description:    "ISA Memory Hole"
 ...

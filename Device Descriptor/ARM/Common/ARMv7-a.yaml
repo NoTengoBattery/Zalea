@@ -1,16 +1,17 @@
---- # ARMv7-a Shared Properties for Device Descriptor
-interrupt:
-  vector: # Define the properties of the ARM interrupt vector table
-    address:
-      lower: # The lowermost address available for the ARM interrupt vector table
-        name:           Lower Vector Table Address
-        base: !pointer  0x00000000
-      upper: # The uppermost address available for the ARM interrupt vector table
-        name:           Upper Vector Table Address
-        base: !pointer  0xFFFF0000
+--- # Description for the generic ARMv7-a Architecture
+memory: # Special memory pointers, ranges and areas
+  interrupt:
+    vector: # Define the properties of the ARM interrupt vector table
+      address:
+        lower: # The lowermost address available for the ARM interrupt vector table
+          name:           "Lower Vector Table Address"
+          base: !pointer  0x00000000
+        upper: # The uppermost address available for the ARM interrupt vector table
+          name:           "Upper Vector Table Address"
+          base: !pointer  0xFFFF0000
 machine: # ARM Machine definitions
-  codename: unknown
-  model:    Unknown ARM Board
-  name:     Unknown ARM Machine Type
-  type: !id 0xFFFFFFFF
+  codename:   unknown
+  model:      "Unknown ARM Board"
+  name:       "Unknown ARM Machine Type"
+  type: !u-id 0xFFFFFFFF
 ...

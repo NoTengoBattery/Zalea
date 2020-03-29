@@ -1,9 +1,8 @@
---- # Include all common properties from parent platforms
-include:
-  - !$$ <ARM/Common/ARMv7-a.yaml>
+---
+$INCLUDE:
   - !$@ <ARM RealView PBX.yaml>
 ...
----
+--- # Description for the ARM RealView Platform Baseboard Explore (PBX) for Cortex-A9
 machine:
-  model: "ARM RealView Platform Baseboard Explore for Cortex-A9"
+  model: "ARM RealView Platform Baseboard Explore (PBX) for Cortex-A9"
 ...
